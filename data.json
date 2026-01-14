@@ -1,0 +1,59 @@
+
+{
+  "cakes": [
+    {
+      "id": "c1",
+      "name": "Malinový sen",
+      "pricePerServing": 65,
+      "availablePortions": [12, 16, 24],
+      "imageId": "1",
+      "description": "Lehký piškot s malinovým krémem a čerstvým ovocem."
+    },
+    {
+      "id": "c2",
+      "name": "Čokoládová klasika",
+      "pricePerServing": 75,
+      "availablePortions": [12, 18, 24, 32],
+      "imageId": "2",
+      "description": "Bohatý čokoládový korpus s belgickou čokoládou."
+    },
+    {
+      "id": "c3",
+      "name": "Slaný karamel",
+      "pricePerServing": 70,
+      "availablePortions": [12, 16, 20],
+      "imageId": "3",
+      "description": "Harmonie sladkého a slaného v každém soustu."
+    }
+  ],
+  "desserts": [
+    {
+      "id": "d1",
+      "name": "Tradiční Větrník",
+      "price": 48,
+      "imageId": "4",
+      "description": "S pravou karamelovou šlehačkou."
+    },
+    {
+      "id": "d2",
+      "name": "Laskonka",
+      "price": 32,
+      "imageId": "5",
+      "description": "S ořechovým krémem a křupavým korpusem."
+    },
+    {
+      "id": "d3",
+      "name": "Punčový řez",
+      "price": 38,
+      "imageId": "6",
+      "description": "Šťavnatý řez s vůní rumu a ovoce."
+    },
+    {
+      "id": "d4",
+      "name": "Makronka",
+      "price": 28,
+      "imageId": "7",
+      "description": "Různé příchutě, dle denní nabídky."
+    }
+  ]
+}
