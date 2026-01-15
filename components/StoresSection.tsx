@@ -119,7 +119,7 @@ const StoresSection: React.FC = () => {
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <button 
-            onClick={() => window.location.href = 'mailto:cukrarna.pist@seznam.cz'}
+            onClick={() => window.location.href = 'mailto:objednavky@cukrarstviblahutovi.cz'}
             className="px-8 py-3 bg-[#E8A2AF] text-white rounded-xl font-bold shadow-md hover:bg-[#db8d9c] transition-colors"
           >
             Napište nám e-mail

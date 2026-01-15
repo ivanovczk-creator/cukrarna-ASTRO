@@ -28,5 +28,6 @@ export interface CartItem {
 export enum Branch {
   Petrvald = 'Petřvald (Šenovská 1)',
   Karvina = 'Karviná (Tř. Těreškovové 2233/28)',
-  Ostrava = 'Ostrava Zábřeh (Výškovická 116A)'
+  Ostrava = 'Ostrava Zábřeh (Výškovická 116A)',
+  Pist = 'Výrobna Píšť (Opavská 218/101)'
 }

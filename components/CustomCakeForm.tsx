@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 const CustomCakeForm: React.FC = () => {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [fileName, setFileName] = useState<string>('');
+  const [email, setEmail] = useState('');
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -18,7 +19,6 @@ const CustomCakeForm: React.FC = () => {
     const formData = new FormData(form);
 
     try {
-      // Pro Netlify Forms odesíláme data na kořenovou cestu pomocí POST
       const response = await fetch("/", {
         method: "POST",
         body: formData,
@@ -46,12 +46,13 @@ const CustomCakeForm: React.FC = () => {
         <h3 className="text-3xl font-serif text-[#4A3728] mb-4">Poptávka odeslána!</h3>
         <p className="text-slate-600 leading-relaxed mb-8">
           Děkujeme za váš zájem o dort na přání. Vaši poptávku i s přílohou jsme přijali. 
-          Brzy se vám ozveme, abychom probrali detaily a cenu.
+          Potvrzení o přijetí poptávky vám bylo zasláno na váš e-mail. Brzy se vám ozveme, abychom probrali detaily.
         </p>
         <button 
           onClick={() => {
             setStatus('idle');
             setFileName('');
+            setEmail('');
           }}
           className="text-[#D4AF37] font-bold hover:underline"
         >
@@ -66,7 +67,7 @@ const CustomCakeForm: React.FC = () => {
       <div className="text-center mb-12">
         <h2 className="text-4xl md:text-5xl font-serif mb-6 text-[#4A3728]">Dort na přání</h2>
         <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-          Máte vlastní představu? Pošlete nám fotku nebo popis a mi vám upečeme dort přesně podle vašich představ.
+          Máte vlastní představu? Pošlete nám fotku nebo popis a my vám upečeme dort přesně podle vašich představ.
         </p>
       </div>
 
@@ -75,13 +76,13 @@ const CustomCakeForm: React.FC = () => {
           name="dort-na-prani" 
           method="POST" 
           data-netlify="true" 
-          // FIX: Changed 'enctype' to 'encType' to comply with React's attribute naming rules
           encType="multipart/form-data"
           onSubmit={handleSubmit}
           className="space-y-6"
         >
-          {/* Identifikátor formuláře pro Netlify */}
           <input type="hidden" name="form-name" value="dort-na-prani" />
+          {/* Netlify email trigger */}
+          <input type="hidden" name="email" value={email} />
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="md:col-span-2">
@@ -91,7 +92,7 @@ const CustomCakeForm: React.FC = () => {
                 name="jmeno" 
                 required 
                 placeholder="Jan Novák"
-                className="w-full min-h-[48px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all" 
+                className="w-full min-h-[44px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all" 
               />
             </div>
 
@@ -102,17 +103,20 @@ const CustomCakeForm: React.FC = () => {
                 name="telefon" 
                 required 
                 placeholder="+420 777 666 555"
-                className="w-full min-h-[48px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all" 
+                className="w-full min-h-[44px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all" 
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">E-mail</label>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">E-mail *</label>
               <input 
                 type="email" 
-                name="email" 
+                name="email_input" 
+                required
                 placeholder="vas@email.cz"
-                className="w-full min-h-[48px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full min-h-[44px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all" 
               />
             </div>
           </div>
@@ -147,29 +151,14 @@ const CustomCakeForm: React.FC = () => {
                 </span>
               </div>
             </div>
-            <p className="mt-2 text-[10px] text-slate-400 italic">Maximální velikost souboru 10MB. Podporujeme JPG, PNG.</p>
           </div>
-
-          {status === 'error' && (
-            <div className="p-4 bg-red-50 text-red-600 rounded-xl text-sm font-medium text-center">
-              Omlouváme se, při odesílání došlo k chybě. Zkuste to prosím znovu.
-            </div>
-          )}
 
           <button 
             type="submit" 
             disabled={status === 'submitting'}
             className="w-full min-h-[56px] bg-[#D4AF37] hover:bg-[#C4A132] disabled:bg-slate-300 text-white font-bold py-4 rounded-2xl transition-all shadow-lg active:scale-[0.98] flex items-center justify-center gap-3 text-lg"
           >
-            {status === 'submitting' ? (
-              <>
-                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Odesílám...
-              </>
-            ) : "Odeslat nezávaznou poptávku"}
+            {status === 'submitting' ? "Odesílám..." : "Odeslat nezávaznou poptávku"}
           </button>
         </form>
       </div>

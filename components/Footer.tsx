@@ -58,7 +58,7 @@ const Footer: React.FC = () => {
               </div>
               <div className="pt-4 border-t border-white/10">
                 <p className="text-xs uppercase tracking-widest text-slate-400 mb-2">E-mail</p>
-                <a href="mailto:cukrarna.pist@seznam.cz" className="text-sm text-slate-300 hover:text-white transition-colors block">cukrarna.pist@seznam.cz</a>
+                <a href="mailto:objednavky@cukrarstviblahutovi.cz" className="text-sm text-slate-300 hover:text-white transition-colors block">objednavky@cukrarstviblahutovi.cz</a>
               </div>
             </div>
           </div>
