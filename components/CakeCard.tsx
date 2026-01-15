@@ -9,8 +9,26 @@ interface CakeCardProps {
 
 const CakeCard: React.FC<CakeCardProps> = ({ cake, onAdd }) => {
   const [portions, setPortions] = useState(cake.mozne_porce[0]);
+  const [imgSrc, setImgSrc] = useState(cake.foto);
+  const [triedAlternative, setTriedAlternative] = useState(false);
   
   const totalPrice = portions * cake.cena_za_porci;
+
+  const handleImageError = () => {
+    if (!triedAlternative) {
+      // Pokud selže .jpg, zkusíme .jpeg (a naopak)
+      const isJpg = imgSrc.toLowerCase().endsWith('.jpg');
+      const altSrc = isJpg 
+        ? imgSrc.replace(/\.jpg$/i, '.jpeg') 
+        : imgSrc.replace(/\.jpeg$/i, '.jpg');
+      
+      setImgSrc(altSrc);
+      setTriedAlternative(true);
+    } else {
+      // Pokud selže i alternativa, použijeme placeholder z Picsum
+      setImgSrc(`https://picsum.photos/seed/cake-${cake.id}/600/400`);
+    }
+  };
 
   const handleAdd = () => {
     onAdd({
@@ -27,13 +45,10 @@ const CakeCard: React.FC<CakeCardProps> = ({ cake, onAdd }) => {
     <div className="bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-shadow border border-slate-50">
       <div className="h-64 overflow-hidden relative group">
         <img 
-          src={cake.foto} 
+          src={imgSrc} 
           alt={cake.nazev}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          onError={(e) => {
-            // Fallback pro chybějící obrázek
-            (e.target as HTMLImageElement).src = `https://picsum.photos/seed/${cake.id}/600/400`;
-          }}
+          onError={handleImageError}
         />
         <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-[#4A3728]">
           {cake.cena_za_porci} Kč / porce

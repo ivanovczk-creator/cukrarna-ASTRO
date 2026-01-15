@@ -9,6 +9,22 @@ interface DessertCardProps {
 
 const DessertCard: React.FC<DessertCardProps> = ({ dessert, onAdd }) => {
   const [qty, setQty] = useState(1);
+  const [imgSrc, setImgSrc] = useState(dessert.foto);
+  const [triedAlternative, setTriedAlternative] = useState(false);
+
+  const handleImageError = () => {
+    if (!triedAlternative) {
+      const isJpg = imgSrc.toLowerCase().endsWith('.jpg');
+      const altSrc = isJpg 
+        ? imgSrc.replace(/\.jpg$/i, '.jpeg') 
+        : imgSrc.replace(/\.jpeg$/i, '.jpg');
+      
+      setImgSrc(altSrc);
+      setTriedAlternative(true);
+    } else {
+      setImgSrc(`https://picsum.photos/seed/dessert-${dessert.id}/400/300`);
+    }
+  };
 
   const handleAdd = () => {
     onAdd({
@@ -25,12 +41,10 @@ const DessertCard: React.FC<DessertCardProps> = ({ dessert, onAdd }) => {
     <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-slate-100 group">
       <div className="h-48 overflow-hidden">
         <img 
-          src={dessert.foto} 
+          src={imgSrc} 
           alt={dessert.nazev}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = `https://picsum.photos/seed/${dessert.id}/400/300`;
-          }}
+          onError={handleImageError}
         />
       </div>
       <div className="p-4">
