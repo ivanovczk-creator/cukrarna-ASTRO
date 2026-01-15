@@ -1,5 +1,0 @@
-{
-  "name": "Astro Cake Reservation System",
-  "description": "A clean, performant Astro.js application for a bakery with specific delivery rules and product management via JSON data.",
-  "requestFramePermissions": []
-}
