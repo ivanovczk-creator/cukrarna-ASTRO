@@ -5,6 +5,7 @@ export interface Dort {
   porce: string;
   foto: string;
   kategorie: 'dorty';
+  weight?: number;
 }
 
 export interface Zakusek {
@@ -14,6 +15,7 @@ export interface Zakusek {
   foto: string;
   kategorie: 'zakusky';
   popis?: string;
+  weight?: number;
 }
 
 export interface CartItem {

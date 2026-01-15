@@ -17,6 +17,15 @@ const App: React.FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [activeTab, setActiveTab] = useState<Tab>('cakes');
 
+  // Seřazení produktů podle priority (weight)
+  const sortedCakes = useMemo(() => {
+    return [...(data.cakes as Dort[])].sort((a, b) => (a.weight ?? 100) - (b.weight ?? 100));
+  }, []);
+
+  const sortedDesserts = useMemo(() => {
+    return [...(data.desserts as Zakusek[])].sort((a, b) => (a.weight ?? 100) - (b.weight ?? 100));
+  }, []);
+
   // Automatické odrolování nahoru při změně záložky
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -73,11 +82,11 @@ const App: React.FC = () => {
             <div className="text-center mb-12">
               <h2 className="text-4xl font-serif mb-4 text-[#4A3728]">Naše Dorty</h2>
               <p className="text-slate-600 max-w-2xl mx-auto px-4">
-                Vyberte si z {data.cakes.length} druhů dortů. Každý pečený s maximální péčí.
+                Vyberte si z {sortedCakes.length} druhů dortů. Každý pečený s maximální péčí.
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {data.cakes.map((cake: Dort) => (
+              {sortedCakes.map((cake: Dort) => (
                 <CakeCard key={cake.id} cake={cake} onAdd={addToCart} />
               ))}
             </div>
@@ -93,7 +102,7 @@ const App: React.FC = () => {
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {data.desserts.map((dessert: Zakusek) => (
+              {sortedDesserts.map((dessert: Zakusek) => (
                 <DessertCard key={dessert.id} dessert={dessert} onAdd={addToCart} />
               ))}
             </div>

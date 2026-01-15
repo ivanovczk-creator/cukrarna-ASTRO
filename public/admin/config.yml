@@ -23,6 +23,7 @@ collections:
             summary: "Dort {{id}}: {{title}}"
             fields:
               - { label: "ID (Číslo dortu)", name: "id", widget: "number", value_type: "int" }
+              - { label: "Pořadí (číslo)", name: "weight", widget: "number", default: 100, value_type: "int" }
               - { label: "Název", name: "title", widget: "string" }
               - { label: "Cena", name: "cena", widget: "string", hint: "Např. 1900 Kč" }
               - { label: "Počet porcí", name: "porce", widget: "string", hint: "Např. 12 porcí" }
@@ -35,6 +36,7 @@ collections:
             summary: "Zákusek: {{title}}"
             fields:
               - { label: "ID (Např. d1, d2...)", name: "id", widget: "string" }
+              - { label: "Pořadí (číslo)", name: "weight", widget: "number", default: 100, value_type: "int" }
               - { label: "Název", name: "title", widget: "string" }
               - { label: "Cena", name: "cena", widget: "string", hint: "Např. 45 Kč" }
               - { label: "Obrázek", name: "foto", widget: "image", media_folder: "public/img/zakusky", public_folder: "/img/zakusky" }
