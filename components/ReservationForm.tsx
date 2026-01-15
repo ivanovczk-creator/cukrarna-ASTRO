@@ -14,7 +14,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ cart, total }) => {
 
   const cartSummary = cart.map(i => `${i.name}${i.portions ? ` (${i.portions} porcí)` : ''} x${i.quantity}`).join(', ');
 
-  // Výpočet minimálního data (dnešek + 3 dny)
   const minDateString = useMemo(() => {
     const date = new Date();
     date.setDate(date.getDate() + 3);
@@ -24,18 +23,12 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ cart, total }) => {
   const validateDate = (dateStr: string, branch: Branch) => {
     if (!dateStr) return null;
     const date = new Date(dateStr);
-    const day = date.getDay(); // 0 = Ne, 1 = Po, 2 = Út, 3 = St, 4 = Čt, 5 = Pá, 6 = So
+    const day = date.getDay(); // 0 = Ne, 1 = Po...
 
-    // Specifické zavírací dny pro pobočky
-    if (branch === Branch.Petrvald && day === 1) { // Pondělí
-      return "V pondělí má pobočka Petřvald zavřeno. Vyberte prosím jiný termín.";
-    }
-    if ((branch === Branch.Karvina || branch === Branch.Ostrava) && day === 0) { // Neděle
-      return "V neděli má tato pobočka zavřeno. Vyberte prosím jiný termín.";
-    }
-    if (branch === Branch.Pist && (day === 0 || day === 6)) { // Sobota + Neděle
-      return "V sobotu a neděli má výrobna v Píšti zavřeno. Vyberte prosím jiný termín.";
-    }
+    if (branch === Branch.Petrvald && day === 1) return "Pondělí: Petřvald má zavřeno.";
+    if ((branch === Branch.Karvina || branch === Branch.Ostrava) && day === 0) return "Neděle: Pobočka má zavřeno.";
+    if (branch === Branch.Pist && (day === 0 || day === 6)) return "Víkend: Výrobna v Píšti má zavřeno.";
+    
     return null;
   };
 
@@ -62,55 +55,34 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ cart, total }) => {
       <input type="hidden" name="form-name" value="rezervace" />
       <input type="hidden" name="obsah_kosiku" value={cartSummary} />
       <input type="hidden" name="celkova_cena" value={`${total} Kč`} />
-      
-      {/* Skryté pole 'email' pro Netlify auto-reply */}
       <input type="hidden" name="email" value={customerEmail} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8">
         <div className="md:col-span-2">
           <label className="block text-sm font-bold text-slate-700 mb-2">Jméno a příjmení *</label>
-          <input 
-            type="text" 
-            name="jmeno" 
-            required 
-            placeholder="Jan Novák"
-            className="w-full min-h-[44px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all text-base"
-          />
+          <input type="text" name="jmeno" required className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#E8A2AF] outline-none" />
         </div>
 
         <div>
           <label className="block text-sm font-bold text-slate-700 mb-2">Telefon *</label>
-          <input 
-            type="tel" 
-            name="telefon" 
-            required 
-            placeholder="+420 777 666 555"
-            className="w-full min-h-[44px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all text-base"
-          />
+          <input type="tel" name="telefon" required className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#E8A2AF] outline-none" />
         </div>
 
         <div>
-          <label className="block text-sm font-bold text-slate-700 mb-2">Kontaktní E-mail *</label>
+          <label className="block text-sm font-bold text-slate-700 mb-2">E-mail *</label>
           <input 
             type="email" 
             name="customer_email" 
             required 
-            placeholder="jan.novak@seznam.cz"
             value={customerEmail}
             onChange={(e) => setCustomerEmail(e.target.value)}
-            className="w-full min-h-[44px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all text-base"
+            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#E8A2AF] outline-none" 
           />
         </div>
 
         <div>
           <label className="block text-sm font-bold text-slate-700 mb-2">Pobočka k vyzvednutí *</label>
-          <select 
-            name="pobocka" 
-            required 
-            value={selectedBranch}
-            onChange={handleBranchChange}
-            className="w-full min-h-[44px] px-4 py-3 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all text-base appearance-none"
-          >
+          <select name="pobocka" required value={selectedBranch} onChange={handleBranchChange} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none appearance-none">
             <option value={Branch.Petrvald}>{Branch.Petrvald}</option>
             <option value={Branch.Karvina}>{Branch.Karvina}</option>
             <option value={Branch.Ostrava}>{Branch.Ostrava}</option>
@@ -127,36 +99,24 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ cart, total }) => {
             min={minDateString}
             value={selectedDate}
             onChange={handleDateChange}
-            className={`w-full min-h-[44px] px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all text-base ${error ? 'border-red-500 bg-red-50' : 'border-slate-200'}`}
+            className={`w-full px-4 py-3 rounded-xl border outline-none ${error ? 'border-red-500 bg-red-50' : 'border-slate-200'}`}
           />
           {error && <p className="text-red-500 text-xs mt-1 font-bold">{error}</p>}
-          <p className="text-[10px] text-slate-400 mt-2 leading-tight">
-            Rezervace je nutná minimálně 3 dny předem. Vyzvednutí je možné kdykoliv během otevírací doby vybrané provozovny.
-          </p>
         </div>
       </div>
 
       <div className="mb-8">
-        <label className="block text-sm font-bold text-slate-700 mb-2">Poznámka k objednávce</label>
-        <textarea 
-          name="poznamka" 
-          rows={3} 
-          placeholder="Např. text na dort, specifické přání..."
-          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all resize-none text-base"
-        ></textarea>
+        <label className="block text-sm font-bold text-slate-700 mb-2">Poznámka</label>
+        <textarea name="poznamka" rows={3} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#E8A2AF] outline-none resize-none"></textarea>
       </div>
 
       <button 
         type="submit" 
         disabled={cart.length === 0 || !!error}
-        className="w-full min-h-[56px] bg-[#D4AF37] hover:bg-[#c4a132] disabled:bg-slate-300 text-white font-bold py-4 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 text-lg active:scale-[0.98]"
+        className="w-full bg-[#D4AF37] hover:bg-[#c4a132] disabled:bg-slate-300 text-white font-bold py-4 rounded-2xl shadow-lg transition-all"
       >
-        Odeslat závaznou rezervaci
+        Odeslat rezervaci
       </button>
-      
-      <p className="mt-4 text-[11px] text-slate-400 text-center uppercase tracking-wider">
-        Potvrzení o přijetí rezervace vám bude zasláno na váš e-mail.
-      </p>
     </form>
   );
 };
