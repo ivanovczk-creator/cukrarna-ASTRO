@@ -1,0 +1,43 @@
+
+{
+  "shop": {
+    "name": "Sladká Tečka",
+    "description": "Poctivé domácí dorty z nejlepších surovin."
+  },
+  "branches": [
+    { "id": "petrvald", "name": "Petřvald", "blockedDays": [1] },
+    { "id": "karvina", "name": "Karviná", "blockedDays": [0] },
+    { "id": "ostrava", "name": "Ostrava", "blockedDays": [0] },
+    { "id": "pist", "name": "Píšť", "blockedDays": [0, 6] }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "Čokoládový Sen",
+      "price": 850,
+      "image": "https://picsum.photos/seed/cake1/600/400",
+      "description": "Bohatý čokoládový korpus s pařížským krémem."
+    },
+    {
+      "id": 2,
+      "name": "Malinové Potešení",
+      "price": 790,
+      "image": "https://picsum.photos/seed/cake2/600/400",
+      "description": "Lehký piškot s čerstvými malinami a tvarohem."
+    },
+    {
+      "id": 3,
+      "name": "Slaný Karamel",
+      "price": 920,
+      "image": "https://picsum.photos/seed/cake3/600/400",
+      "description": "Moderní kombinace sladkého karamelu a špetky soli."
+    },
+    {
+      "id": 4,
+      "name": "Ovocný Mix",
+      "price": 750,
+      "image": "https://picsum.photos/seed/cake4/600/400",
+      "description": "Sezónní ovoce na nadýchaném krému."
+    }
+  ]
+}
