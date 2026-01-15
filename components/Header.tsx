@@ -22,7 +22,7 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, cartCount }) =
         <div className="flex items-center justify-between h-16 md:h-20">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab('cakes')}>
             <div className="w-8 h-8 md:w-10 md:h-10 bg-[#E8A2AF] rounded-full flex items-center justify-center text-white font-serif text-lg md:text-xl italic shrink-0">B</div>
-            <div className="hidden sm:block">
+            <div className="block">
               <h1 className="text-lg md:text-xl font-serif font-bold text-[#4A3728] leading-tight">Cukrářství</h1>
               <p className="text-[8px] md:text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] font-bold">Blahutovi</p>
             </div>
@@ -31,7 +31,7 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, cartCount }) =
           <div className="flex items-center gap-3">
              <button 
               onClick={() => setActiveTab('checkout')}
-              className={`relative flex items-center gap-2 px-4 md:px-5 min-h-[44px] rounded-full transition-all ${
+              className={`relative flex items-center gap-2 px-3 md:px-5 min-h-[40px] md:min-h-[44px] rounded-full transition-all ${
                 activeTab === 'checkout' 
                 ? 'bg-[#4A3728] text-white' 
                 : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
@@ -50,13 +50,13 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, cartCount }) =
           </div>
         </div>
 
-        {/* Spodní řada: Mobilní/Desktop Navigace (scrollable na mobilu) */}
-        <nav className="flex items-center gap-1 md:gap-4 overflow-x-auto no-scrollbar pb-2 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0">
+        {/* Spodní řada: Navigace - flex-wrap pro mobil, aby bylo vidět všech 5 položek */}
+        <nav className="flex flex-wrap items-center justify-center gap-x-1 gap-y-1 md:gap-4 py-2">
           {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`whitespace-nowrap px-4 py-2 min-h-[44px] rounded-xl text-xs md:text-sm font-bold transition-all flex items-center justify-center ${
+              className={`whitespace-nowrap px-3 py-1.5 md:px-4 md:py-2 min-h-[36px] md:min-h-[44px] rounded-lg md:rounded-xl text-[11px] md:text-sm font-bold transition-all flex items-center justify-center ${
                 activeTab === item.id 
                 ? 'bg-pink-50 text-[#E8A2AF] md:bg-transparent md:text-[#D4AF37] md:border-b-2 md:border-[#D4AF37] md:rounded-none' 
                 : 'text-slate-500 hover:text-[#4A3728] hover:bg-slate-50 md:hover:bg-transparent'
@@ -67,16 +67,6 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, cartCount }) =
           ))}
         </nav>
       </div>
-      
-      <style>{`
-        .no-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .no-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
     </header>
   );
 };

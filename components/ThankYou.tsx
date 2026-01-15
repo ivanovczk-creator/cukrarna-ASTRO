@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface ThankYouProps {
@@ -7,7 +6,7 @@ interface ThankYouProps {
 
 const ThankYou: React.FC<ThankYouProps> = ({ onBack }) => {
   return (
-    <div className="max-w-2xl mx-auto py-16 px-4 text-center">
+    <div className="max-w-2xl mx-auto py-16 px-4 text-center animate-fade-in">
       <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-8">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -19,6 +18,9 @@ const ThankYou: React.FC<ThankYouProps> = ({ onBack }) => {
       <div className="space-y-4 text-slate-600 mb-10 leading-relaxed">
         <p className="text-lg">
           Vaši rezervaci jsme v pořádku přijali a již ji zpracováváme.
+        </p>
+        <p className="bg-pink-50 p-4 rounded-2xl text-sm font-medium border border-pink-100">
+          Potvrzení o přijetí rezervace vám bylo zasláno na váš e-mail.
         </p>
         <p>
           Brzy vás budeme kontaktovat na uvedený telefonní nebo e-mailový kontakt pro potvrzení dostupnosti a doladění detailů.

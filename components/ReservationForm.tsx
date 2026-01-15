@@ -26,15 +26,15 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ cart, total }) => {
     const date = new Date(dateStr);
     const day = date.getDay(); // 0 = Ne, 1 = Po, 2 = Út, 3 = St, 4 = Čt, 5 = Pá, 6 = So
 
-    // Validace zavíracích dní dle otevírací doby
+    // Specifické zavírací dny pro pobočky
     if (branch === Branch.Petrvald && day === 1) { // Pondělí
-      return "V pondělí je prodejna v Petřvaldě zavřená.";
+      return "V pondělí má pobočka Petřvald zavřeno. Vyberte prosím jiný termín.";
     }
     if ((branch === Branch.Karvina || branch === Branch.Ostrava) && day === 0) { // Neděle
-      return "V neděli je tato prodejna zavřená.";
+      return "V neděli má tato pobočka zavřeno. Vyberte prosím jiný termín.";
     }
     if (branch === Branch.Pist && (day === 0 || day === 6)) { // Sobota + Neděle
-      return "V sobotu a neděli je výrobna v Píšti zavřená.";
+      return "V sobotu a neděli má výrobna v Píšti zavřeno. Vyberte prosím jiný termín.";
     }
     return null;
   };
@@ -57,17 +57,16 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ cart, total }) => {
       method="POST" 
       action="/podekovani"
       data-netlify="true" 
-      className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100"
+      className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100"
     >
-      {/* Nutné pro Netlify Forms v Reactu */}
       <input type="hidden" name="form-name" value="rezervace" />
       <input type="hidden" name="obsah_kosiku" value={cartSummary} />
       <input type="hidden" name="celkova_cena" value={`${total} Kč`} />
       
-      {/* Skryté pole 'email' pro Netlify auto-reply trigger */}
+      {/* Skryté pole 'email' pro Netlify auto-reply */}
       <input type="hidden" name="email" value={customerEmail} />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8">
         <div className="md:col-span-2">
           <label className="block text-sm font-bold text-slate-700 mb-2">Jméno a příjmení *</label>
           <input 
@@ -75,7 +74,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ cart, total }) => {
             name="jmeno" 
             required 
             placeholder="Jan Novák"
-            className="w-full min-h-[44px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] focus:border-transparent transition-all text-base"
+            className="w-full min-h-[44px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all text-base"
           />
         </div>
 
@@ -86,8 +85,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ cart, total }) => {
             name="telefon" 
             required 
             placeholder="+420 777 666 555"
-            autoComplete="tel"
-            className="w-full min-h-[44px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] focus:border-transparent transition-all text-base"
+            className="w-full min-h-[44px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all text-base"
           />
         </div>
 
@@ -98,10 +96,9 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ cart, total }) => {
             name="customer_email" 
             required 
             placeholder="jan.novak@seznam.cz"
-            autoComplete="email"
             value={customerEmail}
             onChange={(e) => setCustomerEmail(e.target.value)}
-            className="w-full min-h-[44px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] focus:border-transparent transition-all text-base"
+            className="w-full min-h-[44px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all text-base"
           />
         </div>
 
@@ -133,7 +130,9 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ cart, total }) => {
             className={`w-full min-h-[44px] px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all text-base ${error ? 'border-red-500 bg-red-50' : 'border-slate-200'}`}
           />
           {error && <p className="text-red-500 text-xs mt-1 font-bold">{error}</p>}
-          <p className="text-[10px] text-slate-400 mt-1 italic">Rezervace je nutná minimálně 3 dny předem. Vyzvednutí je možné kdykoliv během otevírací doby.</p>
+          <p className="text-[10px] text-slate-400 mt-2 leading-tight">
+            Rezervace je nutná minimálně 3 dny předem. Vyzvednutí je možné kdykoliv během otevírací doby vybrané provozovny.
+          </p>
         </div>
       </div>
 
@@ -142,7 +141,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ cart, total }) => {
         <textarea 
           name="poznamka" 
           rows={3} 
-          placeholder="Alergie, text na dortu, atd."
+          placeholder="Např. text na dort, specifické přání..."
           className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all resize-none text-base"
         ></textarea>
       </div>
@@ -155,7 +154,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ cart, total }) => {
         Odeslat závaznou rezervaci
       </button>
       
-      <p className="mt-4 text-[10px] text-slate-400 text-center uppercase tracking-wider">
+      <p className="mt-4 text-[11px] text-slate-400 text-center uppercase tracking-wider">
         Potvrzení o přijetí rezervace vám bude zasláno na váš e-mail.
       </p>
     </form>
