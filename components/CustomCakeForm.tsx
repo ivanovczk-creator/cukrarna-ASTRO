@@ -18,6 +18,7 @@ const CustomCakeForm: React.FC = () => {
     const formData = new FormData(form);
 
     try {
+      // Pro Netlify Forms odesíláme data na kořenovou cestu pomocí POST
       const response = await fetch("/", {
         method: "POST",
         body: formData,
@@ -48,7 +49,10 @@ const CustomCakeForm: React.FC = () => {
           Brzy se vám ozveme, abychom probrali detaily a cenu.
         </p>
         <button 
-          onClick={() => setStatus('idle')}
+          onClick={() => {
+            setStatus('idle');
+            setFileName('');
+          }}
           className="text-[#D4AF37] font-bold hover:underline"
         >
           Odeslat další poptávku
@@ -62,7 +66,7 @@ const CustomCakeForm: React.FC = () => {
       <div className="text-center mb-12">
         <h2 className="text-4xl md:text-5xl font-serif mb-6 text-[#4A3728]">Dort na přání</h2>
         <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-          Máte vlastní představu? Pošlete nám fotku nebo popis a my vám upečeme dort přesně podle vašich představ.
+          Máte vlastní představu? Pošlete nám fotku nebo popis a mi vám upečeme dort přesně podle vašich představ.
         </p>
       </div>
 
@@ -71,10 +75,12 @@ const CustomCakeForm: React.FC = () => {
           name="dort-na-prani" 
           method="POST" 
           data-netlify="true" 
-          enctype="multipart/form-data"
+          // FIX: Changed 'enctype' to 'encType' to comply with React's attribute naming rules
+          encType="multipart/form-data"
           onSubmit={handleSubmit}
           className="space-y-6"
         >
+          {/* Identifikátor formuláře pro Netlify */}
           <input type="hidden" name="form-name" value="dort-na-prani" />
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -127,7 +133,7 @@ const CustomCakeForm: React.FC = () => {
             <div className="relative group">
               <input 
                 type="file" 
-                name="foto" 
+                name="soubor_fotka" 
                 accept="image/*"
                 onChange={handleFileChange}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
