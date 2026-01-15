@@ -1,0 +1,43 @@
+backend:
+  name: git-gateway
+  branch: main # Větev, na kterou se ukládají změny
+
+# Cesty pro nahrávané obrázky
+media_folder: "public/img/dorty"
+public_folder: "/img/dorty"
+
+collections:
+  - name: "products"
+    label: "Katalog produktů"
+    delete: false
+    editor:
+      preview: false
+    files:
+      - name: "data"
+        label: "Data webu"
+        file: "data.json" # Cesta k datovému souboru v kořenu repozitáře
+        format: "json"
+        fields:
+          - label: "Dorty"
+            name: "cakes"
+            widget: "list"
+            summary: "Dort {{id}}: {{title}}"
+            fields:
+              - { label: "ID (ID dortu)", name: "id", widget: "number", value_type: "int" }
+              - { label: "Název", name: "title", widget: "string" }
+              - { label: "Cena", name: "cena", widget: "string", hint: "Např. 1900 Kč" }
+              - { label: "Počet porcí", name: "porce", widget: "string", hint: "Např. 12 porcí" }
+              - { label: "Obrázek", name: "foto", widget: "image" }
+              - { label: "Kategorie", name: "kategorie", widget: "hidden", default: "dorty" }
+
+          - label: "Zákusky"
+            name: "desserts"
+            widget: "list"
+            summary: "{{title}}"
+            fields:
+              - { label: "ID", name: "id", widget: "string" }
+              - { label: "Název", name: "title", widget: "string" }
+              - { label: "Cena", name: "cena", widget: "string", hint: "Např. 45 Kč" }
+              - { label: "Popis", name: "popis", widget: "string", required: false }
+              - { label: "Obrázek", name: "foto", widget: "image", media_folder: "public/img/zakusky", public_folder: "/img/zakusky" }
+              - { label: "Kategorie", name: "kategorie", widget: "hidden", default: "zakusky" }
