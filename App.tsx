@@ -17,6 +17,11 @@ const App: React.FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [activeTab, setActiveTab] = useState<Tab>('cakes');
 
+  // Automatické odrolování nahoru při změně záložky
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [activeTab]);
+
   useEffect(() => {
     const path = window.location.pathname;
     if (path === '/podekovani') {
