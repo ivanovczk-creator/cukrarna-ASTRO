@@ -1,8 +1,7 @@
-
 export interface Dort {
   id: string;
-  nazev: string;
-  cena: number;
+  title: string;
+  cena: string | number;
   porce: string;
   foto: string;
   kategorie: 'dorty';
@@ -10,8 +9,8 @@ export interface Dort {
 
 export interface Zakusek {
   id: string;
-  nazev: string;
-  cena: number;
+  title: string;
+  cena: string | number;
   foto: string;
   kategorie: 'zakusky';
   popis?: string;

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Zakusek, CartItem } from '../types';
 
@@ -27,10 +26,11 @@ const DessertCard: React.FC<DessertCardProps> = ({ dessert, onAdd }) => {
   };
 
   const handleAdd = () => {
+    const priceNum = typeof dessert.cena === 'string' ? parseInt(dessert.cena.replace(/\D/g, '')) || 0 : dessert.cena;
     onAdd({
       id: dessert.id,
-      name: dessert.nazev,
-      price: dessert.cena,
+      name: dessert.title,
+      price: priceNum,
       quantity: qty,
       type: 'dessert'
     });
@@ -42,13 +42,13 @@ const DessertCard: React.FC<DessertCardProps> = ({ dessert, onAdd }) => {
       <div className="h-48 overflow-hidden">
         <img 
           src={imgSrc} 
-          alt={dessert.nazev}
+          alt={dessert.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           onError={handleImageError}
         />
       </div>
       <div className="p-4">
-        <h3 className="text-lg font-bold text-[#4A3728] mb-1">{dessert.nazev}</h3>
+        <h3 className="text-lg font-bold text-[#4A3728] mb-1">{dessert.title}</h3>
         <p className="text-xs text-slate-500 mb-3 line-clamp-1">{dessert.popis}</p>
         <div className="text-xl font-bold text-[#D4AF37] mb-4">{dessert.cena} Kč</div>
         

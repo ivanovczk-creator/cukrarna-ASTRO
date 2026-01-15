@@ -25,11 +25,11 @@ const CakeCard: React.FC<CakeCardProps> = ({ cake, onAdd }) => {
   };
 
   const handleAdd = () => {
-    // Send formatted name with number and portions as requested
+    const priceNum = typeof cake.cena === 'string' ? parseInt(cake.cena.replace(/\D/g, '')) || 0 : cake.cena;
     onAdd({
       id: cake.id,
       name: `Dort č. ${cake.id} (${cake.porce})`,
-      price: cake.cena,
+      price: priceNum,
       quantity: 1,
       portions: cake.porce,
       type: 'cake'
@@ -41,7 +41,7 @@ const CakeCard: React.FC<CakeCardProps> = ({ cake, onAdd }) => {
       <div className="h-64 overflow-hidden relative group">
         <img 
           src={imgSrc} 
-          alt={cake.nazev}
+          alt={cake.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           onError={handleImageError}
         />
@@ -51,7 +51,7 @@ const CakeCard: React.FC<CakeCardProps> = ({ cake, onAdd }) => {
       </div>
       
       <div className="p-6">
-        <h3 className="text-xl font-serif mb-1 text-[#4A3728] leading-tight min-h-[3rem]">{cake.nazev}</h3>
+        <h3 className="text-xl font-serif mb-1 text-[#4A3728] leading-tight min-h-[3rem]">{cake.title}</h3>
         
         <div className="flex flex-col gap-1 mb-6">
             <span className="text-2xl font-bold text-[#D4AF37]">{cake.cena} Kč</span>
