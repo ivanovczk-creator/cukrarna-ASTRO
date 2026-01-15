@@ -32,6 +32,7 @@
 <body>
     <div id="root"></div>
     <script>
+      // Skript pro automatické přesměrování do administrace po přihlášení
       if (window.netlifyIdentity) {
         window.netlifyIdentity.on("init", user => {
           if (!user) {

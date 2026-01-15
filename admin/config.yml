@@ -2,28 +2,28 @@ backend:
   name: git-gateway
   branch: main
 
-# Nastavení složek pro média
-media_folder: "public/img/dorty" # Fyzické umístění v repozitáři
-public_folder: "/img/dorty"      # Cesta, kterou uvidí web (uloží se do JSONu)
+# Správa médií
+media_folder: "public/img/dorty"
+public_folder: "/img/dorty"
 
 collections:
-  - name: "content"
-    label: "Obsah webu"
-    delete: false
+  - name: "products"
+    label: "Katalog produktů"
+    delete: false # Zabrání smazání celého data.json
     editor:
       preview: false
     files:
       - name: "data"
-        label: "Katalog produktů"
+        label: "Data webu"
         file: "data.json"
         format: "json"
         fields:
           - label: "Dorty"
             name: "cakes"
             widget: "list"
-            summary: "Dort č. {{id}}: {{title}}"
+            summary: "Dort {{id}}: {{title}}"
             fields:
-              - { label: "Číslo (ID)", name: "id", widget: "string", hint: "Unikátní identifikátor (např. číslo 5)" }
+              - { label: "ID (číslo)", name: "id", widget: "number", value_type: "int" }
               - { label: "Název", name: "title", widget: "string" }
               - { label: "Cena", name: "cena", widget: "string", hint: "Např. 1900 Kč" }
               - { label: "Počet porcí", name: "porce", widget: "string", hint: "Např. 12 porcí" }
@@ -37,7 +37,7 @@ collections:
             fields:
               - { label: "ID", name: "id", widget: "string" }
               - { label: "Název", name: "title", widget: "string" }
-              - { label: "Cena", name: "cena", widget: "string" }
+              - { label: "Cena", name: "cena", widget: "string", hint: "Např. 45 Kč" }
               - { label: "Popis", name: "popis", widget: "string", required: false }
               - { label: "Obrázek", name: "foto", widget: "image", media_folder: "public/img/zakusky", public_folder: "/img/zakusky" }
               - { label: "Kategorie", name: "kategorie", widget: "hidden", default: "zakusky" }
