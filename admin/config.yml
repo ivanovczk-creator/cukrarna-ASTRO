@@ -1,28 +1,29 @@
 backend:
   name: git-gateway
-  branch: main # Ujistěte se, že toto odpovídá vaší hlavní větvi v GitHubu
+  branch: main
 
-media_folder: "public/img" # Cesta v repozitáři pro média
-public_folder: "/img"      # Cesta, pod kterou jsou média dostupná na webu
+# Globální nastavení médií (fallback)
+media_folder: "public/img"
+public_folder: "/img"
 
 collections:
   - name: "content"
     label: "Obsah webu"
-    delete: false # Zabrání smazání celého souboru
+    delete: false
     editor:
       preview: false
     files:
       - name: "data"
-        label: "Produkty (Dorty a Zákusky)"
+        label: "Produkty"
         file: "data.json"
         format: "json"
         fields:
-          - label: "Seznam Dortů"
+          - label: "Dorty"
             name: "cakes"
             widget: "list"
             summary: "Dort č. {{id}}: {{nazev}} ({{cena}} Kč)"
             fields:
-              - { label: "Číslo (ID)", name: "id", widget: "string", hint: "Musí odpovídat číslu v názvu fotky (např. 5)" }
+              - { label: "Číslo (ID)", name: "id", widget: "string", hint: "Číslo korespondující s fotkou" }
               - { label: "Název", name: "nazev", widget: "string" }
               - { label: "Cena v Kč", name: "cena", widget: "number", value_type: "int" }
               - { label: "Počet porcí", name: "porce", widget: "string", hint: "Např. 12 porcí" }
@@ -33,7 +34,7 @@ collections:
                 public_folder: "/img/dorty"
               - { label: "Kategorie", name: "kategorie", widget: "hidden", default: "dorty" }
 
-          - label: "Seznam Zákusků"
+          - label: "Zákusky"
             name: "desserts"
             widget: "list"
             summary: "{{nazev}} ({{cena}} Kč)"
@@ -41,7 +42,6 @@ collections:
               - { label: "ID", name: "id", widget: "string" }
               - { label: "Název", name: "nazev", widget: "string" }
               - { label: "Cena v Kč", name: "cena", widget: "number", value_type: "int" }
-              - { label: "Popis", name: "popis", widget: "string", required: false }
               - label: "Fotografie"
                 name: "foto"
                 widget: "image"
