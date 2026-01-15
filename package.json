@@ -1,8 +1,0 @@
-{
-  "type": "module",
-  "scripts": { "build": "astro build" },
-  "dependencies": { 
-    "astro": "^4.0.0", 
-    "@astrojs/tailwind": "^5.0.0" 
-  }
-}
