@@ -1,21 +1,21 @@
 backend:
   name: git-gateway
-  branch: main
+  branch: main # Větev, na kterou se ukládají změny
 
-# Správa médií
+# Cesty pro nahrávané obrázky
 media_folder: "public/img/dorty"
 public_folder: "/img/dorty"
 
 collections:
   - name: "products"
     label: "Katalog produktů"
-    delete: false # Zabrání smazání celého data.json
+    delete: false # Bezpečnostní pojistka proti smazání celého souboru
     editor:
       preview: false
     files:
       - name: "data"
         label: "Data webu"
-        file: "data.json"
+        file: "data.json" # Cesta k datovému souboru
         format: "json"
         fields:
           - label: "Dorty"
@@ -23,7 +23,7 @@ collections:
             widget: "list"
             summary: "Dort {{id}}: {{title}}"
             fields:
-              - { label: "ID (číslo)", name: "id", widget: "number", value_type: "int" }
+              - { label: "ID (ID dortu)", name: "id", widget: "number", value_type: "int" }
               - { label: "Název", name: "title", widget: "string" }
               - { label: "Cena", name: "cena", widget: "string", hint: "Např. 1900 Kč" }
               - { label: "Počet porcí", name: "porce", widget: "string", hint: "Např. 12 porcí" }

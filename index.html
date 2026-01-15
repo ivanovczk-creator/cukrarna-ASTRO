@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cukrářství Blahutovi</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Netlify Identity Widget v hlavičce -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,12 +32,14 @@
 </head>
 <body>
     <div id="root"></div>
+    
+    <!-- Skript pro Netlify Identity: Přesměrování po loginu -->
     <script>
-      // Skript pro automatické přesměrování do administrace po přihlášení
       if (window.netlifyIdentity) {
         window.netlifyIdentity.on("init", user => {
           if (!user) {
             window.netlifyIdentity.on("login", () => {
+              // Po úspěšném přihlášení pošleme uživatele do administrace
               document.location.href = "/admin/";
             });
           }
