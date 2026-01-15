@@ -2,11 +2,10 @@
 export interface Dort {
   id: string;
   nazev: string;
-  cena_za_porci: number;
-  mozne_porce: number[];
+  cena: number;
+  porce: string;
   foto: string;
   kategorie: 'dorty';
-  popis?: string;
 }
 
 export interface Zakusek {
@@ -23,7 +22,7 @@ export interface CartItem {
   name: string;
   price: number;
   quantity: number;
-  portions?: number;
+  portions?: string;
   type: 'cake' | 'dessert';
 }
 

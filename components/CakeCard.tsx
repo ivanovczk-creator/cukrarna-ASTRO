@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Dort, CartItem } from '../types';
 
@@ -8,15 +7,11 @@ interface CakeCardProps {
 }
 
 const CakeCard: React.FC<CakeCardProps> = ({ cake, onAdd }) => {
-  const [portions, setPortions] = useState(cake.mozne_porce[0]);
   const [imgSrc, setImgSrc] = useState(cake.foto);
   const [triedAlternative, setTriedAlternative] = useState(false);
-  
-  const totalPrice = portions * cake.cena_za_porci;
 
   const handleImageError = () => {
     if (!triedAlternative) {
-      // Pokud selže .jpg, zkusíme .jpeg (a naopak)
       const isJpg = imgSrc.toLowerCase().endsWith('.jpg');
       const altSrc = isJpg 
         ? imgSrc.replace(/\.jpg$/i, '.jpeg') 
@@ -25,18 +20,18 @@ const CakeCard: React.FC<CakeCardProps> = ({ cake, onAdd }) => {
       setImgSrc(altSrc);
       setTriedAlternative(true);
     } else {
-      // Pokud selže i alternativa, použijeme placeholder z Picsum
       setImgSrc(`https://picsum.photos/seed/cake-${cake.id}/600/400`);
     }
   };
 
   const handleAdd = () => {
+    // Send formatted name with number and portions as requested
     onAdd({
       id: cake.id,
-      name: cake.nazev,
-      price: totalPrice,
+      name: `Dort č. ${cake.id} (${cake.porce})`,
+      price: cake.cena,
       quantity: 1,
-      portions: portions,
+      portions: cake.porce,
       type: 'cake'
     });
   };
@@ -50,47 +45,25 @@ const CakeCard: React.FC<CakeCardProps> = ({ cake, onAdd }) => {
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           onError={handleImageError}
         />
-        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-[#4A3728]">
-          {cake.cena_za_porci} Kč / porce
+        <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-[#4A3728] uppercase tracking-wider">
+          Číslo {cake.id}
         </div>
       </div>
       
       <div className="p-6">
-        <h3 className="text-xl font-serif mb-2 text-[#4A3728] leading-tight min-h-[3rem]">{cake.nazev}</h3>
+        <h3 className="text-xl font-serif mb-1 text-[#4A3728] leading-tight min-h-[3rem]">{cake.nazev}</h3>
         
-        <div className="flex flex-col gap-4">
-          <div>
-            <label className="block text-xs uppercase tracking-wider text-slate-400 mb-2 font-bold">Počet porcí</label>
-            <div className="flex gap-2 flex-wrap">
-              {cake.mozne_porce.map(p => (
-                <button
-                  key={p}
-                  onClick={() => setPortions(p)}
-                  className={`px-3 py-2 rounded-xl text-sm font-medium transition-all ${
-                    portions === p 
-                    ? 'bg-[#E8A2AF] text-white shadow-lg shadow-pink-100' 
-                    : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
-                  }`}
-                >
-                  {p}
-                </button>
-              ))}
-            </div>
-          </div>
-          
-          <div className="pt-4 border-t border-slate-50 flex items-center justify-between">
-            <div className="flex flex-col">
-              <span className="text-xs text-slate-400">Celková cena</span>
-              <span className="text-2xl font-bold text-[#D4AF37]">{totalPrice} Kč</span>
-            </div>
-            <button
-              onClick={handleAdd}
-              className="bg-[#4A3728] text-white px-5 py-3 rounded-2xl font-bold hover:bg-[#5D4634] active:scale-95 transition-all text-sm"
-            >
-              Do výběru
-            </button>
-          </div>
+        <div className="flex flex-col gap-1 mb-6">
+            <span className="text-2xl font-bold text-[#D4AF37]">{cake.cena} Kč</span>
+            <span className="text-sm text-slate-400 font-medium">{cake.porce}</span>
         </div>
+        
+        <button
+          onClick={handleAdd}
+          className="w-full bg-[#4A3728] text-white px-5 py-3 rounded-2xl font-bold hover:bg-[#5D4634] active:scale-95 transition-all text-sm flex items-center justify-center gap-2"
+        >
+          Rezervovat
+        </button>
       </div>
     </div>
   );
