@@ -1,0 +1,47 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import StoresSection from '../components/StoresSection';
+import B2BSection from '../components/B2BSection';
+import ReservationForm from '../components/ReservationForm';
+import CakeCard from '../components/CakeCard';
+import DessertCard from '../components/DessertCard';
+import data from '../../data.json';
+
+// Logika pro zobrazení produktů z data.json
+const featuredCakes = data.products.filter(p => p.category === 'dorty').slice(0, 4);
+const featuredDesserts = data.products.filter(p => p.category === 'zakusky').slice(0, 8);
+---
+
+<Layout title="Cukrářství Blahutovi | Poctivé domácí dorty a zákusky">
+  <Header client:load />
+  
+  <main>
+    <section class="relative h-[70vh] flex items-center justify-center bg-pink-50">
+      <div class="text-center px-4">
+        <h1 class="text-5xl md:text-7xl font-bold text-gray-900 mb-6">Poctivá cukrářská výroba</h1>
+        <p class="text-xl text-gray-700 mb-8 max-w-2xl mx-auto">Rodinná tradice, nejlepší suroviny a láska k řemeslu. To jsou dorty a zákusky od Blahutů.</p>
+        <a href="#rezervace" class="bg-pink-500 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-pink-600 transition">Objednat online</a>
+      </div>
+    </section>
+
+    <section id="dorty" class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-12 text-center">Naše oblíbené dorty</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {featuredCakes.map(cake => (
+            <CakeCard client:visible cake={cake} />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="rezervace" class="py-20 bg-pink-50">
+      <div class="max-w-3xl mx-auto px-4">
+        <div class="bg-white p-8 rounded-3xl shadow-xl">
+          <h2 class="text-3xl font-bold mb-8 text-center">Rezervace vyzvednutí</h2>
+          <ReservationForm client:load />
+        </div>
+      </div>
+    </section>
