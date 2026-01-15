@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Netlify Forms Detection</title>
+</head>
+<body>
+    <!-- Tento soubor slouží pouze pro Netlify build boty k detekci formulářů v React aplikaci -->
+
+    <!-- Formulář: Rezervace (z košíku) -->
+    <form name="rezervace" data-netlify="true" method="POST" action="/podekovani">
+        <input type="hidden" name="form-name" value="rezervace" />
+        <input type="hidden" name="obsah_kosiku" />
+        <input type="hidden" name="celkova_cena" />
+        <input type="text" name="jmeno" />
+        <input type="tel" name="telefon" />
+        <input type="email" name="email" />
+        <select name="pobocka">
+            <option>Petřvald (Šenovská 1)</option>
+            <option>Karviná (Tř. Těreškovové 2233/28)</option>
+            <option>Ostrava Zábřeh (Výškovická 116A)</option>
+        </select>
+        <input type="date" name="datum" />
+        <input type="time" name="cas" />
+        <textarea name="poznamka"></textarea>
+    </form>
+
+    <!-- Formulář: Spolupráce (B2B) -->
+    <form name="spoluprace-kontakt" data-netlify="true" method="POST">
+        <input type="hidden" name="form-name" value="spoluprace-kontakt" />
+        <input type="text" name="jmeno_firmy" />
+        <input type="email" name="email" />
+        <input type="tel" name="telefon" />
+        <input type="text" name="lokalita" />
+        <textarea name="zprava"></textarea>
+    </form>
+</body>
+</html>

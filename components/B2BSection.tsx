@@ -14,7 +14,10 @@ const B2BSection: React.FC = () => {
       body: new URLSearchParams(formData as any).toString(),
     })
       .then(() => setSubmitted(true))
-      .catch((error) => alert(error));
+      .catch((error) => {
+        console.error("Form submission error:", error);
+        alert("Omlouváme se, při odesílání došlo k chybě. Zkuste to prosím znovu nebo nám napište e-mail.");
+      });
   };
 
   const benefits = [
@@ -129,6 +132,7 @@ const B2BSection: React.FC = () => {
                   onSubmit={handleSubmit}
                   className="space-y-4"
                 >
+                  {/* Skrytý input pro Netlify k identifikaci názvu formuláře */}
                   <input type="hidden" name="form-name" value="spoluprace-kontakt" />
                   
                   <div>
