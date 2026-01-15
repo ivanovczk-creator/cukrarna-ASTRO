@@ -54,7 +54,7 @@ const CakeCard: React.FC<CakeCardProps> = ({ cake, onAdd }) => {
         <h3 className="text-xl font-serif mb-1 text-[#4A3728] leading-tight min-h-[3rem]">{cake.title}</h3>
         
         <div className="flex flex-col gap-1 mb-6">
-            <span className="text-2xl font-bold text-[#D4AF37]">{cake.cena} Kč</span>
+            <span className="text-2xl font-bold text-[#D4AF37]">{cake.cena}</span>
             <span className="text-sm text-slate-400 font-medium">{cake.porce}</span>
         </div>
         

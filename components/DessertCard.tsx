@@ -50,7 +50,7 @@ const DessertCard: React.FC<DessertCardProps> = ({ dessert, onAdd }) => {
       <div className="p-4">
         <h3 className="text-lg font-bold text-[#4A3728] mb-1">{dessert.title}</h3>
         <p className="text-xs text-slate-500 mb-3 line-clamp-1">{dessert.popis}</p>
-        <div className="text-xl font-bold text-[#D4AF37] mb-4">{dessert.cena} Kč</div>
+        <div className="text-xl font-bold text-[#D4AF37] mb-4">{dessert.cena}</div>
         
         <div className="flex items-center gap-2">
           <div className="flex items-center border border-slate-200 rounded-lg bg-slate-50 overflow-hidden">
