@@ -1,0 +1,131 @@
+---
+interface Props {
+	title?: string;
+	description?: string;
+	keywords?: string;
+}
+
+const {
+	title = 'Cukrářství Blahutovi - Tradiční pečivo a dorty | Píšť, Karviná, Ostrava, Petřvald',
+	description = 'Rodinné cukrářství s tradicí od roku 1985. Nabízíme čerstvé dorty, zákusky a sladkosti nejvyšší kvality. Zakázková výroba, velkoobchod pro firmy. Prodejny v Píšti, Karviné, Ostravě a Petřvaldě.',
+	keywords = 'cukrářství, dorty, zákusky, svatební dorty, narozeninové dorty, zakázková výroba, Píšť, Karviná, Ostrava, Petřvald, velkoobchod, B2B, cukrárna'
+} = Astro.props;
+
+const siteUrl = 'https://www.cukrarstvi-blahutovi.cz';
+---
+
+<!doctype html>
+<html lang="cs">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+
+		<!-- Primary Meta Tags -->
+		<title>{title}</title>
+		<meta name="title" content={title} />
+		<meta name="description" content={description} />
+		<meta name="keywords" content={keywords} />
+		<meta name="author" content="Cukrářství Blahutovi" />
+		<meta name="robots" content="index, follow" />
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={siteUrl} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:locale" content="cs_CZ" />
+		<meta property="og:site_name" content="Cukrářství Blahutovi" />
+
+		<!-- Twitter -->
+		<meta property="twitter:card" content="summary_large_image" />
+		<meta property="twitter:url" content={siteUrl} />
+		<meta property="twitter:title" content={title} />
+		<meta property="twitter:description" content={description} />
+
+		<!-- Additional SEO -->
+		<link rel="canonical" href={siteUrl} />
+		<meta name="theme-color" content="#1e3a8a" />
+
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+		<!-- Structured Data -->
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "Bakery",
+			"name": "Cukrářství Blahutovi",
+			"description": "Rodinné cukrářství s tradicí od roku 1985",
+			"url": "https://www.cukrarstvi-blahutovi.cz",
+			"foundingDate": "1985",
+			"priceRange": "$$",
+			"servesCuisine": "Czech",
+			"address": [
+				{
+					"@type": "PostalAddress",
+					"streetAddress": "Hlavní 123",
+					"addressLocality": "Píšť",
+					"postalCode": "739 51",
+					"addressCountry": "CZ"
+				},
+				{
+					"@type": "PostalAddress",
+					"streetAddress": "Náměstí 456",
+					"addressLocality": "Karviná",
+					"postalCode": "733 01",
+					"addressCountry": "CZ"
+				},
+				{
+					"@type": "PostalAddress",
+					"streetAddress": "Hlavní třída 789",
+					"addressLocality": "Ostrava",
+					"postalCode": "702 00",
+					"addressCountry": "CZ"
+				},
+				{
+					"@type": "PostalAddress",
+					"streetAddress": "Nádražní 321",
+					"addressLocality": "Petřvald",
+					"postalCode": "735 41",
+					"addressCountry": "CZ"
+				}
+			],
+			"openingHoursSpecification": [
+				{
+					"@type": "OpeningHoursSpecification",
+					"dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+					"opens": "07:00",
+					"closes": "18:00"
+				}
+			]
+		}
+		</script>
+	</head>
+	<body class="bg-offwhite">
+		<slot />
+	</body>
+</html>
+
+<style is:global>
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	html {
+		scroll-behavior: smooth;
+	}
+
+	body {
+		font-family: 'Inter', sans-serif;
+		line-height: 1.6;
+	}
+
+	h1, h2, h3, h4, h5, h6 {
+		font-family: 'Playfair Display', serif;
+	}
+</style>

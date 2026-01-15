@@ -1,0 +1,55 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/img"
+public_folder: "/img"
+
+locale: "cs"
+
+collections:
+  - name: "products"
+    label: "Produkty"
+    files:
+      - name: "all_products"
+        label: "Všechny produkty"
+        file: "src/data/products.json"
+        fields:
+          - label: "Dorty"
+            name: "dorty"
+            widget: "list"
+            summary: "{{fields.title}} - {{fields.price}}"
+            fields:
+              - {label: "Název", name: "title", widget: "string", required: true}
+              - {label: "Popis", name: "description", widget: "text", required: true}
+              - {label: "Cena", name: "price", widget: "string", required: true, hint: "např. 'od 850 Kč' nebo '45 Kč/ks'"}
+              - {label: "Obrázek", name: "image", widget: "image", required: true, media_folder: "/public/img/dorty", public_folder: "/img/dorty"}
+
+          - label: "Zákusky"
+            name: "zakusky"
+            widget: "list"
+            summary: "{{fields.title}} - {{fields.price}}"
+            fields:
+              - {label: "Název", name: "title", widget: "string", required: true}
+              - {label: "Popis", name: "description", widget: "text", required: true}
+              - {label: "Cena", name: "price", widget: "string", required: true, hint: "např. 'od 850 Kč' nebo '45 Kč/ks'"}
+              - {label: "Obrázek", name: "image", widget: "image", required: true, media_folder: "/public/img/zakusky", public_folder: "/img/zakusky"}
+
+  - name: "b2b"
+    label: "B2B Partnerství"
+    files:
+      - name: "b2b_content"
+        label: "B2B Obsah"
+        file: "src/data/b2b.json"
+        fields:
+          - {label: "Nadpis", name: "title", widget: "string", required: true}
+          - {label: "Podnadpis", name: "subtitle", widget: "string", required: true}
+          - {label: "Popis", name: "description", widget: "text", required: true}
+          - label: "Výhody"
+            name: "benefits"
+            widget: "list"
+            summary: "{{fields.title}}"
+            fields:
+              - {label: "Název výhody", name: "title", widget: "string", required: true}
+              - {label: "Popis výhody", name: "description", widget: "text", required: true}
+          - {label: "Text tlačítka", name: "cta", widget: "string", required: true, default: "Chci se stát partnerem"}

@@ -1,0 +1,239 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ReservationForm from '../components/ReservationForm';
+import productsData from '../data/products.json';
+import b2bData from '../data/b2b.json';
+
+const products = productsData;
+const b2b = b2bData;
+
+const stores = [
+	{
+		name: 'Píšť',
+		address: 'Hlavní 123, 739 51 Píšť',
+		mapsUrl: 'https://maps.google.com/?q=Píšť',
+		closedDays: ['Sobota', 'Neděle'],
+	},
+	{
+		name: 'Karviná',
+		address: 'Náměstí 456, 733 01 Karviná',
+		mapsUrl: 'https://maps.google.com/?q=Karviná',
+		closedDays: ['Neděle'],
+	},
+	{
+		name: 'Ostrava',
+		address: 'Hlavní třída 789, 702 00 Ostrava',
+		mapsUrl: 'https://maps.google.com/?q=Ostrava',
+		closedDays: ['Neděle'],
+	},
+	{
+		name: 'Petřvald',
+		address: 'Nádražní 321, 735 41 Petřvald',
+		mapsUrl: 'https://maps.google.com/?q=Petřvald',
+		closedDays: ['Pondělí'],
+	},
+];
+---
+
+<Layout>
+	<div class="min-h-screen">
+		<header class="bg-white shadow-md sticky top-0 z-50">
+			<nav class="container mx-auto px-4 py-4">
+				<div class="flex items-center justify-between">
+					<h1 class="text-3xl font-bold text-navy-900">Cukrářství Blahutovi</h1>
+					<div class="hidden md:flex gap-6 items-center">
+						<a href="#dorty" class="text-gray-700 hover:text-gold-500 transition-colors">Dorty</a>
+						<a href="#zakusky" class="text-gray-700 hover:text-gold-500 transition-colors">Zákusky</a>
+						<a href="#prodejny" class="text-gray-700 hover:text-gold-500 transition-colors">Prodejny</a>
+						<a href="#b2b" class="text-gray-700 hover:text-gold-500 transition-colors">B2B</a>
+						<a href="#rezervace" class="bg-gold-500 text-navy-900 px-6 py-2 rounded-full font-semibold hover:bg-gold-400 transition-colors shadow-md">Rezervace</a>
+					</div>
+				</div>
+			</nav>
+		</header>
+
+		<section class="relative bg-gradient-to-br from-navy-900 to-navy-800 text-white py-32 px-4">
+			<div class="container mx-auto text-center">
+				<h2 class="text-5xl md:text-6xl font-bold mb-6">Vítejte v Cukrářství Blahutovi</h2>
+				<p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto font-light">
+					Rodinné cukrářství s tradicí od roku 1985. Nabízíme čerstvé dorty, zákusky a další sladkosti připravené s láskou.
+				</p>
+				<a href="#dorty" class="inline-block bg-gold-500 text-navy-900 px-8 py-3 rounded-full font-semibold hover:bg-gold-400 transition-colors shadow-lg">
+					Prohlédnout nabídku
+				</a>
+			</div>
+			<div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-offwhite to-transparent"></div>
+		</section>
+
+		<section id="dorty" class="py-20 px-4">
+			<div class="container mx-auto">
+				<h2 class="text-4xl md:text-5xl font-bold text-center mb-4 text-gray-800">Naše dorty</h2>
+				<p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">
+					Každý dort je připraven na míru podle vašich přání. Používáme pouze ty nejkvalitnější suroviny.
+				</p>
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+					{products.dorty.map(product => (
+						<div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow border border-gold-500/20">
+							<div class="aspect-square bg-gradient-to-br from-cream to-offwhite flex items-center justify-center">
+								<img src={product.image} alt={product.title} class="w-full h-full object-cover" loading="lazy" />
+							</div>
+							<div class="p-6">
+								<h3 class="text-xl font-bold mb-2 text-navy-900">{product.title}</h3>
+								<p class="text-gray-600 mb-3">{product.description}</p>
+								<p class="text-gold-600 font-semibold text-lg mb-4">{product.price}</p>
+								<button
+									class="order-button w-full bg-gold-500 text-navy-900 py-2 rounded-lg font-semibold hover:bg-gold-400 transition-colors"
+									data-product={product.title}
+								>
+									Objednat
+								</button>
+							</div>
+						</div>
+					))}
+				</div>
+			</div>
+		</section>
+
+		<section id="zakusky" class="py-20 px-4 bg-white">
+			<div class="container mx-auto">
+				<h2 class="text-4xl md:text-5xl font-bold text-center mb-4 text-gray-800">Naše zákusky</h2>
+				<p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">
+					Čerstvé zákusky připravované denně. Ideální k odpolednímu kávě nebo na oslavu.
+				</p>
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+					{products.zakusky.map(product => (
+						<div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow border border-gold-500/20">
+							<div class="aspect-square bg-gradient-to-br from-cream to-offwhite flex items-center justify-center">
+								<img src={product.image} alt={product.title} class="w-full h-full object-cover" loading="lazy" />
+							</div>
+							<div class="p-6">
+								<h3 class="text-xl font-bold mb-2 text-navy-900">{product.title}</h3>
+								<p class="text-gray-600 mb-3">{product.description}</p>
+								<p class="text-gold-600 font-semibold text-lg mb-4">{product.price}</p>
+								<button
+									class="order-button w-full bg-gold-500 text-navy-900 py-2 rounded-lg font-semibold hover:bg-gold-400 transition-colors"
+									data-product={product.title}
+								>
+									Objednat
+								</button>
+							</div>
+						</div>
+					))}
+				</div>
+			</div>
+		</section>
+
+		<section id="prodejny" class="py-20 px-4">
+			<div class="container mx-auto">
+				<h2 class="text-4xl md:text-5xl font-bold text-center mb-4 text-gray-800">Naše prodejny</h2>
+				<p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">
+					Navštivte nás v jedné z našich čtyř prodejen. Těšíme se na vás!
+				</p>
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+					{stores.map(store => (
+						<div class="bg-cream rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gold-500/20">
+							<h3 class="text-2xl font-bold mb-3 text-gold-600">{store.name}</h3>
+							<p class="text-gray-700 mb-4">{store.address}</p>
+							<div class="mb-4">
+								<p class="text-sm text-gray-600 font-semibold mb-1">Zavřeno:</p>
+								<p class="text-sm text-gray-600">{store.closedDays.join(', ')}</p>
+							</div>
+							<a
+								href={store.mapsUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="inline-block w-full text-center bg-navy-900 text-white px-6 py-2 rounded-lg hover:bg-navy-800 transition-colors"
+							>
+								Zobrazit na mapě
+							</a>
+						</div>
+					))}
+				</div>
+			</div>
+		</section>
+
+		<section id="b2b" class="py-20 px-4 bg-gradient-to-br from-navy-900 to-navy-800 text-white">
+			<div class="container mx-auto">
+				<div class="text-center mb-12">
+					<h2 class="text-4xl md:text-5xl font-bold mb-4">{b2b.title}</h2>
+					<p class="text-xl text-gray-300 mb-4">{b2b.subtitle}</p>
+					<p class="text-lg text-gray-400 max-w-3xl mx-auto">{b2b.description}</p>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+					{b2b.benefits.map(benefit => (
+						<div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-gold-500/30 hover:border-gold-500/60 transition-all">
+							<h3 class="text-xl font-bold mb-3 text-gold-400">{benefit.title}</h3>
+							<p class="text-gray-300">{benefit.description}</p>
+						</div>
+					))}
+				</div>
+
+				<div class="text-center">
+					<a
+						href="#rezervace"
+						class="inline-block bg-gold-500 text-navy-900 px-10 py-4 rounded-full font-bold text-lg hover:bg-gold-400 transition-colors shadow-xl hover:shadow-2xl"
+					>
+						{b2b.cta}
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<section id="rezervace" class="py-20 px-4 bg-gradient-to-br from-cream to-offwhite">
+			<div class="container mx-auto max-w-2xl">
+				<h2 class="text-4xl md:text-5xl font-bold text-center mb-4 text-gray-800">Rezervace</h2>
+				<p class="text-center text-gray-600 mb-12">
+					Objednejte si dort nebo zákusky předem. Minimální objednávka 3 dny předem.
+				</p>
+				<div class="bg-white rounded-2xl shadow-xl p-8">
+					<ReservationForm client:load stores={stores} />
+				</div>
+			</div>
+		</section>
+
+		<footer class="bg-navy-900 text-white py-12 px-4">
+			<div class="container mx-auto text-center">
+				<h3 class="text-2xl font-bold mb-4 text-gold-500">Cukrářství Blahutovi</h3>
+				<p class="text-gray-300 mb-4">Rodinné cukrářství s tradicí od roku 1985</p>
+				<p class="text-gray-400">&copy; 2024 Cukrářství Blahutovi. Všechna práva vyhrazena.</p>
+			</div>
+		</footer>
+
+		<a
+			href="#rezervace"
+			class="fixed bottom-6 right-6 bg-gold-500 text-navy-900 px-6 py-4 rounded-full font-bold shadow-2xl hover:bg-gold-400 transition-all hover:scale-110 z-40 flex items-center gap-2"
+			aria-label="Objednat online"
+		>
+			<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+			</svg>
+			Objednat online
+		</a>
+	</div>
+
+	<script>
+		let selectedProduct = '';
+
+		document.addEventListener('DOMContentLoaded', () => {
+			const orderButtons = document.querySelectorAll('.order-button');
+
+			orderButtons.forEach(button => {
+				button.addEventListener('click', (e) => {
+					const target = e.currentTarget as HTMLButtonElement;
+					selectedProduct = target.dataset.product || '';
+
+					const rezervaceSection = document.getElementById('rezervace');
+					if (rezervaceSection) {
+						rezervaceSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+					}
+				});
+			});
+		});
+
+		if (typeof window !== 'undefined') {
+			(window as any).getSelectedProduct = () => selectedProduct;
+			(window as any).clearSelectedProduct = () => { selectedProduct = ''; };
+		}
+	</script>
+</Layout>
