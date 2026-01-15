@@ -1,9 +1,8 @@
-
 import React from 'react';
 
 interface HeaderProps {
-  activeTab: 'cakes' | 'desserts' | 'checkout';
-  setActiveTab: (tab: 'cakes' | 'desserts' | 'checkout') => void;
+  activeTab: 'cakes' | 'desserts' | 'checkout' | 'b2b' | 'stores';
+  setActiveTab: (tab: 'cakes' | 'desserts' | 'checkout' | 'b2b' | 'stores') => void;
   cartCount: number;
 }
 
@@ -32,6 +31,18 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, cartCount }) =
               className={`pb-1 transition-all ${activeTab === 'desserts' ? 'text-[#D4AF37] border-b-2 border-[#D4AF37]' : 'text-slate-500 hover:text-[#4A3728]'}`}
             >
               Zákusky
+            </button>
+            <button 
+              onClick={() => setActiveTab('stores')}
+              className={`pb-1 transition-all ${activeTab === 'stores' ? 'text-[#D4AF37] border-b-2 border-[#D4AF37]' : 'text-slate-500 hover:text-[#4A3728]'}`}
+            >
+              Prodejny
+            </button>
+            <button 
+              onClick={() => setActiveTab('b2b')}
+              className={`pb-1 transition-all ${activeTab === 'b2b' ? 'text-[#D4AF37] border-b-2 border-[#D4AF37]' : 'text-slate-500 hover:text-[#4A3728]'}`}
+            >
+              Pro firmy
             </button>
           </nav>
 

@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect } from 'react';
 import { Dort, Zakusek, CartItem } from './types';
 import data from './data.json';
@@ -8,8 +7,10 @@ import ReservationForm from './components/ReservationForm';
 import ThankYou from './components/ThankYou';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import B2BSection from './components/B2BSection';
+import StoresSection from './components/StoresSection';
 
-type Tab = 'cakes' | 'desserts' | 'checkout' | 'podekovani';
+type Tab = 'cakes' | 'desserts' | 'checkout' | 'podekovani' | 'b2b' | 'stores';
 
 const App: React.FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -54,7 +55,6 @@ const App: React.FC = () => {
     <div className="min-h-screen flex flex-col text-slate-800">
       {activeTab !== 'podekovani' && (
         <Header 
-          // Fix: activeTab is already narrowed by the condition above, removing redundant comparison that caused TS error
           activeTab={activeTab as any} 
           setActiveTab={setActiveTab as any} 
           cartCount={cart.reduce((s, i) => s + i.quantity, 0)} 
@@ -93,6 +93,10 @@ const App: React.FC = () => {
             </div>
           </div>
         )}
+
+        {activeTab === 'stores' && <StoresSection />}
+
+        {activeTab === 'b2b' && <B2BSection />}
 
         {activeTab === 'checkout' && (
           <div className="max-w-4xl mx-auto">
