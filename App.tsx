@@ -9,8 +9,9 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import B2BSection from './components/B2BSection';
 import StoresSection from './components/StoresSection';
+import CustomCakeForm from './components/CustomCakeForm';
 
-type Tab = 'cakes' | 'desserts' | 'checkout' | 'podekovani' | 'b2b' | 'stores';
+type Tab = 'cakes' | 'desserts' | 'checkout' | 'podekovani' | 'b2b' | 'stores' | 'custom-cake';
 
 const App: React.FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -93,6 +94,8 @@ const App: React.FC = () => {
             </div>
           </div>
         )}
+
+        {activeTab === 'custom-cake' && <CustomCakeForm />}
 
         {activeTab === 'stores' && <StoresSection />}
 

@@ -1,8 +1,8 @@
 import React from 'react';
 
 interface HeaderProps {
-  activeTab: 'cakes' | 'desserts' | 'checkout' | 'b2b' | 'stores';
-  setActiveTab: (tab: 'cakes' | 'desserts' | 'checkout' | 'b2b' | 'stores') => void;
+  activeTab: 'cakes' | 'desserts' | 'checkout' | 'b2b' | 'stores' | 'custom-cake';
+  setActiveTab: (tab: 'cakes' | 'desserts' | 'checkout' | 'b2b' | 'stores' | 'custom-cake') => void;
   cartCount: number;
 }
 
@@ -19,7 +19,7 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, cartCount }) =
             </div>
           </div>
 
-          <nav className="hidden md:flex items-center gap-8 text-sm font-bold">
+          <nav className="hidden xl:flex items-center gap-8 text-sm font-bold">
             <button 
               onClick={() => setActiveTab('cakes')}
               className={`pb-1 transition-all ${activeTab === 'cakes' ? 'text-[#D4AF37] border-b-2 border-[#D4AF37]' : 'text-slate-500 hover:text-[#4A3728]'}`}
@@ -31,6 +31,12 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, cartCount }) =
               className={`pb-1 transition-all ${activeTab === 'desserts' ? 'text-[#D4AF37] border-b-2 border-[#D4AF37]' : 'text-slate-500 hover:text-[#4A3728]'}`}
             >
               Zákusky
+            </button>
+            <button 
+              onClick={() => setActiveTab('custom-cake')}
+              className={`pb-1 transition-all ${activeTab === 'custom-cake' ? 'text-[#D4AF37] border-b-2 border-[#D4AF37]' : 'text-slate-500 hover:text-[#4A3728]'}`}
+            >
+              Dort na přání
             </button>
             <button 
               onClick={() => setActiveTab('stores')}
