@@ -8,16 +8,17 @@ interface ReservationFormProps {
 }
 
 const ReservationForm: React.FC<ReservationFormProps> = ({ cart, total }) => {
-  // We stringify the cart for Netlify to capture it as a single field
   const cartSummary = cart.map(i => `${i.name}${i.portions ? ` (${i.portions} porcí)` : ''} x${i.quantity}`).join(', ');
 
   return (
     <form 
       name="rezervace" 
       method="POST" 
+      action="/podekovani"
       data-netlify="true" 
       className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100"
     >
+      {/* Nutné pro Netlify Forms v Reactu */}
       <input type="hidden" name="form-name" value="rezervace" />
       <input type="hidden" name="obsah_kosiku" value={cartSummary} />
       <input type="hidden" name="celkova_cena" value={`${total} Kč`} />
@@ -30,7 +31,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ cart, total }) => {
             name="jmeno" 
             required 
             placeholder="Jan Novák"
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] focus:border-transparent transition-all"
+            className="w-full min-h-[48px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] focus:border-transparent transition-all text-base"
           />
         </div>
 
@@ -41,7 +42,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ cart, total }) => {
             name="telefon" 
             required 
             placeholder="+420 777 666 555"
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] focus:border-transparent transition-all"
+            autoComplete="tel"
+            className="w-full min-h-[48px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] focus:border-transparent transition-all text-base"
           />
         </div>
 
@@ -52,7 +54,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ cart, total }) => {
             name="email" 
             required 
             placeholder="jan.novak@seznam.cz"
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] focus:border-transparent transition-all"
+            autoComplete="email"
+            className="w-full min-h-[48px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] focus:border-transparent transition-all text-base"
           />
         </div>
 
@@ -61,7 +64,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ cart, total }) => {
           <select 
             name="pobocka" 
             required 
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all"
+            className="w-full min-h-[48px] px-4 py-3 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all text-base appearance-none"
           >
             <option value={Branch.Petrvald}>{Branch.Petrvald}</option>
             <option value={Branch.Karvina}>{Branch.Karvina}</option>
@@ -76,7 +79,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ cart, total }) => {
               type="date" 
               name="datum" 
               required 
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all"
+              className="w-full min-h-[48px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all text-base"
             />
           </div>
           <div>
@@ -85,7 +88,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ cart, total }) => {
               type="time" 
               name="cas" 
               required 
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all"
+              className="w-full min-h-[48px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all text-base"
             />
           </div>
         </div>
@@ -97,14 +100,14 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ cart, total }) => {
           name="poznamka" 
           rows={3} 
           placeholder="Alergie, text na dortu, atd."
-          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all resize-none"
+          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all resize-none text-base"
         ></textarea>
       </div>
 
       <button 
         type="submit" 
         disabled={cart.length === 0}
-        className="w-full bg-[#D4AF37] hover:bg-[#c4a132] disabled:bg-slate-300 text-white font-bold py-4 rounded-2xl shadow-lg shadow-gold-100 transition-all flex items-center justify-center gap-2"
+        className="w-full min-h-[56px] bg-[#D4AF37] hover:bg-[#c4a132] disabled:bg-slate-300 text-white font-bold py-4 rounded-2xl shadow-lg shadow-gold-100 transition-all flex items-center justify-center gap-2 text-lg active:scale-[0.98]"
       >
         Odeslat závaznou rezervaci
       </button>

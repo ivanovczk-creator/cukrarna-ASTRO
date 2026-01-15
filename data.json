@@ -1,59 +1,72 @@
 
 {
   "cakes": [
-    {
-      "id": "c1",
-      "name": "Malinový sen",
-      "pricePerServing": 65,
-      "availablePortions": [12, 16, 24],
-      "imageId": "1",
-      "description": "Lehký piškot s malinovým krémem a čerstvým ovocem."
-    },
-    {
-      "id": "c2",
-      "name": "Čokoládová klasika",
-      "pricePerServing": 75,
-      "availablePortions": [12, 18, 24, 32],
-      "imageId": "2",
-      "description": "Bohatý čokoládový korpus s belgickou čokoládou."
-    },
-    {
-      "id": "c3",
-      "name": "Slaný karamel",
-      "pricePerServing": 70,
-      "availablePortions": [12, 16, 20],
-      "imageId": "3",
-      "description": "Harmonie sladkého a slaného v každém soustu."
-    }
+    { "id": "1", "nazev": "V MARCIPÁNU, 2 FIGURKY", "cena_za_porci": 150, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/1.jpg", "kategorie": "dorty" },
+    { "id": "2", "nazev": "OBMAZANÝ, MARCIPÁNOVÉ OZDOBY", "cena_za_porci": 158, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/2.jpg", "kategorie": "dorty" },
+    { "id": "3", "nazev": "2 PATRA, V MARCIPÁNU", "cena_za_porci": 140, "mozne_porce": [20, 24, 32], "foto": "/img/dorty/3.jpg", "kategorie": "dorty" },
+    { "id": "4", "nazev": "OBMAZANÝ, SNĚHOVÉ OZDOBY, MAKRONKY", "cena_za_porci": 133, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/4.jpg", "kategorie": "dorty" },
+    { "id": "5", "nazev": "V MARCIPÁNU, 2 MARCIPÁNOVÉ FIGURKY", "cena_za_porci": 133, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/5.jpg", "kategorie": "dorty" },
+    { "id": "6", "nazev": "V MARCIPÁNU 3,5 Kg", "cena_za_porci": 140, "mozne_porce": [15, 20, 24, 32], "foto": "/img/dorty/6.jpg", "kategorie": "dorty" },
+    { "id": "7", "nazev": "V MARCIPÁNU, MARCIPÁNOVÉ OZDOBY", "cena_za_porci": 142, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/7.jpg", "kategorie": "dorty" },
+    { "id": "8", "nazev": "V MARCIPÁNU, 1 MARCIPÁNOVÁ FIGURKA", "cena_za_porci": 133, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/8.jpg", "kategorie": "dorty" },
+    { "id": "9", "nazev": "MARCIPÁNOVÁ PLACKA, JEDLÝ PAPÍR", "cena_za_porci": 116, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/9.jpg", "kategorie": "dorty" },
+    { "id": "10", "nazev": "V MARCIPÁNU, MARCIPÁNOVÉ OZDOBY, JEDLÝ P.", "cena_za_porci": 166, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/10.jpg", "kategorie": "dorty" },
+    { "id": "11", "nazev": "OBMAZANÝ, MARCIPÁNOVÉ OZDOBY", "cena_za_porci": 150, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/11.jpg", "kategorie": "dorty" },
+    { "id": "12", "nazev": "MODELOVANÝ V MARCIPÁNU - Bezubka", "cena_za_porci": 124, "mozne_porce": [25, 32], "foto": "/img/dorty/12.jpg", "kategorie": "dorty" },
+    { "id": "13", "nazev": "V MARCIPÁNU, JEDLÝ PAPÍR", "cena_za_porci": 116, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/13.jpg", "kategorie": "dorty" },
+    { "id": "14", "nazev": "V MARCIPÁNU, MARCIPÁNOVÉ OZDOBY", "cena_za_porci": 180, "mozne_porce": [15, 20, 24, 32], "foto": "/img/dorty/14.jpg", "kategorie": "dorty" },
+    { "id": "15", "nazev": "V MARCIPÁNU", "cena_za_porci": 125, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/15.jpg", "kategorie": "dorty" },
+    { "id": "16", "nazev": "V MARCIPÁNU, 1 MARCIPÁNOVÁ FIGURKA", "cena_za_porci": 133, "mozne_porce": [6, 8, 12, 16], "foto": "/img/dorty/16.jpg", "kategorie": "dorty" },
+    { "id": "17", "nazev": "V MARCIPÁNU", "cena_za_porci": 164, "mozne_porce": [14, 16, 24, 32], "foto": "/img/dorty/17.jpg", "kategorie": "dorty" },
+    { "id": "18", "nazev": "ČÍSLICE V MARCIPÁNU 4,5 Kg", "cena_za_porci": 116, "mozne_porce": [25, 30, 32], "foto": "/img/dorty/18.jpg", "kategorie": "dorty" },
+    { "id": "19", "nazev": "V MARCIPÁNU, JEDLÝ PAPÍR", "cena_za_porci": 133, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/19.jpg", "kategorie": "dorty" },
+    { "id": "20", "nazev": "V MARCIPÁNU, JEDLÝ PAPÍR", "cena_za_porci": 125, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/20.jpg", "kategorie": "dorty" },
+    { "id": "21", "nazev": "V MARCIPÁNU, JEDLÝ PAPÍR", "cena_za_porci": 116, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/21.jpg", "kategorie": "dorty" },
+    { "id": "22", "nazev": "V MARCIPÁNU, FIGURKY", "cena_za_porci": 158, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/22.jpg", "kategorie": "dorty" },
+    { "id": "23", "nazev": "V MARCIPÁNU, MARCIPÁNOVÉ OZDOBY", "cena_za_porci": 137, "mozne_porce": [8, 10, 12, 16], "foto": "/img/dorty/23.jpg", "kategorie": "dorty" },
+    { "id": "24", "nazev": "V MARCIPÁNU, JEDLÝ PAPÍR", "cena_za_porci": 116, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/24.jpg", "kategorie": "dorty" },
+    { "id": "25", "nazev": "V MARCIPÁNU, Bagr", "cena_za_porci": 212, "mozne_porce": [8, 10, 12, 16], "foto": "/img/dorty/25.jpg", "kategorie": "dorty" },
+    { "id": "26", "nazev": "V MARCIPÁNU, MARCIPÁNOVÉ FIGURKY", "cena_za_porci": 212, "mozne_porce": [8, 10, 12, 16], "foto": "/img/dorty/26.jpg", "kategorie": "dorty" },
+    { "id": "27", "nazev": "V ČOKOLÁDĚ, MARCIP. OZDOBY, JEDLÝ PAPÍR", "cena_za_porci": 145, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/27.jpg", "kategorie": "dorty" },
+    { "id": "28", "nazev": "OBSYPANÝ PIŠKOTEM, MARCIPÁNOVÉ FIGURKY", "cena_za_porci": 137, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/28.jpg", "kategorie": "dorty" },
+    { "id": "29", "nazev": "OBMAZANÝ, MARCIPÁNOVÉ OZDOBY, JEDLÝ PAP", "cena_za_porci": 175, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/29.jpg", "kategorie": "dorty" },
+    { "id": "30", "nazev": "2 PATRA S ČOKOLÁDOU, MARCIPÁNOVÉ OZDOBY", "cena_za_porci": 150, "mozne_porce": [18, 20, 24, 32], "foto": "/img/dorty/30.jpg", "kategorie": "dorty" },
+    { "id": "31", "nazev": "2 PATRA V MARCIPÁNU, BING", "cena_za_porci": 166, "mozne_porce": [18, 20, 24, 32], "foto": "/img/dorty/31.jpg", "kategorie": "dorty" },
+    { "id": "32", "nazev": "V MARCIPÁNU, 6 MARCIPÁNOVÝCH FIGUREK", "cena_za_porci": 208, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/32.jpg", "kategorie": "dorty" },
+    { "id": "33", "nazev": "V MARCIPÁNU, MARCIPÁNOVÉ FIGURKY A OZDO", "cena_za_porci": 175, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/33.jpg", "kategorie": "dorty" },
+    { "id": "34", "nazev": "V MARCIPÁNU, 1 MARCIPÁNOVÁ FIGURKA", "cena_za_porci": 168, "mozne_porce": [8, 10, 12, 16], "foto": "/img/dorty/34.jpg", "kategorie": "dorty" },
+    { "id": "35", "nazev": "V MARCIPÁNU, 1 MARCIPÁNOVÁ FIGURKA", "cena_za_porci": 168, "mozne_porce": [8, 10, 12, 16], "foto": "/img/dorty/35.jpg", "kategorie": "dorty" },
+    { "id": "36", "nazev": "V MARCIPÁNU, MARCIPÁNOVÉ OZDOBY", "cena_za_porci": 158, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/36.jpg", "kategorie": "dorty" },
+    { "id": "37", "nazev": "V MARCIPÁNU, JEDLÝ PAPÍR, MARCIPÁNOVÁ FIG", "cena_za_porci": 142, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/37.jpg", "kategorie": "dorty" },
+    { "id": "38", "nazev": "MARCIPÁN, KRÉM, OVOCE", "cena_za_porci": 150, "mozne_porce": [10, 12, 16, 24], "foto": "/img/dorty/38.jpg", "kategorie": "dorty" },
+    { "id": "39", "nazev": "OBMAZANÝ, MARCIPÁNOVÉ OZDOBY, JEDLÝ PAP", "cena_za_porci": 125, "mozne_porce": [10, 12, 16, 24], "foto": "/img/dorty/39.jpg", "kategorie": "dorty" },
+    { "id": "40", "nazev": "OBMAZANÝ, ČOKOLÁDA, OVOCE", "cena_za_porci": 166, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/40.jpg", "kategorie": "dorty" },
+    { "id": "41", "nazev": "OBMAZANÝ, ČOKOLÁDOVÝ OBSYP, OVOCE", "cena_za_porci": 128, "mozne_porce": [25, 32], "foto": "/img/dorty/41.jpg", "kategorie": "dorty" },
+    { "id": "42", "nazev": "NAHÝ DORT, OVOCE", "cena_za_porci": 162, "mozne_porce": [8, 10, 12, 16], "foto": "/img/dorty/42.jpg", "kategorie": "dorty" },
+    { "id": "43", "nazev": "ČOKOLÁDOVÝ PAŘÍŽ, MALINY", "cena_za_porci": 70, "mozne_porce": [10, 12, 16, 24], "foto": "/img/dorty/43.jpg", "kategorie": "dorty" },
+    { "id": "44", "nazev": "V MARCIPÁNU, MARCIPÁNOVÉ OZDOBY", "cena_za_porci": 146, "mozne_porce": [15, 20, 24, 32], "foto": "/img/dorty/44.jpg", "kategorie": "dorty" },
+    { "id": "45", "nazev": "V ČOKOLÁDĚ, MARCIPÁNOVÉ OZDOBY", "cena_za_porci": 140, "mozne_porce": [15, 20, 24, 32], "foto": "/img/dorty/45.jpg", "kategorie": "dorty" },
+    { "id": "46", "nazev": "MALÉ SRDCE", "cena_za_porci": 75, "mozne_porce": [6, 12, 16], "foto": "/img/dorty/46.jpg", "kategorie": "dorty" },
+    { "id": "47", "nazev": "V ČOKOLÁDĚ, MARCIPÁNOVÉ OZDOBY", "cena_za_porci": 165, "mozne_porce": [20, 25, 32], "foto": "/img/dorty/47.jpg", "kategorie": "dorty" },
+    { "id": "48", "nazev": "V ČOKOLÁDĚ, MARCIPÁNOVÉ OZDOBY", "cena_za_porci": 116, "mozne_porce": [6, 12, 16], "foto": "/img/dorty/48.jpg", "kategorie": "dorty" },
+    { "id": "49", "nazev": "OBMAZANÝ, MARCIPÁNOVÉ OZDOBY", "cena_za_porci": 110, "mozne_porce": [10, 12, 16, 24], "foto": "/img/dorty/49.jpg", "kategorie": "dorty" },
+    { "id": "50", "nazev": "MINI ROLÁDY", "cena_za_porci": 20, "mozne_porce": [10, 20, 30], "foto": "/img/dorty/50.jpg", "kategorie": "dorty" },
+    { "id": "51", "nazev": "OBMAZANÝ, OVOCE VELKÝ", "cena_za_porci": 137, "mozne_porce": [40, 50, 60], "foto": "/img/dorty/51.jpg", "kategorie": "dorty" },
+    { "id": "52", "nazev": "BÍLÝ FONDÁN, OVOCE", "cena_za_porci": 186, "mozne_porce": [15, 20, 24, 32], "foto": "/img/dorty/52.jpg", "kategorie": "dorty" },
+    { "id": "53", "nazev": "NAHÝ DORT, OVOCE 5,5 Kg", "cena_za_porci": 175, "mozne_porce": [20, 25, 32], "foto": "/img/dorty/53.jpg", "kategorie": "dorty" },
+    { "id": "54", "nazev": "OBMAZANÝ, ŽIVÉ KVĚTY", "cena_za_porci": 165, "mozne_porce": [20, 25, 32], "foto": "/img/dorty/54.jpg", "kategorie": "dorty" },
+    { "id": "55", "nazev": "SVATEBNÍ A DĚKOVACÍ DORTY", "cena_za_porci": 142, "mozne_porce": [35, 40, 50, 60], "foto": "/img/dorty/55.jpg", "kategorie": "dorty" },
+    { "id": "56", "nazev": "OBMAZANÝ, ČOKOLÁDOVÝ OBSYP", "cena_za_porci": 165, "mozne_porce": [20, 25, 32], "foto": "/img/dorty/56.jpg", "kategorie": "dorty" },
+    { "id": "57", "nazev": "V MARCIPÁNU, MARCIPÁNOVÉ OZDOBY", "cena_za_porci": 145, "mozne_porce": [20, 25, 32], "foto": "/img/dorty/57.jpg", "kategorie": "dorty" },
+    { "id": "58", "nazev": "OBMAZANÝ, MARCIPÁNOVÉ OZDOBY", "cena_za_porci": 150, "mozne_porce": [20, 25, 32], "foto": "/img/dorty/58.jpg", "kategorie": "dorty" },
+    { "id": "59", "nazev": "V MARCIPÁNU KLASIK", "cena_za_porci": 125, "mozne_porce": [12, 16, 24, 32], "foto": "/img/dorty/59.jpg", "kategorie": "dorty" },
+    { "id": "60", "nazev": "V MARCIPÁNU, JEDLÝ PAPÍR", "cena_za_porci": 166, "mozne_porce": [15, 20, 24, 32], "foto": "/img/dorty/60.jpg", "kategorie": "dorty" },
+    { "id": "61", "nazev": "V MARCIPÁNU, JEDLÝ PAPÍR, ČOKO", "cena_za_porci": 200, "mozne_porce": [15, 20, 24, 32], "foto": "/img/dorty/61.jpg", "kategorie": "dorty" }
   ],
   "desserts": [
-    {
-      "id": "d1",
-      "name": "Tradiční Větrník",
-      "price": 48,
-      "imageId": "4",
-      "description": "S pravou karamelovou šlehačkou."
-    },
-    {
-      "id": "d2",
-      "name": "Laskonka",
-      "price": 32,
-      "imageId": "5",
-      "description": "S ořechovým krémem a křupavým korpusem."
-    },
-    {
-      "id": "d3",
-      "name": "Punčový řez",
-      "price": 38,
-      "imageId": "6",
-      "description": "Šťavnatý řez s vůní rumu a ovoce."
-    },
-    {
-      "id": "d4",
-      "name": "Makronka",
-      "price": 28,
-      "imageId": "7",
-      "description": "Různé příchutě, dle denní nabídky."
-    }
+    { "id": "d1", "nazev": "Tradiční Větrník", "cena": 48, "foto": "/img/zakusky/d1.jpg", "kategorie": "zakusky", "popis": "S pravou karamelovou šlehačkou." },
+    { "id": "d2", "nazev": "Laskonka", "cena": 32, "foto": "/img/zakusky/d2.jpg", "kategorie": "zakusky", "popis": "S ořechovým krémem." },
+    { "id": "d3", "nazev": "Punčový řez", "cena": 38, "foto": "/img/zakusky/d3.jpg", "kategorie": "zakusky", "popis": "Šťavnatý řez s vůní rumu." },
+    { "id": "d4", "nazev": "Makronka", "cena": 28, "foto": "/img/zakusky/d4.jpg", "kategorie": "zakusky", "popis": "Různé příchutě." }
   ]
 }

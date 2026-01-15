@@ -1,19 +1,21 @@
 
-export interface Cake {
+export interface Dort {
   id: string;
-  name: string;
-  pricePerServing: number;
-  availablePortions: number[];
-  imageId: string;
-  description: string;
+  nazev: string;
+  cena_za_porci: number;
+  mozne_porce: number[];
+  foto: string;
+  kategorie: 'dorty';
+  popis?: string;
 }
 
-export interface Dessert {
+export interface Zakusek {
   id: string;
-  name: string;
-  price: number;
-  imageId: string;
-  description: string;
+  nazev: string;
+  cena: number;
+  foto: string;
+  kategorie: 'zakusky';
+  popis?: string;
 }
 
 export interface CartItem {
@@ -21,7 +23,7 @@ export interface CartItem {
   name: string;
   price: number;
   quantity: number;
-  portions?: number; // Only for cakes
+  portions?: number;
   type: 'cake' | 'dessert';
 }
 
