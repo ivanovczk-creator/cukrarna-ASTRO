@@ -1,43 +1,55 @@
 
 {
-  "shop": {
-    "name": "Sladká Tečka",
-    "description": "Poctivé domácí dorty z nejlepších surovin."
-  },
-  "branches": [
-    { "id": "petrvald", "name": "Petřvald", "blockedDays": [1] },
-    { "id": "karvina", "name": "Karviná", "blockedDays": [0] },
-    { "id": "ostrava", "name": "Ostrava", "blockedDays": [0] },
-    { "id": "pist", "name": "Píšť", "blockedDays": [0, 6] }
-  ],
   "products": [
+    { "id": "d1", "name": "Čokoládový Sen", "category": "cake", "description": "Třívrstvý čokoládový korpus s pařížským krémem a belgickou čokoládou.", "price": 850, "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=600" },
+    { "id": "d2", "name": "Jahodové Pokušení", "category": "cake", "description": "Lehký piškot s čerstvými jahodami, šlehačkou a vanilkovým krémem.", "price": 790, "image": "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?auto=format&fit=crop&q=80&w=600" },
+    { "id": "d3", "name": "Pistáciový Luxus", "category": "cake", "description": "Korpus s mletými pistáciemi, jemným krémem a nasekanými ořechy.", "price": 950, "image": "https://images.unsplash.com/photo-1535254973040-607b474cb804?auto=format&fit=crop&q=80&w=600" },
+    { "id": "d4", "name": "Red Velvet", "category": "cake", "description": "Klasický americký recept se sytě červeným korpusem a krémem z mascarpone.", "price": 820, "image": "https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?auto=format&fit=crop&q=80&w=600" },
+    { "id": "z1", "name": "Větrník", "category": "pastry", "description": "Odpalované těsto s karamelovou šlehačkou a fondánovou polevou.", "price": 55, "image": "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&q=80&w=600" },
+    { "id": "z2", "name": "Laskonka", "category": "pastry", "description": "Sněhové pláty s oříškovou náplní a poctivým máslovým krémem.", "price": 45, "image": "https://images.unsplash.com/photo-1559620192-032c4bc4674e?auto=format&fit=crop&q=80&w=600" },
+    { "id": "z3", "name": "Punčový řez", "category": "pastry", "description": "Tradiční šťavnatý řez s rumovou polevou a ovocným džemem.", "price": 42, "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&q=80&w=600" },
+    { "id": "z4", "name": "Špička", "category": "pastry", "description": "Čokoládový kužel s tekutým vaječným likérem na piškotovém základě.", "price": 48, "image": "https://images.unsplash.com/photo-1542826438-bd32f43d626f?auto=format&fit=crop&q=80&w=600" },
+    { "id": "z5", "name": "Kremrole", "category": "pastry", "description": "Listové těsto plněné lehkým bílkovým sněhem.", "price": 38, "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=600" },
+    { "id": "z6", "name": "Indiánek", "category": "pastry", "description": "Sněhový dezert v tmavé čokoládové polevě.", "price": 35, "image": "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&q=80&w=600" },
+    { "id": "z7", "name": "Makový koláč", "category": "pastry", "description": "Kynuté těsto s bohatou makovou náplní a drobenkou.", "price": 28, "image": "https://images.unsplash.com/photo-1603532612706-7992042f4448?auto=format&fit=crop&q=80&w=600" },
+    { "id": "z8", "name": "Věneček", "category": "pastry", "description": "Lehký dezert z odpalovaného těsta se žloutkovým krémem.", "price": 32, "image": "https://images.unsplash.com/photo-1505976378723-9726af540dec?auto=format&fit=crop&q=80&w=600" }
+  ],
+  "stores": [
     {
-      "id": 1,
-      "name": "Čokoládový Sen",
-      "price": 850,
-      "image": "https://picsum.photos/seed/cake1/600/400",
-      "description": "Bohatý čokoládový korpus s pařížským krémem."
+      "id": "pist",
+      "name": "Pobočka Píšť",
+      "address": "Opavská 123",
+      "city": "Píšť",
+      "hours": "Po-Pá: 8:00 - 17:00",
+      "mapUrl": "https://www.google.com/maps/search/Cukrarstvi+Blahutovi+Pist",
+      "closedDays": [0, 6]
     },
     {
-      "id": 2,
-      "name": "Malinové Potešení",
-      "price": 790,
-      "image": "https://picsum.photos/seed/cake2/600/400",
-      "description": "Lehký piškot s čerstvými malinami a tvarohem."
+      "id": "karvina",
+      "name": "Pobočka Karviná",
+      "address": "Masarykovo náměstí 5",
+      "city": "Karviná",
+      "hours": "Po-So: 9:00 - 18:00",
+      "mapUrl": "https://www.google.com/maps/search/Cukrarstvi+Blahutovi+Karvina",
+      "closedDays": [0]
     },
     {
-      "id": 3,
-      "name": "Slaný Karamel",
-      "price": 920,
-      "image": "https://picsum.photos/seed/cake3/600/400",
-      "description": "Moderní kombinace sladkého karamelu a špetky soli."
+      "id": "ostrava",
+      "name": "Pobočka Ostrava",
+      "address": "Stodolní 12",
+      "city": "Ostrava",
+      "hours": "Po-So: 9:00 - 19:00",
+      "mapUrl": "https://www.google.com/maps/search/Cukrarstvi+Blahutovi+Ostrava",
+      "closedDays": [0]
     },
     {
-      "id": 4,
-      "name": "Ovocný Mix",
-      "price": 750,
-      "image": "https://picsum.photos/seed/cake4/600/400",
-      "description": "Sezónní ovoce na nadýchaném krému."
+      "id": "petrvald",
+      "name": "Pobočka Petřvald",
+      "address": "Ostravská 550",
+      "city": "Petřvald",
+      "hours": "Út-Ne: 8:30 - 17:30",
+      "mapUrl": "https://www.google.com/maps/search/Cukrarstvi+Blahutovi+Petrvald",
+      "closedDays": [1]
     }
   ]
 }
