@@ -1,8 +1,8 @@
 backend:
   name: git-gateway
-  branch: main # Větev, na kterou se ukládají změny
+  branch: main # Větev pro ukládání změn
 
-# Cesty pro nahrávané obrázky
+# Globální nastavení pro média (výchozí pro dorty)
 media_folder: "public/img/dorty"
 public_folder: "/img/dorty"
 
@@ -14,8 +14,8 @@ collections:
       preview: false
     files:
       - name: "data"
-        label: "Data webu"
-        file: "data.json" # Cesta k datovému souboru v kořenu repozitáře
+        label: "Data webu (JSON)"
+        file: "data.json"
         format: "json"
         fields:
           - label: "Dorty"
@@ -23,7 +23,7 @@ collections:
             widget: "list"
             summary: "Dort {{id}}: {{title}}"
             fields:
-              - { label: "ID (ID dortu)", name: "id", widget: "number", value_type: "int" }
+              - { label: "ID (Číslo dortu)", name: "id", widget: "number", value_type: "int" }
               - { label: "Název", name: "title", widget: "string" }
               - { label: "Cena", name: "cena", widget: "string", hint: "Např. 1900 Kč" }
               - { label: "Počet porcí", name: "porce", widget: "string", hint: "Např. 12 porcí" }
@@ -33,11 +33,11 @@ collections:
           - label: "Zákusky"
             name: "desserts"
             widget: "list"
-            summary: "{{title}}"
+            summary: "Zákusek: {{title}}"
             fields:
-              - { label: "ID", name: "id", widget: "string" }
+              - { label: "ID (Např. d1, d2...)", name: "id", widget: "string" }
               - { label: "Název", name: "title", widget: "string" }
               - { label: "Cena", name: "cena", widget: "string", hint: "Např. 45 Kč" }
+              - label: "Obrázek", name: "foto", widget: "image", media_folder: "public/img/zakusky", public_folder: "/img/zakusky" }
               - { label: "Popis", name: "popis", widget: "string", required: false }
-              - { label: "Obrázek", name: "foto", widget: "image", media_folder: "public/img/zakusky", public_folder: "/img/zakusky" }
               - { label: "Kategorie", name: "kategorie", widget: "hidden", default: "zakusky" }
