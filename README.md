@@ -1,92 +1,20 @@
-# Cukrářství Blahutovi
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
-Professional Astro.js website for a traditional Czech bakery "Cukrářství Blahutovi".
+# Run and deploy your AI Studio app
 
-## Features
+This contains everything you need to run your app locally.
 
-- Modern, responsive design with Tailwind CSS
-- Premium bakery style with Dark Blue (#1e3a8a), Gold (#d4af37), and Cream color scheme
-- Product sections for cakes (Dorty) and pastries (Zákusky) with pricing
-- Product management via Decap CMS (Netlify CMS)
-- B2B partner section for business clients (restaurants, hotels, cafes)
-  - Customizable benefits and features
-  - Call-to-action button linking to reservation form
-- Store locations with Google Maps integration (4 locations: Píšť, Karviná, Ostrava, Petřvald)
-- Advanced reservation form with React
-- Date validation (minimum 3 days in advance)
-- Store-specific closed days blocking:
-  - Petřvald: Closed on Monday
-  - Karviná & Ostrava: Closed on Sunday
-  - Píšť: Closed on Saturday & Sunday
-- Form submission via Formspree
+View your app in AI Studio: https://ai.studio/apps/drive/1zhC-Scscapzl0_iqFT2OJm-tRAxCmEZ_
 
-## Project Structure
+## Run Locally
 
-```text
-/
-├── public/
-│   ├── admin/
-│   │   ├── index.html       # Decap CMS admin interface
-│   │   └── config.yml       # CMS configuration
-│   ├── img/
-│   │   ├── dorty/           # Cake product images
-│   │   └── zakusky/         # Pastry product images
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   └── ReservationForm.tsx  # React reservation form
-│   ├── data/
-│   │   ├── products.json    # Product data (managed by CMS)
-│   │   └── b2b.json         # B2B section content (managed by CMS)
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+**Prerequisites:**  Node.js
 
-## Setup
 
 1. Install dependencies:
-```sh
-npm install
-```
-
-2. Configure Formspree:
-   - Go to [formspree.io](https://formspree.io) and create a free account
-   - Create a new form and copy your form ID
-   - Open `src/components/ReservationForm.tsx`
-   - Replace `'your-form-id'` in the fetch URL with your actual Formspree form ID:
-   ```tsx
-   const response = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
-   ```
-
-3. Configure Decap CMS (Optional - for content management):
-   - Deploy your site to a Git-based hosting service (GitHub, GitLab, Bitbucket)
-   - Enable Netlify Identity or another authentication provider
-   - Access the CMS at `/admin` after deployment
-   - Via CMS you can manage:
-     - **Products (Dorty & Zákusky)**: Name, description, price, image
-     - **B2B Section**: Title, subtitle, description, benefits list, CTA button text
-
-4. Replace placeholder images:
-   - Add your actual product images to `public/img/dorty/` and `public/img/zakusky/`
-   - Or keep the placeholder SVG images as-is
-   - Images can also be uploaded via the CMS admin interface
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
