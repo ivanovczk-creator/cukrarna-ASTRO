@@ -1,11 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-// Import dat z kořenového adresáře (podle screenshotu struktury)
+// Načtení dat z kořene projektu podle screenshotu
 import productsData from '../../data.json';
 import b2bData from '../../b2b.json';
 
-// Definice prodejen s reálnými adresami (pokud nejsou v JSONu, bereme tyto)
+// Příprava dat pro zobrazení
+const cakes = productsData.dorty || [];
+const desserts = productsData.zakusky || [];
+const b2b = b2bData;
+
+// Reálné adresy prodejen pro zobrazení
 const stores = [
 	{
 		name: 'Píšť',
@@ -32,17 +37,6 @@ const stores = [
 		mapsUrl: 'https://maps.google.com/?q=Nádražní+321+Petřvald'
 	}
 ];
-
-// Příprava produktů - opravujeme cesty k obrázkům z /public
-const cakes = (productsData.dorty || []).map(p => ({
-	...p,
-	image: p.image.startsWith('/') ? p.image : `/img/dorty/${p.image}`
-}));
-
-const desserts = (productsData.zakusky || []).map(p => ({
-	...p,
-	image: p.image.startsWith('/') ? p.image : `/img/zakusky/${p.image}`
-}));
 ---
 
 <Layout title="Cukrářství Blahutovi">
@@ -52,41 +46,38 @@ const desserts = (productsData.zakusky || []).map(p => ({
 			--gold: #d4af37;
 			--offwhite: #f8f9fa;
 		}
-		body { background-color: var(--offwhite); font-family: 'Inter', sans-serif; margin: 0; }
-		header { background-color: var(--navy); padding: 1.2rem 0; color: white; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+		body { background-color: var(--offwhite); font-family: 'Inter', sans-serif; margin: 0; color: var(--navy); }
+		header { background-color: var(--navy); padding: 1.2rem 0; color: white; position: sticky; top: 0; z-index: 100; }
 		.nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 1.5rem; }
-		.nav-links a { color: white; text-decoration: none; margin-left: 1.5rem; font-weight: 600; font-size: 0.95rem; }
-		.nav-links a:hover { color: var(--gold); }
-		.hero { background: linear-gradient(rgba(10,25,47,0.8), rgba(10,25,47,0.8)); padding: 100px 1.5rem; text-align: center; color: white; }
-		.hero h2 { font-size: 3.5rem; color: var(--gold); margin-bottom: 1rem; font-family: 'Playfair Display', serif; }
-		.section-title { text-align: center; font-size: 2.5rem; color: var(--navy); margin: 4rem 0 2rem; font-family: 'Playfair Display', serif; }
+		.nav-links a { color: white; text-decoration: none; margin-left: 1.5rem; font-weight: bold; }
+		.hero { background: #112240; padding: 100px 1.5rem; text-align: center; color: white; }
+		.hero h2 { font-size: 3.5rem; color: var(--gold); margin-bottom: 1rem; }
+		.section-title { text-align: center; font-size: 2.5rem; color: var(--navy); margin: 4rem 0 2rem; }
 		.grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2.5rem; padding: 0 1.5rem; }
-		.card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.05); border: 1px solid rgba(212,175,55,0.15); transition: 0.3s; }
-		.card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
-		.card img { width: 100%; height: 280px; object-fit: cover; }
+		.card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.05); border: 1px solid rgba(212,175,55,0.15); }
+		.card img { width: 100%; height: 280px; object-fit: cover; background-color: #eee; }
 		.card-content { padding: 1.5rem; text-align: center; }
-		.price { color: var(--gold); font-weight: 700; font-size: 1.25rem; margin: 0.5rem 0; }
-		.btn-gold { display: inline-block; background-color: var(--gold); color: var(--navy); padding: 0.8rem 2rem; border-radius: 50px; text-decoration: none; font-weight: 700; margin-top: 1rem; border: none; transition: 0.2s; }
-		.btn-gold:hover { background-color: #f1c40f; transform: scale(1.05); }
-		.reservation-box { max-width: 650px; margin: 4rem auto; background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 1px solid rgba(212,175,55,0.2); }
-		footer { background: var(--navy); color: white; text-align: center; padding: 4rem 1.5rem; margin-top: 5rem; border-top: 4px solid var(--gold); }
+		.price { color: var(--gold); font-weight: bold; font-size: 1.3rem; margin: 0.5rem 0; }
+		.btn-gold { display: inline-block; background-color: var(--gold); color: var(--navy); padding: 0.8rem 2rem; border-radius: 50px; text-decoration: none; font-weight: bold; margin-top: 1rem; }
+		.reservation-box { max-width: 600px; margin: 4rem auto; background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 1px solid rgba(212,175,55,0.2); }
+		footer { background: var(--navy); color: white; text-align: center; padding: 4rem 1.5rem; margin-top: 5rem; }
 	</style>
 
 	<header>
 		<div class="nav-container">
-			<h1 style="margin:0; color:var(--gold); font-family: 'Playfair Display', serif;">Cukrářství Blahutovi</h1>
+			<h1 style="margin:0; color:var(--gold);">Cukrářství Blahutovi</h1>
 			<div class="nav-links">
 				<a href="#dorty">Dorty</a>
 				<a href="#zakusky">Zákusky</a>
 				<a href="#prodejny">Prodejny</a>
-				<a href="#rezervace" style="background:var(--gold); color:var(--navy); padding: 0.6rem 1.2rem; border-radius: 50px;">Rezervace</a>
+				<a href="#rezervace">Rezervace</a>
 			</div>
 		</div>
 	</header>
 
 	<section class="hero">
 		<h2>Rodinná tradice od roku 1985</h2>
-		<p style="font-size: 1.3rem; max-width: 800px; margin: 0 auto; opacity: 0.9;">Nabízíme poctivé dorty a zákusky připravované s láskou z těch nejlepších surovin.</p>
+		<p style="font-size: 1.3rem; max-width: 800px; margin: 0 auto; opacity: 0.9;">Pečeme pro Vás poctivé dorty a zákusky z těch nejlepších surovin.</p>
 	</section>
 
 	<section id="dorty">
@@ -94,9 +85,9 @@ const desserts = (productsData.zakusky || []).map(p => ({
 		<div class="grid">
 			{cakes.map((p) => (
 				<div class="card">
-					<img src={p.image} alt={p.title} />
+					<img src={p.image.startsWith('/') ? p.image : `/img/dorty/${p.image}`} alt={p.title} />
 					<div class="card-content">
-						<h3 style="margin:0; font-family: 'Playfair Display', serif;">{p.title}</h3>
+						<h3 style="margin:0;">{p.title}</h3>
 						<p class="price">{p.price}</p>
 						<a href="#rezervace" class="btn-gold">Objednat</a>
 					</div>
@@ -105,14 +96,56 @@ const desserts = (productsData.zakusky || []).map(p => ({
 		</div>
 	</section>
 
-	<section id="zakusky" style="background-color: #fff; padding-bottom: 5rem;">
+	<section id="zakusky" style="background-color: white; padding-bottom: 5rem;">
 		<h2 class="section-title">Naše zákusky</h2>
 		<div class="grid">
 			{desserts.map((p) => (
 				<div class="card">
-					<img src={p.image} alt={p.title} />
+					<img src={p.image.startsWith('/') ? p.image : `/img/zakusky/${p.image}`} alt={p.title} />
 					<div class="card-content">
-						<h3 style="margin:0; font-family: 'Playfair Display', serif;">{p.title}</h3>
+						<h3 style="margin:0;">{p.title}</h3>
 						<p class="price">{p.price}</p>
 						<a href="#rezervace" class="btn-gold">Objednat</a>
 					</div>
+				</div>
+			))}
+		</div>
+	</section>
+
+	<section id="prodejny" style="background-color: var(--offwhite); padding-bottom: 5rem;">
+		<h2 class="section-title">Naše prodejny</h2>
+		<div class="grid">
+			{stores.map((s) => (
+				<div class="card" style="padding: 2.5rem;">
+					<h3 style="color:var(--gold); margin: 0 0 1rem 0; font-size: 1.8rem;">{s.name}</h3>
+					<p style="font-weight: bold; font-size: 1.1rem; margin-bottom: 0.5rem;">{s.address}</p>
+					<p style="color: #666; margin-bottom: 1.5rem;">{s.hours}</p>
+					<a href={s.mapsUrl} target="_blank" class="btn-gold" style="width: 100%; text-align: center; box-sizing: border-box; background: var(--navy); color: white;">Zobrazit na mapě</a>
+				</div>
+			))}
+		</div>
+	</section>
+
+	<section id="rezervace">
+		<div class="reservation-box">
+			<h2 style="text-align: center; margin-top: 0; font-size: 2.5rem;">Rezervace</h2>
+			<form style="display: flex; flex-direction: column; gap: 1.5rem;">
+				<div style="display: flex; flex-direction: column; gap: 0.5rem;">
+					<label style="font-weight: bold;">Jméno a příjmení</label>
+					<input type="text" style="padding: 1rem; border: 2px solid #eee; border-radius: 10px;" placeholder="Vaše jméno" required />
+				</div>
+				<div style="display: flex; flex-direction: column; gap: 0.5rem;">
+					<label style="font-weight: bold;">Telefonní číslo</label>
+					<input type="tel" style="padding: 1rem; border: 2px solid #eee; border-radius: 10px;" placeholder="+420 ..." required />
+				</div>
+				<button type="button" class="btn-gold" style="width: 100%; font-size: 1.2rem; cursor: pointer; border: none;">Odeslat poptávku</button>
+			</form>
+		</div>
+	</section>
+
+	<footer>
+		<h2 style="color: var(--gold); margin: 0 0 1rem 0;">Cukrářství Blahutovi</h2>
+		<p style="opacity: 0.8;">Tradiční receptury a poctivé řemeslo od roku 1985.</p>
+		<p style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.5;">© 2026 Všechna práva vyhrazena.</p>
+	</footer>
+</Layout>
