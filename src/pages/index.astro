@@ -58,25 +58,24 @@ const stores = [
 			
 			<form name="rezervace-kosik" method="POST" data-netlify="true" id="order-form">
 				<input type="hidden" name="Produkty" id="hidden-cart-details" />
-				<input type="hidden" name="Pobocka" id="hidden-store" />
+				<input type="hidden" name="Prodejna" id="hidden-store" />
 				<input type="hidden" name="Termin" id="hidden-date" />
 
 				<div style="margin-bottom:1rem">
-					<label style="font-size:0.85rem; font-weight:bold;">Kde si zboží vyzvednete?</label>
+					<label style="font-size:0.85rem; font-weight:bold;">Vyzvednutí na prodejně</label>
 					<select id="store-select" class="input-field" required onchange="validateDate()">
-						<option value="">Vyberte prodejnu...</option>
+						<option value="">Vyberte...</option>
 						{stores.map(s => <option value={s.id} data-closed={s.closed.join(',')}>{s.name}</option>)}
 					</select>
 				</div>
 				<div style="margin-bottom:1rem">
-					<label style="font-size:0.85rem; font-weight:bold;">Kdy? (min. za 3 dny)</label>
+					<label style="font-size:0.85rem; font-weight:bold;">Datum vyzvednutí</label>
 					<input type="date" id="date-input" class="input-field" required onchange="validateDate()" />
-					<p id="date-error" style="color:red; font-size:0.75rem; display:none; margin-top:5px; font-weight:bold;">Zavřeno nebo příliš brzy.</p>
 				</div>
-				<input type="text" name="Zakaznik" placeholder="Vaše jméno" class="input-field" required />
-				<input type="email" name="Email" placeholder="Váš e-mail" class="input-field" required />
-				<input type="tel" name="Telefon" placeholder="Váš telefon" class="input-field" required />
-				<button type="submit" id="submit-btn" class="btn-add" style="width:100%; margin-top:1.5rem">Potvrdit rezervaci</button>
+				<input type="text" name="Jmeno" placeholder="Jméno" class="input-field" required />
+				<input type="email" name="Email" placeholder="E-mail" class="input-field" required />
+				<input type="tel" name="Telefon" placeholder="Telefon" class="input-field" required />
+				<button type="submit" id="submit-btn" class="btn-add" style="width:100%; margin-top:1.5rem">Odeslat objednávku</button>
 			</form>
 		</div>
 	</div>
@@ -121,7 +120,7 @@ const stores = [
 				<input type="text" name="Jmeno" placeholder="Vaše jméno" class="input-field" required />
 				<input type="email" name="Email" placeholder="Váš e-mail" class="input-field" required />
 				<input type="tel" name="Telefon" placeholder="Váš telefon" class="input-field" required style="margin-bottom: 1rem;" />
-				<textarea name="Prani" placeholder="Popište mi vaši představu..." class="input-field" style="height: 120px; margin-bottom: 1.5rem;" required></textarea>
+				<textarea name="Popis" placeholder="Popište vaši představu..." class="input-field" style="height: 120px; margin-bottom: 1.5rem;" required></textarea>
 				<label style="display: block; margin-bottom: 0.5rem; font-weight: bold; font-size: 0.85rem;">Máte obrázek? (JPG/PNG):</label>
 				<input type="file" name="Fotka" accept="image/*" class="input-field" style="margin-bottom: 2rem; padding: 0.5rem;" required />
 				<button type="submit" class="btn-add" style="width: 100%; margin: 0; font-size: 1.1rem;">Odeslat poptávku</button>
@@ -131,16 +130,15 @@ const stores = [
 
 	<section id="b2b" style="background: var(--navy); color: white; padding: 6rem 1rem; text-align: center;">
 		<div style="max-width:1000px; margin:0 auto;">
-			<h2 style="color:var(--gold); font-family:'Playfair Display'; font-size:3rem; margin-bottom: 2rem;">Velkoobchodní ceny</h2>
+			<h2 style="color:var(--gold); font-family:'Playfair Display'; font-size:3rem; margin-bottom: 2rem;">Velkoobchodní spolupráce</h2>
 			<div style="background: white; color: var(--navy); padding: 3rem; border-radius: 20px; max-width: 600px; margin: 0 auto; text-align: left;">
 				<form name="poptavka-b2b" method="POST" data-netlify="true">
-					<input type="text" name="Firma" placeholder="Název firmy / Jméno" class="input-field" required style="margin-bottom:0.8rem" />
+					<input type="text" name="Firma" placeholder="Firma / Jméno" class="input-field" required style="margin-bottom:0.8rem" />
 					<input type="email" name="Email" placeholder="E-mail" class="input-field" required style="margin-bottom:0.8rem" />
 					<input type="tel" name="Telefon" placeholder="Telefon" class="input-field" required style="margin-bottom:0.8rem" />
-					<textarea name="Zprava" placeholder="Mám zájem o odběr do své provozovny v..." class="input-field" style="height: 100px; margin-bottom: 2rem;"></textarea>
-					<button type="submit" class="btn-add" style="width: 100%; margin: 0; font-size: 1.1rem;">Chci B2B ceník</button>
+					<textarea name="Zprava" placeholder="Zpráva..." class="input-field" style="height: 100px; margin-bottom: 2rem;"></textarea>
+					<button type="submit" class="btn-add" style="width: 100%; margin: 0; font-size: 1.1rem;">Odeslat žádost</button>
 				</form>
-				<p style="text-align: center; margin-top: 1.5rem; font-weight: bold;">Tel: +420 602 323 788</p>
 			</div>
 		</div>
 	</section>
@@ -151,10 +149,10 @@ const stores = [
 			{stores.map((s) => (
 				<div class="card" style="padding: 2.5rem; background: var(--navy); color: white; text-align: left;">
 					<h3 style="color:var(--gold); margin:0 0 15px 0; font-family:'Playfair Display'; font-size:1.8rem;">{s.name}</h3>
-					<p style="margin: 8px 0;">📍 {s.address}</p>
-					<p style="margin: 8px 0;">📞 <a href={`tel:${s.phone.replace(/\s/g, '')}`} style="color:white; text-decoration:none;">{s.phone}</a></p>
+					<p>📍 {s.address}</p>
+					<p>📞 <a href={`tel:${s.phone.replace(/\s/g, '')}`} style="color:white; text-decoration:none;">{s.phone}</a></p>
 					<p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.7;">{s.hours}</p>
-					<a href={s.mapUrl} target="_blank" style="display:inline-block; margin-top:20px; background:var(--gold); color:var(--navy); padding:0.6rem 1.2rem; border-radius:5px; text-decoration:none; font-weight:bold; font-size:0.85rem;">MAPA</a>
+					<a href={s.mapUrl} target="_blank" style="display:inline-block; margin-top:20px; background:var(--gold); color:var(--navy); padding:0.6rem 1.2rem; border-radius:5px; text-decoration:none; font-weight:bold; font-size:0.85rem;">NAVIGOVAT</a>
 				</div>
 			))}
 		</div>
