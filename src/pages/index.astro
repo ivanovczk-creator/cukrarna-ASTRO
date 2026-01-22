@@ -57,6 +57,7 @@ const stores = [
 			<div id="cart-items" style="margin: 1.5rem 0; border-bottom: 1px solid #eee; padding-bottom: 1rem;"></div>
 			
 			<form name="objednavka-kosik" method="POST" data-netlify="true" id="order-form">
+				<input type="hidden" name="subject" value="Nová objednávka z košíku - Cukrářství Blahutovi" />
 				<input type="hidden" name="seznam-zbozi" id="hidden-cart-details" />
 				<input type="hidden" name="vyzvednuti-prodejna" id="hidden-store" />
 				<input type="hidden" name="vyzvednuti-datum" id="hidden-date" />
@@ -69,9 +70,8 @@ const stores = [
 					</select>
 				</div>
 				<div style="margin-bottom:1rem">
-					<label style="font-size:0.85rem; font-weight:bold;">Datum vyzvednutí (min. za 3 dny)</label>
+					<label style="font-size:0.85rem; font-weight:bold;">Datum vyzvednutí</label>
 					<input type="date" name="datum-vyzvednuti" id="date-input" class="input-field" required onchange="validateDate()" />
-					<p id="date-error" style="color:red; font-size:0.75rem; display:none; margin-top:5px; font-weight:bold;">Tento den je zavřeno nebo termín příliš brzy.</p>
 				</div>
 				<input type="text" name="jmeno" placeholder="Celé jméno" class="input-field" required style="margin-bottom:0.8rem" />
 				<input type="email" name="email" placeholder="Váš e-mail" class="input-field" required style="margin-bottom:0.8rem" />
@@ -117,9 +117,8 @@ const stores = [
 	<section id="dort-na-prani" style="padding: 5rem 1rem; background: #eeeae4;">
 		<div style="max-width: 800px; margin: 0 auto; background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
 			<h2 style="text-align: center; font-family: 'Playfair Display'; font-size: 2.5rem; margin-bottom: 1rem;">Dort na přání</h2>
-			<p style="text-align: center; margin-bottom: 2rem; opacity: 0.8;">Máte vlastní představu? Popište mi ji a nahrajte obrázek pro inspiraci.</p>
-			
 			<form name="dort-na-prani" method="POST" data-netlify="true" enctype="multipart/form-data">
+				<input type="hidden" name="subject" value="Nová poptávka: Dort na přání" />
 				<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
 					<input type="text" name="jmeno" placeholder="Vaše jméno" class="input-field" required />
 					<input type="email" name="email" placeholder="Váš e-mail" class="input-field" required />
@@ -127,7 +126,7 @@ const stores = [
 				<input type="tel" name="telefon" placeholder="Váš telefon" class="input-field" required style="margin-bottom: 1rem;" />
 				<textarea name="popis" placeholder="Detaily o dortu..." class="input-field" style="height: 120px; margin-bottom: 1.5rem;" required></textarea>
 				<label style="display: block; margin-bottom: 0.5rem; font-weight: bold; font-size: 0.85rem;">Inspirační fotka:</label>
-				<input type="file" name="foto" accept="image/*" class="input-field" style="margin-bottom: 2rem; padding: 0.5rem;" />
+				<input type="file" name="soubor-foto" accept="image/*" class="input-field" style="margin-bottom: 2rem; padding: 0.5rem;" />
 				<button type="submit" class="btn-add" style="width: 100%; margin: 0; font-size: 1.1rem;">Odeslat poptávku</button>
 			</form>
 		</div>
@@ -136,21 +135,9 @@ const stores = [
 	<section id="b2b" style="background: var(--navy); color: white; padding: 6rem 1rem; text-align: center;">
 		<div style="max-width:1000px; margin:0 auto;">
 			<h2 style="color:var(--gold); font-family:'Playfair Display'; font-size:3rem; margin-bottom: 2rem;">Velkoobchodní spolupráce</h2>
-			<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 4rem; text-align: left;">
-				<div style="background: rgba(212,175,55,0.1); padding: 2.5rem; border-radius: 15px; border: 1px solid var(--gold);">
-					<h3 style="color:var(--gold); margin-top:0;">Výhodnější ceny</h3>
-					<p style="font-size: 1.1rem;">Pro stálé odběratele nabízím speciální velkoobchodní ceník.</p>
-				</div>
-				<div style="background: rgba(255,255,255,0.05); padding: 2.5rem; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1);">
-					<h3 style="color:var(--gold); margin-top:0;">Rozvozové okruhy</h3>
-					<div style="display: grid; grid-template-columns: 1fr; gap: 10px; font-weight: bold; color: var(--gold); font-size: 1.2rem;">
-						<span>🚚 Karviná</span><span>🚚 Ostravsko</span><span>🚚 Opavsko</span><span>🚚 Havířov</span><span>🚚 Bohumín</span>
-					</div>
-				</div>
-			</div>
 			<div style="background: white; color: var(--navy); padding: 3rem; border-radius: 20px; max-width: 600px; margin: 0 auto; text-align: left;">
-				<h3 style="text-align: center; font-family:'Playfair Display'; margin-top:0; font-size: 1.8rem;">Poptat ceník</h3>
 				<form name="b2b-poptavka" method="POST" data-netlify="true">
+					<input type="hidden" name="subject" value="B2B Poptávka spolupráce" />
 					<input type="text" name="firma" placeholder="Firma / Jméno" class="input-field" required style="margin-bottom:0.8rem" />
 					<input type="email" name="email" placeholder="E-mail" class="input-field" required style="margin-bottom:0.8rem" />
 					<input type="tel" name="telefon" placeholder="Telefon" class="input-field" required style="margin-bottom:0.8rem" />
