@@ -1,38 +1,38 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-// Načtení tvých dat
+// Import tvých dat z kořene
 import productsData from '../../data.json';
 
-// Přesné mapování na tvůj JSON (cena, foto, title)
+// Přesné mapování na tvůj JSON
 const cakes = productsData?.cakes || [];
 const desserts = productsData?.desserts || [];
 
-// Seznam tvých prodejen s přesnými adresami
+// Seznam tvých prodejen
 const stores = [
 	{
 		name: 'Petřvald',
 		address: 'Šenovská 1, 735 41 Petřvald',
 		hours: 'Út-Ne: 9:00 - 17:00 (Po: zavřeno)',
-		maps: 'https://www.google.com/maps/search/?api=1&query=Šenovská+1+Petřvald'
+		maps: 'https://maps.google.com/?q=Náměstí+456,733+01+Karviná0'
 	},
 	{
 		name: 'Píšť',
 		address: 'Hlavní 123, 739 51 Píšť',
 		hours: 'Po-Pá: 7:00 - 18:00',
-		maps: 'https://www.google.com/maps/search/?api=1&query=Hlavní+123+Píšť'
+		maps: 'https://maps.google.com/?q=Náměstí+456,733+01+Karviná1'
 	},
 	{
 		name: 'Karviná',
 		address: 'Náměstí 456, 733 01 Karviná',
 		hours: 'Po-Pá: 9:00 - 18:00, So: 8:00 - 12:00',
-		maps: 'https://www.google.com/maps/search/?api=1&query=Karviná+Náměstí'
+		maps: 'https://maps.google.com/?q=Náměstí+456,733+01+Karviná2'
 	},
 	{
 		name: 'Ostrava',
 		address: 'Hlavní třída 789, 702 00 Ostrava',
 		hours: 'Po-So: 9:00 - 19:00',
-		maps: 'https://www.google.com/maps/search/?api=1&query=Ostrava+Hlavní+třída'
+		maps: 'https://maps.google.com/?q=Náměstí+456,733+01+Karviná3'
 	}
 ];
 ---
@@ -44,11 +44,11 @@ const stores = [
 			--gold: #d4af37;
 			--offwhite: #fcfaf7;
 		}
-		body { background-color: var(--offwhite); font-family: 'Inter', sans-serif; margin: 0; color: var(--navy); }
+		body { background-color: var(--offwhite); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; color: var(--navy); }
 		header { background-color: var(--navy); padding: 1.5rem 0; color: white; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--gold); }
 		.nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 1rem; }
 		.nav-links a { color: white; text-decoration: none; margin-left: 1.5rem; font-weight: bold; }
-		.hero { background: #112240; padding: 80px 1rem; text-align: center; color: white; }
+		.hero { background: #112240; padding: 100px 1.5rem; text-align: center; color: white; }
 		.hero h2 { font-size: 3.5rem; color: var(--gold); margin-bottom: 1rem; font-family: 'Playfair Display', serif; }
 		.section-title { text-align: center; font-size: 3rem; color: var(--navy); margin: 4rem 0 2rem; font-family: 'Playfair Display', serif; }
 		.grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2.5rem; padding: 0 1rem; }
@@ -57,8 +57,9 @@ const stores = [
 		.card img { width: 100%; height: 280px; object-fit: cover; background-color: #eee; }
 		.card-content { padding: 1.5rem; text-align: center; }
 		.price { color: var(--gold); font-weight: bold; font-size: 1.4rem; margin: 0.5rem 0; }
-		.btn-gold { display: inline-block; background: var(--gold); color: var(--navy); padding: 0.8rem 2rem; border-radius: 50px; text-decoration: none; font-weight: bold; margin-top: 1rem; }
-		.store-card { background: var(--navy); color: white; padding: 2.5rem; border-radius: 15px; text-align: left; }
+		.btn-gold { display: inline-block; background: var(--gold); color: var(--navy); padding: 0.8rem 2rem; border-radius: 50px; text-decoration: none; font-weight: bold; margin-top: 1rem; border: none; cursor: pointer; }
+		.b2b-section { background: var(--navy); color: white; padding: 5rem 1rem; margin-top: 5rem; text-align: center; }
+		.store-card { background: var(--navy); color: white; padding: 2.5rem; border-radius: 15px; }
 		footer { background: var(--navy); color: white; text-align: center; padding: 4rem 1rem; margin-top: 5rem; }
 	</style>
 
@@ -68,6 +69,7 @@ const stores = [
 			<div class="nav-links">
 				<a href="#dorty">Dorty</a>
 				<a href="#zakusky">Zákusky</a>
+				<a href="#b2b">Pro firmy</a>
 				<a href="#prodejny">Prodejny</a>
 			</div>
 		</div>
@@ -75,7 +77,7 @@ const stores = [
 
 	<section class="hero">
 		<h2>Poctivé řemeslo od roku 1985</h2>
-		<p style="font-size: 1.3rem; opacity: 0.9;">Aktuálně pro Vás máme v nabídce přes 120 druhů poctivých výrobků.</p>
+		<p style="font-size: 1.3rem; opacity: 0.9;">Aktuálně nabízíme přes 120 druhů poctivých výrobků.</p>
 	</section>
 
 	<section id="dorty">
@@ -111,6 +113,28 @@ const stores = [
 		</div>
 	</section>
 
+	<section id="b2b" class="b2b-section">
+		<div style="max-width: 800px; margin: 0 auto;">
+			<h2 style="color: var(--gold); font-size: 3rem; font-family: 'Playfair Display', serif; margin-bottom: 1.5rem;">B2B Spolupráce</h2>
+			<p style="font-size: 1.2rem; line-height: 1.8; margin-bottom: 2rem; opacity: 0.9;">
+				Hledáte spolehlivého partnera pro svou kavárnu, restauraci nebo firmu? 
+				Dodáváme naše poctivé zákusky a dorty v té nejvyšší kvalitě do řady provozoven v celém kraji. 
+				Nabízíme individuální přístup, pravidelné závozy a velkoobchodní ceny.
+			</p>
+			<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; margin-bottom: 3rem;">
+				<div style="border: 1px solid var(--gold); padding: 1.5rem; border-radius: 10px; width: 250px;">
+					<h4 style="color: var(--gold); margin-top: 0;">Pravidelný závoz</h4>
+					<p style="font-size: 0.9rem; margin-bottom: 0;">Vždy čerstvé produkty přímo do vaší provozovny.</p>
+				</div>
+				<div style="border: 1px solid var(--gold); padding: 1.5rem; border-radius: 10px; width: 250px;">
+					<h4 style="color: var(--gold); margin-top: 0;">Tradiční kvalita</h4>
+					<p style="font-size: 0.9rem; margin-bottom: 0;">Používáme poctivé suroviny bez náhražek.</p>
+				</div>
+			</div>
+			<a href="#rezervace" class="btn-gold" style="font-size: 1.2rem;">Kontaktujte nás pro nabídku</a>
+		</div>
+	</section>
+
 	<section id="prodejny">
 		<h2 class="section-title">Naše prodejny</h2>
 		<div class="grid">
@@ -119,19 +143,20 @@ const stores = [
 					<h3 style="color:var(--gold); margin-top:0;">{s.name}</h3>
 					<p style="font-size: 1.1rem; margin-bottom: 0.5rem;">{s.address}</p>
 					<p style="opacity: 0.7; margin-bottom: 1.5rem;">{s.hours}</p>
-					<a href={s.maps} target="_blank" class="btn-gold" style="display:block; text-align:center;">Navigovat</a>
+					<a href={s.maps} target="_blank" class="btn-gold" style="display:block; text-align:center;">Mapa</a>
 				</div>
 			))}
 		</div>
 	</section>
 
 	<section id="rezervace">
-		<div style="max-width: 600px; margin: 5rem auto; background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); text-align: center;">
-			<h2 style="margin-top:0; font-family: 'Playfair Display', serif; font-size: 2.5rem;">Rezervace</h2>
+		<div style="max-width: 600px; margin: 5rem auto; background: white; padding: 3.5rem; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 1px solid #eee; text-align: center;">
+			<h2 style="margin-top:0; font-family: 'Playfair Display', serif; font-size: 2.5rem;">Rezervace a dotazy</h2>
 			<form style="display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem;">
 				<input type="text" placeholder="Vaše jméno" style="padding: 1rem; border-radius: 10px; border: 1px solid #ddd;" required />
 				<input type="tel" placeholder="Telefon" style="padding: 1rem; border-radius: 10px; border: 1px solid #ddd;" required />
-				<button type="button" class="btn-gold" style="font-size: 1.2rem; border: none; cursor: pointer;">Odeslat poptávku</button>
+				<textarea placeholder="Jak Vám můžeme pomoci?" style="padding: 1rem; border-radius: 10px; border: 1px solid #ddd; min-height: 100px;"></textarea>
+				<button type="button" class="btn-gold" style="font-size: 1.2rem; border: none; cursor: pointer;">Odeslat</button>
 			</form>
 		</div>
 	</section>
