@@ -2,9 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import ReservationForm from '../components/ReservationForm';
 
-// OPRAVA: Soubory jsou přímo v src, nikoliv v src/data
-import productsData from '../data.json';
-import b2bData from '../b2b.json';
+// CESTA DO KOŘENOVÉHO ADRESÁŘE (dvě úrovně nahoru)
+import productsData from '../../data.json';
+import b2bData from '../../b2b.json';
 
 const sortedCakes = [...productsData.dorty].sort((a, b) => (a.weight || 100) - (b.weight || 100));
 const sortedDesserts = [...productsData.zakusky].sort((a, b) => (a.weight || 100) - (b.weight || 100));
