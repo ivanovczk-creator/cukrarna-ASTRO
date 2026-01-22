@@ -2,9 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import ReservationForm from '../components/ReservationForm';
 
-// Opravené názvy podle GitHubu (máte tam data.json místo products.json)
-import productsData from '../data/data.json';
-import b2bData from '../data/b2b.json';
+// Oprava cest: soubory jsou podle screenshotu přímo v src, nikoliv v src/data
+import productsData from '../data.json';
+import b2bData from '../b2b.json';
 
 // Načtení dat a jejich seřazení podle váhy (weight)
 const sortedCakes = [...productsData.dorty].sort((a, b) => (a.weight || 100) - (b.weight || 100));
