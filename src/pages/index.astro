@@ -2,9 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import ReservationForm from '../components/ReservationForm';
 
-// Oprava cest: soubory jsou podle screenshotu přímo v src, nikoliv v src/data
-import productsData from '../data.json';
-import b2bData from '../b2b.json';
+// Oprava cest: soubory jsou podle screenshotu v hlavní složce (root), nikoliv v src
+import productsData from '../../data.json';
+import b2bData from '../../b2b.json';
 
 // Načtení dat a jejich seřazení podle váhy (weight)
 const sortedCakes = [...productsData.dorty].sort((a, b) => (a.weight || 100) - (b.weight || 100));
@@ -15,25 +15,25 @@ const stores = [
 	{
 		name: 'Píšť',
 		address: 'Hlavní 123, 739 51 Píšť',
-		mapsUrl: 'https://maps.google.com',
+		mapsUrl: 'https://www.google.com/maps',
 		closedDays: ['Sobota', 'Neděle'],
 	},
 	{
 		name: 'Karviná',
 		address: 'Náměstí 456, 733 01 Karviná',
-		mapsUrl: 'https://maps.google.com',
+		mapsUrl: 'https://www.google.com/maps',
 		closedDays: ['Neděle'],
 	},
 	{
 		name: 'Ostrava',
 		address: 'Hlavní třída 789, 702 00 Ostrava',
-		mapsUrl: 'https://maps.google.com',
+		mapsUrl: 'https://www.google.com/maps',
 		closedDays: ['Neděle'],
 	},
 	{
 		name: 'Petřvald',
 		address: 'Nádražní 321, 735 41 Petřvald',
-		mapsUrl: 'https://maps.google.com',
+		mapsUrl: 'https://www.google.com/maps',
 		closedDays: ['Pondělí'],
 	},
 ];
