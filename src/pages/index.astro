@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-// Cesty k datům jsou již ověřené
+// Ověřené cesty k datům v kořenovém adresáři
 import productsData from '../../data.json';
 import b2bData from '../../b2b.json';
 
@@ -40,77 +40,107 @@ const stores = [
 ];
 ---
 
-<Layout>
-	<div class="min-h-screen">
-		<header class="bg-[#0a192f] shadow-md sticky top-0 z-50 py-4">
-			<nav class="container mx-auto px-4 flex items-center justify-between">
-				<h1 class="text-3xl font-bold text-[#d4af37]">Cukrářství Blahutovi</h1>
-				<div class="hidden md:flex gap-6 items-center">
-					<a href="#dorty" class="text-white hover:text-[#d4af37]">Dorty</a>
-					<a href="#zakusky" class="text-white hover:text-[#d4af37]">Zákusky</a>
-					<a href="#prodejny" class="text-white hover:text-[#d4af37]">Prodejny</a>
-					<a href="#b2b" class="text-white hover:text-[#d4af37]">B2B</a>
-					<a href="#rezervace" class="bg-[#d4af37] text-[#0a192f] px-6 py-2 rounded-full font-semibold">Rezervace</a>
-				</div>
-			</nav>
-		</header>
+<Layout title="Cukrářství Blahutovi">
+	<style is:global>
+		/* NÁHRADA ZA NEFUNKČNÍ TAILWIND - DEFINICE BAREV */
+		:root {
+			--navy: #0a192f;
+			--gold: #d4af37;
+			--white: #ffffff;
+			--offwhite: #f8f9fa;
+		}
+		body { background-color: var(--offwhite); font-family: sans-serif; margin: 0; }
+		header { background-color: var(--navy); padding: 1rem 0; color: white; position: sticky; top: 0; z-index: 100; }
+		.nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 1rem; }
+		.nav-links a { color: white; text-decoration: none; margin-left: 1.5rem; font-weight: bold; }
+		.nav-links a:hover { color: var(--gold); }
+		.hero { background: linear-gradient(rgba(10,25,47,0.8), rgba(10,25,47,0.8)), url('/img/hero-bg.jpg'); background-size: cover; color: white; padding: 100px 1rem; text-align: center; }
+		.hero h2 { font-size: 3rem; color: var(--gold); margin-bottom: 1rem; }
+		.section-title { text-align: center; font-size: 2.5rem; color: var(--navy); margin: 3rem 0; }
+		.grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; padding: 0 1rem; }
+		.card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid rgba(212,175,55,0.2); }
+		.card img { width: 100%; height: 250px; object-fit: cover; }
+		.card-content { padding: 1.5rem; text-align: center; }
+		.card-content h3 { color: var(--navy); margin: 0 0 0.5rem 0; }
+		.price { color: var(--gold); font-weight: bold; font-size: 1.2rem; }
+		.btn-gold { display: inline-block; background-color: var(--gold); color: var(--navy); padding: 0.8rem 2rem; border-radius: 25px; text-decoration: none; font-weight: bold; margin-top: 1rem; }
+		.btn-gold:hover { background-color: #f1c40f; }
+		.reservation-box { max-width: 600px; margin: 3rem auto; background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+		.form-group { margin-bottom: 1rem; text-align: left; }
+		.form-group label { display: block; margin-bottom: 0.5rem; font-weight: bold; color: var(--navy); }
+		.form-group input { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+		footer { background: var(--navy); color: white; text-align: center; padding: 3rem 1rem; margin-top: 4rem; }
+	</style>
 
-		<section class="bg-[#112240] text-white py-32 px-4 text-center">
-			<div class="container mx-auto">
-				<h2 class="text-5xl font-bold mb-6">Vítejte v Cukrářství Blahutovi</h2>
-				<p class="text-xl mb-8 max-w-2xl mx-auto opacity-80">Rodinné cukrářství s tradicí od roku 1985. Nabízíme čerstvé dorty a zákusky připravené s láskou.</p>
-				<a href="#dorty" class="bg-[#d4af37] text-[#0a192f] px-8 py-3 rounded-full font-bold shadow-lg">Prohlédnout nabídku</a>
+	<header>
+		<div class="nav-container">
+			<h1 style="margin:0; color:var(--gold);">Cukrářství Blahutovi</h1>
+			<div class="nav-links">
+				<a href="#dorty">Dorty</a>
+				<a href="#zakusky">Zákusky</a>
+				<a href="#prodejny">Prodejny</a>
+				<a href="#rezervace" style="background:var(--gold); color:var(--navy); padding: 0.5rem 1rem; border-radius: 20px;">Rezervace</a>
 			</div>
-		</section>
+		</div>
+	</header>
 
-		<section id="dorty" class="py-20 px-4 bg-white">
-			<div class="container mx-auto">
-				<h2 class="text-4xl font-bold text-center mb-12 text-gray-800">Naše dorty</h2>
-				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-					{sortedCakes.map((product) => (
-						<div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-[#d4af37]/20">
-							<div class="aspect-square">
-								<img src={product.image} alt={product.title} class="w-full h-full object-cover" />
-							</div>
-							<div class="p-6">
-								<h3 class="text-xl font-bold mb-2 text-[#0a192f]">{product.title}</h3>
-								<p class="text-[#d4af37] font-bold mb-4">{product.price}</p>
-								<a href="#rezervace" class="block text-center bg-[#d4af37] text-[#0a192f] py-2 rounded-lg font-bold">Objednat</a>
-							</div>
-						</div>
-					))}
-				</div>
-			</div>
-		</section>
+	<section class="hero">
+		<h2>Vítejte u Blahutů</h2>
+		<p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto;">Rodinná tradice od roku 1985. Pečeme pro Vás ty nejlepší dorty a zákusky v kraji.</p>
+	</section>
 
-		<section id="prodejny" class="py-20 px-4 bg-[#f8f9fa]">
-			<div class="container mx-auto">
-				<h2 class="text-4xl font-bold text-center mb-12">Naše prodejny</h2>
-				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-					{stores.map((store) => (
-						<div class="bg-white rounded-2xl p-6 shadow-md border border-[#d4af37]/20">
-							<h3 class="text-2xl font-bold mb-3 text-[#d4af37]">{store.name}</h3>
-							<p class="text-gray-700 mb-4">{store.address}</p>
-							<p class="text-sm text-gray-500 mb-4">Zavřeno: {store.closedDays.join(', ')}</p>
-							<a href={store.mapsUrl} target="_blank" class="block text-center bg-[#0a192f] text-white py-2 rounded-lg">Zobrazit mapu</a>
-						</div>
-					))}
-				</div>
-			</div>
-		</section>
-
-		<section id="rezervace" class="py-20 px-4 bg-white">
-			<div class="container mx-auto max-w-2xl">
-				<h2 class="text-4xl font-bold text-center mb-12">Rezervace</h2>
-				<form class="space-y-4 bg-[#f8f9fa] p-8 rounded-2xl shadow-xl border border-[#d4af37]/20">
-					<div>
-						<label class="block mb-2 font-bold">Jméno a příjmení</label>
-						<input type="text" class="w-full p-3 rounded-lg border border-gray-300" placeholder="Vaše jméno" />
+	<section id="dorty">
+		<h2 class="section-title">Naše dorty</h2>
+		<div class="grid">
+			{sortedCakes.map((p) => (
+				<div class="card">
+					<img src={p.image} alt={p.title} />
+					<div class="card-content">
+						<h3>{p.title}</h3>
+						<p class="price">{p.price}</p>
+						<a href="#rezervace" class="btn-gold">Objednat</a>
 					</div>
-					<div>
-						<label class="block mb-2 font-bold">Telefon</label>
-						<input type="tel" class="w-full p-3 rounded-lg border border-gray-300" placeholder="+420 ..." />
-					</div>
-					<div>
-						<label class="block mb-2 font-bold">O jaký produkt máte zájem?</label>
-						<input type="text" class
+				</div>
+			))}
+		</div>
+	</section>
+
+	<section id="prodejny" style="background: #eee; padding-bottom: 4rem;">
+		<h2 class="section-title">Naše prodejny</h2>
+		<div class="grid">
+			{stores.map((s) => (
+				<div class="card" style="padding: 1.5rem;">
+					<h3 style="color:var(--gold);">{s.name}</h3>
+					<p>{s.address}</p>
+					<p style="font-size: 0.9rem; color: #666;">Zavřeno: {s.closedDays.join(', ')}</p>
+					<a href={s.mapsUrl} target="_blank" class="btn-gold" style="background:var(--navy); color:white; width: 100%; text-align: center; box-sizing: border-box;">Zobrazit mapu</a>
+				</div>
+			))}
+		</div>
+	</section>
+
+	<section id="rezervace">
+		<h2 class="section-title">Rezervace</h2>
+		<div class="reservation-box">
+			<form action="#" method="POST">
+				<div class="form-group">
+					<label>Jméno a příjmení</label>
+					<input type="text" name="name" required placeholder="Vaše jméno" />
+				</div>
+				<div class="form-group">
+					<label>Telefon</label>
+					<input type="tel" name="phone" required placeholder="+420 ..." />
+				</div>
+				<div class="form-group">
+					<label>O co máte zájem?</label>
+					<input type="text" name="product" placeholder="Název produktu" />
+				</div>
+				<button type="submit" class="btn-gold" style="width: 100%; border: none; cursor: pointer; font-size: 1.1rem;">Odeslat poptávku</button>
+			</form>
+		</div>
+	</section>
+
+	<footer>
+		<p>© 2026 Cukrářství Blahutovi. Všechna práva vyhrazena.</p>
+	</footer>
+</Layout>
