@@ -2,11 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import productsData from '../../data.json';
 
-// Načtení a seřazení produktů
 const cakes = (productsData?.cakes || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 
-// Prodejny
 const stores = [
 	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1, 735 41 Petřvald', phone: '+420 778 157 857', mapUrl: 'https://maps.google.com/?q=Šenovská+1+Petřvald', closed: [1], hours: 'Út-Ne: 9:00 - 17:00 (Po: zavřeno)' },
 	{ id: 'pist', name: 'Píšť', address: 'Opavská 218/101, 747 18 Píšť', phone: '+420 602 323 788', mapUrl: 'https://maps.google.com/?q=Opavská+218+Píšť', closed: [0, 6], hours: 'Po-Pá: 6:00 - 15:00' },
@@ -119,17 +117,17 @@ const stores = [
 	<section id="dort-na-prani" style="padding: 5rem 1rem; background: #eeeae4;">
 		<div style="max-width: 800px; margin: 0 auto; background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
 			<h2 style="text-align: center; font-family: 'Playfair Display'; font-size: 2.5rem; margin-bottom: 1rem;">Dort na přání</h2>
-			<form name="dort-na-prani" method="POST" data-netlify="true" enctype="multipart/form-data">
-				<input type="hidden" name="subject" value="Nová poptávka: Dort na přání" />
+			<form name="dort-na-prani" method="POST" data-netlify="true" enctype="multipart/form-data" action="/success">
+				<input type="hidden" name="form-name" value="dort-na-prani" />
 				<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-					<input type="text" name="Jmeno" placeholder="Vaše jméno" class="input-field" required />
-					<input type="email" name="Email" placeholder="Váš e-mail" class="input-field" required />
+					<input type="text" name="jmeno" placeholder="Vaše jméno" class="input-field" required />
+					<input type="email" name="email" placeholder="Váš e-mail" class="input-field" required />
 				</div>
-				<input type="tel" name="Telefon" placeholder="Váš telefon" class="input-field" required style="margin-bottom: 1rem;" />
-				<textarea name="Popis" placeholder="Detaily o dortu..." class="input-field" style="height: 120px; margin-bottom: 1.5rem;" required></textarea>
+				<input type="tel" name="telefon" placeholder="Váš telefon" class="input-field" required style="margin-bottom: 1rem;" />
+				<textarea name="popis" placeholder="Detaily o dortu..." class="input-field" style="height: 120px; margin-bottom: 1.5rem;" required></textarea>
 				
-				<label style="display: block; margin-bottom: 0.5rem; font-weight: bold; font-size: 0.85rem;">Inspirační fotka (přiložte soubor):</label>
-				<input type="file" name="Soubor Fotka" id="file-upload" accept="image/*" class="input-field" style="margin-bottom: 2rem; padding: 0.5rem;" />
+				<label style="display: block; margin-bottom: 0.5rem; font-weight: bold; font-size: 0.85rem;">Inspirační fotka (JPG/PNG):</label>
+				<input type="file" name="soubor_fotka" accept="image/*" class="input-field" style="margin-bottom: 2rem; padding: 0.5rem;" required />
 				
 				<button type="submit" class="btn-add" style="width: 100%; margin: 0; font-size: 1.1rem;">Odeslat poptávku s fotkou</button>
 			</form>
@@ -141,7 +139,6 @@ const stores = [
 			<h2 style="color:var(--gold); font-family:'Playfair Display'; font-size:3rem; margin-bottom: 2rem;">Velkoobchodní spolupráce</h2>
 			<div style="background: white; color: var(--navy); padding: 3rem; border-radius: 20px; max-width: 600px; margin: 0 auto; text-align: left;">
 				<form name="b2b-poptavka" method="POST" data-netlify="true">
-					<input type="hidden" name="subject" value="B2B Poptávka" />
 					<input type="text" name="firma" placeholder="Firma / Jméno" class="input-field" required style="margin-bottom:0.8rem" />
 					<input type="email" name="email" placeholder="E-mail" class="input-field" required style="margin-bottom:0.8rem" />
 					<input type="tel" name="telefon" placeholder="Telefon" class="input-field" required style="margin-bottom:0.8rem" />
@@ -176,7 +173,7 @@ const stores = [
 		const dateInput = document.getElementById('date-input');
 		const minDate = new Date();
 		minDate.setDate(minDate.getDate() + 3);
-		dateInput.min = minDate.toISOString().split('T')[0];
+		if(dateInput) dateInput.min = minDate.toISOString().split('T')[0];
 
 		function addToCart(title, price) {
 			const existing = cart.find(i => i.title === title);
@@ -188,7 +185,8 @@ const stores = [
 		function updateCart() {
 			const countEl = document.getElementById('cart-count');
 			const itemsEl = document.getElementById('cart-items');
-			countEl.innerText = cart.reduce((sum, item) => sum + item.qty, 0);
+			if(countEl) countEl.innerText = cart.reduce((sum, item) => sum + item.qty, 0);
+			if(!itemsEl) return;
 			if (cart.length === 0) { itemsEl.innerHTML = '<p style="text-align:center; opacity:0.4;">Košík je prázdný.</p>'; return; }
 			itemsEl.innerHTML = cart.map((item, index) => `
 				<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:0.95rem">
@@ -214,12 +212,16 @@ const stores = [
 			submitBtn.style.opacity = isInvalid ? '0.4' : '1';
 		}
 
-		document.getElementById('order-form').onsubmit = function(e) {
-			if (cart.length === 0) { e.preventDefault(); return alert('Košík je prázdný!'); }
-			const storeName = document.getElementById('store-select').options[document.getElementById('store-select').selectedIndex].text;
-			document.getElementById('hidden-cart-details').value = cart.map(i => `${i.qty}x ${i.title} (${i.price})`).join('\n');
-			document.getElementById('hidden-store').value = storeName;
-			document.getElementById('hidden-date').value = dateInput.value;
-		};
+		// JS obsluha jen pro KOŠÍK
+		const orderForm = document.getElementById('order-form');
+		if(orderForm) {
+			orderForm.onsubmit = function(e) {
+				if (cart.length === 0) { e.preventDefault(); return alert('Košík je prázdný!'); }
+				const storeName = document.getElementById('store-select').options[document.getElementById('store-select').selectedIndex].text;
+				document.getElementById('hidden-cart-details').value = cart.map(i => `${i.qty}x ${i.title} (${i.price})`).join('\n');
+				document.getElementById('hidden-store').value = storeName;
+				document.getElementById('hidden-date').value = dateInput.value;
+			};
+		}
 	</script>
 </Layout>
