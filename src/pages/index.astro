@@ -2,9 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import ReservationForm from '../components/ReservationForm';
 
-// Cesty jsou již ověřené a funkční
+// OPRAVA CEST: Nastavujeme oběma souborům cestu do hlavní složky (rootu)
 import productsData from '../../data.json';
-import b2bData from '../b2b.json';
+import b2bData from '../../b2b.json';
 
 const sortedCakes = [...productsData.dorty].sort((a, b) => (a.weight || 100) - (b.weight || 100));
 const sortedDesserts = [...productsData.zakusky].sort((a, b) => (a.weight || 100) - (b.weight || 100));
