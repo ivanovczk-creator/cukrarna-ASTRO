@@ -2,10 +2,11 @@
 import Layout from '../layouts/Layout.astro';
 import ReservationForm from '../components/ReservationForm';
 
-// Použijeme přímý import z kořenové složky, to Netlify nesplete
-import productsData from '../data/products.json';
+// Opravené názvy podle GitHubu (máte tam data.json místo products.json)
+import productsData from '../data/data.json';
 import b2bData from '../data/b2b.json';
 
+// Načtení dat a jejich seřazení podle váhy (weight)
 const sortedCakes = [...productsData.dorty].sort((a, b) => (a.weight || 100) - (b.weight || 100));
 const sortedDesserts = [...productsData.zakusky].sort((a, b) => (a.weight || 100) - (b.weight || 100));
 const b2b = b2bData;
@@ -180,7 +181,7 @@ const stores = [
 </Layout>
 
 <script>
-	function initScroll() {
+	function initScripts() {
 		const orderButtons = document.querySelectorAll('.order-button');
 		orderButtons.forEach(button => {
 			button.addEventListener('click', () => {
@@ -188,6 +189,6 @@ const stores = [
 			});
 		});
 	}
-	initScroll();
-	document.addEventListener('astro:after-swap', initScroll);
+	initScripts();
+	document.addEventListener('astro:after-swap', initScripts);
 </script>
