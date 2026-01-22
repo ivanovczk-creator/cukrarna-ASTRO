@@ -17,15 +17,37 @@ const stores = [
 	<style is:global>
 		:root { --navy: #0a192f; --gold: #d4af37; --offwhite: #fcfaf7; }
 		body { background-color: var(--offwhite); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; scroll-behavior: smooth; color: var(--navy); }
-		header { background: var(--navy); padding: 1.2rem 0; color: white; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--gold); }
-		.nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 1rem; }
-		.nav-links a { color: white; text-decoration: none; margin-left: 1.2rem; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; }
+		
+		/* NAVIGACE S HAMBURGEREM */
+		header { background: var(--navy); padding: 1rem 0; color: white; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--gold); }
+		.nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 1.5rem; }
+		
+		.nav-links { display: flex; gap: 1.5rem; }
+		.nav-links a { color: white; text-decoration: none; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+		
+		.hamburger { display: none; background: none; border: none; cursor: pointer; padding: 0; }
+		.hamburger span { display: block; width: 25px; height: 3px; background: var(--gold); margin: 5px 0; transition: 0.3s; }
+
+		@media (max-width: 768px) {
+			.hamburger { display: block; }
+			.nav-links { 
+				display: none; 
+				position: absolute; top: 100%; left: 0; right: 0; 
+				background: var(--navy); flex-direction: column; 
+				padding: 2rem; text-align: center; gap: 2rem;
+				border-bottom: 2px solid var(--gold);
+			}
+			.nav-links.active { display: flex; }
+		}
+
+		/* UI ZBYTEK */
 		.section-title { text-align: center; font-family: 'Playfair Display', serif; font-size: 2.5rem; margin: 4rem 0 2rem; }
 		.grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; padding: 0 1rem; }
 		.card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.05); border: 1px solid rgba(212,175,55,0.1); text-align: center; }
 		.card img { width: 100%; height: 280px; object-fit: cover; }
 		.btn-add { background: var(--gold); color: var(--navy); padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: bold; border: none; cursor: pointer; display: inline-block; text-decoration: none; }
 		.input-field { padding: 0.9rem; border-radius: 8px; border: 1px solid #ddd; width: 100%; box-sizing: border-box; font-family: inherit; margin-top: 5px; }
+
 		#cart-float { position: fixed; bottom: 30px; right: 30px; background: var(--gold); color: var(--navy); width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); cursor: pointer; z-index: 1000; }
 		#cart-count { position: absolute; top: 0; right: 0; background: var(--navy); color: white; width: 22px; height: 22px; border-radius: 50%; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; font-weight: bold; }
 		#cart-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; padding: 15px; }
@@ -34,8 +56,13 @@ const stores = [
 
 	<header>
 		<div class="nav-container">
-			<h1 style="margin:0; color:var(--gold); font-family: 'Playfair Display'">Cukrářství Blahutovi</h1>
-			<nav class="nav-links">
+			<h1 style="margin:0; color:var(--gold); font-family: 'Playfair Display'; font-size: 1.5rem;">Cukrářství Blahutovi</h1>
+			
+			<button class="hamburger" id="hamburger-btn">
+				<span></span><span></span><span></span>
+			</button>
+
+			<nav class="nav-links" id="nav-menu">
 				<a href="#dorty">Dorty</a>
 				<a href="#zakusky">Zákusky</a>
 				<a href="#dort-na-prani">Na přání</a>
@@ -62,26 +89,26 @@ const stores = [
 				<input type="hidden" name="Termin" id="hidden-date" />
 
 				<div style="margin-bottom:1rem">
-					<label style="font-size:0.85rem; font-weight:bold;">Vyzvednutí na prodejně</label>
+					<label style="font-size:0.85rem; font-weight:bold;">Kde vyzvednete?</label>
 					<select id="store-select" class="input-field" required onchange="validateDate()">
-						<option value="">Vyberte...</option>
+						<option value="">Vyberte prodejnu...</option>
 						{stores.map(s => <option value={s.id} data-closed={s.closed.join(',')}>{s.name}</option>)}
 					</select>
 				</div>
 				<div style="margin-bottom:1rem">
-					<label style="font-size:0.85rem; font-weight:bold;">Datum vyzvednutí</label>
+					<label style="font-size:0.85rem; font-weight:bold;">Datum (min. za 3 dny)</label>
 					<input type="date" id="date-input" class="input-field" required onchange="validateDate()" />
 				</div>
-				<input type="text" name="Jmeno" placeholder="Jméno" class="input-field" required />
-				<input type="email" name="Email" placeholder="E-mail" class="input-field" required />
-				<input type="tel" name="Telefon" placeholder="Telefon" class="input-field" required />
+				<input type="text" name="Jmeno" placeholder="Vaše jméno" class="input-field" required />
+				<input type="email" name="Email" placeholder="Váš e-mail" class="input-field" required />
+				<input type="tel" name="Telefon" placeholder="Váš telefon" class="input-field" required />
 				<button type="submit" id="submit-btn" class="btn-add" style="width:100%; margin-top:1.5rem">Odeslat objednávku</button>
 			</form>
 		</div>
 	</div>
 
 	<section id="dorty">
-		<h2 class="section-title">Dorty</h2>
+		<h2 class="section-title">Naše dorty</h2>
 		<div class="grid">
 			{cakes.map((p) => (
 				<div class="card">
@@ -98,7 +125,7 @@ const stores = [
 	</section>
 
 	<section id="zakusky" style="background: white; padding-bottom: 5rem;">
-		<h2 class="section-title">Zákusky</h2>
+		<h2 class="section-title">Naše zákusky</h2>
 		<div class="grid">
 			{desserts.map((p) => (
 				<div class="card">
@@ -120,31 +147,31 @@ const stores = [
 				<input type="text" name="Jmeno" placeholder="Vaše jméno" class="input-field" required />
 				<input type="email" name="Email" placeholder="Váš e-mail" class="input-field" required />
 				<input type="tel" name="Telefon" placeholder="Váš telefon" class="input-field" required style="margin-bottom: 1rem;" />
-				<textarea name="Popis" placeholder="Popište vaši představu..." class="input-field" style="height: 120px; margin-bottom: 1.5rem;" required></textarea>
-				<label style="display: block; margin-bottom: 0.5rem; font-weight: bold; font-size: 0.85rem;">Máte obrázek? (JPG/PNG):</label>
+				<textarea name="Popis" placeholder="Detaily o dortu..." class="input-field" style="height: 120px; margin-bottom: 1.5rem;" required></textarea>
+				<label style="display: block; margin-bottom: 0.5rem; font-weight: bold; font-size: 0.85rem;">Inspirační fotka:</label>
 				<input type="file" name="Fotka" accept="image/*" class="input-field" style="margin-bottom: 2rem; padding: 0.5rem;" required />
-				<button type="submit" class="btn-add" style="width: 100%; margin: 0; font-size: 1.1rem;">Odeslat poptávku</button>
+				<button type="submit" class="btn-add" style="width: 100%; margin: 0; font-size: 1.1rem;">Odeslat poptávku s fotkou</button>
 			</form>
 		</div>
 	</section>
 
 	<section id="b2b" style="background: var(--navy); color: white; padding: 6rem 1rem; text-align: center;">
 		<div style="max-width:1000px; margin:0 auto;">
-			<h2 style="color:var(--gold); font-family:'Playfair Display'; font-size:3rem; margin-bottom: 2rem;">Velkoobchodní spolupráce</h2>
+			<h2 style="color:var(--gold); font-family:'Playfair Display'; font-size:3rem; margin-bottom: 2rem;">Velkoobchod</h2>
 			<div style="background: white; color: var(--navy); padding: 3rem; border-radius: 20px; max-width: 600px; margin: 0 auto; text-align: left;">
 				<form name="poptavka-b2b" method="POST" data-netlify="true">
-					<input type="text" name="Firma" placeholder="Firma / Jméno" class="input-field" required style="margin-bottom:0.8rem" />
+					<input type="text" name="Firma" placeholder="Firma / Provozovna" class="input-field" required style="margin-bottom:0.8rem" />
 					<input type="email" name="Email" placeholder="E-mail" class="input-field" required style="margin-bottom:0.8rem" />
 					<input type="tel" name="Telefon" placeholder="Telefon" class="input-field" required style="margin-bottom:0.8rem" />
 					<textarea name="Zprava" placeholder="Zpráva..." class="input-field" style="height: 100px; margin-bottom: 2rem;"></textarea>
-					<button type="submit" class="btn-add" style="width: 100%; margin: 0; font-size: 1.1rem;">Odeslat žádost</button>
+					<button type="submit" class="btn-add" style="width: 100%; margin: 0;">Odeslat žádost o spolupráci</button>
 				</form>
 			</div>
 		</div>
 	</section>
 
 	<section id="prodejny" style="padding: 6rem 1rem;">
-		<h2 class="section-title">Kde mě najdete</h2>
+		<h2 class="section-title">Naše prodejny</h2>
 		<div class="grid">
 			{stores.map((s) => (
 				<div class="card" style="padding: 2.5rem; background: var(--navy); color: white; text-align: left;">
@@ -163,6 +190,19 @@ const stores = [
 	</footer>
 
 	<script is:inline>
+		// --- LOGIKA MENU ---
+		const hamburger = document.getElementById('hamburger-btn');
+		const navMenu = document.getElementById('nav-menu');
+
+		hamburger.addEventListener('click', () => {
+			navMenu.classList.toggle('active');
+		});
+
+		navMenu.addEventListener('click', () => {
+			navMenu.classList.remove('active');
+		});
+
+		// --- LOGIKA KOŠÍKU ---
 		let cart = [];
 		const dateInput = document.getElementById('date-input');
 		const minDate = new Date();
@@ -185,7 +225,7 @@ const stores = [
 			itemsEl.innerHTML = cart.map((item, index) => `
 				<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:0.95rem">
 					<span><b>${item.qty}x</b> ${item.title}</span>
-					<span>${item.price} <button onclick="removeItem(${index})" style="color:#ff4444; border:none; background:none; cursor:pointer; font-weight:bold; margin-left:10px;">✕</button></span>
+					<span>${item.price} <button onclick="removeItem(${index})" style="color:#ff4444; border:none; background:none; cursor:pointer; font-weight:bold;">✕</button></span>
 				</div>
 			`).join('');
 		}
@@ -195,13 +235,11 @@ const stores = [
 
 		function validateDate() {
 			const storeSelect = document.getElementById('store-select');
-			const errorEl = document.getElementById('date-error');
 			const submitBtn = document.getElementById('submit-btn');
 			if (!dateInput.value || !storeSelect.value) return;
 			const day = new Date(dateInput.value).getDay();
 			const closed = storeSelect.options[storeSelect.selectedIndex].dataset.closed.split(',').map(Number);
 			const isInvalid = closed.includes(day);
-			errorEl.style.display = isInvalid ? 'block' : 'none';
 			submitBtn.disabled = isInvalid;
 			submitBtn.style.opacity = isInvalid ? '0.4' : '1';
 		}
@@ -211,7 +249,7 @@ const stores = [
 			const storeName = storeSelect.options[storeSelect.selectedIndex].text;
 			document.getElementById('hidden-cart-details').value = cart.map(i => `${i.qty}x ${i.title} (${i.price})`).join('\n');
 			document.getElementById('hidden-store').value = storeName;
-			document.getElementById('hidden-date').value = document.getElementById('date-input').value;
+			document.getElementById('hidden-date').value = dateInput.value;
 		};
 	</script>
 </Layout>
