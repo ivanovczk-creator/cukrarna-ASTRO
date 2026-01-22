@@ -2,48 +2,14 @@
 import Layout from '../layouts/Layout.astro';
 import productsData from '../../data.json';
 
-// Načtení a seřazení produktů podle weight (priority)
 const cakes = (productsData?.cakes || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 
-// Definice prodejen s mapami a pravidly pro blokování v kalendáři
 const stores = [
-	{ 
-		id: 'petrvald', 
-		name: 'Petřvald', 
-		address: 'Šenovská 1, 735 41 Petřvald', 
-		phone: '+420 778 157 857',
-		mapUrl: 'https://maps.google.com/?q=Šenovská+1+Petřvald',
-		closed: [1], 
-		hours: 'Út-Ne: 9:00 - 17:00 (Po: zavřeno)' 
-	},
-	{ 
-		id: 'pist', 
-		name: 'Píšť', 
-		address: 'Opavská 218/101, 747 18 Píšť', 
-		phone: '+420 602 323 788',
-		mapUrl: 'https://maps.google.com/?q=Opavská+218+Píšť',
-		closed: [0, 6], 
-		hours: 'Po-Pá: 6:00 - 15:00' 
-	},
-	{ 
-		id: 'karvina', 
-		name: 'Karviná', 
-		address: 'tř. Těreškovové 2233/28, 734 01 Karviná', 
-		phone: '+420 778 157 867',
-		mapUrl: 'https://maps.google.com/?q=Těreškovové+2233+Karviná',
-		closed: [0], 
-		hours: 'Po-Pá: 9:00 - 17:00, So: 8:00 - 12:00' 
-	},
-	{ 
-		id: 'ostrava', 
-		name: 'Ostrava (Zábřeh)', 
-		address: 'Výškovická 116a, 700 30 Ostrava', 
-		phone: '+420 775 271 101',
-		mapUrl: 'https://maps.google.com/?q=Výškovická+116a+Ostrava',
-		closed: [0], 
-		hours: 'Po-Pá: 9:00 - 17:00, So: 9:00 - 12:00' 
-	}
+	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1, 735 41 Petřvald', phone: '+420 778 157 857', mapUrl: 'https://maps.google.com/?q=Šenovská+1+Petřvald', closed: [1], hours: 'Út-Ne: 9:00 - 17:00 (Po: zavřeno)' },
+	{ id: 'pist', name: 'Píšť', address: 'Opavská 218/101, 747 18 Píšť', phone: '+420 602 323 788', mapUrl: 'https://maps.google.com/?q=Opavská+218+Píšť', closed: [0, 6], hours: 'Po-Pá: 6:00 - 15:00' },
+	{ id: 'karvina', name: 'Karviná', address: 'tř. Těreškovové 2233/28, 734 01 Karviná', phone: '+420 778 157 867', mapUrl: 'https://maps.google.com/?q=Těreškovové+2233+Karviná', closed: [0], hours: 'Po-Pá: 9:00 - 17:00, So: 8:00 - 12:00' },
+	{ id: 'ostrava', name: 'Ostrava (Zábřeh)', address: 'Výškovická 116a, 700 30 Ostrava', phone: '+420 775 271 101', mapUrl: 'https://maps.google.com/?q=Výškovická+116a+Ostrava', closed: [0], hours: 'Po-Pá: 9:00 - 17:00, So: 9:00 - 12:00' }
 ];
 ---
 
@@ -105,18 +71,18 @@ const stores = [
 				<div style="margin-bottom:1rem">
 					<label style="font-size:0.85rem; font-weight:bold;">Datum vyzvednutí (min. za 3 dny)</label>
 					<input type="date" name="datum-vyzvednuti" id="date-input" class="input-field" required onchange="validateDate()" />
-					<p id="date-error" style="color:red; font-size:0.75rem; display:none; margin-top:5px; font-weight:bold;">V tento den máme zavřeno nebo je termín příliš brzy.</p>
+					<p id="date-error" style="color:red; font-size:0.75rem; display:none; margin-top:5px; font-weight:bold;">Tento den je zavřeno nebo termín příliš brzy.</p>
 				</div>
-				<input type="text" name="jmeno" id="cust-name" placeholder="Celé jméno" class="input-field" required style="margin-bottom:0.8rem" />
-				<input type="email" name="email" id="cust-email" placeholder="Váš e-mail" class="input-field" required style="margin-bottom:0.8rem" />
-				<input type="tel" name="telefon" id="cust-phone" placeholder="Váš telefon" class="input-field" required />
+				<input type="text" name="jmeno" placeholder="Celé jméno" class="input-field" required style="margin-bottom:0.8rem" />
+				<input type="email" name="email" placeholder="Váš e-mail" class="input-field" required style="margin-bottom:0.8rem" />
+				<input type="tel" name="telefon" placeholder="Váš telefon" class="input-field" required />
 				<button type="submit" id="submit-btn" class="btn-add" style="width:100%; margin-top:1.5rem">Odeslat objednávku</button>
 			</form>
 		</div>
 	</div>
 
 	<section id="dorty">
-		<h2 class="section-title">Dorty</h2>
+		<h2 class="section-title">Naše dorty</h2>
 		<div class="grid">
 			{cakes.map((p) => (
 				<div class="card">
@@ -133,7 +99,7 @@ const stores = [
 	</section>
 
 	<section id="zakusky" style="background: white; padding-bottom: 5rem;">
-		<h2 class="section-title">Zákusky</h2>
+		<h2 class="section-title">Naše zákusky</h2>
 		<div class="grid">
 			{desserts.map((p) => (
 				<div class="card">
@@ -152,15 +118,16 @@ const stores = [
 		<div style="max-width: 800px; margin: 0 auto; background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
 			<h2 style="text-align: center; font-family: 'Playfair Display'; font-size: 2.5rem; margin-bottom: 1rem;">Dort na přání</h2>
 			<p style="text-align: center; margin-bottom: 2rem; opacity: 0.8;">Máte vlastní představu? Popište mi ji a nahrajte obrázek pro inspiraci.</p>
+			
 			<form name="dort-na-prani" method="POST" data-netlify="true" enctype="multipart/form-data">
 				<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
 					<input type="text" name="jmeno" placeholder="Vaše jméno" class="input-field" required />
 					<input type="email" name="email" placeholder="Váš e-mail" class="input-field" required />
 				</div>
 				<input type="tel" name="telefon" placeholder="Váš telefon" class="input-field" required style="margin-bottom: 1rem;" />
-				<textarea name="popis" placeholder="Detaily o dortu (příchuť, motiv, počet porcí...)" class="input-field" style="height: 120px; margin-bottom: 1.5rem;" required></textarea>
-				<label style="display: block; margin-bottom: 0.5rem; font-weight: bold; font-size: 0.85rem;">Inspirační fotka (JPG/PNG):</label>
-				<input type="file" name="priloha-foto" accept="image/*" class="input-field" style="margin-bottom: 2rem; padding: 0.5rem;" />
+				<textarea name="popis" placeholder="Detaily o dortu..." class="input-field" style="height: 120px; margin-bottom: 1.5rem;" required></textarea>
+				<label style="display: block; margin-bottom: 0.5rem; font-weight: bold; font-size: 0.85rem;">Inspirační fotka:</label>
+				<input type="file" name="foto" accept="image/*" class="input-field" style="margin-bottom: 2rem; padding: 0.5rem;" />
 				<button type="submit" class="btn-add" style="width: 100%; margin: 0; font-size: 1.1rem;">Odeslat poptávku</button>
 			</form>
 		</div>
@@ -176,7 +143,6 @@ const stores = [
 				</div>
 				<div style="background: rgba(255,255,255,0.05); padding: 2.5rem; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1);">
 					<h3 style="color:var(--gold); margin-top:0;">Rozvozové okruhy</h3>
-					<p style="margin-bottom: 1.5rem;">Zavážím vlastními chlazenými vozy tyto oblasti:</p>
 					<div style="display: grid; grid-template-columns: 1fr; gap: 10px; font-weight: bold; color: var(--gold); font-size: 1.2rem;">
 						<span>🚚 Karviná</span><span>🚚 Ostravsko</span><span>🚚 Opavsko</span><span>🚚 Havířov</span><span>🚚 Bohumín</span>
 					</div>
@@ -188,7 +154,7 @@ const stores = [
 					<input type="text" name="firma" placeholder="Firma / Jméno" class="input-field" required style="margin-bottom:0.8rem" />
 					<input type="email" name="email" placeholder="E-mail" class="input-field" required style="margin-bottom:0.8rem" />
 					<input type="tel" name="telefon" placeholder="Telefon" class="input-field" required style="margin-bottom:0.8rem" />
-					<textarea name="zprava" placeholder="Kde sídlíte a co byste rádi odebírali?" class="input-field" style="height: 100px; margin-bottom: 2rem;"></textarea>
+					<textarea name="zprava" placeholder="Zpráva..." class="input-field" style="height: 100px; margin-bottom: 2rem;"></textarea>
 					<button type="submit" class="btn-add" style="width: 100%; margin: 0; font-size: 1.1rem;">Odeslat žádost</button>
 				</form>
 			</div>
@@ -201,8 +167,8 @@ const stores = [
 			{stores.map((s) => (
 				<div class="card" style="padding: 2.5rem; background: var(--navy); color: white; text-align: left;">
 					<h3 style="color:var(--gold); margin:0 0 15px 0; font-family:'Playfair Display'; font-size:1.8rem;">{s.name}</h3>
-					<p style="margin: 8px 0;">📍 {s.address}</p>
-					<p style="margin: 8px 0;">📞 <a href={`tel:${s.phone.replace(/\s/g, '')}`} style="color:white; text-decoration:none;">{s.phone}</a></p>
+					<p>📍 {s.address}</p>
+					<p>📞 <a href={`tel:${s.phone.replace(/\s/g, '')}`} style="color:white; text-decoration:none;">{s.phone}</a></p>
 					<p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.7;">{s.hours}</p>
 					<a href={s.mapUrl} target="_blank" style="display:inline-block; margin-top:20px; background:var(--gold); color:var(--navy); padding:0.6rem 1.2rem; border-radius:5px; text-decoration:none; font-weight:bold; font-size:0.85rem;">NAVIGOVAT</a>
 				</div>
@@ -211,7 +177,7 @@ const stores = [
 	</section>
 
 	<footer style="background: #050c18; color: white; text-align: center; padding: 4rem 1rem;">
-		<p>© 2026 Cukrářství Blahutovi | Tradiční řemeslo</p>
+		<p>© 2026 Cukrářství Blahutovi</p>
 	</footer>
 
 	<script is:inline>
