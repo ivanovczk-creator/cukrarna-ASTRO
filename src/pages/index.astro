@@ -2,9 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 import ReservationForm from '../components/ReservationForm';
 
-// OPRAVA CEST: Nastavujeme oběma souborům cestu do hlavní složky (rootu)
-import productsData from '../../data.json';
-import b2bData from '../../b2b.json';
+// PŘESNÉ CESTY PODLE SCREENSHOTU:
+// Jdeme o úroveň výš (z pages do src) a pak do složky data
+import productsData from '../data/data.json';
+import b2bData from '../data/b2b.json';
 
 const sortedCakes = [...productsData.dorty].sort((a, b) => (a.weight || 100) - (b.weight || 100));
 const sortedDesserts = [...productsData.zakusky].sort((a, b) => (a.weight || 100) - (b.weight || 100));
@@ -14,25 +15,25 @@ const stores = [
 	{
 		name: 'Píšť',
 		address: 'Hlavní 123, 739 51 Píšť',
-		mapsUrl: 'https://maps.google.com',
+		mapsUrl: 'https://maps.google.com/?q=Hlavní+123+Píšť',
 		closedDays: ['Sobota', 'Neděle'],
 	},
 	{
 		name: 'Karviná',
 		address: 'Náměstí 456, 733 01 Karviná',
-		mapsUrl: 'https://maps.google.com',
+		mapsUrl: 'https://maps.google.com/?q=Náměstí+456+Karviná',
 		closedDays: ['Neděle'],
 	},
 	{
 		name: 'Ostrava',
 		address: 'Hlavní třída 789, 702 00 Ostrava',
-		mapsUrl: 'https://maps.google.com',
+		mapsUrl: 'https://maps.google.com/?q=Hlavní+třída+789+Ostrava',
 		closedDays: ['Neděle'],
 	},
 	{
 		name: 'Petřvald',
 		address: 'Nádražní 321, 735 41 Petřvald',
-		mapsUrl: 'https://maps.google.com',
+		mapsUrl: 'https://maps.google.com/?q=Nádražní+321+Petřvald',
 		closedDays: ['Pondělí'],
 	},
 ];
