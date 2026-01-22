@@ -59,9 +59,9 @@ const stores = [
 			<div id="cart-items" style="margin: 1.5rem 0; border-bottom: 1px solid #eee; padding-bottom: 1rem;"></div>
 			
 			<form name="objednavka-kosik" method="POST" data-netlify="true" id="order-form">
-				<input type="hidden" name="Seznam Zbozi" id="hidden-cart-details" />
-				<input type="hidden" name="Prodejna" id="hidden-store" />
-				<input type="hidden" name="Datum" id="hidden-date" />
+				<input type="hidden" name="Seznam_Zbozi" id="hidden-cart-details" />
+				<input type="hidden" name="Prodejna_Vyzvednuti" id="hidden-store" />
+				<input type="hidden" name="Datum_Vyzvednuti" id="hidden-date" />
 
 				<div style="margin-bottom:1rem">
 					<label style="font-size:0.85rem; font-weight:bold;">Vyzvednutí na prodejně</label>
@@ -124,7 +124,7 @@ const stores = [
 				<input type="tel" name="Telefon" placeholder="Váš telefon" class="input-field" required style="margin-bottom: 1rem;" />
 				<textarea name="Popis" placeholder="Detaily o dortu..." class="input-field" style="height: 120px; margin-bottom: 1.5rem;" required></textarea>
 				<label style="display: block; margin-bottom: 0.5rem; font-weight: bold; font-size: 0.85rem;">Inspirační fotka:</label>
-				<input type="file" name="Soubor Fotka" accept="image/*" class="input-field" style="margin-bottom: 2rem; padding: 0.5rem;" required />
+				<input type="file" name="Soubor_Fotka" accept="image/*" class="input-field" style="margin-bottom: 2rem; padding: 0.5rem;" required />
 				<button type="submit" class="btn-add" style="width: 100%; margin: 0; font-size: 1.1rem;">Odeslat poptávku</button>
 			</form>
 		</div>
