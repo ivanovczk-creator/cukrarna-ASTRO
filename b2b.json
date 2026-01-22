@@ -1,0 +1,24 @@
+{
+  "title": "Staňte se naším partnerem",
+  "subtitle": "Spolupracujeme s restauracemi, hotely, kavárny a dalšími firmami",
+  "description": "Nabízíme kvalitní cukrářské výrobky pro vaše podnikání. S námi získáte spolehlivého partnera s dlouholetou tradicí a zkušenostmi.",
+  "benefits": [
+    {
+      "title": "Zakázková výroba",
+      "description": "Připravíme cokoli přesně podle vašich požadavků a receptur"
+    },
+    {
+      "title": "Velkoobchodní ceny",
+      "description": "Výhodné ceny při pravidelných a větších odběrech"
+    },
+    {
+      "title": "Spolehlivá dodávka",
+      "description": "Garantujeme včasné dodání čerstvých výrobků"
+    },
+    {
+      "title": "Flexibilita",
+      "description": "Přizpůsobíme se vašim potřebám a požadavkům"
+    }
+  ],
+  "cta": "Chci se stát partnerem"
+}
