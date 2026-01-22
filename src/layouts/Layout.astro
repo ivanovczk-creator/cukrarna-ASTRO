@@ -11,7 +11,7 @@ const {
 	keywords = 'cukrářství, dorty, zákusky, svatební dorty, narozeninové dorty, zakázková výroba, Píšť, Karviná, Ostrava, Petřvald, velkoobchod, B2B, cukrárna'
 } = Astro.props;
 
-const siteUrl = 'https://www.cukrarstvi-blahutovi.cz';
+const siteUrl = 'https://cukrarstvi-blahutovi.cz';
 ---
 
 <!doctype html>
@@ -22,7 +22,6 @@ const siteUrl = 'https://www.cukrarstvi-blahutovi.cz';
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 
-		<!-- Primary Meta Tags -->
 		<title>{title}</title>
 		<meta name="title" content={title} />
 		<meta name="description" content={description} />
@@ -30,7 +29,6 @@ const siteUrl = 'https://www.cukrarstvi-blahutovi.cz';
 		<meta name="author" content="Cukrářství Blahutovi" />
 		<meta name="robots" content="index, follow" />
 
-		<!-- Open Graph / Facebook -->
 		<meta property="og:type" content="website" />
 		<meta property="og:url" content={siteUrl} />
 		<meta property="og:title" content={title} />
@@ -38,13 +36,11 @@ const siteUrl = 'https://www.cukrarstvi-blahutovi.cz';
 		<meta property="og:locale" content="cs_CZ" />
 		<meta property="og:site_name" content="Cukrářství Blahutovi" />
 
-		<!-- Twitter -->
 		<meta property="twitter:card" content="summary_large_image" />
 		<meta property="twitter:url" content={siteUrl} />
 		<meta property="twitter:title" content={title} />
 		<meta property="twitter:description" content={description} />
 
-		<!-- Additional SEO -->
 		<link rel="canonical" href={siteUrl} />
 		<meta name="theme-color" content="#1e3a8a" />
 
@@ -52,14 +48,15 @@ const siteUrl = 'https://www.cukrarstvi-blahutovi.cz';
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-		<!-- Structured Data -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+
 		<script type="application/ld+json">
 		{
 			"@context": "https://schema.org",
 			"@type": "Bakery",
 			"name": "Cukrářství Blahutovi",
 			"description": "Rodinné cukrářství s tradicí od roku 1985",
-			"url": "https://www.cukrarstvi-blahutovi.cz",
+			"url": "https://cukrarstvi-blahutovi.cz",
 			"foundingDate": "1985",
 			"priceRange": "$$",
 			"servesCuisine": "Czech",
@@ -106,6 +103,22 @@ const siteUrl = 'https://www.cukrarstvi-blahutovi.cz';
 	</head>
 	<body class="bg-offwhite">
 		<slot />
+
+		<script is:inline src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+		<script is:inline>
+			function initLightbox() {
+				GLightbox({
+					selector: '.glightbox',
+					touchNavigation: true,
+					loop: true,
+					zoomable: true
+				});
+			}
+			// Inicializace při prvním načtení
+			initLightbox();
+			// Inicializace při navigaci v Astro (View Transitions)
+			document.addEventListener('astro:after-swap', initLightbox);
+		</script>
 	</body>
 </html>
 
@@ -127,5 +140,10 @@ const siteUrl = 'https://www.cukrarstvi-blahutovi.cz';
 
 	h1, h2, h3, h4, h5, h6 {
 		font-family: 'Playfair Display', serif;
+	}
+
+	/* Styl pro kurzor na obrázcích s lightboxem */
+	.glightbox img {
+		cursor: zoom-in;
 	}
 </style>
