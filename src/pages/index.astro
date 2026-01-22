@@ -2,29 +2,31 @@
 import Layout from '../layouts/Layout.astro';
 import productsData from '../../data.json';
 
+// Načtení a seřazení produktů
 const cakes = (productsData?.cakes || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 
+// Definice prodejen
 const stores = [
-	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1, 735 41 Petřvald', phone: '+420 778 157 857', mapUrl: 'https://maps.google.com/?q=Šenovská+1+Petřvald', closed: [1], hours: 'Út-Ne: 9:00 - 17:00 (Po: zavřeno)' },
+	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1, 735 41 Petřvald', phone: '+420 778 157 857', mapUrl: 'https://maps.google.com/?q=Šenovská+1+Petřvald', closed: [1], hours: 'Út-Ne: 9:00 - 17:00' },
 	{ id: 'pist', name: 'Píšť', address: 'Opavská 218/101, 747 18 Píšť', phone: '+420 602 323 788', mapUrl: 'https://maps.google.com/?q=Opavská+218+Píšť', closed: [0, 6], hours: 'Po-Pá: 6:00 - 15:00' },
-	{ id: 'karvina', name: 'Karviná', address: 'tř. Těreškovové 2233/28, 734 01 Karviná', phone: '+420 778 157 867', mapUrl: 'https://maps.google.com/?q=Těreškovové+2233+Karviná', closed: [0], hours: 'Po-Pá: 9:00 - 17:00, So: 8:00 - 12:00' },
-	{ id: 'ostrava', name: 'Ostrava (Zábřeh)', address: 'Výškovická 116a, 700 30 Ostrava', phone: '+420 775 271 101', mapUrl: 'https://maps.google.com/?q=Výškovická+116a+Ostrava', closed: [0], hours: 'Po-Pá: 9:00 - 17:00, So: 9:00 - 12:00' }
+	{ id: 'karvina', name: 'Karviná', address: 'tř. Těreškovové 2233/28, 734 01 Karviná', phone: '+420 778 157 867', mapUrl: 'https://maps.google.com/?q=tř.+Těreškovové+2233+Karviná', closed: [0], hours: 'Po-Pá: 9:00 - 17:00' },
+	{ id: 'ostrava', name: 'Ostrava (Zábřeh)', address: 'Výškovická 116a, 700 30 Ostrava', phone: '+420 775 271 101', mapUrl: 'https://maps.google.com/?q=Výškovická+116a+Ostrava', closed: [0], hours: 'Po-Pá: 9:00 - 17:00' }
 ];
 ---
 
-<Layout title="Cukrářství Blahutovi - Tradiční výroba od roku 1985">
+<Layout title="Cukrářství Blahutovi">
 	<style is:global>
 		:root { --navy: #0a192f; --gold: #d4af37; --offwhite: #fcfaf7; }
 		body { background-color: var(--offwhite); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; scroll-behavior: smooth; color: var(--navy); }
 		header { background: var(--navy); padding: 1.2rem 0; color: white; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--gold); }
 		.nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 1rem; }
 		.nav-links a { color: white; text-decoration: none; margin-left: 1.2rem; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; }
-		.section-title { text-align: center; font-family: 'Playfair Display', serif; font-size: 2.8rem; margin: 4rem 0 2rem; }
+		.section-title { text-align: center; font-family: 'Playfair Display', serif; font-size: 2.5rem; margin: 4rem 0 2rem; }
 		.grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; padding: 0 1rem; }
-		.card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.05); border: 1px solid rgba(212,175,55,0.1); text-align: center; transition: 0.3s; }
-		.card img { width: 100%; height: 280px; object-fit: cover; background: #eee; }
-		.btn-add { background: var(--gold); color: var(--navy); padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: bold; border: none; cursor: pointer; display: inline-block; text-decoration: none; transition: 0.2s; }
+		.card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.05); border: 1px solid rgba(212,175,55,0.1); text-align: center; }
+		.card img { width: 100%; height: 280px; object-fit: cover; }
+		.btn-add { background: var(--gold); color: var(--navy); padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: bold; border: none; cursor: pointer; display: inline-block; text-decoration: none; }
 		.input-field { padding: 0.9rem; border-radius: 8px; border: 1px solid #ddd; width: 100%; box-sizing: border-box; font-family: inherit; margin-top: 5px; }
 		#cart-float { position: fixed; bottom: 30px; right: 30px; background: var(--gold); color: var(--navy); width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); cursor: pointer; z-index: 1000; }
 		#cart-count { position: absolute; top: 0; right: 0; background: var(--navy); color: white; width: 22px; height: 22px; border-radius: 50%; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; font-weight: bold; }
@@ -57,32 +59,31 @@ const stores = [
 			<div id="cart-items" style="margin: 1.5rem 0; border-bottom: 1px solid #eee; padding-bottom: 1rem;"></div>
 			
 			<form name="objednavka-kosik" method="POST" data-netlify="true" id="order-form">
-				<input type="hidden" name="subject" value="Nová objednávka z košíku" />
-				<input type="hidden" name="seznam-zbozi" id="hidden-cart-details" />
-				<input type="hidden" name="vyzvednuti-prodejna" id="hidden-store" />
-				<input type="hidden" name="vyzvednuti-datum" id="hidden-date" />
+				<input type="hidden" name="Seznam Zbozi" id="hidden-cart-details" />
+				<input type="hidden" name="Prodejna" id="hidden-store" />
+				<input type="hidden" name="Datum" id="hidden-date" />
 
 				<div style="margin-bottom:1rem">
-					<label style="font-size:0.85rem; font-weight:bold;">Místo vyzvednutí</label>
-					<select id="store-select" name="prodejna" class="input-field" required onchange="validateDate()">
-						<option value="">Vyberte prodejnu...</option>
+					<label style="font-size:0.85rem; font-weight:bold;">Vyzvednutí na prodejně</label>
+					<select id="store-select" class="input-field" required onchange="validateDate()">
+						<option value="">Vyberte...</option>
 						{stores.map(s => <option value={s.id} data-closed={s.closed.join(',')}>{s.name}</option>)}
 					</select>
 				</div>
 				<div style="margin-bottom:1rem">
 					<label style="font-size:0.85rem; font-weight:bold;">Datum vyzvednutí</label>
-					<input type="date" name="datum-vyzvednuti" id="date-input" class="input-field" required onchange="validateDate()" />
+					<input type="date" id="date-input" class="input-field" required onchange="validateDate()" />
 				</div>
-				<input type="text" name="jmeno" placeholder="Celé jméno" class="input-field" required style="margin-bottom:0.8rem" />
-				<input type="email" name="email" placeholder="Váš e-mail" class="input-field" required style="margin-bottom:0.8rem" />
-				<input type="tel" name="telefon" placeholder="Váš telefon" class="input-field" required />
+				<input type="text" name="Jmeno" placeholder="Jméno" class="input-field" required />
+				<input type="email" name="Email" placeholder="E-mail" class="input-field" required />
+				<input type="tel" name="Telefon" placeholder="Telefon" class="input-field" required />
 				<button type="submit" id="submit-btn" class="btn-add" style="width:100%; margin-top:1.5rem">Odeslat objednávku</button>
 			</form>
 		</div>
 	</div>
 
 	<section id="dorty">
-		<h2 class="section-title">Naše dorty</h2>
+		<h2 class="section-title">Dorty</h2>
 		<div class="grid">
 			{cakes.map((p) => (
 				<div class="card">
@@ -99,7 +100,7 @@ const stores = [
 	</section>
 
 	<section id="zakusky" style="background: white; padding-bottom: 5rem;">
-		<h2 class="section-title">Naše zákusky</h2>
+		<h2 class="section-title">Zákusky</h2>
 		<div class="grid">
 			{desserts.map((p) => (
 				<div class="card">
@@ -117,19 +118,14 @@ const stores = [
 	<section id="dort-na-prani" style="padding: 5rem 1rem; background: #eeeae4;">
 		<div style="max-width: 800px; margin: 0 auto; background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
 			<h2 style="text-align: center; font-family: 'Playfair Display'; font-size: 2.5rem; margin-bottom: 1rem;">Dort na přání</h2>
-			<form name="dort-na-prani" method="POST" data-netlify="true" enctype="multipart/form-data" action="/success">
-				<input type="hidden" name="form-name" value="dort-na-prani" />
-				<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-					<input type="text" name="jmeno" placeholder="Vaše jméno" class="input-field" required />
-					<input type="email" name="email" placeholder="Váš e-mail" class="input-field" required />
-				</div>
-				<input type="tel" name="telefon" placeholder="Váš telefon" class="input-field" required style="margin-bottom: 1rem;" />
-				<textarea name="popis" placeholder="Detaily o dortu..." class="input-field" style="height: 120px; margin-bottom: 1.5rem;" required></textarea>
-				
-				<label style="display: block; margin-bottom: 0.5rem; font-weight: bold; font-size: 0.85rem;">Inspirační fotka (JPG/PNG):</label>
-				<input type="file" name="soubor_fotka" accept="image/*" class="input-field" style="margin-bottom: 2rem; padding: 0.5rem;" required />
-				
-				<button type="submit" class="btn-add" style="width: 100%; margin: 0; font-size: 1.1rem;">Odeslat poptávku s fotkou</button>
+			<form name="dort-na-prani" method="POST" data-netlify="true" enctype="multipart/form-data">
+				<input type="text" name="Jmeno" placeholder="Vaše jméno" class="input-field" required />
+				<input type="email" name="Email" placeholder="Váš e-mail" class="input-field" required />
+				<input type="tel" name="Telefon" placeholder="Váš telefon" class="input-field" required style="margin-bottom: 1rem;" />
+				<textarea name="Popis" placeholder="Detaily o dortu..." class="input-field" style="height: 120px; margin-bottom: 1.5rem;" required></textarea>
+				<label style="display: block; margin-bottom: 0.5rem; font-weight: bold; font-size: 0.85rem;">Inspirační fotka:</label>
+				<input type="file" name="Soubor Fotka" accept="image/*" class="input-field" style="margin-bottom: 2rem; padding: 0.5rem;" required />
+				<button type="submit" class="btn-add" style="width: 100%; margin: 0; font-size: 1.1rem;">Odeslat poptávku</button>
 			</form>
 		</div>
 	</section>
@@ -139,10 +135,10 @@ const stores = [
 			<h2 style="color:var(--gold); font-family:'Playfair Display'; font-size:3rem; margin-bottom: 2rem;">Velkoobchodní spolupráce</h2>
 			<div style="background: white; color: var(--navy); padding: 3rem; border-radius: 20px; max-width: 600px; margin: 0 auto; text-align: left;">
 				<form name="b2b-poptavka" method="POST" data-netlify="true">
-					<input type="text" name="firma" placeholder="Firma / Jméno" class="input-field" required style="margin-bottom:0.8rem" />
-					<input type="email" name="email" placeholder="E-mail" class="input-field" required style="margin-bottom:0.8rem" />
-					<input type="tel" name="telefon" placeholder="Telefon" class="input-field" required style="margin-bottom:0.8rem" />
-					<textarea name="zprava" placeholder="Zpráva..." class="input-field" style="height: 100px; margin-bottom: 2rem;"></textarea>
+					<input type="text" name="Firma" placeholder="Firma / Jméno" class="input-field" required style="margin-bottom:0.8rem" />
+					<input type="email" name="Email" placeholder="E-mail" class="input-field" required style="margin-bottom:0.8rem" />
+					<input type="tel" name="Telefon" placeholder="Telefon" class="input-field" required style="margin-bottom:0.8rem" />
+					<textarea name="Zprava" placeholder="Zpráva..." class="input-field" style="height: 100px; margin-bottom: 2rem;"></textarea>
 					<button type="submit" class="btn-add" style="width: 100%; margin: 0; font-size: 1.1rem;">Odeslat žádost</button>
 				</form>
 			</div>
@@ -155,8 +151,8 @@ const stores = [
 			{stores.map((s) => (
 				<div class="card" style="padding: 2.5rem; background: var(--navy); color: white; text-align: left;">
 					<h3 style="color:var(--gold); margin:0 0 15px 0; font-family:'Playfair Display'; font-size:1.8rem;">{s.name}</h3>
-					<p>📍 {s.address}</p>
-					<p>📞 <a href={`tel:${s.phone.replace(/\s/g, '')}`} style="color:white; text-decoration:none;">{s.phone}</a></p>
+					<p style="margin: 8px 0;">📍 {s.address}</p>
+					<p style="margin: 8px 0;">📞 <a href={`tel:${s.phone.replace(/\s/g, '')}`} style="color:white; text-decoration:none;">{s.phone}</a></p>
 					<p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.7;">{s.hours}</p>
 					<a href={s.mapUrl} target="_blank" style="display:inline-block; margin-top:20px; background:var(--gold); color:var(--navy); padding:0.6rem 1.2rem; border-radius:5px; text-decoration:none; font-weight:bold; font-size:0.85rem;">NAVIGOVAT</a>
 				</div>
@@ -191,7 +187,7 @@ const stores = [
 			itemsEl.innerHTML = cart.map((item, index) => `
 				<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:0.95rem">
 					<span><b>${item.qty}x</b> ${item.title}</span>
-					<span>${item.price} <button onclick="removeItem(${index})" style="color:#ff4444; border:none; background:none; cursor:pointer; font-weight:bold;">✕</button></span>
+					<span>${item.price} <button onclick="removeItem(${index})" style="color:#ff4444; border:none; background:none; cursor:pointer; font-weight:bold; margin-left:10px;">✕</button></span>
 				</div>
 			`).join('');
 		}
@@ -212,16 +208,12 @@ const stores = [
 			submitBtn.style.opacity = isInvalid ? '0.4' : '1';
 		}
 
-		// JS obsluha jen pro KOŠÍK
-		const orderForm = document.getElementById('order-form');
-		if(orderForm) {
-			orderForm.onsubmit = function(e) {
-				if (cart.length === 0) { e.preventDefault(); return alert('Košík je prázdný!'); }
-				const storeName = document.getElementById('store-select').options[document.getElementById('store-select').selectedIndex].text;
-				document.getElementById('hidden-cart-details').value = cart.map(i => `${i.qty}x ${i.title} (${i.price})`).join('\n');
-				document.getElementById('hidden-store').value = storeName;
-				document.getElementById('hidden-date').value = dateInput.value;
-			};
-		}
+		document.getElementById('order-form').onsubmit = function() {
+			const storeSelect = document.getElementById('store-select');
+			const storeName = storeSelect.options[storeSelect.selectedIndex].text;
+			document.getElementById('hidden-cart-details').value = cart.map(i => `${i.qty}x ${i.title} (${i.price})`).join('\n');
+			document.getElementById('hidden-store').value = storeName;
+			document.getElementById('hidden-date').value = document.getElementById('date-input').value;
+		};
 	</script>
 </Layout>
