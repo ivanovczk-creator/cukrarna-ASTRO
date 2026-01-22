@@ -486,116 +486,122 @@
   "desserts": [
     {
       "id": "d1",
-      "title": "Zákusek č. 1",
-      "cena": "0 Kč",
+      "title": "Likérová špička",
+      "cena": "50 Kč",
       "foto": "/img/zakusky/01.jpg",
       "kategorie": "zakusky",
-      "popis": "Čerstvý zákusek z naší výroby."
-    },
-    {
-      "id": "d2",
-      "title": "Zákusek č. 2",
-      "cena": "0 Kč",
-      "foto": "/img/zakusky/02.jpg",
-      "kategorie": "zakusky"
+      "popis": "Čerstvý zákusek z naší výroby.",
+      "weight": 20
     },
     {
       "id": "d3",
-      "title": "Zákusek č. 3",
-      "cena": "0 Kč",
+      "title": "Nugátový dortík",
+      "cena": "55 Kč",
       "foto": "/img/zakusky/03.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 10
     },
     {
       "id": "d4",
-      "title": "Zákusek č. 4",
-      "cena": "0 Kč",
+      "title": "Panna cotta",
+      "cena": "60 Kč",
       "foto": "/img/zakusky/04.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 2
     },
     {
       "id": "d5",
-      "title": "Zákusek č. 5",
-      "cena": "0 Kč",
+      "title": "Metro",
+      "cena": "50 Kč",
       "foto": "/img/zakusky/05.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 30
     },
     {
       "id": "d6",
-      "title": "Zákusek č. 6",
-      "cena": "0 Kč",
+      "title": "Dortička",
+      "cena": "50 Kč",
       "foto": "/img/zakusky/06.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 60
     },
     {
       "id": "d7",
-      "title": "Zákusek č. 7",
-      "cena": "0 Kč",
+      "title": "Čokoládová kostka",
+      "cena": "45 Kč",
       "foto": "/img/zakusky/07.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 28
     },
     {
       "id": "d8",
-      "title": "Zákusek č. 8",
-      "cena": "0 Kč",
+      "title": "Indián",
+      "cena": "45 Kč",
       "foto": "/img/zakusky/08.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 14
     },
     {
       "id": "d9",
-      "title": "Zákusek č. 9",
-      "cena": "0 Kč",
+      "title": "Pistáciový větrník mascarpone",
+      "cena": "55 Kč",
       "foto": "/img/zakusky/09.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 4
     },
     {
       "id": "d10",
-      "title": "Zákusek č. 10",
+      "title": "Pistáciová koule",
       "cena": "0 Kč",
       "foto": "/img/zakusky/10.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 33
     },
     {
       "id": "d11",
-      "title": "Zákusek č. 11",
-      "cena": "0 Kč",
+      "title": "Višňová tartaletka",
+      "cena": "55 Kč",
       "foto": "/img/zakusky/11.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 5
     },
     {
       "id": "d12",
-      "title": "Zákusek č. 12",
-      "cena": "0 Kč",
+      "title": "12",
+      "cena": "55 Kč",
       "foto": "/img/zakusky/12.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 11
     },
     {
       "id": "d13",
-      "title": "Zákusek č. 13",
-      "cena": "0 Kč",
+      "title": "Karamelová tartaletka",
+      "cena": "55 Kč",
       "foto": "/img/zakusky/13.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d14",
-      "title": "Zákusek č. 14",
-      "cena": "0 Kč",
+      "title": "Craqulin",
+      "cena": "65 Kč",
       "foto": "/img/zakusky/14.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 2
     },
     {
       "id": "d15",
-      "title": "Zákusek č. 15",
-      "cena": "0 Kč",
+      "title": "Tiramisu",
+      "cena": "65 Kč",
       "foto": "/img/zakusky/15.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d16",
-      "title": "Zákusek č. 16",
-      "cena": "0 Kč",
+      "title": "Jádrový rohlíček",
+      "cena": "45 Kč",
       "foto": "/img/zakusky/16.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 44
     },
     {
       "id": "d17",
@@ -606,59 +612,48 @@
     },
     {
       "id": "d18",
-      "title": "Zákusek č. 18",
-      "cena": "0 Kč",
+      "title": "Dort Rafaelo",
+      "cena": "65 Kč",
       "foto": "/img/zakusky/18.jpg",
-      "kategorie": "zakusky"
-    },
-    {
-      "id": "d19",
-      "title": "Zákusek č. 19",
-      "cena": "0 Kč",
-      "foto": "/img/zakusky/19.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 9
     },
     {
       "id": "d20",
-      "title": "Zákusek č. 20",
-      "cena": "0 Kč",
+      "title": "Višňový řez",
+      "cena": "50 Kč",
       "foto": "/img/zakusky/20.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d21",
-      "title": "Zákusek č. 21",
-      "cena": "0 Kč",
+      "title": "Jahodový řez",
+      "cena": "50 Kč",
       "foto": "/img/zakusky/21.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d22",
-      "title": "Zákusek č. 22",
-      "cena": "0 Kč",
+      "title": "Malinový řez",
+      "cena": "55 Kč",
       "foto": "/img/zakusky/22.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": ""
     },
     {
       "id": "d23",
-      "title": "Zákusek č. 23",
-      "cena": "0 Kč",
+      "title": "Mandarinkový řez",
+      "cena": "50 Kč",
       "foto": "/img/zakusky/23.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d24",
-      "title": "Zákusek č. 24",
-      "cena": "0 Kč",
+      "title": "Čoko-malina",
+      "cena": "55 Kč",
       "foto": "/img/zakusky/24.jpg",
-      "kategorie": "zakusky"
-    },
-    {
-      "id": "d25",
-      "title": "Zákusek č. 25",
-      "cena": "0 Kč",
-      "foto": "/img/zakusky/25.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": -1
     },
     {
       "id": "d26",
@@ -669,7 +664,7 @@
     },
     {
       "id": "d27",
-      "title": "Zákusek č. 27",
+      "title": "Punčový",
       "cena": "0 Kč",
       "foto": "/img/zakusky/27.jpg",
       "kategorie": "zakusky"
@@ -677,70 +672,73 @@
     {
       "id": "d28",
       "title": "Zákusek č. 28",
-      "cena": "0 Kč",
+      "cena": "50 Kč",
       "foto": "/img/zakusky/28.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d29",
-      "title": "Zákusek č. 29",
-      "cena": "0 Kč",
+      "title": "Kokosová lahůdka mini",
+      "cena": "30 Kč",
       "foto": "/img/zakusky/29.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d30",
-      "title": "Zákusek č. 30",
-      "cena": "0 Kč",
+      "title": "Mecháček s mascarpone",
+      "cena": "70 Kč",
       "foto": "/img/zakusky/30.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 2
     },
     {
       "id": "d31",
-      "title": "Zákusek č. 31",
-      "cena": "0 Kč",
+      "title": "Ovocný košíček",
+      "cena": "50 Kč",
       "foto": "/img/zakusky/31.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d32",
-      "title": "Zákusek č. 32",
-      "cena": "0 Kč",
+      "title": "Ovocná miska",
+      "cena": "55 Kč",
       "foto": "/img/zakusky/32.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 2
     },
     {
       "id": "d33",
-      "title": "Zákusek č. 33",
-      "cena": "0 Kč",
+      "title": "Šodo se šlehačkou",
+      "cena": "55 Kč",
       "foto": "/img/zakusky/33.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 8
     },
     {
       "id": "d34",
-      "title": "Zákusek č. 34",
-      "cena": "0 Kč",
+      "title": "Ovocný mix",
+      "cena": "50 Kč",
       "foto": "/img/zakusky/34.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d35",
-      "title": "Zákusek č. 35",
-      "cena": "0 Kč",
+      "title": "Pařížská trubička",
+      "cena": "40 Kč",
       "foto": "/img/zakusky/35.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d36",
-      "title": "Zákusek č. 36",
-      "cena": "0 Kč",
+      "title": "Marcipánová roláda - vanilka",
+      "cena": "45 Kč",
       "foto": "/img/zakusky/36.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d37",
-      "title": "Zákusek č. 37",
-      "cena": "0 Kč",
+      "title": "Pařížská bomba",
+      "cena": "55 Kč",
       "foto": "/img/zakusky/37.jpg",
       "kategorie": "zakusky"
     },
@@ -752,163 +750,126 @@
       "kategorie": "zakusky"
     },
     {
-      "id": "d39",
-      "title": "Zákusek č. 39",
-      "cena": "0 Kč",
-      "foto": "/img/zakusky/39.jpg",
-      "kategorie": "zakusky"
-    },
-    {
       "id": "d40",
-      "title": "Zákusek č. 40",
-      "cena": "0 Kč",
+      "title": "Toffi",
+      "cena": "55 Kč",
       "foto": "/img/zakusky/40.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d41",
-      "title": "Zákusek č. 41",
-      "cena": "0 Kč",
+      "title": "Pařížský dort",
+      "cena": "55 Kč",
       "foto": "/img/zakusky/41.jpg",
       "kategorie": "zakusky"
     },
     {
-      "id": "d42",
-      "title": "Zákusek č. 42",
-      "cena": "0 Kč",
-      "foto": "/img/zakusky/42.jpg",
-      "kategorie": "zakusky"
-    },
-    {
       "id": "d43",
-      "title": "Zákusek č. 43",
-      "cena": "0 Kč",
+      "title": "Briketka",
+      "cena": "45 Kč",
       "foto": "/img/zakusky/43.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d44",
-      "title": "Zákusek č. 44",
-      "cena": "0 Kč",
+      "title": "Laskonka",
+      "cena": "45 Kč",
       "foto": "/img/zakusky/44.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d45",
-      "title": "Zákusek č. 45",
-      "cena": "0 Kč",
+      "title": "Linecké třené tyčinky",
+      "cena": "35 Kč",
       "foto": "/img/zakusky/45.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d46",
-      "title": "Zákusek č. 46",
-      "cena": "0 Kč",
+      "title": "Linecké kolečko s marmeládou  ",
+      "cena": "35 Kč",
       "foto": "/img/zakusky/46.jpg",
-      "kategorie": "zakusky"
-    },
-    {
-      "id": "d47",
-      "title": "Zákusek č. 47",
-      "cena": "0 Kč",
-      "foto": "/img/zakusky/47.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": ""
     },
     {
       "id": "d48",
-      "title": "Zákusek č. 48",
-      "cena": "0 Kč",
+      "title": "Věneček se šlehačkou",
+      "cena": "45 Kč",
       "foto": "/img/zakusky/48.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d49",
-      "title": "Zákusek č. 49",
-      "cena": "0 Kč",
+      "title": "Věneček",
+      "cena": "40 Kč",
       "foto": "/img/zakusky/49.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 11
     },
     {
       "id": "d50",
-      "title": "Zákusek č. 50",
-      "cena": "0 Kč",
+      "title": "Banánek",
+      "cena": "45 Kč",
       "foto": "/img/zakusky/50.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d51",
-      "title": "Zákusek č. 51",
-      "cena": "0 Kč",
+      "title": "Čoko-višeň",
+      "cena": "60 Kč",
       "foto": "/img/zakusky/51.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 1
     },
     {
       "id": "d52",
-      "title": "Zákusek č. 52",
-      "cena": "0 Kč",
+      "title": "Citrónový řez s ovocem ",
+      "cena": "55 Kč",
       "foto": "/img/zakusky/52.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d53",
-      "title": "Zákusek č. 53",
-      "cena": "0 Kč",
+      "title": "Lanýžový dort     ",
+      "cena": "50 Kč",
       "foto": "/img/zakusky/53.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d54",
-      "title": "Zákusek č. 54",
-      "cena": "0 Kč",
+      "title": "Sophia řez",
+      "cena": "50 Kč",
       "foto": "/img/zakusky/54.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d55",
-      "title": "Zákusek č. 55",
-      "cena": "0 Kč",
+      "title": "Větrník karamelový",
+      "cena": "60 Kč",
       "foto": "/img/zakusky/55.jpg",
-      "kategorie": "zakusky"
-    },
-    {
-      "id": "d56",
-      "title": "Zákusek č. 56",
-      "cena": "0 Kč",
-      "foto": "/img/zakusky/56.jpg",
-      "kategorie": "zakusky"
-    },
-    {
-      "id": "d57",
-      "title": "Zákusek č. 57",
-      "cena": "0 Kč",
-      "foto": "/img/zakusky/57.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 5
     },
     {
       "id": "d58",
-      "title": "Zákusek č. 58",
-      "cena": "0 Kč",
+      "title": "Tartaletka srdíčko - malinové",
+      "cena": "55 Kč",
       "foto": "/img/zakusky/58.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 10
     },
     {
       "id": "d59",
-      "title": "Zákusek č. 59",
-      "cena": "0 Kč",
+      "title": "Roláda delux",
+      "cena": "120 Kč",
       "foto": "/img/zakusky/59.jpg",
       "kategorie": "zakusky"
     },
     {
-      "id": "d60",
-      "title": "Zákusek č. 60",
-      "cena": "0 Kč",
-      "foto": "/img/zakusky/60.jpg",
-      "kategorie": "zakusky"
-    },
-    {
       "id": "d61",
-      "title": "Zákusek č. 61",
-      "cena": "0 Kč",
+      "title": "Pop cake",
+      "cena": "45 Kč",
       "foto": "/img/zakusky/61.jpg",
       "kategorie": "zakusky"
     },
@@ -920,73 +881,32 @@
       "kategorie": "zakusky"
     },
     {
-      "id": "d63",
-      "title": "Zákusek č. 63",
-      "cena": "0 Kč",
-      "foto": "/img/zakusky/63.jpg",
-      "kategorie": "zakusky"
-    },
-    {
       "id": "d64",
-      "title": "Zákusek č. 64",
+      "title": "Karamelový mascarpone",
       "cena": "0 Kč",
       "foto": "/img/zakusky/64.jpg",
-      "kategorie": "zakusky"
+      "kategorie": "zakusky",
+      "weight": 20
     },
     {
       "id": "d65",
-      "title": "Zákusek č. 65",
-      "cena": "0 Kč",
+      "title": "Čokoládový dort",
+      "cena": "75 Kč",
       "foto": "/img/zakusky/65.jpg",
       "kategorie": "zakusky"
     },
     {
       "id": "d66",
-      "title": "Zákusek č. 66",
-      "cena": "0 Kč",
+      "title": "Borůvkový žez",
+      "cena": "50 Kč",
       "foto": "/img/zakusky/66.jpg",
       "kategorie": "zakusky"
     },
     {
-      "id": "d67",
-      "title": "Zákusek č. 67",
-      "cena": "0 Kč",
-      "foto": "/img/zakusky/67.jpg",
-      "kategorie": "zakusky"
-    },
-    {
-      "id": "d68",
-      "title": "Zákusek č. 68",
-      "cena": "0 Kč",
-      "foto": "/img/zakusky/68.jpg",
-      "kategorie": "zakusky"
-    },
-    {
-      "id": "d69",
-      "title": "Zákusek č. 69",
-      "cena": "0 Kč",
-      "foto": "/img/zakusky/69.jpg",
-      "kategorie": "zakusky"
-    },
-    {
-      "id": "d70",
-      "title": "Zákusek č. 70",
-      "cena": "0 Kč",
-      "foto": "/img/zakusky/70.jpg",
-      "kategorie": "zakusky"
-    },
-    {
       "id": "d71",
-      "title": "Zákusek č. 71",
-      "cena": "0 Kč",
+      "title": "Kávový řez",
+      "cena": "45 Kč",
       "foto": "/img/zakusky/71.jpg",
-      "kategorie": "zakusky"
-    },
-    {
-      "id": "d72",
-      "title": "Zákusek č. 72",
-      "cena": "0 Kč",
-      "foto": "/img/zakusky/72.jpg",
       "kategorie": "zakusky"
     }
   ]
