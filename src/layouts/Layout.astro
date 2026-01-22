@@ -6,9 +6,9 @@ interface Props {
 }
 
 const {
-	title = 'Cukrářství Blahutovi - Tradiční pečivo a dorty | Píšť, Karviná, Ostrava, Petřvald',
-	description = 'Rodinné cukrářství s tradicí od roku 1985. Nabízíme čerstvé dorty, zákusky a sladkosti nejvyšší kvality. Zakázková výroba, velkoobchod pro firmy. Prodejny v Píšti, Karviné, Ostravě a Petřvaldě.',
-	keywords = 'cukrářství, dorty, zákusky, svatební dorty, narozeninové dorty, zakázková výroba, Píšť, Karviná, Ostrava, Petřvald, velkoobchod, B2B, cukrárna'
+	title = 'Cukrářství Blahutovi - Tradiční pečivo a dorty',
+	description = 'Rodinné cukrářství s tradicí od roku 1985.',
+	keywords = 'cukrářství, dorty, zákusky'
 } = Astro.props;
 
 const siteUrl = 'https://cukrarstvi-blahutovi.cz';
@@ -23,127 +23,58 @@ const siteUrl = 'https://cukrarstvi-blahutovi.cz';
 		<meta name="generator" content={Astro.generator} />
 
 		<title>{title}</title>
-		<meta name="title" content={title} />
 		<meta name="description" content={description} />
-		<meta name="keywords" content={keywords} />
-		<meta name="author" content="Cukrářství Blahutovi" />
-		<meta name="robots" content="index, follow" />
-
-		<meta property="og:type" content="website" />
-		<meta property="og:url" content={siteUrl} />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
-		<meta property="og:locale" content="cs_CZ" />
-		<meta property="og:site_name" content="Cukrářství Blahutovi" />
-
-		<meta property="twitter:card" content="summary_large_image" />
-		<meta property="twitter:url" content={siteUrl} />
-		<meta property="twitter:title" content={title} />
-		<meta property="twitter:description" content={description} />
-
-		<link rel="canonical" href={siteUrl} />
-		<meta name="theme-color" content="#1e3a8a" />
-
+		
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
+		
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
-
-		<script type="application/ld+json">
-		{
-			"@context": "https://schema.org",
-			"@type": "Bakery",
-			"name": "Cukrářství Blahutovi",
-			"description": "Rodinné cukrářství s tradicí od roku 1985",
-			"url": "https://cukrarstvi-blahutovi.cz",
-			"foundingDate": "1985",
-			"priceRange": "$$",
-			"servesCuisine": "Czech",
-			"address": [
-				{
-					"@type": "PostalAddress",
-					"streetAddress": "Hlavní 123",
-					"addressLocality": "Píšť",
-					"postalCode": "739 51",
-					"addressCountry": "CZ"
-				},
-				{
-					"@type": "PostalAddress",
-					"streetAddress": "Náměstí 456",
-					"addressLocality": "Karviná",
-					"postalCode": "733 01",
-					"addressCountry": "CZ"
-				},
-				{
-					"@type": "PostalAddress",
-					"streetAddress": "Hlavní třída 789",
-					"addressLocality": "Ostrava",
-					"postalCode": "702 00",
-					"addressCountry": "CZ"
-				},
-				{
-					"@type": "PostalAddress",
-					"streetAddress": "Nádražní 321",
-					"addressLocality": "Petřvald",
-					"postalCode": "735 41",
-					"addressCountry": "CZ"
-				}
-			],
-			"openingHoursSpecification": [
-				{
-					"@type": "OpeningHoursSpecification",
-					"dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-					"opens": "07:00",
-					"closes": "18:00"
-				}
-			]
-		}
-		</script>
 	</head>
-	<body class="bg-offwhite">
+	<body class="bg-offwhite text-navy-900">
 		<slot />
 
 		<script is:inline src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 		<script is:inline>
 			function initLightbox() {
-				GLightbox({
-					selector: '.glightbox',
-					touchNavigation: true,
-					loop: true,
-					zoomable: true
-				});
+				if (window.GLightbox) {
+					GLightbox({ selector: '.glightbox' });
+				}
 			}
-			// Inicializace při prvním načtení
 			initLightbox();
-			// Inicializace při navigaci v Astro (View Transitions)
 			document.addEventListener('astro:after-swap', initLightbox);
 		</script>
 	</body>
 </html>
 
 <style is:global>
-	* {
-		margin: 0;
-		padding: 0;
-		box-sizing: border-box;
+	/* Definice barev, které vaše index.astro používá v Tailwind třídách */
+	:root {
+		--navy-900: #0a192f;
+		--navy-800: #112240;
+		--gold-500: #d4af37;
+		--gold-400: #f1c40f;
+		--cream: #fffdfa;
+		--offwhite: #f8f9fa;
 	}
 
-	html {
-		scroll-behavior: smooth;
-	}
+	/* Propojení CSS proměnných s Tailwind třídami, které máte v index.astro */
+	.bg-navy-900 { background-color: var(--navy-900) !important; }
+	.bg-navy-800 { background-color: var(--navy-800) !important; }
+	.bg-gold-500 { background-color: var(--gold-500) !important; }
+	.bg-gold-400 { background-color: var(--gold-400) !important; }
+	.bg-cream { background-color: var(--cream) !important; }
+	.bg-offwhite { background-color: var(--offwhite) !important; }
+	
+	.text-navy-900 { color: var(--navy-900) !important; }
+	.text-gold-500 { color: var(--gold-500) !important; }
+	.text-gold-400 { color: var(--gold-400) !important; }
+	.text-gold-600 { color: #b8860b !important; }
 
-	body {
-		font-family: 'Inter', sans-serif;
-		line-height: 1.6;
-	}
+	.border-gold-500\/20 { border-color: rgba(212, 175, 55, 0.2) !important; }
+	.border-gold-500\/30 { border-color: rgba(212, 175, 55, 0.3) !important; }
 
-	h1, h2, h3, h4, h5, h6 {
-		font-family: 'Playfair Display', serif;
-	}
-
-	/* Styl pro kurzor na obrázcích s lightboxem */
-	.glightbox img {
-		cursor: zoom-in;
-	}
+	html { scroll-behavior: smooth; }
+	body { font-family: 'Inter', sans-serif; margin: 0; }
+	h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
 </style>
