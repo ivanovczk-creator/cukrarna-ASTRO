@@ -2,9 +2,11 @@
 import Layout from '../layouts/Layout.astro';
 import productsData from '../../data.json';
 
+// Načtení a seřazení produktů
 const cakes = (productsData?.cakes || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 
+// Prodejny
 const stores = [
 	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1, 735 41 Petřvald', phone: '+420 778 157 857', mapUrl: 'https://maps.google.com/?q=Šenovská+1+Petřvald', closed: [1], hours: 'Út-Ne: 9:00 - 17:00 (Po: zavřeno)' },
 	{ id: 'pist', name: 'Píšť', address: 'Opavská 218/101, 747 18 Píšť', phone: '+420 602 323 788', mapUrl: 'https://maps.google.com/?q=Opavská+218+Píšť', closed: [0, 6], hours: 'Po-Pá: 6:00 - 15:00' },
@@ -57,7 +59,7 @@ const stores = [
 			<div id="cart-items" style="margin: 1.5rem 0; border-bottom: 1px solid #eee; padding-bottom: 1rem;"></div>
 			
 			<form name="objednavka-kosik" method="POST" data-netlify="true" id="order-form">
-				<input type="hidden" name="subject" value="Nová objednávka z košíku - Cukrářství Blahutovi" />
+				<input type="hidden" name="subject" value="Nová objednávka z košíku" />
 				<input type="hidden" name="seznam-zbozi" id="hidden-cart-details" />
 				<input type="hidden" name="vyzvednuti-prodejna" id="hidden-store" />
 				<input type="hidden" name="vyzvednuti-datum" id="hidden-date" />
@@ -120,14 +122,16 @@ const stores = [
 			<form name="dort-na-prani" method="POST" data-netlify="true" enctype="multipart/form-data">
 				<input type="hidden" name="subject" value="Nová poptávka: Dort na přání" />
 				<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-					<input type="text" name="jmeno" placeholder="Vaše jméno" class="input-field" required />
-					<input type="email" name="email" placeholder="Váš e-mail" class="input-field" required />
+					<input type="text" name="Jmeno" placeholder="Vaše jméno" class="input-field" required />
+					<input type="email" name="Email" placeholder="Váš e-mail" class="input-field" required />
 				</div>
-				<input type="tel" name="telefon" placeholder="Váš telefon" class="input-field" required style="margin-bottom: 1rem;" />
-				<textarea name="popis" placeholder="Detaily o dortu..." class="input-field" style="height: 120px; margin-bottom: 1.5rem;" required></textarea>
-				<label style="display: block; margin-bottom: 0.5rem; font-weight: bold; font-size: 0.85rem;">Inspirační fotka:</label>
-				<input type="file" name="soubor-foto" accept="image/*" class="input-field" style="margin-bottom: 2rem; padding: 0.5rem;" />
-				<button type="submit" class="btn-add" style="width: 100%; margin: 0; font-size: 1.1rem;">Odeslat poptávku</button>
+				<input type="tel" name="Telefon" placeholder="Váš telefon" class="input-field" required style="margin-bottom: 1rem;" />
+				<textarea name="Popis" placeholder="Detaily o dortu..." class="input-field" style="height: 120px; margin-bottom: 1.5rem;" required></textarea>
+				
+				<label style="display: block; margin-bottom: 0.5rem; font-weight: bold; font-size: 0.85rem;">Inspirační fotka (přiložte soubor):</label>
+				<input type="file" name="Soubor Fotka" id="file-upload" accept="image/*" class="input-field" style="margin-bottom: 2rem; padding: 0.5rem;" />
+				
+				<button type="submit" class="btn-add" style="width: 100%; margin: 0; font-size: 1.1rem;">Odeslat poptávku s fotkou</button>
 			</form>
 		</div>
 	</section>
@@ -137,7 +141,7 @@ const stores = [
 			<h2 style="color:var(--gold); font-family:'Playfair Display'; font-size:3rem; margin-bottom: 2rem;">Velkoobchodní spolupráce</h2>
 			<div style="background: white; color: var(--navy); padding: 3rem; border-radius: 20px; max-width: 600px; margin: 0 auto; text-align: left;">
 				<form name="b2b-poptavka" method="POST" data-netlify="true">
-					<input type="hidden" name="subject" value="B2B Poptávka spolupráce" />
+					<input type="hidden" name="subject" value="B2B Poptávka" />
 					<input type="text" name="firma" placeholder="Firma / Jméno" class="input-field" required style="margin-bottom:0.8rem" />
 					<input type="email" name="email" placeholder="E-mail" class="input-field" required style="margin-bottom:0.8rem" />
 					<input type="tel" name="telefon" placeholder="Telefon" class="input-field" required style="margin-bottom:0.8rem" />
