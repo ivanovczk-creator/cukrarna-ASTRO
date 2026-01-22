@@ -2,11 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 import ReservationForm from '../components/ReservationForm';
 
-// Oprava cest: soubory jsou podle screenshotu v hlavní složce (root), nikoliv v src
-import productsData from '../../data.json';
-import b2bData from '../../b2b.json';
+// OPRAVA CEST: Každý soubor je jinde
+import productsData from '../../data.json'; // Tento je v hlavní složce (root)
+import b2bData from '../b2b.json';       // Tento je ve složce src
 
-// Načtení dat a jejich seřazení podle váhy (weight)
 const sortedCakes = [...productsData.dorty].sort((a, b) => (a.weight || 100) - (b.weight || 100));
 const sortedDesserts = [...productsData.zakusky].sort((a, b) => (a.weight || 100) - (b.weight || 100));
 const b2b = b2bData;
@@ -15,25 +14,25 @@ const stores = [
 	{
 		name: 'Píšť',
 		address: 'Hlavní 123, 739 51 Píšť',
-		mapsUrl: 'https://www.google.com/maps',
+		mapsUrl: 'https://maps.google.com/?q=Hlavní+123+Píšť',
 		closedDays: ['Sobota', 'Neděle'],
 	},
 	{
 		name: 'Karviná',
 		address: 'Náměstí 456, 733 01 Karviná',
-		mapsUrl: 'https://www.google.com/maps',
+		mapsUrl: 'https://maps.google.com/?q=Náměstí+456+Karviná',
 		closedDays: ['Neděle'],
 	},
 	{
 		name: 'Ostrava',
 		address: 'Hlavní třída 789, 702 00 Ostrava',
-		mapsUrl: 'https://www.google.com/maps',
+		mapsUrl: 'https://maps.google.com/?q=Hlavní+třída+789+Ostrava',
 		closedDays: ['Neděle'],
 	},
 	{
 		name: 'Petřvald',
 		address: 'Nádražní 321, 735 41 Petřvald',
-		mapsUrl: 'https://www.google.com/maps',
+		mapsUrl: 'https://maps.google.com/?q=Nádražní+321+Petřvald',
 		closedDays: ['Pondělí'],
 	},
 ];
@@ -133,62 +132,4 @@ const stores = [
 						<div class="bg-cream rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gold-500/20">
 							<h3 class="text-2xl font-bold mb-3 text-gold-600">{store.name}</h3>
 							<p class="text-gray-700 mb-4">{store.address}</p>
-							<div class="mb-4">
-								<p class="text-sm text-gray-600 font-semibold mb-1">Zavřeno:</p>
-								<p class="text-sm text-gray-600">{store.closedDays.join(', ')}</p>
-							</div>
-							<a href={store.mapsUrl} target="_blank" rel="noopener noreferrer" class="inline-block w-full text-center bg-navy-900 text-white px-6 py-2 rounded-lg hover:bg-navy-800 transition-colors">
-								Zobrazit na mapě
-							</a>
-						</div>
-					))}
-				</div>
-			</div>
-		</section>
-
-		<section id="b2b" class="py-20 px-4 bg-gradient-to-br from-navy-900 to-navy-800 text-white text-center">
-			<div class="container mx-auto">
-				<h2 class="text-4xl md:text-5xl font-bold mb-4">{b2b.title}</h2>
-				<p class="text-xl text-gray-300 mb-12 max-w-3xl mx-auto">{b2b.description}</p>
-				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12 text-left">
-					{b2b.benefits.map(benefit => (
-						<div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-gold-500/30">
-							<h3 class="text-xl font-bold mb-3 text-gold-400">{benefit.title}</h3>
-							<p class="text-gray-300">{benefit.description}</p>
-						</div>
-					))}
-				</div>
-				<a href="#rezervace" class="inline-block bg-gold-500 text-navy-900 px-10 py-4 rounded-full font-bold text-lg hover:bg-gold-400 transition-colors shadow-xl">
-					{b2b.cta}
-				</a>
-			</div>
-		</section>
-
-		<section id="rezervace" class="py-20 px-4 bg-gradient-to-br from-cream to-offwhite">
-			<div class="container mx-auto max-w-2xl">
-				<h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-gray-800">Rezervace</h2>
-				<div class="bg-white rounded-2xl shadow-xl p-8">
-					<ReservationForm client:load stores={stores} />
-				</div>
-			</div>
-		</section>
-
-		<footer class="bg-navy-900 text-white py-12 px-4 text-center">
-			<h3 class="text-2xl font-bold mb-4 text-gold-500">Cukrářství Blahutovi</h3>
-			<p class="text-gray-300">© 2026 Cukrářství Blahutovi. Všechna práva vyhrazena.</p>
-		</footer>
-	</div>
-</Layout>
-
-<script>
-	function initScripts() {
-		const orderButtons = document.querySelectorAll('.order-button');
-		orderButtons.forEach(button => {
-			button.addEventListener('click', () => {
-				document.getElementById('rezervace')?.scrollIntoView({ behavior: 'smooth' });
-			});
-		});
-	}
-	initScripts();
-	document.addEventListener('astro:after-swap', initScripts);
-</script>
+							<div
