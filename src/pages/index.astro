@@ -6,9 +6,9 @@ const cakes = (productsData?.cakes || []).sort((a, b) => (a.weight ?? 999) - (b.
 const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 
 const stores = [
-	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1, 735 41 Petřvald', phone: '+420 778 157 857', mapUrl: 'https://maps.google.com/?q=Šenovská+1+Petřvald', closed: [1], hours: 'Út-Ne: 9:00 - 17:00' },
-	{ id: 'pist', name: 'Píšť', address: 'Opavská 218/101, 747 18 Píšť', phone: '+420 602 323 788', mapUrl: 'https://maps.google.com/?q=Opavská+218+Píšť', closed: [0, 6], hours: 'Po-Pá: 6:00 - 15:00' },
-	{ id: 'karvina', name: 'Karviná', address: 'tř. Těreškovové 2233/28', phone: '+420 778 157 867', mapUrl: 'https://maps.google.com/?q=Těreškovové+2233+Karviná', closed: [0], hours: 'Po-Pá: 9:00 - 17:00' },
+	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1', phone: '+420 778 157 857', mapUrl: 'https://maps.google.com/?q=Šenovská+1+Petřvald', closed: [1], hours: 'Út-Ne: 9:00 - 17:00' },
+	{ id: 'pist', name: 'Píšť', address: 'Opavská 218/101', phone: '+420 602 323 788', mapUrl: 'https://maps.google.com/?q=Opavská+218+Píšť', closed: [0, 6], hours: 'Po-Pá: 6:00 - 15:00' },
+	{ id: 'karvina', name: 'Karviná', address: 'tř. Těreškovové 2233/28', phone: '+420 778 157 867', mapUrl: 'https://maps.google.com/?q=tř.+Těreškovové+2233+Karviná', closed: [0], hours: 'Po-Pá: 9:00 - 17:00' },
 	{ id: 'ostrava', name: 'Ostrava (Zábřeh)', address: 'Výškovická 116a', phone: '+420 775 271 101', mapUrl: 'https://maps.google.com/?q=Výškovická+116a+Ostrava', closed: [0], hours: 'Po-Pá: 9:00 - 17:00' }
 ];
 ---
@@ -18,36 +18,38 @@ const stores = [
 		:root { --navy: #0a192f; --gold: #d4af37; --offwhite: #fcfaf7; }
 		body { background-color: var(--offwhite); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; scroll-behavior: smooth; color: var(--navy); }
 		
-		/* NAVIGACE S HAMBURGEREM */
+		/* HEADER A OPRAVENÉ MOBILNÍ MENU */
 		header { background: var(--navy); padding: 1rem 0; color: white; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--gold); }
-		.nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 1.5rem; }
+		.nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 1rem; position: relative; }
 		
-		.nav-links { display: flex; gap: 1.5rem; }
-		.nav-links a { color: white; text-decoration: none; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
-		
-		.hamburger { display: none; background: none; border: none; cursor: pointer; padding: 0; }
-		.hamburger span { display: block; width: 25px; height: 3px; background: var(--gold); margin: 5px 0; transition: 0.3s; }
+		.nav-links { display: flex; gap: 1.5rem; align-items: center; }
+		.nav-links a { color: white; text-decoration: none; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; transition: 0.3s; }
+		.nav-links a:hover { color: var(--gold); }
 
-		@media (max-width: 768px) {
-			.hamburger { display: block; }
+		/* Hamburger tlačítko */
+		.menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 10px; flex-direction: column; gap: 5px; z-index: 110; }
+		.menu-btn span { display: block; width: 25px; height: 3px; background: var(--gold); border-radius: 2px; transition: 0.3s; }
+
+		@media (max-width: 900px) {
+			.menu-btn { display: flex; }
 			.nav-links { 
-				display: none; 
-				position: absolute; top: 100%; left: 0; right: 0; 
-				background: var(--navy); flex-direction: column; 
-				padding: 2rem; text-align: center; gap: 2rem;
-				border-bottom: 2px solid var(--gold);
+				display: none; position: absolute; top: 100%; left: 0; width: 100%; 
+				background: var(--navy); flex-direction: column; padding: 2rem 0; 
+				border-bottom: 2px solid var(--gold); box-shadow: 0 10px 20px rgba(0,0,0,0.3);
 			}
 			.nav-links.active { display: flex; }
+			.nav-links a { font-size: 1.1rem; padding: 15px; width: 100%; text-align: center; border-bottom: 1px solid rgba(212,175,55,0.1); }
 		}
 
-		/* UI ZBYTEK */
+		/* UI Prvky */
 		.section-title { text-align: center; font-family: 'Playfair Display', serif; font-size: 2.5rem; margin: 4rem 0 2rem; }
 		.grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; padding: 0 1rem; }
-		.card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.05); border: 1px solid rgba(212,175,55,0.1); text-align: center; }
+		.card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.05); text-align: center; }
 		.card img { width: 100%; height: 280px; object-fit: cover; }
 		.btn-add { background: var(--gold); color: var(--navy); padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: bold; border: none; cursor: pointer; display: inline-block; text-decoration: none; }
-		.input-field { padding: 0.9rem; border-radius: 8px; border: 1px solid #ddd; width: 100%; box-sizing: border-box; font-family: inherit; margin-top: 5px; }
+		.input-field { padding: 0.9rem; border-radius: 8px; border: 1px solid #ddd; width: 100%; box-sizing: border-box; margin-top: 5px; }
 
+		/* Plovoucí košík */
 		#cart-float { position: fixed; bottom: 30px; right: 30px; background: var(--gold); color: var(--navy); width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); cursor: pointer; z-index: 1000; }
 		#cart-count { position: absolute; top: 0; right: 0; background: var(--navy); color: white; width: 22px; height: 22px; border-radius: 50%; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; font-weight: bold; }
 		#cart-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; padding: 15px; }
@@ -58,14 +60,14 @@ const stores = [
 		<div class="nav-container">
 			<h1 style="margin:0; color:var(--gold); font-family: 'Playfair Display'; font-size: 1.5rem;">Cukrářství Blahutovi</h1>
 			
-			<button class="hamburger" id="hamburger-btn">
+			<button class="menu-btn" id="mobile-toggle" aria-label="Menu">
 				<span></span><span></span><span></span>
 			</button>
 
-			<nav class="nav-links" id="nav-menu">
+			<nav class="nav-links" id="main-nav">
 				<a href="#dorty">Dorty</a>
 				<a href="#zakusky">Zákusky</a>
-				<a href="#dort-na-prani">Na přání</a>
+				<a href="#dort-na-prani">Dort na přání</a>
 				<a href="#b2b">Pro firmy</a>
 				<a href="#prodejny">Prodejny</a>
 			</nav>
@@ -83,25 +85,23 @@ const stores = [
 			<h2 style="font-family:'Playfair Display'; margin-top:0">Vaše rezervace</h2>
 			<div id="cart-items" style="margin: 1.5rem 0; border-bottom: 1px solid #eee; padding-bottom: 1rem;"></div>
 			
-			<form name="rezervace-kosik" method="POST" data-netlify="true" id="order-form">
-				<input type="hidden" name="Produkty" id="hidden-cart-details" />
-				<input type="hidden" name="Prodejna" id="hidden-store" />
-				<input type="hidden" name="Termin" id="hidden-date" />
-
+			<form name="objednavka-kosik" method="POST" data-netlify="true" id="order-form">
+				<input type="hidden" name="form-name" value="objednavka-kosik" />
+				<input type="hidden" name="seznam-zbozi" id="hidden-cart-details" />
 				<div style="margin-bottom:1rem">
-					<label style="font-size:0.85rem; font-weight:bold;">Kde vyzvednete?</label>
-					<select id="store-select" class="input-field" required onchange="validateDate()">
-						<option value="">Vyberte prodejnu...</option>
+					<label style="font-size:0.85rem; font-weight:bold;">Prodejna</label>
+					<select name="Prodejna" id="store-select" class="input-field" required onchange="validateDate()">
+						<option value="">Vyberte...</option>
 						{stores.map(s => <option value={s.id} data-closed={s.closed.join(',')}>{s.name}</option>)}
 					</select>
 				</div>
 				<div style="margin-bottom:1rem">
-					<label style="font-size:0.85rem; font-weight:bold;">Datum (min. za 3 dny)</label>
-					<input type="date" id="date-input" class="input-field" required onchange="validateDate()" />
+					<label style="font-size:0.85rem; font-weight:bold;">Datum vyzvednutí</label>
+					<input type="date" name="Datum" id="date-input" class="input-field" required onchange="validateDate()" />
 				</div>
-				<input type="text" name="Jmeno" placeholder="Vaše jméno" class="input-field" required />
-				<input type="email" name="Email" placeholder="Váš e-mail" class="input-field" required />
-				<input type="tel" name="Telefon" placeholder="Váš telefon" class="input-field" required />
+				<input type="text" name="Jmeno" placeholder="Jméno" class="input-field" required />
+				<input type="email" name="Email" placeholder="E-mail" class="input-field" required />
+				<input type="tel" name="Telefon" placeholder="Telefon" class="input-field" required />
 				<button type="submit" id="submit-btn" class="btn-add" style="width:100%; margin-top:1.5rem">Odeslat objednávku</button>
 			</form>
 		</div>
@@ -114,9 +114,8 @@ const stores = [
 				<div class="card">
 					<img src={p.foto} alt={p.title} loading="lazy" />
 					<div style="padding: 1.5rem">
-						<h3 style="margin:0; font-family:'Playfair Display'">{p.title}</h3>
-						<p style="font-size:0.85rem; color:#888; margin: 5px 0;">{p.porce}</p>
-						<p style="color:var(--gold); font-weight:bold; font-size:1.3rem;">{p.cena}</p>
+						<h3 style="margin:0;">{p.title}</h3>
+						<p style="color:var(--gold); font-weight:bold;">{p.cena}</p>
 						<button class="btn-add" onclick={`addToCart('${p.title}', '${p.cena}')`}>Do košíku</button>
 					</div>
 				</div>
@@ -131,8 +130,8 @@ const stores = [
 				<div class="card">
 					<img src={p.foto} alt={p.title} loading="lazy" />
 					<div style="padding: 1.5rem">
-						<h3 style="margin:0; font-family:'Playfair Display'">{p.title}</h3>
-						<p style="color:var(--gold); font-weight:bold; font-size:1.3rem;">{p.cena}</p>
+						<h3 style="margin:0;">{p.title}</h3>
+						<p style="color:var(--gold); font-weight:bold;">{p.cena}</p>
 						<button class="btn-add" onclick={`addToCart('${p.title}', '${p.cena}')`}>Do košíku</button>
 					</div>
 				</div>
@@ -141,73 +140,68 @@ const stores = [
 	</section>
 
 	<section id="dort-na-prani" style="padding: 5rem 1rem; background: #eeeae4;">
-		<div style="max-width: 800px; margin: 0 auto; background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-			<h2 style="text-align: center; font-family: 'Playfair Display'; font-size: 2.5rem; margin-bottom: 1rem;">Dort na přání</h2>
-			<form name="poptavka-dort" method="POST" data-netlify="true" enctype="multipart/form-data">
-				<input type="text" name="Jmeno" placeholder="Vaše jméno" class="input-field" required />
-				<input type="email" name="Email" placeholder="Váš e-mail" class="input-field" required />
-				<input type="tel" name="Telefon" placeholder="Váš telefon" class="input-field" required style="margin-bottom: 1rem;" />
-				<textarea name="Popis" placeholder="Detaily o dortu..." class="input-field" style="height: 120px; margin-bottom: 1.5rem;" required></textarea>
-				<label style="display: block; margin-bottom: 0.5rem; font-weight: bold; font-size: 0.85rem;">Inspirační fotka:</label>
-				<input type="file" name="Fotka" accept="image/*" class="input-field" style="margin-bottom: 2rem; padding: 0.5rem;" required />
-				<button type="submit" class="btn-add" style="width: 100%; margin: 0; font-size: 1.1rem;">Odeslat poptávku s fotkou</button>
+		<div style="max-width: 800px; margin: 0 auto; background: white; padding: 2.5rem; border-radius: 20px;">
+			<h2 style="text-align: center; font-family: 'Playfair Display'; margin-bottom: 1.5rem;">Dort na přání</h2>
+			<form name="dort-na-prani" method="POST" data-netlify="true" enctype="multipart/form-data">
+				<input type="hidden" name="form-name" value="dort-na-prani" />
+				<input type="text" name="Jmeno" placeholder="Jméno" class="input-field" required />
+				<input type="email" name="Email" placeholder="E-mail" class="input-field" required />
+				<input type="tel" name="Telefon" placeholder="Telefon" class="input-field" required />
+				<textarea name="Popis" placeholder="Detaily o dortu..." class="input-field" style="height: 120px;"></textarea>
+				<label style="display: block; margin-top: 1.5rem; font-weight: bold;">Inspirační fotka:</label>
+				<input type="file" name="Soubor Fotka" accept="image/*" class="input-field" required />
+				<button type="submit" class="btn-add" style="width: 100%; margin-top: 2rem;">Odeslat poptávku s fotkou</button>
 			</form>
 		</div>
 	</section>
 
-	<section id="b2b" style="background: var(--navy); color: white; padding: 6rem 1rem; text-align: center;">
-		<div style="max-width:1000px; margin:0 auto;">
-			<h2 style="color:var(--gold); font-family:'Playfair Display'; font-size:3rem; margin-bottom: 2rem;">Velkoobchod</h2>
-			<div style="background: white; color: var(--navy); padding: 3rem; border-radius: 20px; max-width: 600px; margin: 0 auto; text-align: left;">
-				<form name="poptavka-b2b" method="POST" data-netlify="true">
-					<input type="text" name="Firma" placeholder="Firma / Provozovna" class="input-field" required style="margin-bottom:0.8rem" />
-					<input type="email" name="Email" placeholder="E-mail" class="input-field" required style="margin-bottom:0.8rem" />
-					<input type="tel" name="Telefon" placeholder="Telefon" class="input-field" required style="margin-bottom:0.8rem" />
-					<textarea name="Zprava" placeholder="Zpráva..." class="input-field" style="height: 100px; margin-bottom: 2rem;"></textarea>
-					<button type="submit" class="btn-add" style="width: 100%; margin: 0;">Odeslat žádost o spolupráci</button>
-				</form>
-			</div>
+	<section id="b2b" style="background: var(--navy); color: white; padding: 5rem 1rem; text-align: center;">
+		<div style="max-width:600px; margin:0 auto; background: white; color: var(--navy); padding: 2rem; border-radius: 15px;">
+			<h2 style="font-family:'Playfair Display'; margin-top:0;">B2B Spolupráce</h2>
+			<form name="b2b-poptavka" method="POST" data-netlify="true">
+				<input type="hidden" name="form-name" value="b2b-poptavka" />
+				<input type="text" name="Firma" placeholder="Firma" class="input-field" required />
+				<input type="email" name="Email" placeholder="E-mail" class="input-field" required />
+				<input type="tel" name="Telefon" placeholder="Telefon" class="input-field" required />
+				<textarea name="Zprava" placeholder="Zpráva..." class="input-field"></textarea>
+				<button type="submit" class="btn-add" style="width: 100%; margin-top: 1.5rem;">Poptat spolupráci</button>
+			</form>
 		</div>
 	</section>
 
-	<section id="prodejny" style="padding: 6rem 1rem;">
-		<h2 class="section-title">Naše prodejny</h2>
+	<section id="prodejny" style="padding: 5rem 1rem;">
+		<h2 class="section-title">Kde nás najdete</h2>
 		<div class="grid">
 			{stores.map((s) => (
 				<div class="card" style="padding: 2.5rem; background: var(--navy); color: white; text-align: left;">
-					<h3 style="color:var(--gold); margin:0 0 15px 0; font-family:'Playfair Display'; font-size:1.8rem;">{s.name}</h3>
-					<p>📍 {s.address}</p>
-					<p>📞 <a href={`tel:${s.phone.replace(/\s/g, '')}`} style="color:white; text-decoration:none;">{s.phone}</a></p>
-					<p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.7;">{s.hours}</p>
-					<a href={s.mapUrl} target="_blank" style="display:inline-block; margin-top:20px; background:var(--gold); color:var(--navy); padding:0.6rem 1.2rem; border-radius:5px; text-decoration:none; font-weight:bold; font-size:0.85rem;">NAVIGOVAT</a>
+					<h3 style="color:var(--gold); margin:0 0 10px 0;">{s.name}</h3>
+					<p style="margin: 5px 0;">📍 {s.address}</p>
+					<p style="margin: 5px 0;">📞 {s.phone}</p>
+					<p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.7;">{s.hours}</p>
+					<a href={s.mapUrl} target="_blank" style="display:inline-block; margin-top:15px; background:var(--gold); color:var(--navy); padding:0.5rem 1rem; border-radius:5px; text-decoration:none; font-weight:bold; font-size:0.8rem;">MAPA →</a>
 				</div>
 			))}
 		</div>
 	</section>
 
-	<footer style="background: #050c18; color: white; text-align: center; padding: 4rem 1rem;">
+	<footer style="background: #050c18; color: white; text-align: center; padding: 3rem 1rem;">
 		<p>© 2026 Cukrářství Blahutovi</p>
 	</footer>
 
 	<script is:inline>
-		// --- LOGIKA MENU ---
-		const hamburger = document.getElementById('hamburger-btn');
-		const navMenu = document.getElementById('nav-menu');
+		// --- MOBILNÍ MENU ---
+		const toggle = document.getElementById('mobile-toggle');
+		const nav = document.getElementById('main-nav');
+		toggle.addEventListener('click', () => nav.classList.toggle('active'));
+		nav.querySelectorAll('a').forEach(l => l.addEventListener('click', () => nav.classList.remove('active')));
 
-		hamburger.addEventListener('click', () => {
-			navMenu.classList.toggle('active');
-		});
-
-		navMenu.addEventListener('click', () => {
-			navMenu.classList.remove('active');
-		});
-
-		// --- LOGIKA KOŠÍKU ---
+		// --- KOŠÍK ---
 		let cart = [];
 		const dateInput = document.getElementById('date-input');
-		const minDate = new Date();
-		minDate.setDate(minDate.getDate() + 3);
-		if(dateInput) dateInput.min = minDate.toISOString().split('T')[0];
+		if(dateInput) {
+			const m = new Date(); m.setDate(m.getDate() + 3);
+			dateInput.min = m.toISOString().split('T')[0];
+		}
 
 		function addToCart(title, price) {
 			const existing = cart.find(i => i.title === title);
@@ -217,39 +211,36 @@ const stores = [
 		}
 
 		function updateCart() {
-			const countEl = document.getElementById('cart-count');
-			const itemsEl = document.getElementById('cart-items');
-			if(countEl) countEl.innerText = cart.reduce((sum, item) => sum + item.qty, 0);
-			if(!itemsEl) return;
-			if (cart.length === 0) { itemsEl.innerHTML = '<p style="text-align:center; opacity:0.4;">Košík je prázdný.</p>'; return; }
-			itemsEl.innerHTML = cart.map((item, index) => `
-				<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:0.95rem">
-					<span><b>${item.qty}x</b> ${item.title}</span>
-					<span>${item.price} <button onclick="removeItem(${index})" style="color:#ff4444; border:none; background:none; cursor:pointer; font-weight:bold;">✕</button></span>
+			const cEl = document.getElementById('cart-count');
+			const iEl = document.getElementById('cart-items');
+			if(cEl) cEl.innerText = cart.reduce((s, i) => s + i.qty, 0);
+			if(!iEl) return;
+			if (cart.length === 0) { iEl.innerHTML = '<p style="text-align:center; opacity:0.4;">Košík je prázdný.</p>'; return; }
+			iEl.innerHTML = cart.map((i, idx) => `
+				<div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.95rem">
+					<span><b>${i.qty}x</b> ${i.title}</span>
+					<span>${i.price} <button onclick="removeItem(${idx})" style="color:red; border:none; background:none; cursor:pointer;">✕</button></span>
 				</div>
 			`).join('');
 		}
 
-		function removeItem(index) { cart.splice(index, 1); updateCart(); }
-		function toggleModal(show) { document.getElementById('cart-modal').style.display = show ? 'flex' : 'none'; }
+		function removeItem(idx) { cart.splice(idx, 1); updateCart(); }
+		function toggleModal(s) { document.getElementById('cart-modal').style.display = s ? 'flex' : 'none'; }
 
 		function validateDate() {
-			const storeSelect = document.getElementById('store-select');
-			const submitBtn = document.getElementById('submit-btn');
-			if (!dateInput.value || !storeSelect.value) return;
+			const s = document.getElementById('store-select');
+			const err = document.getElementById('date-error');
+			const b = document.getElementById('submit-btn');
+			if (!dateInput.value || !s.value) return;
 			const day = new Date(dateInput.value).getDay();
-			const closed = storeSelect.options[storeSelect.selectedIndex].dataset.closed.split(',').map(Number);
-			const isInvalid = closed.includes(day);
-			submitBtn.disabled = isInvalid;
-			submitBtn.style.opacity = isInvalid ? '0.4' : '1';
+			const closed = s.options[s.selectedIndex].dataset.closed.split(',').map(Number);
+			const inv = closed.includes(day);
+			err.style.display = inv ? 'block' : 'none';
+			b.disabled = inv; b.style.opacity = inv ? '0.4' : '1';
 		}
 
-		document.getElementById('order-form').onsubmit = function() {
-			const storeSelect = document.getElementById('store-select');
-			const storeName = storeSelect.options[storeSelect.selectedIndex].text;
-			document.getElementById('hidden-cart-details').value = cart.map(i => `${i.qty}x ${i.title} (${i.price})`).join('\n');
-			document.getElementById('hidden-store').value = storeName;
-			document.getElementById('hidden-date').value = dateInput.value;
+		document.getElementById('order-form').onsubmit = () => {
+			document.getElementById('hidden-cart-details').value = cart.map(i => `${i.qty}x ${i.title}`).join(', ');
 		};
 	</script>
 </Layout>
