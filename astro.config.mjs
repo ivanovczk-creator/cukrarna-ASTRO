@@ -1,7 +1,7 @@
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
 
 export default defineConfig({
-  integrations: [tailwind(), react()],
+  // Necháme jen react, tailwind vyhodíme, aby to neházelo chybu
+  integrations: [react()],
 });
