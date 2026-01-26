@@ -2,30 +2,53 @@
 import Layout from '../layouts/Layout.astro';
 import productsData from '../../data.json';
 import CustomCakeForm from '../components/CustomCakeForm';
+import ReservationForm from '../components/ReservationForm';
 import { Branch } from '../types';
 
-// Seřazení produktů podle váhy (pokud je definována)
 const cakes = (productsData?.cakes || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 
 const stores = [
-	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1', phone: '+420 778 157 857', mapUrl: 'https://maps.app.goo.gl/9Z6wN', hours: 'Út-Ne: 9:00 - 17:00' },
-	{ id: 'pist', name: 'Píšť', address: 'Opavská 218/101', phone: '+420 602 323 788', mapUrl: 'https://maps.app.goo.gl/X7fR1', hours: 'Po-Pá: 6:00 - 15:00' },
-	{ id: 'karvina', name: 'Karviná', address: 'tř. Těreškovové 2233/28', phone: '+420 778 157 867', mapUrl: 'https://maps.app.goo.gl/K8wS2', hours: 'Po-Pá: 9:00 - 17:00, So: 8:00 - 12:00' },
-	{ id: 'ostrava', name: 'Ostrava (Zábřeh)', address: 'Výškovická 116a', phone: '+420 775 271 101', mapUrl: 'https://maps.app.goo.gl/O9wL3', hours: 'Po-Pá: 9:00 - 17:00, So: 9:00 - 12:00' }
+	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1', phone: '+420 778 157 857', mapUrl: 'https://maps.google.com/?q=Šenovská+1+Petřvald', hours: 'Út-Ne: 9:00 - 17:00' },
+	{ id: 'pist', name: 'Píšť', address: 'Opavská 218/101', phone: '+420 602 323 788', mapUrl: 'https://maps.google.com/?q=Opavská+218/101+Píšť', hours: 'Po-Pá: 6:00 - 15:00' },
+	{ id: 'karvina', name: 'Karviná', address: 'tř. Těreškovové 2233/28', phone: '+420 778 157 867', mapUrl: 'https://maps.google.com/?q=tř.+Těreškovové+2233/28+Karviná', hours: 'Po-Pá: 9:00 - 17:00, So: 8:00 - 12:00' },
+	{ id: 'ostrava', name: 'Ostrava (Zábřeh)', address: 'Výškovická 116a', phone: '+420 775 271 101', mapUrl: 'https://maps.google.com/?q=Výškovická+116a+Ostrava', hours: 'Po-Pá: 9:00 - 17:00, So: 9:00 - 12:00' }
 ];
 ---
 
 <Layout title="Cukrářství Blahutovi">
 	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
 		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
-			<h1 class="text-2xl font-serif text-[#d4af37]">Cukrářství Blahutovi</h1>
-			<nav class="hidden md:flex gap-8 uppercase text-sm font-bold tracking-widest">
-				<a href="#dorty" class="hover:text-[#d4af37] transition-colors">Dorty</a>
-				<a href="#zakusky" class="hover:text-[#d4af37] transition-colors">Zákusky</a>
-				<a href="#dort-na-prani" class="hover:text-[#d4af37] transition-colors">Dort na přání</a>
-				<a href="#prodejny" class="hover:text-[#d4af37] transition-colors">Prodejny</a>
+			<h1 class="text-xl md:text-2xl font-serif text-[#d4af37]">Cukrářství Blahutovi</h1>
+			
+			<nav class="hidden md:flex gap-6 uppercase text-xs font-bold tracking-widest">
+				<a href="#dorty" class="hover:text-[#d4af37]">Dorty</a>
+				<a href="#zakusky" class="hover:text-[#d4af37]">Zákusky</a>
+				<a href="#dort-na-prani" class="hover:text-[#d4af37]">Dort na přání</a>
+				<a href="#prodejny" class="hover:text-[#d4af37]">Prodejny</a>
 			</nav>
+
+			<div class="flex items-center gap-4">
+				<ReservationForm client:load />
+				
+				<button id="menu-toggle" class="md:hidden text-[#d4af37]">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+					</svg>
+				</button>
+			</div>
+		</div>
+
+		<div id="mobile-menu" class="hidden fixed inset-0 bg-[#0a192f] z-40 flex flex-col items-center justify-center gap-8 text-xl uppercase font-bold tracking-widest">
+			<button id="menu-close" class="absolute top-6 right-6 text-[#d4af37]">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+				</svg>
+			</button>
+			<a href="#dorty" class="mobile-link">Dorty</a>
+			<a href="#zakusky" class="mobile-link">Zákusky</a>
+			<a href="#dort-na-prani" class="mobile-link">Dort na přání</a>
+			<a href="#prodejny" class="mobile-link">Prodejny</a>
 		</div>
 	</header>
 
@@ -34,14 +57,26 @@ const stores = [
 			<h2 class="text-4xl font-serif text-center mb-12 italic">Naše Dorty</h2>
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
 				{cakes.map(cake => (
-					<div class="bg-white rounded-3xl shadow-lg border border-slate-100 overflow-hidden group hover:shadow-2xl transition-all duration-300">
-						<div class="h-72 overflow-hidden">
-							<img src={cake.foto} alt={cake.title} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" />
+					<div class="bg-white rounded-3xl shadow-lg border border-slate-100 overflow-hidden group flex flex-col">
+						<div class="h-64 overflow-hidden relative">
+							<a href={cake.foto} class="glightbox" data-gallery="cakes">
+								<img src={cake.foto} alt={cake.title} class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+							</a>
 						</div>
-						<div class="p-6 text-center">
-							<h3 class="text-xl font-bold mb-2">{cake.title}</h3>
-							<p class="text-slate-500 text-sm mb-3">{cake.porce}</p>
-							<p class="text-[#d4af37] font-black text-2xl">{cake.cena}</p>
+						<div class="p-6 text-center flex-grow flex flex-col justify-between">
+							<div>
+								<h3 class="text-xl font-bold mb-1">{cake.title}</h3>
+								<p class="text-slate-500 text-sm mb-4">{cake.porce}</p>
+							</div>
+							<div>
+								<p class="text-[#d4af37] font-black text-2xl mb-4">{cake.cena}</p>
+								<button 
+									onclick={`window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: '${cake.title}', price: '${cake.cena}' } }))`}
+									class="w-full bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-colors"
+								>
+									Přidat do objednávky
+								</button>
+							</div>
 						</div>
 					</div>
 				))}
@@ -50,16 +85,26 @@ const stores = [
 
 		<section id="zakusky" class="py-16 px-4 bg-slate-50">
 			<div class="max-w-7xl mx-auto">
-				<h2 class="text-4xl font-serif text-center mb-12 italic">Naše Zákusky</h2>
+				<h2 class="text-4xl font-serif text-center mb-12 italic text-[#0a192f]">Naše Zákusky</h2>
 				<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
 					{desserts.map(dessert => (
-						<div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden group hover:-translate-y-1 transition-all">
+						<div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
 							<div class="h-40 overflow-hidden">
-								<img src={dessert.foto} alt={dessert.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+								<a href={dessert.foto} class="glightbox" data-gallery="desserts">
+									<img src={dessert.foto} alt={dessert.title} class="w-full h-full object-cover" />
+								</a>
 							</div>
-							<div class="p-4 text-center">
-								<h3 class="font-bold text-sm mb-1 h-10 flex items-center justify-center">{dessert.title}</h3>
-								<p class="text-[#d4af37] font-bold">{dessert.cena}</p>
+							<div class="p-4 text-center flex-grow flex flex-col justify-between">
+								<h3 class="font-bold text-sm mb-2">{dessert.title}</h3>
+								<div>
+									<p class="text-[#d4af37] font-bold text-sm mb-3">{dessert.cena}</p>
+									<button 
+										onclick={`window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: '${dessert.title}', price: '${dessert.cena}' } }))`}
+										class="w-full bg-slate-100 text-[#0a192f] py-2 rounded-lg text-xs font-bold hover:bg-[#d4af37] hover:text-white transition-colors"
+									>
+										Objednat
+									</button>
+								</div>
 							</div>
 						</div>
 					))}
@@ -67,34 +112,22 @@ const stores = [
 			</div>
 		</section>
 
-		<section id="dort-na-prani" class="py-20 px-4 bg-white">
+		<section id="dort-na-prani" class="py-20 px-4">
 			<CustomCakeForm client:load />
-		</section>
-
-		<section id="prodejny" class="py-20 px-4 max-w-7xl mx-auto">
-			<h2 class="text-4xl font-serif text-center mb-16 italic text-[#0a192f]">Naše Prodejny</h2>
-			<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-				{stores.map(store => (
-					<div class="bg-[#0a192f] text-white p-8 rounded-[2.5rem] border border-[#d4af37]/30 shadow-2xl relative overflow-hidden group">
-						<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-125 transition-transform duration-500">
-							<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-						</div>
-						<h3 class="text-[#d4af37] font-bold mb-4 text-2xl">{store.name}</h3>
-						<p class="text-sm opacity-80 mb-1 leading-relaxed">{store.address}</p>
-						<p class="text-lg font-bold mb-6">{store.phone}</p>
-						<div class="text-[11px] opacity-60 mb-8 uppercase tracking-[0.2em] font-bold">{store.hours}</div>
-						<a href={store.mapUrl} target="_blank" class="inline-block w-full text-center py-3 rounded-full border border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#0a192f] transition-all font-bold text-xs tracking-widest uppercase">Otevřít Mapu</a>
-					</div>
-				))}
-			</div>
 		</section>
 	</main>
 
-	<footer class="bg-[#0a192f] py-16 text-center text-white/40 text-xs border-t border-[#d4af37]/20">
-		<div class="mb-4">
-			<h2 class="text-[#d4af37] font-serif text-xl mb-2 italic">Cukrářství Blahutovi</h2>
-			<p>Tradiční výroba od roku 1985</p>
-		</div>
-		<p>© {new Date().getFullYear()} Všechna práva vyhrazena.</p>
-	</footer>
+	<script is:inline>
+		// Hamburger logika
+		const menuToggle = document.getElementById('menu-toggle');
+		const menuClose = document.getElementById('menu-close');
+		const mobileMenu = document.getElementById('mobile-menu');
+		const mobileLinks = document.querySelectorAll('.mobile-link');
+
+		menuToggle.onclick = () => mobileMenu.classList.remove('hidden');
+		menuClose.onclick = () => mobileMenu.classList.add('hidden');
+		mobileLinks.forEach(link => {
+			link.onclick = () => mobileMenu.classList.add('hidden');
+		});
+	</script>
 </Layout>
