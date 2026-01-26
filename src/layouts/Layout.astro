@@ -10,8 +10,6 @@ const {
 	description = 'Rodinné cukrářství s tradicí od roku 1985.',
 	keywords = 'cukrářství, dorty, zákusky'
 } = Astro.props;
-
-const siteUrl = 'https://cukrarstvi-blahutovi.cz';
 ---
 
 <!doctype html>
@@ -24,6 +22,7 @@ const siteUrl = 'https://cukrarstvi-blahutovi.cz';
 
 		<title>{title}</title>
 		<meta name="description" content={description} />
+		<meta name="keywords" content={keywords} />
 		
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,19 +35,39 @@ const siteUrl = 'https://cukrarstvi-blahutovi.cz';
 
 		<script is:inline src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 		<script is:inline>
+			// Inicializace galerie
 			function initLightbox() {
 				if (window.GLightbox) {
-					GLightbox({ selector: '.glightbox' });
+					GLightbox({ selector: '.glightbox', touchNavigation: true, loop: true });
 				}
 			}
+
+			// Skript pro zavírání mobilního menu po kliknutí (pokud je v index.astro)
+			function initMobileMenu() {
+				const nav = document.querySelector('.nav-links');
+				const links = document.querySelectorAll('.nav-links a');
+				if (nav) {
+					links.forEach(link => {
+						link.addEventListener('click', () => {
+							nav.classList.remove('active');
+						});
+					});
+				}
+			}
+
 			initLightbox();
-			document.addEventListener('astro:after-swap', initLightbox);
+			initMobileMenu();
+			
+			// Pro Astro (pokud používáte View Transitions)
+			document.addEventListener('astro:after-swap', () => {
+				initLightbox();
+				initMobileMenu();
+			});
 		</script>
 	</body>
 </html>
 
 <style is:global>
-	/* Definice barev, které vaše index.astro používá v Tailwind třídách */
 	:root {
 		--navy-900: #0a192f;
 		--navy-800: #112240;
@@ -58,23 +77,25 @@ const siteUrl = 'https://cukrarstvi-blahutovi.cz';
 		--offwhite: #f8f9fa;
 	}
 
-	/* Propojení CSS proměnných s Tailwind třídami, které máte v index.astro */
+	/* Základní opravy pro plynulé skrolování */
+	html { 
+		scroll-behavior: smooth; 
+		scroll-padding-top: 80px; /* Aby vám menu nepřekrylo nadpis sekce po kliknutí */
+	}
+
+	body { 
+		font-family: 'Inter', sans-serif; 
+		margin: 0; 
+		overflow-x: hidden; 
+	}
+
+	h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+
+	/* Pomocné třídy pro barvy */
 	.bg-navy-900 { background-color: var(--navy-900) !important; }
-	.bg-navy-800 { background-color: var(--navy-800) !important; }
-	.bg-gold-500 { background-color: var(--gold-500) !important; }
-	.bg-gold-400 { background-color: var(--gold-400) !important; }
-	.bg-cream { background-color: var(--cream) !important; }
-	.bg-offwhite { background-color: var(--offwhite) !important; }
-	
 	.text-navy-900 { color: var(--navy-900) !important; }
 	.text-gold-500 { color: var(--gold-500) !important; }
-	.text-gold-400 { color: var(--gold-400) !important; }
-	.text-gold-600 { color: #b8860b !important; }
 
-	.border-gold-500\/20 { border-color: rgba(212, 175, 55, 0.2) !important; }
-	.border-gold-500\/30 { border-color: rgba(212, 175, 55, 0.3) !important; }
-
-	html { scroll-behavior: smooth; }
-	body { font-family: 'Inter', sans-serif; margin: 0; }
-	h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+	/* Oprava pro zobrazení GLightboxu navrchu */
+	.glightbox-container { z-index: 9999 !important; }
 </style>
