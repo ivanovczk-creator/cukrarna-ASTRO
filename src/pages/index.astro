@@ -14,6 +14,8 @@ const stores = [
 ---
 
 <Layout title="Cukrářství Blahutovi">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+
 	<style is:global>
 		:root { --navy: #0a192f; --gold: #d4af37; --offwhite: #fcfaf7; }
 		body { background-color: var(--offwhite); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; scroll-behavior: smooth; color: var(--navy); }
@@ -45,7 +47,11 @@ const stores = [
 		.section-title { text-align: center; font-family: 'Playfair Display', serif; font-size: 2.5rem; margin: 4rem 0 2rem; }
 		.grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; padding: 0 1rem; }
 		.card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.05); text-align: center; }
-		.card img { width: 100%; height: 280px; object-fit: cover; }
+		
+		/* Oprava pro klikání na fotky */
+		.card-img-link { display: block; width: 100%; height: 280px; cursor: zoom-in; }
+		.card img { width: 100%; height: 100%; object-fit: cover; }
+		
 		.btn-add { background: var(--gold); color: var(--navy); padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: bold; border: none; cursor: pointer; display: inline-block; text-decoration: none; }
 		.input-field { padding: 0.9rem; border-radius: 8px; border: 1px solid #ddd; width: 100%; box-sizing: border-box; margin-top: 5px; }
 
@@ -112,7 +118,9 @@ const stores = [
 		<div class="grid">
 			{cakes.map((p) => (
 				<div class="card">
-					<img src={p.foto} alt={p.title} loading="lazy" />
+					<a href={p.foto} class="glightbox card-img-link" data-gallery="dorty">
+						<img src={p.foto} alt={p.title} loading="lazy" />
+					</a>
 					<div style="padding: 1.5rem">
 						<h3 style="margin:0;">{p.title}</h3>
 						<p style="color:var(--gold); font-weight:bold;">{p.cena}</p>
@@ -128,7 +136,9 @@ const stores = [
 		<div class="grid">
 			{desserts.map((p) => (
 				<div class="card">
-					<img src={p.foto} alt={p.title} loading="lazy" />
+					<a href={p.foto} class="glightbox card-img-link" data-gallery="zakusky">
+						<img src={p.foto} alt={p.title} loading="lazy" />
+					</a>
 					<div style="padding: 1.5rem">
 						<h3 style="margin:0;">{p.title}</h3>
 						<p style="color:var(--gold); font-weight:bold;">{p.cena}</p>
@@ -188,7 +198,16 @@ const stores = [
 		<p>© 2026 Cukrářství Blahutovi</p>
 	</footer>
 
+	<script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js" is:inline></script>
+
 	<script is:inline>
+		// --- INICIALIZACE ZVĚTŠOVÁNÍ FOTEK ---
+		const lightbox = GLightbox({
+			selector: '.glightbox',
+			touchNavigation: true,
+			loop: true
+		});
+
 		// --- MOBILNÍ MENU ---
 		const toggle = document.getElementById('mobile-toggle');
 		const nav = document.getElementById('main-nav');
