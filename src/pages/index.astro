@@ -1,10 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import productsData from '../../data.json';
+import CustomCakeForm from '../components/CustomCakeForm';
+import ReservationForm from '../components/ReservationForm';
+import { Branch } from '../types';
 
 const cakes = (productsData?.cakes || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 
+// Pomocná data pro prodejny
 const stores = [
 	{ 
 		id: 'petrvald', 
@@ -28,7 +32,7 @@ const stores = [
 		address: 'tř. Těreškovové 2233/28', 
 		phone: '+420 778 157 867', 
 		mapUrl: 'https://www.google.com/maps/search/?api=1&query=Cukrářství+Blahutovi+Karviná', 
-		hours: 'Po-Pá: 9:00 - 17:00, So: 8:00 - 12:00 (Ne: Zavřeno)' 
+		hours: 'Po-Pá: 9:00 - 17:00, So: 8:00 - 12:00' 
 	},
 	{ 
 		id: 'ostrava', 
@@ -36,207 +40,92 @@ const stores = [
 		address: 'Výškovická 116a', 
 		phone: '+420 775 271 101', 
 		mapUrl: 'https://www.google.com/maps/search/?api=1&query=Cukrářství+Blahutovi+Ostrava', 
-		hours: 'Po-Pá: 9:00 - 17:00, So: 9:00 - 12:00 (Ne: Zavřeno)' 
+		hours: 'Po-Pá: 9:00 - 17:00, So: 9:00 - 12:00' 
 	}
 ];
 ---
 
 <Layout title="Cukrářství Blahutovi">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
-
-	<style is:global>
-		:root { --navy: #0a192f; --gold: #d4af37; --offwhite: #fcfaf7; }
-		body { background-color: var(--offwhite); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; scroll-behavior: smooth; color: var(--navy); }
-		header { background: var(--navy); padding: 1rem 0; color: white; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--gold); }
-		.nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 1rem; position: relative; }
-		.nav-links { display: flex; gap: 1.5rem; align-items: center; }
-		.nav-links a { color: white; text-decoration: none; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; transition: 0.3s; }
-		.menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 10px; flex-direction: column; gap: 5px; z-index: 110; }
-		.menu-btn span { display: block; width: 25px; height: 3px; background: var(--gold); border-radius: 2px; }
-
-		@media (max-width: 900px) {
-			.menu-btn { display: flex; }
-			.nav-links { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: var(--navy); flex-direction: column; padding: 2rem 0; border-bottom: 2px solid var(--gold); }
-			.nav-links.active { display: flex; }
-			.nav-links a { font-size: 1.1rem; padding: 15px; width: 100%; text-align: center; }
-		}
-
-		.section-title { text-align: center; font-family: 'Playfair Display', serif; font-size: 2.5rem; margin: 4rem 0 2rem; }
-		.grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; padding: 0 1rem; }
-		.card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.05); text-align: center; }
-		.card-img-link { display: block; width: 100%; height: 280px; cursor: zoom-in; }
-		.card img { width: 100%; height: 100%; object-fit: cover; }
-		.btn-add { background: var(--gold); color: var(--navy); padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: bold; border: none; cursor: pointer; }
-		.input-field { padding: 0.9rem; border-radius: 8px; border: 1px solid #ddd; width: 100%; box-sizing: border-box; margin-top: 5px; }
-
-		#cart-float { position: fixed; bottom: 30px; right: 30px; background: var(--gold); color: var(--navy); width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 1000; cursor: pointer; }
-		#cart-count { position: absolute; top: 0; right: 0; background: var(--navy); color: white; width: 22px; height: 22px; border-radius: 50%; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-		#cart-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; padding: 15px; }
-		.modal-content { background: white; width: 100%; max-width: 500px; border-radius: 20px; padding: 2.5rem; max-height: 90vh; overflow-y: auto; position: relative; }
-	</style>
-
-	<header>
-		<div class="nav-container">
-			<h1 style="margin:0; color:var(--gold); font-family: 'Playfair Display'; font-size: 1.5rem;">Cukrářství Blahutovi</h1>
-			<button class="menu-btn" id="mobile-toggle" aria-label="Menu">
-				<span></span><span></span><span></span>
-			</button>
-			<nav class="nav-links" id="main-nav">
-				<a href="/#dorty">Dorty</a>
-				<a href="/#zakusky">Zákusky</a>
-				<a href="/#dort-na-prani">Dort na přání</a>
-				<a href="/#b2b">Pro firmy</a>
-				<a href="/#prodejny">Prodejny</a>
+	<header class="bg-navy-900 text-white sticky top-0 z-50 border-b-2 border-gold-500">
+		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
+			<h1 class="text-2xl font-serif text-gold-500">Cukrářství Blahutovi</h1>
+			<nav class="hidden md:flex gap-8">
+				<a href="/#dorty" class="hover:text-gold-500 transition-colors font-semibold uppercase text-sm tracking-widest">Dorty</a>
+				<a href="/#zakusky" class="hover:text-gold-500 transition-colors font-semibold uppercase text-sm tracking-widest">Zákusky</a>
+				<a href="/#dort-na-prani" class="hover:text-gold-500 transition-colors font-semibold uppercase text-sm tracking-widest">Dort na přání</a>
+				<a href="/#prodejny" class="hover:text-gold-500 transition-colors font-semibold uppercase text-sm tracking-widest">Prodejny</a>
 			</nav>
+			<button class="md:hidden text-gold-500" id="mobile-toggle">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+				</svg>
+			</button>
+		</div>
+		<div id="mobile-menu" class="hidden md:hidden bg-navy-900 border-b border-gold-500">
+			<div class="flex flex-col p-4 gap-4">
+				<a href="/#dorty" class="text-white uppercase font-bold text-center py-2">Dorty</a>
+				<a href="/#zakusky" class="text-white uppercase font-bold text-center py-2">Zákusky</a>
+				<a href="/#dort-na-prani" class="text-white uppercase font-bold text-center py-2">Dort na přání</a>
+				<a href="/#prodejny" class="text-white uppercase font-bold text-center py-2">Prodejny</a>
+			</div>
 		</div>
 	</header>
 
-	<section id="dorty">
-		<h2 class="section-title">Naše dorty</h2>
-		<div class="grid">
-			{cakes.map((p) => (
-				<div class="card">
-					<a href={p.foto} class="glightbox card-img-link">
-						<img src={p.foto} alt={p.title} loading="lazy" />
-					</a>
-					<div style="padding: 1.5rem">
-						<h3 style="margin:0;">{p.title}</h3>
-						<p style="color:var(--gold); font-weight:bold;">{p.cena}</p>
-						<button class="btn-add" onclick={`addToCart('${p.title}', '${p.cena}')`}>Do košíku</button>
+	<main>
+		<section id="dorty" class="py-20 px-4 max-w-7xl mx-auto">
+			<h2 class="text-4xl md:text-5xl font-serif text-center mb-16">Naše Dorty</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+				{cakes.map((cake) => (
+					<div class="bg-white rounded-[2rem] overflow-hidden shadow-sm border border-slate-100 hover:shadow-md transition-shadow group">
+						<a href={cake.foto} class="glightbox block h-72 overflow-hidden">
+							<img src={cake.foto} alt={cake.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+						</a>
+						<div class="p-8 text-center">
+							<h3 class="text-2xl font-serif mb-2">{cake.title}</h3>
+							<p class="text-gold-500 font-bold text-xl mb-4">{cake.cena}</p>
+							{/* Tady by mohl být button pro přidání do košíku, pokud používáte interaktivní košík */}
+						</div>
 					</div>
-				</div>
-			))}
-		</div>
-	</section>
+				))}
+			</div>
+		</section>
 
-	<section id="zakusky" style="background: white; padding-bottom: 5rem;">
-		<h2 class="section-title">Naše zákusky</h2>
-		<div class="grid">
-			{desserts.map((p) => (
-				<div class="card">
-					<a href={p.foto} class="glightbox card-img-link">
-						<img src={p.foto} alt={p.title} loading="lazy" />
-					</a>
-					<div style="padding: 1.5rem">
-						<h3 style="margin:0;">{p.title}</h3>
-						<p style="color:var(--gold); font-weight:bold;">{p.cena}</p>
-						<button class="btn-add" onclick={`addToCart('${p.title}', '${p.cena}')`}>Do košíku</button>
+		<section id="dort-na-prani" class="py-20 bg-slate-50 px-4">
+			<CustomCakeForm client:load />
+		</section>
+
+		<section id="prodejny" class="py-20 px-4 max-w-7xl mx-auto">
+			<h2 class="text-4xl md:text-5xl font-serif text-center mb-16">Naše Prodejny</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+				{stores.map((store) => (
+					<div class="bg-navy-900 text-white p-8 rounded-[2rem] border border-gold-500/20">
+						<h3 class="text-xl font-serif text-gold-500 mb-4">{store.name}</h3>
+						<p class="mb-2 opacity-80">{store.address}</p>
+						<p class="mb-4 font-bold">{store.phone}</p>
+						<div class="text-xs opacity-60 mb-6 leading-relaxed">
+							{store.hours}
+						</div>
+						<a href={store.mapUrl} target="_blank" class="text-gold-500 font-bold hover:underline">Zobrazit na mapě →</a>
 					</div>
-				</div>
-			))}
-		</div>
-	</section>
+				))}
+			</div>
+		</section>
+	</main>
 
-	<section id="dort-na-prani" style="padding: 5rem 1rem; background: #eeeae4;">
-		<div style="max-width: 800px; margin: 0 auto; background: white; padding: 2.5rem; border-radius: 20px;">
-			<h2 style="text-align: center; font-family: 'Playfair Display'; margin-bottom: 1.5rem;">Dort na přání</h2>
-			<form name="dort-na-prani" method="POST" data-netlify="true" enctype="multipart/form-data" action="/dekujeme/">
-				<input type="hidden" name="form-name" value="dort-na-prani" />
-				<input type="text" name="Jmeno" placeholder="Vaše jméno" class="input-field" required />
-				<input type="email" name="Email" placeholder="Váš e-mail" class="input-field" required />
-				<input type="tel" name="Telefon" placeholder="Váš telefon" class="input-field" required />
-				<textarea name="Popis" placeholder="Popište mi svou představu o dortu..." class="input-field" style="height: 120px;"></textarea>
-				<label style="display: block; margin-top: 1.5rem; font-weight: bold;">Inspirační fotka:</label>
-				<input type="file" name="Soubor Fotka" accept="image/*" class="input-field" required />
-				<button type="submit" class="btn-add" style="width: 100%; margin-top: 2rem;">Odeslat poptávku</button>
-			</form>
-		</div>
-	</section>
+	{/* <ReservationForm client:only="react" cart={[]} total={0} /> */}
 
-	<section id="b2b" style="background: var(--navy); color: white; padding: 5rem 1rem; text-align: center;">
-		<div style="max-width:600px; margin:0 auto; background: white; color: var(--navy); padding: 2rem; border-radius: 15px;">
-			<h2 style="font-family:'Playfair Display'; margin-top:0;">B2B Spolupráce</h2>
-			<form name="b2b-poptavka" method="POST" data-netlify="true" action="/dekujeme/">
-				<input type="hidden" name="form-name" value="b2b-poptavka" />
-				<input type="text" name="Firma" placeholder="Název vaší firmy" class="input-field" required />
-				<input type="email" name="Email" placeholder="E-mail" class="input-field" required />
-				<textarea name="Zprava" placeholder="V čem bychom mohli spolupracovat?" class="input-field"></textarea>
-				<button type="submit" class="btn-add" style="width: 100%; margin-top: 1.5rem;">Odeslat poptávku</button>
-			</form>
-		</div>
-	</section>
-
-	<section id="prodejny" style="padding: 5rem 1rem;">
-		<h2 class="section-title">Kde nás najdete</h2>
-		<div class="grid">
-			{stores.map((s) => (
-				<div class="card" style="padding: 2.5rem; background: var(--navy); color: white; text-align: left;">
-					<h3 style="color:var(--gold); margin:0 0 10px 0;">{s.name}</h3>
-					<p>📍 {s.address}</p>
-					<p>📞 {s.phone}</p>
-					<p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.7;">{s.hours}</p>
-					<a href={s.mapUrl} target="_blank" rel="noopener noreferrer" style="display:inline-block; margin-top:15px; color:var(--gold); text-decoration:none; font-weight:bold;">MAPA →</a>
-				</div>
-			))}
-		</div>
-	</section>
-
-	<div id="cart-float" onclick="toggleModal(true)">
-		<div id="cart-count">0</div>
-		<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-	</div>
-
-	<div id="cart-modal">
-		<div class="modal-content">
-			<button onclick="toggleModal(false)" style="position:absolute; right:25px; top:25px; border:none; background:none; font-size:1.5rem; cursor:pointer">✕</button>
-			<h2 style="font-family:'Playfair Display'; margin-top:0">Vaše rezervace</h2>
-			<div id="cart-items" style="margin: 1.5rem 0; border-bottom: 1px solid #eee; padding-bottom: 1rem;"></div>
-			<form name="objednavka-kosik" method="POST" data-netlify="true" id="order-form" action="/dekujeme/">
-				<input type="hidden" name="form-name" value="objednavka-kosik" />
-				<input type="hidden" name="Zbozi" id="hidden-cart-details" />
-				<select name="Prodejna" class="input-field" required>
-					<option value="">Vyberte prodejnu...</option>
-					{stores.map(s => <option value={s.name}>{s.name}</option>)}
-				</select>
-				<input type="date" name="Datum" class="input-field" required style="margin-top:10px" />
-				<input type="text" name="Jmeno" placeholder="Jméno" class="input-field" required style="margin-top:10px" />
-				<input type="email" name="Email" placeholder="E-mail" class="input-field" required style="margin-top:10px" />
-				<input type="tel" name="Telefon" placeholder="Telefon" class="input-field" required style="margin-top:10px" />
-				<button type="submit" class="btn-add" style="width:100%; margin-top:1.5rem">Odeslat objednávku</button>
-			</form>
-		</div>
-	</div>
-
-	<footer style="background: #050c18; color: white; text-align: center; padding: 2rem;">
-		<p>© 2026 Cukrářství Blahutovi</p>
+	<footer class="bg-navy-900 text-white/50 py-12 text-center border-t border-gold-500/10">
+		<p>© 2026 Cukrářství Blahutovi. Všechna práva vyhrazena.</p>
 	</footer>
-
-	<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js" is:inline></script>
-	<script is:inline>
-		document.addEventListener('DOMContentLoaded', () => {
-			GLightbox({ selector: '.glightbox', touchNavigation: true, loop: true, type: 'image' });
-		});
-
-		const toggle = document.getElementById('mobile-toggle');
-		const nav = document.getElementById('main-nav');
-		toggle.onclick = () => nav.classList.toggle('active');
-		
-		nav.querySelectorAll('a').forEach(link => {
-			link.onclick = () => nav.classList.remove('active');
-		});
-
-		let cart = [];
-		function addToCart(title, price) {
-			const existing = cart.find(i => i.title === title);
-			if (existing) { existing.qty++; } else { cart.push({ title, price, qty: 1 }); }
-			updateCart();
-			alert('Přidáno do košíku');
-		}
-		function updateCart() {
-			document.getElementById('cart-count').innerText = cart.reduce((s, i) => s + i.qty, 0);
-			const itemsEl = document.getElementById('cart-items');
-			if (cart.length === 0) { itemsEl.innerHTML = 'Košík je prázdný.'; return; }
-			itemsEl.innerHTML = cart.map((i, idx) => `
-				<div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-					<span>${i.qty}x ${i.title}</span>
-					<button onclick="removeItem(${idx})" style="color:red; border:none; background:none; cursor:pointer;">✕</button>
-				</div>
-			`).join('');
-		}
-		window.removeItem = (idx) => { cart.splice(idx, 1); updateCart(); }
-		window.toggleModal = (s) => { document.getElementById('cart-modal').style.display = s ? 'flex' : 'none'; }
-		document.getElementById('order-form').onsubmit = () => {
-			document.getElementById('hidden-cart-details').value = cart.map(i => `${i.qty}x ${i.title}`).join(', ');
-		};
-	</script>
 </Layout>
+
+<script is:inline>
+	// Jednoduchý skript pro mobilní menu
+	const toggle = document.getElementById('mobile-toggle');
+	const menu = document.getElementById('mobile-menu');
+	if (toggle && menu) {
+		toggle.addEventListener('click', () => {
+			menu.classList.toggle('hidden');
+		});
+	}
+</script>
