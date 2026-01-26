@@ -1,9 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import productsData from '../../data.json';
-// OPRAVENÁ CESTA: Používáme ./ místo ../
-import CustomCakeForm from '../components/CustomCakeForm';
-import ReservationForm from '../components/ReservationForm';
+// OPRAVENO: Velké 'C' v názvu složky Components
+import CustomCakeForm from '../Components/CustomCakeForm';
+import ReservationForm from '../Components/ReservationForm';
 import { Branch } from '../types';
 
 const cakes = (productsData?.cakes || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
@@ -15,7 +15,7 @@ const stores = [
 		name: 'Petřvald', 
 		address: 'Šenovská 1', 
 		phone: '+420 778 157 857', 
-		mapUrl: 'https://www.google.com/maps/search/Cukrárna+Petřvald+Blahutovi', 
+		mapUrl: 'https://www.google.com/maps/search/Cukrárství+Blahutovi+Petřvald', 
 		hours: 'Út-Ne: 9:00 - 17:00 (Po: Zavřeno)' 
 	},
 	{ 
@@ -23,7 +23,7 @@ const stores = [
 		name: 'Píšť', 
 		address: 'Opavská 218/101', 
 		phone: '+420 602 323 788', 
-		mapUrl: 'https://www.google.com/maps/search/Cukrářství+Blahutovi+Píšť', 
+		mapUrl: 'https://www.google.com/maps/search/Cukrárství+Blahutovi+Píšť', 
 		hours: 'Po-Pá: 6:00 - 15:00 (So-Ne: Zavřeno)' 
 	},
 	{ 
@@ -31,7 +31,7 @@ const stores = [
 		name: 'Karviná', 
 		address: 'tř. Těreškovové 2233/28', 
 		phone: '+420 778 157 867', 
-		mapUrl: 'https://www.google.com/maps/search/Cukrárna+Karviná+Blahutovi', 
+		mapUrl: 'https://www.google.com/maps/search/Cukrárství+Blahutovi+Karviná', 
 		hours: 'Po-Pá: 9:00 - 17:00, So: 8:00 - 12:00' 
 	},
 	{ 
@@ -39,7 +39,7 @@ const stores = [
 		name: 'Ostrava (Zábřeh)', 
 		address: 'Výškovická 116a', 
 		phone: '+420 775 271 101', 
-		mapUrl: 'https://www.google.com/maps/search/Cukrárna+Ostrava+Zábřeh+Blahutovi', 
+		mapUrl: 'https://www.google.com/maps/search/Cukrárství+Blahutovi+Ostrava', 
 		hours: 'Po-Pá: 9:00 - 17:00, So: 9:00 - 12:00' 
 	}
 ];
