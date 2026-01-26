@@ -38,31 +38,31 @@ const stores = [
 			</div>
 		</div>
 
-		<div id="mobile-menu" class="hidden fixed inset-0 bg-[#0a192f] z-[60] flex flex-col items-center justify-center gap-8 text-xl uppercase font-bold tracking-widest">
+		<div id="mobile-menu" class="hidden fixed inset-0 bg-[#0a192f] z-[60] flex flex-col items-center justify-center gap-8 text-xl uppercase font-bold tracking-widest text-white">
 			<button id="menu-close" class="absolute top-6 right-6 text-[#d4af37]">
 				<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
 				</svg>
 			</button>
-			<a href="#dorty" class="mobile-link text-white hover:text-[#d4af37]">Dorty</a>
-			<a href="#zakusky" class="mobile-link text-white hover:text-[#d4af37]">Zákusky</a>
-			<a href="#dort-na-prani" class="mobile-link text-white hover:text-[#d4af37]">Dort na přání</a>
-			<a href="#prodejny" class="mobile-link text-white hover:text-[#d4af37]">Prodejny</a>
+			<a href="#dorty" class="mobile-link hover:text-[#d4af37]">Dorty</a>
+			<a href="#zakusky" class="mobile-link hover:text-[#d4af37]">Zákusky</a>
+			<a href="#dort-na-prani" class="mobile-link hover:text-[#d4af37]">Dort na přání</a>
+			<a href="#prodejny" class="mobile-link hover:text-[#d4af37]">Prodejny</a>
 		</div>
 	</header>
 
 	<main>
 		<section id="dorty" class="py-16 px-4 max-w-7xl mx-auto">
-			<h2 class="text-4xl font-serif text-center mb-12 italic">Naše Dorty</h2>
-			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-[#0a192f]">
+			<h2 class="text-4xl font-serif text-center mb-12 italic text-[#0a192f]">Naše Dorty</h2>
+			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
 				{cakes.map(cake => (
 					<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden group flex flex-col">
 						<div class="h-64 overflow-hidden relative">
 							<a href={cake.foto} class="glightbox" data-gallery="cakes">
-								<img src={cake.foto} alt={cake.title} class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+								<img src={cake.foto} alt={cake.title} class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
 							</a>
 						</div>
-						<div class="p-6 text-center flex-grow flex flex-col justify-between">
+						<div class="p-6 text-center flex-grow flex flex-col justify-between text-[#0a192f]">
 							<div>
 								<h3 class="text-xl font-bold mb-1">{cake.title}</h3>
 								<p class="text-slate-500 text-sm mb-4">{cake.porce}</p>
@@ -71,7 +71,7 @@ const stores = [
 								<p class="text-[#d4af37] font-black text-2xl mb-4">{cake.cena}</p>
 								<button 
 									onclick={`window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: '${cake.title}', price: '${cake.cena}' } }))`}
-									class="w-full bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-colors active:scale-95 transition-transform"
+									class="w-full bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all active:scale-95"
 								>
 									Přidat do objednávky
 								</button>
@@ -90,7 +90,7 @@ const stores = [
 						<div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col text-[#0a192f]">
 							<div class="h-40 overflow-hidden relative">
 								<a href={dessert.foto} class="glightbox" data-gallery="desserts">
-									<img src={dessert.foto} alt={dessert.title} class="w-full h-full object-cover" />
+									<img src={dessert.foto} alt={dessert.title} class="w-full h-full object-cover" loading="lazy" />
 								</a>
 							</div>
 							<div class="p-4 text-center flex-grow flex flex-col justify-between">
@@ -115,11 +115,11 @@ const stores = [
 			<CustomCakeForm client:load />
 		</section>
 
-		<section id="prodejny" class="py-20 px-4 max-w-7xl mx-auto">
-			<h2 class="text-4xl font-serif text-center mb-12 italic text-[#0a192f]">Navštivte nás</h2>
+		<section id="prodejny" class="py-20 px-4 max-w-7xl mx-auto text-[#0a192f]">
+			<h2 class="text-4xl font-serif text-center mb-12 italic">Navštivte nás</h2>
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
 				{stores.map(store => (
-					<div class="bg-[#0a192f] text-white p-6 rounded-[2rem] border border-[#d4af37]/20 shadow-xl flex flex-col justify-between">
+					<div class="bg-[#0a192f] text-white p-6 rounded-[2rem] border border-[#d4af37]/20 shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1">
 						<div>
 							<h3 class="text-[#d4af37] font-bold mb-3 text-xl">{store.name}</h3>
 							<p class="text-sm opacity-80 mb-1">{store.address}</p>
@@ -140,8 +140,19 @@ const stores = [
 		<p>© {new Date().getFullYear()} — Všechna práva vyhrazena</p>
 	</footer>
 
+	<form name="objednavka" data-netlify="true" netlify-honeypot="bot-field" hidden>
+		<input type="text" name="Meno" />
+		<input type="email" name="Email" />
+		<input type="tel" name="Telefon" />
+		<select name="Predajna">
+			<option>Petřvald</option><option>Píšť</option><option>Karviná</option><option>Ostrava</option>
+		</select>
+		<textarea name="Produkty-Seznam"></textarea>
+		<input type="hidden" name="Produkt-0" /><input type="hidden" name="Produkt-1" /><input type="hidden" name="Produkt-2" />
+		<input type="hidden" name="Produkt-3" /><input type="hidden" name="Produkt-4" /><input type="hidden" name="Produkt-5" />
+	</form>
+
 	<script is:inline>
-		// Hamburger logika
 		const menuToggle = document.getElementById('menu-toggle');
 		const menuClose = document.getElementById('menu-close');
 		const mobileMenu = document.getElementById('mobile-menu');
@@ -150,7 +161,7 @@ const stores = [
 		if (menuToggle && mobileMenu) {
 			menuToggle.addEventListener('click', () => {
 				mobileMenu.classList.remove('hidden');
-				document.body.style.overflow = 'hidden'; // Zamezí skrolování při otevřeném menu
+				document.body.style.overflow = 'hidden';
 			});
 
 			const closeMenu = () => {
