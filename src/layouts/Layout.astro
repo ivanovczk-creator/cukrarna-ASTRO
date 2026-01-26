@@ -29,20 +29,38 @@ const {
 		<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 		
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+
+		<script is:inline src="https://cdn.tailwindcss.com"></script>
+		<script is:inline>
+			tailwind.config = {
+				theme: {
+					extend: {
+						colors: {
+							navy: {
+								900: '#0a192f',
+								800: '#112240',
+							},
+							gold: {
+								500: '#d4af37',
+								600: '#b8860b',
+							}
+						}
+					}
+				}
+			}
+		</script>
 	</head>
-	<body class="bg-offwhite text-navy-900">
+	<body class="bg-[#f8f9fa] text-[#0a192f]">
 		<slot />
 
 		<script is:inline src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 		<script is:inline>
-			// Inicializace galerie
 			function initLightbox() {
 				if (window.GLightbox) {
 					GLightbox({ selector: '.glightbox', touchNavigation: true, loop: true });
 				}
 			}
 
-			// Skript pro zavírání mobilního menu po kliknutí (pokud je v index.astro)
 			function initMobileMenu() {
 				const nav = document.querySelector('.nav-links');
 				const links = document.querySelectorAll('.nav-links a');
@@ -58,7 +76,6 @@ const {
 			initLightbox();
 			initMobileMenu();
 			
-			// Pro Astro (pokud používáte View Transitions)
 			document.addEventListener('astro:after-swap', () => {
 				initLightbox();
 				initMobileMenu();
@@ -77,10 +94,9 @@ const {
 		--offwhite: #f8f9fa;
 	}
 
-	/* Základní opravy pro plynulé skrolování */
 	html { 
 		scroll-behavior: smooth; 
-		scroll-padding-top: 80px; /* Aby vám menu nepřekrylo nadpis sekce po kliknutí */
+		scroll-padding-top: 80px; 
 	}
 
 	body { 
@@ -91,11 +107,10 @@ const {
 
 	h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
 
-	/* Pomocné třídy pro barvy */
+	.glightbox-container { z-index: 9999 !important; }
+
+	/* Custom utility třídy pro jistotu */
 	.bg-navy-900 { background-color: var(--navy-900) !important; }
 	.text-navy-900 { color: var(--navy-900) !important; }
 	.text-gold-500 { color: var(--gold-500) !important; }
-
-	/* Oprava pro zobrazení GLightboxu navrchu */
-	.glightbox-container { z-index: 9999 !important; }
 </style>
