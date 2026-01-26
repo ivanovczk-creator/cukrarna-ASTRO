@@ -1,12 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import productsData from '../data.json'; // data.json je v src/
-import CustomCakeForm from '../components/CustomCakeForm'; // Cesta do src/components/
-import ReservationForm from '../components/ReservationForm'; // Cesta do src/components/
-import { Branch } from '../types'; // types.ts je v src/
+// OPRAVENO: Cesta do hlavního adresáře (o dvě úrovně výš)
+import productsData from '../../data.json'; 
+
+import CustomCakeForm from '../components/CustomCakeForm';
+import ReservationForm from '../components/ReservationForm';
+import { Branch } from '../types';
 
 const cakes = (productsData?.cakes || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
+// ... zbytek kódu zůstává stejný
 
 const stores = [
 	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1', phone: '+420 778 157 857', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Cukrářství+Blahutovi+Petřvald', hours: 'Út-Ne: 9:00 - 17:00' },
