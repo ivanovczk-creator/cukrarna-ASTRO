@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 
 const CustomCakeForm: React.FC = () => {
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [fileName, setFileName] = useState<string>('');
-  const [email, setEmail] = useState('');
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -11,56 +9,8 @@ const CustomCakeForm: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setStatus('submitting');
-    
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-
-    try {
-      const response = await fetch("/", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        setStatus('success');
-      } else {
-        setStatus('error');
-      }
-    } catch (error) {
-      console.error("Form submission error:", error);
-      setStatus('error');
-    }
-  };
-
-  if (status === 'success') {
-    return (
-      <div className="max-w-2xl mx-auto bg-white p-12 rounded-[2.5rem] shadow-sm border border-slate-100 text-center animate-fade-in">
-        <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-        </div>
-        <h3 className="text-3xl font-serif text-[#4A3728] mb-4">Poptávka odeslána!</h3>
-        <p className="text-slate-600 leading-relaxed mb-8">
-          Děkujeme za váš zájem o dort na přání. Vaši poptávku i s přílohou jsme přijali. 
-          Potvrzení o přijetí poptávky vám bylo zasláno na váš e-mail. Brzy se vám ozveme, abychom probrali detaily.
-        </p>
-        <button 
-          onClick={() => {
-            setStatus('idle');
-            setFileName('');
-            setEmail('');
-          }}
-          className="text-[#D4AF37] font-bold hover:underline"
-        >
-          Odeslat další poptávku
-        </button>
-      </div>
-    );
-  }
+  // Funkci handleSubmit jsme odstranili a nahradili ji přímým odesláním formuláře,
+  // což zajistí, že Netlify správně zpracuje soubor a provede přesměrování na /dekujeme/
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -77,19 +27,18 @@ const CustomCakeForm: React.FC = () => {
           method="POST" 
           data-netlify="true" 
           encType="multipart/form-data"
-          onSubmit={handleSubmit}
+          action="/dekujeme/"
           className="space-y-6"
         >
+          {/* Skryté pole pro Netlify identifikaci */}
           <input type="hidden" name="form-name" value="dort-na-prani" />
-          {/* Netlify email trigger */}
-          <input type="hidden" name="email" value={email} />
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="md:col-span-2">
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Vaše Jméno *</label>
               <input 
                 type="text" 
-                name="jmeno" 
+                name="Jmeno" 
                 required 
                 placeholder="Jan Novák"
                 className="w-full min-h-[44px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all" 
@@ -100,7 +49,7 @@ const CustomCakeForm: React.FC = () => {
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Telefon *</label>
               <input 
                 type="tel" 
-                name="telefon" 
+                name="Telefon" 
                 required 
                 placeholder="+420 777 666 555"
                 className="w-full min-h-[44px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all" 
@@ -111,11 +60,9 @@ const CustomCakeForm: React.FC = () => {
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">E-mail *</label>
               <input 
                 type="email" 
-                name="email_input" 
+                name="Email" 
                 required
                 placeholder="vas@email.cz"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 className="w-full min-h-[44px] px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#E8A2AF] transition-all" 
               />
             </div>
@@ -124,7 +71,7 @@ const CustomCakeForm: React.FC = () => {
           <div>
             <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Popis vaší představy *</label>
             <textarea 
-              name="popis" 
+              name="Popis" 
               required
               rows={4} 
               placeholder="Popište nám, jak by měl dort vypadat, pro kolik osob by měl být a na jaký termín..."
@@ -137,9 +84,10 @@ const CustomCakeForm: React.FC = () => {
             <div className="relative group">
               <input 
                 type="file" 
-                name="soubor_fotka" 
+                name="Soubor Fotka" 
                 accept="image/*"
                 onChange={handleFileChange}
+                required
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
               />
               <div className="w-full min-h-[64px] px-4 py-4 rounded-xl border-2 border-dashed border-slate-200 group-hover:border-[#E8A2AF] bg-slate-50 flex items-center justify-center gap-3 transition-colors">
@@ -155,10 +103,9 @@ const CustomCakeForm: React.FC = () => {
 
           <button 
             type="submit" 
-            disabled={status === 'submitting'}
-            className="w-full min-h-[56px] bg-[#D4AF37] hover:bg-[#C4A132] disabled:bg-slate-300 text-white font-bold py-4 rounded-2xl transition-all shadow-lg active:scale-[0.98] flex items-center justify-center gap-3 text-lg"
+            className="w-full min-h-[56px] bg-[#D4AF37] hover:bg-[#C4A132] text-white font-bold py-4 rounded-2xl transition-all shadow-lg active:scale-[0.98] flex items-center justify-center gap-3 text-lg"
           >
-            {status === 'submitting' ? "Odesílám..." : "Odeslat nezávaznou poptávku"}
+            Odeslat nezávaznou poptávku
           </button>
         </form>
       </div>
