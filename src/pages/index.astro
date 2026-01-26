@@ -1,131 +1,73 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import productsData from '../../data.json';
-// OPRAVENO: Velké 'C' v názvu složky Components
-import CustomCakeForm from '../Components/CustomCakeForm';
-import ReservationForm from '../Components/ReservationForm';
-import { Branch } from '../types';
+import productsData from '../data.json'; // data.json je v src/
+import CustomCakeForm from '../components/CustomCakeForm'; // Cesta do src/components/
+import ReservationForm from '../components/ReservationForm'; // Cesta do src/components/
+import { Branch } from '../types'; // types.ts je v src/
 
 const cakes = (productsData?.cakes || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 
 const stores = [
-	{ 
-		id: 'petrvald', 
-		name: 'Petřvald', 
-		address: 'Šenovská 1', 
-		phone: '+420 778 157 857', 
-		mapUrl: 'https://www.google.com/maps/search/Cukrárství+Blahutovi+Petřvald', 
-		hours: 'Út-Ne: 9:00 - 17:00 (Po: Zavřeno)' 
-	},
-	{ 
-		id: 'pist', 
-		name: 'Píšť', 
-		address: 'Opavská 218/101', 
-		phone: '+420 602 323 788', 
-		mapUrl: 'https://www.google.com/maps/search/Cukrárství+Blahutovi+Píšť', 
-		hours: 'Po-Pá: 6:00 - 15:00 (So-Ne: Zavřeno)' 
-	},
-	{ 
-		id: 'karvina', 
-		name: 'Karviná', 
-		address: 'tř. Těreškovové 2233/28', 
-		phone: '+420 778 157 867', 
-		mapUrl: 'https://www.google.com/maps/search/Cukrárství+Blahutovi+Karviná', 
-		hours: 'Po-Pá: 9:00 - 17:00, So: 8:00 - 12:00' 
-	},
-	{ 
-		id: 'ostrava', 
-		name: 'Ostrava (Zábřeh)', 
-		address: 'Výškovická 116a', 
-		phone: '+420 775 271 101', 
-		mapUrl: 'https://www.google.com/maps/search/Cukrárství+Blahutovi+Ostrava', 
-		hours: 'Po-Pá: 9:00 - 17:00, So: 9:00 - 12:00' 
-	}
+	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1', phone: '+420 778 157 857', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Cukrářství+Blahutovi+Petřvald', hours: 'Út-Ne: 9:00 - 17:00' },
+	{ id: 'pist', name: 'Píšť', address: 'Opavská 218/101', phone: '+420 602 323 788', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Cukrářství+Blahutovi+Píšť', hours: 'Po-Pá: 6:00 - 15:00' },
+	{ id: 'karvina', name: 'Karviná', address: 'tř. Těreškovové 2233/28', phone: '+420 778 157 867', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Cukrářství+Blahutovi+Karviná', hours: 'Po-So: dle otevírací doby' },
+	{ id: 'ostrava', name: 'Ostrava', address: 'Výškovická 116a', phone: '+420 775 271 101', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Cukrářství+Blahutovi+Ostrava', hours: 'Po-So: dle otevírací doby' }
 ];
 ---
 
 <Layout title="Cukrářství Blahutovi">
-	<header class="bg-navy-900 text-white sticky top-0 z-50 border-b-2 border-gold-500">
-		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
-			<h1 class="text-2xl font-serif text-gold-500">Cukrářství Blahutovi</h1>
-			<nav class="hidden md:flex gap-8">
-				<a href="/#dorty" class="hover:text-gold-500 transition-colors font-semibold uppercase text-sm tracking-widest">Dorty</a>
-				<a href="/#zakusky" class="hover:text-gold-500 transition-colors font-semibold uppercase text-sm tracking-widest">Zákusky</a>
-				<a href="/#dort-na-prani" class="hover:text-gold-500 transition-colors font-semibold uppercase text-sm tracking-widest">Dort na přání</a>
-				<a href="/#prodejny" class="hover:text-gold-500 transition-colors font-semibold uppercase text-sm tracking-widest">Prodejny</a>
-			</nav>
-			<button class="md:hidden text-gold-500" id="mobile-toggle">
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-				</svg>
-			</button>
-		</div>
-		<div id="mobile-menu" class="hidden md:hidden bg-navy-900 border-b border-gold-500">
-			<div class="flex flex-col p-4 gap-4">
-				<a href="/#dorty" class="text-white uppercase font-bold text-center py-2">Dorty</a>
-				<a href="/#zakusky" class="text-white uppercase font-bold text-center py-2">Zákusky</a>
-				<a href="/#dort-na-prani" class="text-white uppercase font-bold text-center py-2">Dort na přání</a>
-				<a href="/#prodejny" class="text-white uppercase font-bold text-center py-2">Prodejny</a>
-			</div>
-		</div>
-	</header>
+    <header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
+        <div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
+            <h1 class="text-2xl font-serif text-[#d4af37]">Cukrářství Blahutovi</h1>
+            <nav class="hidden md:flex gap-8">
+                <a href="/#dorty" class="hover:text-[#d4af37] transition-colors uppercase text-sm font-bold tracking-widest">Dorty</a>
+                <a href="/#zakusky" class="hover:text-[#d4af37] transition-colors uppercase text-sm font-bold tracking-widest">Zákusky</a>
+                <a href="/#dort-na-prani" class="hover:text-[#d4af37] transition-colors uppercase text-sm font-bold tracking-widest">Dort na přání</a>
+                <a href="/#prodejny" class="hover:text-[#d4af37] transition-colors uppercase text-sm font-bold tracking-widest">Prodejny</a>
+            </nav>
+        </div>
+    </header>
 
-	<main>
-		<section id="dorty" class="py-20 px-4 max-w-7xl mx-auto">
-			<h2 class="text-4xl md:text-5xl font-serif text-center mb-16">Naše Dorty</h2>
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-				{cakes.map((cake) => (
-					<div class="bg-white rounded-[2rem] overflow-hidden shadow-sm border border-slate-100 hover:shadow-md transition-shadow group">
-						<a href={cake.foto} class="glightbox block h-72 overflow-hidden">
-							<img src={cake.foto} alt={cake.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-						</a>
-						<div class="p-8 text-center">
-							<h3 class="text-2xl font-serif mb-2">{cake.title}</h3>
-							<p class="text-gold-500 font-bold text-xl mb-4">{cake.cena}</p>
-							{/* Tady by mohl být button pro přidání do košíku, pokud používáte interaktivní košík */}
-						</div>
-					</div>
-				))}
-			</div>
-		</section>
+    <main>
+        <section id="dorty" class="py-16 px-4 max-w-7xl mx-auto">
+            <h2 class="text-4xl font-serif text-center mb-12">Naše Dorty</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {cakes.map(cake => (
+                    <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden group">
+                        <div class="h-64 overflow-hidden">
+                            <img src={cake.foto} alt={cake.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        </div>
+                        <div class="p-6 text-center">
+                            <h3 class="text-xl font-bold mb-2">{cake.title}</h3>
+                            <p class="text-[#d4af37] font-bold text-lg">{cake.cena}</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </section>
 
-		<section id="dort-na-prani" class="py-20 bg-slate-50 px-4">
-			<CustomCakeForm client:load />
-		</section>
+        <section id="dort-na-prani" class="py-16 bg-slate-50">
+            <CustomCakeForm client:load />
+        </section>
 
-		<section id="prodejny" class="py-20 px-4 max-w-7xl mx-auto">
-			<h2 class="text-4xl md:text-5xl font-serif text-center mb-16">Naše Prodejny</h2>
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-				{stores.map((store) => (
-					<div class="bg-navy-900 text-white p-8 rounded-[2rem] border border-gold-500/20">
-						<h3 class="text-xl font-serif text-gold-500 mb-4">{store.name}</h3>
-						<p class="mb-2 opacity-80">{store.address}</p>
-						<p class="mb-4 font-bold">{store.phone}</p>
-						<div class="text-xs opacity-60 mb-6 leading-relaxed">
-							{store.hours}
-						</div>
-						<a href={store.mapUrl} target="_blank" class="text-gold-500 font-bold hover:underline">Zobrazit na mapě →</a>
-					</div>
-				))}
-			</div>
-		</section>
-	</main>
+        <section id="prodejny" class="py-16 px-4 max-w-7xl mx-auto">
+            <h2 class="text-4xl font-serif text-center mb-12">Kde nás najdete</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                {stores.map(store => (
+                    <div class="bg-[#0a192f] text-white p-6 rounded-3xl border border-[#d4af37]/30">
+                        <h3 class="text-[#d4af37] font-bold mb-2 text-xl">{store.name}</h3>
+                        <p class="text-sm opacity-80 mb-1">{store.address}</p>
+                        <p class="text-sm font-bold mb-4">{store.phone}</p>
+                        <div class="text-[10px] opacity-60 mb-6 uppercase tracking-wider">{store.hours}</div>
+                        <a href={store.mapUrl} target="_blank" class="text-[#d4af37] font-bold text-sm hover:underline tracking-widest">NAVIGOVAT →</a>
+                    </div>
+                ))}
+            </div>
+        </section>
+    </main>
 
-	{/* <ReservationForm client:only="react" cart={[]} total={0} /> */}
-
-	<footer class="bg-navy-900 text-white/50 py-12 text-center border-t border-gold-500/10">
-		<p>© 2026 Cukrářství Blahutovi. Všechna práva vyhrazena.</p>
-	</footer>
+    <footer class="bg-[#0a192f] py-12 text-center text-white/30 text-xs border-t border-[#d4af37]/10">
+        <p>© 2026 Cukrářství Blahutovi | Všechna práva vyhrazena</p>
+    </footer>
 </Layout>
-
-<script is:inline>
-	// Jednoduchý skript pro mobilní menu
-	const toggle = document.getElementById('mobile-toggle');
-	const menu = document.getElementById('mobile-menu');
-	if (toggle && menu) {
-		toggle.addEventListener('click', () => {
-			menu.classList.toggle('hidden');
-		});
-	}
-</script>
