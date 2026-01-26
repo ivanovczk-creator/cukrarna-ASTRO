@@ -1,14 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import productsData from '../../data.json';
-import CustomCakeForm from '../components/CustomCakeForm';
-import ReservationForm from '../components/ReservationForm';
+// PŘIDÁNY PŘÍPONY .tsx - to vyřeší tu chybu "Could not resolve"
+import CustomCakeForm from '../components/CustomCakeForm.tsx';
+import ReservationForm from '../components/ReservationForm.tsx';
 import { Branch } from '../types';
 
 const cakes = (productsData?.cakes || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 
-// Pomocná data pro prodejny
 const stores = [
 	{ 
 		id: 'petrvald', 
