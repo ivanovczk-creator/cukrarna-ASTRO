@@ -6,10 +6,42 @@ const cakes = (productsData?.cakes || []).sort((a, b) => (a.weight ?? 999) - (b.
 const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 
 const stores = [
-	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1', phone: '+420 778 157 857', mapUrl: 'https://maps.app.goo.gl/0', closed: [1], hours: 'Út-Ne: 9:00 - 17:00' },
-	{ id: 'pist', name: 'Píšť', address: 'Opavská 218/101', phone: '+420 602 323 788', mapUrl: 'https://maps.app.goo.gl/1', closed: [0, 6], hours: 'Po-Pá: 6:00 - 15:00' },
-	{ id: 'karvina', name: 'Karviná', address: 'tř. Těreškovové 2233/28', phone: '+420 778 157 867', mapUrl: 'https://maps.app.goo.gl/2', closed: [0], hours: 'Po-Pá: 9:00 - 17:00' },
-	{ id: 'ostrava', name: 'Ostrava (Zábřeh)', address: 'Výškovická 116a', phone: '+420 775 271 101', mapUrl: 'https://maps.app.goo.gl/3', closed: [0], hours: 'Po-Pá: 9:00 - 17:00' }
+	{ 
+		id: 'petrvald', 
+		name: 'Petřvald', 
+		address: 'Šenovská 1', 
+		phone: '+420 778 157 857', 
+		mapUrl: 'https://www.google.com/maps/search/?api=1&query=Cukrářství+Blahutovi+Petřvald+Šenovská+1', 
+		closed: [1], 
+		hours: 'Út-Ne: 9:00 - 17:00' 
+	},
+	{ 
+		id: 'pist', 
+		name: 'Píšť', 
+		address: 'Opavská 218/101', 
+		phone: '+420 602 323 788', 
+		mapUrl: 'https://www.google.com/maps/search/?api=1&query=Cukrářství+Blahutovi+Píšť+Opavská+218', 
+		closed: [0, 6], 
+		hours: 'Po-Pá: 6:00 - 15:00' 
+	},
+	{ 
+		id: 'karvina', 
+		name: 'Karviná', 
+		address: 'tř. Těreškovové 2233/28', 
+		phone: '+420 778 157 867', 
+		mapUrl: 'https://www.google.com/maps/search/?api=1&query=Cukrářství+Blahutovi+Karviná+Těreškovové', 
+		closed: [0], 
+		hours: 'Po-Pá: 9:00 - 17:00' 
+	},
+	{ 
+		id: 'ostrava', 
+		name: 'Ostrava (Zábřeh)', 
+		address: 'Výškovická 116a', 
+		phone: '+420 775 271 101', 
+		mapUrl: 'https://www.google.com/maps/search/?api=1&query=Cukrářství+Blahutovi+Ostrava+Výškovická', 
+		closed: [0], 
+		hours: 'Po-Pá: 9:00 - 17:00' 
+	}
 ];
 ---
 
