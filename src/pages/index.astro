@@ -19,23 +19,16 @@ const stores = [
 	<style is:global>
 		:root { --navy: #0a192f; --gold: #d4af37; --offwhite: #fcfaf7; }
 		body { background-color: var(--offwhite); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; scroll-behavior: smooth; color: var(--navy); }
-		
 		header { background: var(--navy); padding: 1rem 0; color: white; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--gold); }
 		.nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 1rem; position: relative; }
-		
 		.nav-links { display: flex; gap: 1.5rem; align-items: center; }
 		.nav-links a { color: white; text-decoration: none; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; transition: 0.3s; }
-
 		.menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 10px; flex-direction: column; gap: 5px; z-index: 110; }
 		.menu-btn span { display: block; width: 25px; height: 3px; background: var(--gold); border-radius: 2px; }
 
 		@media (max-width: 900px) {
 			.menu-btn { display: flex; }
-			.nav-links { 
-				display: none; position: absolute; top: 100%; left: 0; width: 100%; 
-				background: var(--navy); flex-direction: column; padding: 2rem 0; 
-				border-bottom: 2px solid var(--gold); box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-			}
+			.nav-links { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: var(--navy); flex-direction: column; padding: 2rem 0; border-bottom: 2px solid var(--gold); }
 			.nav-links.active { display: flex; }
 			.nav-links a { font-size: 1.1rem; padding: 15px; width: 100%; text-align: center; }
 		}
@@ -43,15 +36,12 @@ const stores = [
 		.section-title { text-align: center; font-family: 'Playfair Display', serif; font-size: 2.5rem; margin: 4rem 0 2rem; }
 		.grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; padding: 0 1rem; }
 		.card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.05); text-align: center; }
-		
-		/* Oprava pro fotky */
 		.card-img-link { display: block; width: 100%; height: 280px; cursor: zoom-in; }
 		.card img { width: 100%; height: 100%; object-fit: cover; }
-		
 		.btn-add { background: var(--gold); color: var(--navy); padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: bold; border: none; cursor: pointer; }
 		.input-field { padding: 0.9rem; border-radius: 8px; border: 1px solid #ddd; width: 100%; box-sizing: border-box; margin-top: 5px; }
 
-		#cart-float { position: fixed; bottom: 30px; right: 30px; background: var(--gold); color: var(--navy); width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 1000; }
+		#cart-float { position: fixed; bottom: 30px; right: 30px; background: var(--gold); color: var(--navy); width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 1000; cursor:pointer; }
 		#cart-count { position: absolute; top: 0; right: 0; background: var(--navy); color: white; width: 22px; height: 22px; border-radius: 50%; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; font-weight: bold; }
 		#cart-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; padding: 15px; }
 		.modal-content { background: white; width: 100%; max-width: 500px; border-radius: 20px; padding: 2.5rem; max-height: 90vh; overflow-y: auto; position: relative; }
@@ -117,11 +107,11 @@ const stores = [
 	<section id="dort-na-prani" style="padding: 5rem 1rem; background: #eeeae4;">
 		<div style="max-width: 800px; margin: 0 auto; background: white; padding: 2.5rem; border-radius: 20px;">
 			<h2 style="text-align: center; font-family: 'Playfair Display'; margin-bottom: 1.5rem;">Dort na přání</h2>
-			<form name="dort-na-prani" method="POST" data-netlify="true" enctype="multipart/form-data">
+			<form name="dort-na-prani" method="POST" data-netlify="true" enctype="multipart/form-data" action="/dekujeme">
 				<input type="hidden" name="form-name" value="dort-na-prani" />
-				<input type="text" name="Jmeno" placeholder="Jméno" class="input-field" required />
-				<input type="email" name="Email" placeholder="E-mail" class="input-field" required />
-				<input type="tel" name="Telefon" placeholder="Telefon" class="input-field" required />
+				<input type="text" name="Jmeno" placeholder="Vaše jméno" class="input-field" required />
+				<input type="email" name="Email" placeholder="Váš e-mail" class="input-field" required />
+				<input type="tel" name="Telefon" placeholder="Váš telefon" class="input-field" required />
 				<textarea name="Popis" placeholder="Detaily o dortu..." class="input-field" style="height: 120px;"></textarea>
 				<label style="display: block; margin-top: 1.5rem; font-weight: bold;">Inspirační fotka:</label>
 				<input type="file" name="Soubor Fotka" accept="image/*" class="input-field" required />
@@ -133,27 +123,14 @@ const stores = [
 	<section id="b2b" style="background: var(--navy); color: white; padding: 5rem 1rem; text-align: center;">
 		<div style="max-width:600px; margin:0 auto; background: white; color: var(--navy); padding: 2rem; border-radius: 15px;">
 			<h2 style="font-family:'Playfair Display'; margin-top:0;">B2B Spolupráce</h2>
-			<form name="b2b-poptavka" method="POST" data-netlify="true">
+			<form name="b2b-poptavka" method="POST" data-netlify="true" action="/dekujeme">
 				<input type="hidden" name="form-name" value="b2b-poptavka" />
-				<input type="text" name="Firma" placeholder="Firma" class="input-field" required />
+				<input type="text" name="Firma" placeholder="Firma / Prodejna" class="input-field" required />
 				<input type="email" name="Email" placeholder="E-mail" class="input-field" required />
+				<input type="tel" name="Telefon" placeholder="Telefon" class="input-field" required />
 				<textarea name="Zprava" placeholder="Zpráva..." class="input-field"></textarea>
 				<button type="submit" class="btn-add" style="width: 100%; margin-top: 1.5rem;">Poptat spolupráci</button>
 			</form>
-		</div>
-	</section>
-
-	<section id="prodejny" style="padding: 5rem 1rem;">
-		<h2 class="section-title">Prodejny</h2>
-		<div class="grid">
-			{stores.map((s) => (
-				<div class="card" style="padding: 2.5rem; background: var(--navy); color: white; text-align: left;">
-					<h3 style="color:var(--gold); margin:0 0 10px 0;">{s.name}</h3>
-					<p>📍 {s.address}</p>
-					<p>📞 {s.phone}</p>
-					<a href={s.mapUrl} target="_blank" style="display:inline-block; margin-top:15px; color:var(--gold); font-weight:bold; text-decoration:none;">MAPA →</a>
-				</div>
-			))}
 		</div>
 	</section>
 
@@ -162,14 +139,17 @@ const stores = [
 			<button onclick="toggleModal(false)" style="position:absolute; right:25px; top:25px; border:none; background:none; font-size:1.5rem; cursor:pointer">✕</button>
 			<h2 style="font-family:'Playfair Display'; margin-top:0">Vaše rezervace</h2>
 			<div id="cart-items" style="margin: 1.5rem 0; border-bottom: 1px solid #eee; padding-bottom: 1rem;"></div>
-			<form name="objednavka-kosik" method="POST" data-netlify="true" id="order-form">
+			<form name="objednavka-kosik" method="POST" data-netlify="true" id="order-form" action="/dekujeme">
 				<input type="hidden" name="form-name" value="objednavka-kosik" />
-				<input type="hidden" name="seznam-zbozi" id="hidden-cart-details" />
+				<input type="hidden" name="Seznam zboží" id="hidden-cart-details" />
 				<select name="Prodejna" id="store-select" class="input-field" required>
+					<option value="">Vyberte prodejnu...</option>
 					{stores.map(s => <option value={s.name}>{s.name}</option>)}
 				</select>
 				<input type="date" name="Datum" id="date-input" class="input-field" required style="margin-top:10px" />
-				<input type="text" name="Jmeno" placeholder="Jméno" class="input-field" required style="margin-top:10px" />
+				<input type="text" name="Jmeno" placeholder="Celé jméno" class="input-field" required style="margin-top:10px" />
+				<input type="email" name="Email" placeholder="Váš e-mail" class="input-field" required style="margin-top:10px" />
+				<input type="tel" name="Telefon" placeholder="Váš telefon" class="input-field" required style="margin-top:10px" />
 				<button type="submit" class="btn-add" style="width:100%; margin-top:1.5rem">Odeslat objednávku</button>
 			</form>
 		</div>
@@ -180,26 +160,16 @@ const stores = [
 	</footer>
 
 	<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js" is:inline></script>
-
 	<script is:inline>
-		// INICIALIZACE LIGHTBOXU - OPRAVA NAČÍTÁNÍ
 		document.addEventListener('DOMContentLoaded', () => {
-			const lightbox = GLightbox({
-				selector: '.glightbox',
-				touchNavigation: true,
-				loop: true,
-				autoplayVideos: false,
-				type: 'image' // Toto vynutí načtení jako obrázek
-			});
+			const lightbox = GLightbox({ selector: '.glightbox', touchNavigation: true, loop: true, type: 'image' });
 		});
 
-		// MENU
 		const toggle = document.getElementById('mobile-toggle');
 		const nav = document.getElementById('main-nav');
 		toggle.onclick = () => nav.classList.toggle('active');
 		nav.onclick = () => nav.classList.remove('active');
 
-		// KOŠÍK
 		let cart = [];
 		function addToCart(title, price) {
 			const existing = cart.find(i => i.title === title);
