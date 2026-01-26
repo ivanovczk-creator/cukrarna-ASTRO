@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.cukrarstviblahutovi.cz/sitemap-index.xml
+Sitemap: https://cukrarstviblahutovi.cz/sitemap-index.xml
