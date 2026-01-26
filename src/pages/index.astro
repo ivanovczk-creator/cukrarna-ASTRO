@@ -11,32 +11,32 @@ const stores = [
 		name: 'Petřvald', 
 		address: 'Šenovská 1', 
 		phone: '+420 778 157 857', 
-		mapUrl: 'https://maps.app.goo.gl/3fR5k8Xp4Dq8o4E97', 
-		hours: 'Ut-Ne: 9:00 - 17:00 (Po: Zatvorené)' 
+		mapUrl: 'https://www.google.com/maps/search/?api=1&query=Cukrářství+Blahutovi+Petřvald', 
+		hours: 'Út-Ne: 9:00 - 17:00 (Po: Zavřeno)' 
 	},
 	{ 
 		id: 'pist', 
 		name: 'Píšť', 
 		address: 'Opavská 218/101', 
 		phone: '+420 602 323 788', 
-		mapUrl: 'https://maps.app.goo.gl/yYvS6o6y7Z4U6Y7Y9', 
-		hours: 'Po-Pi: 6:00 - 15:00 (So-Ne: Zatvorené)' 
+		mapUrl: 'https://www.google.com/maps/search/?api=1&query=Cukrářství+Blahutovi+Píšť', 
+		hours: 'Po-Pá: 6:00 - 15:00 (So-Ne: Zavřeno)' 
 	},
 	{ 
 		id: 'karvina', 
 		name: 'Karviná', 
 		address: 'tř. Těreškovové 2233/28', 
 		phone: '+420 778 157 867', 
-		mapUrl: 'https://maps.app.goo.gl/8v3R4Wp9Dk8y4E987', 
-		hours: 'Po-Pi: 9:00 - 17:00, So: 8:00 - 12:00 (Ne: Zatvorené)' 
+		mapUrl: 'https://www.google.com/maps/search/?api=1&query=Cukrářství+Blahutovi+Karviná', 
+		hours: 'Po-Pá: 9:00 - 17:00, So: 8:00 - 12:00 (Ne: Zavřeno)' 
 	},
 	{ 
 		id: 'ostrava', 
 		name: 'Ostrava (Zábřeh)', 
 		address: 'Výškovická 116a', 
 		phone: '+420 775 271 101', 
-		mapUrl: 'https://maps.app.goo.gl/9v4S5Wp1Ek9z5F098', 
-		hours: 'Po-Pi: 9:00 - 17:00, So: 9:00 - 12:00 (Ne: Zatvorené)' 
+		mapUrl: 'https://www.google.com/maps/search/?api=1&query=Cukrářství+Blahutovi+Ostrava', 
+		hours: 'Po-Pá: 9:00 - 17:00, So: 9:00 - 12:00 (Ne: Zavřeno)' 
 	}
 ];
 ---
@@ -130,9 +130,9 @@ const stores = [
 	<section id="dort-na-prani" style="padding: 5rem 1rem; background: #eeeae4;">
 		<div style="max-width: 800px; margin: 0 auto; background: white; padding: 2.5rem; border-radius: 20px;">
 			<h2 style="text-align: center; font-family: 'Playfair Display'; margin-bottom: 1.5rem;">Dort na přání</h2>
-			<form name="dort-na-prani" method="POST" data-netlify="true" enctype="multipart/form-data" action="/dekujeme">
+			<form name="dort-na-prani" method="POST" data-netlify="true" enctype="multipart/form-data" action="/dekujeme/">
 				<input type="hidden" name="form-name" value="dort-na-prani" />
-				<input type="text" name="Jméno" placeholder="Vaše jméno" class="input-field" required />
+				<input type="text" name="Jmeno" placeholder="Vaše jméno" class="input-field" required />
 				<input type="email" name="Email" placeholder="Váš e-mail" class="input-field" required />
 				<input type="tel" name="Telefon" placeholder="Váš telefon" class="input-field" required />
 				<textarea name="Popis" placeholder="Popište mi svou představu o dortu..." class="input-field" style="height: 120px;"></textarea>
@@ -146,11 +146,11 @@ const stores = [
 	<section id="b2b" style="background: var(--navy); color: white; padding: 5rem 1rem; text-align: center;">
 		<div style="max-width:600px; margin:0 auto; background: white; color: var(--navy); padding: 2rem; border-radius: 15px;">
 			<h2 style="font-family:'Playfair Display'; margin-top:0;">B2B Spolupráce</h2>
-			<form name="b2b-poptavka" method="POST" data-netlify="true" action="/dekujeme">
+			<form name="b2b-poptavka" method="POST" data-netlify="true" action="/dekujeme/">
 				<input type="hidden" name="form-name" value="b2b-poptavka" />
 				<input type="text" name="Firma" placeholder="Název vaší firmy" class="input-field" required />
 				<input type="email" name="Email" placeholder="E-mail" class="input-field" required />
-				<textarea name="Zpráva" placeholder="V čem bychom mohli spolupracovat?" class="input-field"></textarea>
+				<textarea name="Zprava" placeholder="V čem bychom mohli spolupracovat?" class="input-field"></textarea>
 				<button type="submit" class="btn-add" style="width: 100%; margin-top: 1.5rem;">Odeslat poptávku</button>
 			</form>
 		</div>
@@ -165,7 +165,7 @@ const stores = [
 					<p>📍 {s.address}</p>
 					<p>📞 {s.phone}</p>
 					<p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.7;">{s.hours}</p>
-					<a href={s.mapUrl} target="_blank" style="display:inline-block; margin-top:15px; color:var(--gold); text-decoration:none; font-weight:bold;">MAPA →</a>
+					<a href={s.mapUrl} target="_blank" rel="noopener noreferrer" style="display:inline-block; margin-top:15px; color:var(--gold); text-decoration:none; font-weight:bold;">MAPA →</a>
 				</div>
 			))}
 		</div>
@@ -181,15 +181,15 @@ const stores = [
 			<button onclick="toggleModal(false)" style="position:absolute; right:25px; top:25px; border:none; background:none; font-size:1.5rem; cursor:pointer">✕</button>
 			<h2 style="font-family:'Playfair Display'; margin-top:0">Vaše rezervace</h2>
 			<div id="cart-items" style="margin: 1.5rem 0; border-bottom: 1px solid #eee; padding-bottom: 1rem;"></div>
-			<form name="objednavka-kosik" method="POST" data-netlify="true" id="order-form" action="/dekujeme">
+			<form name="objednavka-kosik" method="POST" data-netlify="true" id="order-form" action="/dekujeme/">
 				<input type="hidden" name="form-name" value="objednavka-kosik" />
-				<input type="hidden" name="Zboží" id="hidden-cart-details" />
+				<input type="hidden" name="Zbozi" id="hidden-cart-details" />
 				<select name="Prodejna" class="input-field" required>
 					<option value="">Vyberte prodejnu...</option>
 					{stores.map(s => <option value={s.name}>{s.name}</option>)}
 				</select>
 				<input type="date" name="Datum" class="input-field" required style="margin-top:10px" />
-				<input type="text" name="Jméno" placeholder="Jméno" class="input-field" required style="margin-top:10px" />
+				<input type="text" name="Jmeno" placeholder="Jméno" class="input-field" required style="margin-top:10px" />
 				<input type="email" name="Email" placeholder="E-mail" class="input-field" required style="margin-top:10px" />
 				<input type="tel" name="Telefon" placeholder="Telefon" class="input-field" required style="margin-top:10px" />
 				<button type="submit" class="btn-add" style="width:100%; margin-top:1.5rem">Odeslat objednávku</button>
@@ -211,7 +211,6 @@ const stores = [
 		const nav = document.getElementById('main-nav');
 		toggle.onclick = () => nav.classList.toggle('active');
 		
-		// Zavření menu po kliknutí na odkaz
 		nav.querySelectorAll('a').forEach(link => {
 			link.onclick = () => nav.classList.remove('active');
 		});
