@@ -10,9 +10,10 @@ export default {
         },
         gold: {
           500: '#d4af37',
+          600: '#b8860b',
         }
       },
     },
   },
   plugins: [],
-}
+};
