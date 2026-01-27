@@ -146,7 +146,9 @@ const stores = [
 		<input name="Jmeno" />
 		<input name="Email" />
 		<input name="Telefon" />
-		<select name="Prodejna"></select>
+		<input name="Prodejna" />
+		<input name="Datum" />
+		<textarea name="Poznamka"></textarea>
 		<textarea name="Produkty-Seznam"></textarea>
 	</form>
 
@@ -176,8 +178,6 @@ const stores = [
 
 	<script is:inline>
 		const menuToggle = document.getElementById('menu-toggle');
-		const mobileMenu = document.getElementById('mobile-menu');
-		// Mobilní menu logika (pokud existuje v Layout.astro, zde není potřeba, ale pro jistotu)
 		if (menuToggle) {
 			menuToggle.onclick = () => {
 				const nav = document.querySelector('nav');
@@ -190,6 +190,7 @@ const stores = [
 				nav.classList.toggle('bg-[#0a192f]');
 				nav.classList.toggle('flex-col');
 				nav.classList.toggle('p-6');
+				nav.classList.toggle('z-50');
 			};
 		}
 	</script>
