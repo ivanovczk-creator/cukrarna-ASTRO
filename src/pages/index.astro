@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import productsData from '../../data.json';
 import CustomCakeForm from '../components/CustomCakeForm';
 import ReservationForm from '../components/ReservationForm.tsx';
+import EdiblePrintForm from '../components/EdiblePrintForm.tsx';
 
 const cakes = (productsData?.cakes || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
@@ -19,16 +20,17 @@ const stores = [
 	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
 		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
 			<h1 class="text-xl md:text-2xl font-serif text-[#d4af37]">Cukrářství Blahutovi</h1>
-			<nav class="hidden md:flex gap-6 uppercase text-xs font-bold tracking-widest text-white/90">
+			<nav class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-white/90">
 				<a href="#dorty" class="hover:text-[#d4af37]">Dorty</a>
 				<a href="#zakusky" class="hover:text-[#d4af37]">Zákusky</a>
 				<a href="#dort-na-prani" class="hover:text-[#d4af37]">Dort na přání</a>
+				<a href="#jedly-tisk" class="hover:text-[#d4af37]">Jedlý tisk</a>
 				<a href="#prodejny" class="hover:text-[#d4af37]">Prodejny</a>
 				<a href="#b2b" class="hover:text-[#d4af37]">Pro firmy</a>
 			</nav>
 			<div class="flex items-center gap-4">
 				<ReservationForm client:load />
-				<button id="menu-toggle" class="md:hidden text-[#d4af37]">
+				<button id="menu-toggle" class="lg:hidden text-[#d4af37]">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
 					</svg>
@@ -44,24 +46,11 @@ const stores = [
 				{cakes.map(cake => (
 					<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col text-[#0a192f]">
 						<div class="h-64 overflow-hidden relative">
-							<a href={cake.foto} class="glightbox">
-								<img src={cake.foto} alt={cake.title} class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" loading="lazy" />
-							</a>
+							<a href={cake.foto} class="glightbox"><img src={cake.foto} alt={cake.title} class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" /></a>
 						</div>
 						<div class="p-6 text-center flex-grow flex flex-col justify-between">
-							<div>
-								<h3 class="text-xl font-bold mb-1">{cake.title}</h3>
-								<p class="text-slate-500 text-sm mb-4">{cake.porce}</p>
-							</div>
-							<div>
-								<p class="text-[#d4af37] font-black text-2xl mb-4">{cake.cena}</p>
-								<button 
-									onclick={`window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: '${cake.title}', price: '${cake.cena}', img: '${cake.foto}' } }))`}
-									class="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all active:scale-95"
-								>
-									Přidat do objednávky
-								</button>
-							</div>
+							<div><h3 class="text-xl font-bold mb-1">{cake.title}</h3><p class="text-slate-500 text-sm mb-4">{cake.porce}</p></div>
+							<div><p class="text-[#d4af37] font-black text-2xl mb-4">{cake.cena}</p><button onclick={`window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: '${cake.title}', price: '${cake.cena}', img: '${cake.foto}' } }))`} class="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all shadow-lg">Do košíku</button></div>
 						</div>
 					</div>
 				))}
@@ -75,21 +64,11 @@ const stores = [
 					{desserts.map(dessert => (
 						<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col">
 							<div class="h-56 overflow-hidden relative">
-								<a href={dessert.foto} class="glightbox">
-									<img src={dessert.foto} alt={dessert.title} class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" loading="lazy" />
-								</a>
+								<a href={dessert.foto} class="glightbox"><img src={dessert.foto} alt={dessert.title} class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" /></a>
 							</div>
 							<div class="p-6 text-center flex-grow flex flex-col justify-between">
 								<h3 class="text-lg font-bold mb-1 leading-tight">{dessert.title}</h3>
-								<div>
-									<p class="text-[#d4af37] font-black text-xl mb-4">{dessert.cena}</p>
-									<button 
-										onclick={`window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: '${dessert.title}', price: '${dessert.cena}', img: '${dessert.foto}' } }))`}
-										class="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all active:scale-95"
-									>
-										Přidat do objednávky
-									</button>
-								</div>
+								<div><p class="text-[#d4af37] font-black text-xl mb-4">{dessert.cena}</p><button onclick={`window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: '${dessert.title}', price: '${dessert.cena}', img: '${dessert.foto}' } }))`} class="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all shadow-lg">Do košíku</button></div>
 							</div>
 						</div>
 					))}
@@ -97,62 +76,40 @@ const stores = [
 			</div>
 		</section>
 
+		<section id="jedly-tisk" class="py-20 px-4 bg-white">
+			<EdiblePrintForm client:load />
+		</section>
+
+		<section id="dort-na-prani" class="py-20 px-4 bg-slate-50">
+			<CustomCakeForm client:load />
+		</section>
+
 		<section id="b2b" class="py-24 bg-[#0a192f] text-white">
 			<div class="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-				<div>
-					<h2 class="text-4xl font-serif text-[#d4af37] mb-6 italic">Partnerství pro firmy</h2>
-					<p class="text-slate-300 mb-6 italic">Zajišťujeme pravidelný závoz gastro provozů a prodejen v okresech Opava, Ostrava, Havířov, Bohumín a Karviná.</p>
-				</div>
+				<div><h2 class="text-4xl font-serif text-[#d4af37] mb-6 italic">Partnerství pro firmy</h2><p class="text-slate-300">Pravidelný závoz gastro provozů v okresech Opava, Ostrava, Havířov, Bohumín a Karviná.</p></div>
 				<div class="bg-white/5 p-8 rounded-[3rem] border border-[#d4af37]/20 shadow-2xl">
 					<form name="b2b-poptavka" method="POST" data-netlify="true" action="/dekujeme" class="space-y-4">
-						<input type="hidden" name="form-name" value="b2b-poptavka" />
-						<input type="text" name="Firma" placeholder="Název firmy" required class="w-full p-4 bg-white/10 border-none rounded-2xl text-white outline-none" />
-						<input type="email" name="Email" placeholder="Váš e-mail" required class="w-full p-4 bg-white/10 border-none rounded-2xl text-white outline-none" />
-						<textarea name="Zprava" placeholder="Vaše představa..." required class="w-full p-4 h-32 bg-white/10 border-none rounded-2xl text-white outline-none"></textarea>
-						<button type="submit" class="w-full bg-[#d4af37] text-[#0a192f] py-4 rounded-2xl font-bold hover:bg-white transition-all shadow-lg active:scale-95">Odeslat poptávku</button>
+						<input type="hidden" name="form-name" value="b2b-poptavka" /><input type="text" name="Firma" placeholder="Firma" required class="w-full p-4 bg-white/10 rounded-2xl text-white outline-none" /><input type="email" name="Email" placeholder="E-mail" required class="w-full p-4 bg-white/10 rounded-2xl text-white outline-none" /><textarea name="Zprava" placeholder="Zpráva" required class="w-full p-4 h-32 bg-white/10 rounded-2xl text-white outline-none"></textarea><button type="submit" class="w-full bg-[#d4af37] text-[#0a192f] py-4 rounded-2xl font-bold hover:bg-white transition-all">Odeslat</button>
 					</form>
 				</div>
 			</div>
-		</section>
-
-		<section id="dort-na-prani" class="py-20 px-4">
-			<CustomCakeForm client:load />
 		</section>
 
 		<section id="prodejny" class="py-20 px-4 max-w-7xl mx-auto text-[#0a192f]">
 			<h2 class="text-4xl font-serif text-center mb-12 italic">Navštivte nás</h2>
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-white">
 				{stores.map(store => (
-					<div class="bg-[#0a192f] p-6 rounded-[2rem] border border-[#d4af37]/20 shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1">
-						<div>
-							<h3 class="text-[#d4af37] font-bold mb-3 text-xl">{store.name}</h3>
-							<p class="text-sm opacity-80 mb-1 leading-relaxed">{store.address}</p>
-							<p class="text-sm font-bold mb-4">{store.phone}</p>
-						</div>
-						<a href={store.mapUrl} target="_blank" class="block w-full text-center py-3 rounded-xl border border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#0a192f] transition-all font-bold text-xs uppercase tracking-widest">Mapa</a>
+					<div class="bg-[#0a192f] p-6 rounded-[2rem] shadow-xl flex flex-col justify-between">
+						<div><h3 class="text-[#d4af37] font-bold mb-3 text-xl">{store.name}</h3><p class="text-sm opacity-80 mb-1">{store.address}</p><p class="text-sm font-bold mb-4">{store.phone}</p></div>
+						<a href={store.mapUrl} target="_blank" class="block w-full text-center py-3 rounded-xl border border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#0a192f] font-bold text-xs uppercase tracking-widest">Mapa</a>
 					</div>
 				))}
 			</div>
 		</section>
 	</main>
 
-	<form name="objednavka" data-netlify="true" hidden>
-		<input name="Jmeno" /><input name="Email" /><input name="Telefon" /><select name="Prodejna"></select><textarea name="Produkty-Seznam"></textarea>
-	</form>
-	<form name="dort-na-prani" data-netlify="true" hidden>
-		<input name="Jmeno" /><input name="Email" /><input name="Telefon" /><textarea name="Zprava" /><input type="file" name="Inspiro-Foto" />
-	</form>
-	<form name="b2b-poptavka" data-netlify="true" hidden>
-		<input name="Firma" /><input name="Email" /><textarea name="Zprava" />
-	</form>
-
-	<script is:inline>
-		const menuToggle = document.getElementById('menu-toggle');
-		const mobileMenu = document.getElementById('mobile-menu');
-		if (menuToggle) {
-			menuToggle.onclick = () => {
-				mobileMenu.classList.toggle('hidden');
-			};
-		}
-	</script>
+	<form name="objednavka" data-netlify="true" hidden><input name="Jmeno"/><input name="Email"/><input name="Telefon"/><select name="Prodejna"></select><textarea name="Produkty-Seznam"></textarea></form>
+	<form name="dort-na-prani" data-netlify="true" hidden><input name="Jmeno"/><input name="Email"/><input name="Telefon"/><textarea name="Zprava"/><input type="file" name="Inspiro-Foto"/></form>
+	<form name="tisk-na-papir" data-netlify="true" hidden><input name="Jmeno"/><input name="Email"/><input name="Telefon"/><input type="file" name="Tisk-Soubor"/><textarea name="Zprava"/></form>
+	<form name="b2b-poptavka" data-netlify="true" hidden><input name="Firma"/><input name="Email"/><textarea name="Zprava"/></form>
 </Layout>
