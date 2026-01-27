@@ -23,6 +23,14 @@ const {
 		<title>{title}</title>
 		<meta name="description" content={description} />
 		<meta name="keywords" content={keywords} />
+
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-5JPLYYKGGN"></script>
+		<script is:inline>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+		  gtag('config', 'G-5JPLYYKGGN');
+		</script>
 		
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -109,8 +117,14 @@ const {
 
 	.glightbox-container { z-index: 9999 !important; }
 
-	/* Custom utility třídy pro jistotu */
+	/* Custom utility třídy */
 	.bg-navy-900 { background-color: var(--navy-900) !important; }
 	.text-navy-900 { color: var(--navy-900) !important; }
 	.text-gold-500 { color: var(--gold-500) !important; }
+
+	/* Pěkný scrollbar */
+	::-webkit-scrollbar { width: 10px; }
+	::-webkit-scrollbar-track { background: #f1f1f1; }
+	::-webkit-scrollbar-thumb { background: #0a192f; border-radius: 5px; }
+	::-webkit-scrollbar-thumb:hover { background: #d4af37; }
 </style>
