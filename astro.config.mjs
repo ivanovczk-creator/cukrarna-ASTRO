@@ -1,7 +1,11 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
+import tailwind from '@astrojs/tailwind';
 
+// Nyní bezpečně integrujeme Tailwind přímo do sestavení webu
 export default defineConfig({
-  // Necháme jen react, tailwind vyhodíme, aby to neházelo chybu
-  integrations: [react()],
+  integrations: [
+    react(), 
+    tailwind()
+  ],
 });
