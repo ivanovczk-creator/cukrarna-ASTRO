@@ -26,10 +26,10 @@ const {
 
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-5JPLYYKGGN"></script>
 		<script is:inline>
-		  window.dataLayer = window.dataLayer || [];
-		  function gtag(){dataLayer.push(arguments);}
-		  gtag('js', new Date());
-		  gtag('config', 'G-5JPLYYKGGN');
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'G-5JPLYYKGGN');
 		</script>
 		
 		<link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,9 +54,20 @@ const {
 				const nav = document.querySelector('nav');
 				
 				if (menuToggle && nav) {
+					// Nastavení výchozích ARIA stavů pro roboty
+					menuToggle.setAttribute('aria-expanded', 'false');
+					menuToggle.setAttribute('aria-controls', 'main-nav');
+					nav.setAttribute('id', 'main-nav');
+
 					menuToggle.onclick = () => {
+						const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+						
+						// Přepnutí stavů
+						menuToggle.setAttribute('aria-expanded', !isExpanded);
 						nav.classList.toggle('hidden');
 						nav.classList.toggle('flex');
+						
+						// Přidání/odebrání mobilních tříd
 						nav.classList.toggle('absolute');
 						nav.classList.toggle('top-20');
 						nav.classList.toggle('left-0');
@@ -67,24 +78,23 @@ const {
 						nav.classList.toggle('z-50');
 					};
 
-					// Zavřít menu po kliknutí na odkaz
+					// Zavřít menu po kliknutí na odkaz (pro plynulý scroll)
 					const navLinks = nav.querySelectorAll('a');
 					navLinks.forEach(link => {
 						link.onclick = () => {
 							if (!nav.classList.contains('hidden')) {
 								nav.classList.add('hidden');
 								nav.classList.remove('flex', 'absolute', 'top-20', 'left-0', 'w-full', 'bg-[#0a192f]', 'flex-col', 'p-6', 'z-50');
+								menuToggle.setAttribute('aria-expanded', 'false');
 							}
 						};
 					});
 				}
 			}
 
-			// Spuštění při načtení
 			initLightbox();
 			initMobileMenu();
 			
-			// Spuštění při přechodu mezi stránkami (Astro view transitions)
 			document.addEventListener('astro:after-swap', () => {
 				initLightbox();
 				initMobileMenu();
@@ -103,22 +113,21 @@ const {
 		--offwhite: #f8f9fa;
 	}
 
-	html { 
-		scroll-behavior: smooth; 
-		scroll-padding-top: 80px; 
+	html {
+		scroll-behavior: smooth;
+		scroll-padding-top: 80px;
 	}
 
-	body { 
-		font-family: 'Inter', sans-serif; 
-		margin: 0; 
-		overflow-x: hidden; 
+	body {
+		font-family: 'Inter', sans-serif;
+		margin: 0;
+		overflow-x: hidden;
 	}
 
 	h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
 
 	.glightbox-container { z-index: 9999 !important; }
 
-	/* Custom utility třídy */
 	.bg-navy-900 { background-color: var(--navy-900) !important; }
 	.text-navy-900 { color: var(--navy-900) !important; }
 	.text-gold-500 { color: var(--gold-500) !important; }
