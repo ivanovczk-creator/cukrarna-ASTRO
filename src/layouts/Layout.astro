@@ -50,20 +50,41 @@ const {
 			}
 
 			function initMobileMenu() {
-				const nav = document.querySelector('.nav-links');
-				const links = document.querySelectorAll('.nav-links a');
-				if (nav) {
-					links.forEach(link => {
-						link.addEventListener('click', () => {
-							nav.classList.remove('active');
-						});
+				const menuToggle = document.getElementById('menu-toggle');
+				const nav = document.querySelector('nav');
+				
+				if (menuToggle && nav) {
+					menuToggle.onclick = () => {
+						nav.classList.toggle('hidden');
+						nav.classList.toggle('flex');
+						nav.classList.toggle('absolute');
+						nav.classList.toggle('top-20');
+						nav.classList.toggle('left-0');
+						nav.classList.toggle('w-full');
+						nav.classList.toggle('bg-[#0a192f]');
+						nav.classList.toggle('flex-col');
+						nav.classList.toggle('p-6');
+						nav.classList.toggle('z-50');
+					};
+
+					// Zavřít menu po kliknutí na odkaz
+					const navLinks = nav.querySelectorAll('a');
+					navLinks.forEach(link => {
+						link.onclick = () => {
+							if (!nav.classList.contains('hidden')) {
+								nav.classList.add('hidden');
+								nav.classList.remove('flex', 'absolute', 'top-20', 'left-0', 'w-full', 'bg-[#0a192f]', 'flex-col', 'p-6', 'z-50');
+							}
+						};
 					});
 				}
 			}
 
+			// Spuštění při načtení
 			initLightbox();
 			initMobileMenu();
 			
+			// Spuštění při přechodu mezi stránkami (Astro view transitions)
 			document.addEventListener('astro:after-swap', () => {
 				initLightbox();
 				initMobileMenu();
