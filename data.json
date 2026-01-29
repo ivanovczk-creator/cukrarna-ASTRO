@@ -481,6 +481,86 @@
       "porce": "20 porcí",
       "foto": "/img/dorty/61.jpg",
       "kategorie": "dorty"
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty"
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty"
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty"
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty"
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty"
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty"
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty"
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty"
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty"
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty"
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty"
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty"
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty"
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty"
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty"
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty"
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty"
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty"
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty"
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty"
     }
   ],
   "desserts": [
@@ -566,14 +646,6 @@
       "weight": 5
     },
     {
-      "id": "d12",
-      "title": "12",
-      "cena": "55 Kč",
-      "foto": "/img/zakusky/12.jpg",
-      "kategorie": "zakusky",
-      "weight": 11
-    },
-    {
       "id": "d13",
       "title": "Karamelová tartaletka",
       "cena": "55 Kč",
@@ -592,7 +664,7 @@
       "id": "d15",
       "title": "Tiramisu",
       "cena": "65 Kč",
-      "foto": "/img/zakusky/15.jpg",
+      "foto": "",
       "kategorie": "zakusky"
     },
     {
@@ -602,13 +674,6 @@
       "foto": "/img/zakusky/16.jpg",
       "kategorie": "zakusky",
       "weight": 44
-    },
-    {
-      "id": "d17",
-      "title": "Zákusek č. 17",
-      "cena": "0 Kč",
-      "foto": "/img/zakusky/17.jpg",
-      "kategorie": "zakusky"
     },
     {
       "id": "d18",
@@ -657,7 +722,7 @@
     },
     {
       "id": "d26",
-      "title": "Zákusek č. 26",
+      "title": "Jablečný řez",
       "cena": "0 Kč",
       "foto": "/img/zakusky/26.jpg",
       "kategorie": "zakusky"
@@ -667,13 +732,6 @@
       "title": "Punčový",
       "cena": "0 Kč",
       "foto": "/img/zakusky/27.jpg",
-      "kategorie": "zakusky"
-    },
-    {
-      "id": "d28",
-      "title": "Zákusek č. 28",
-      "cena": "50 Kč",
-      "foto": "/img/zakusky/28.jpg",
       "kategorie": "zakusky"
     },
     {
@@ -743,13 +801,6 @@
       "kategorie": "zakusky"
     },
     {
-      "id": "d38",
-      "title": "Zákusek č. 38",
-      "cena": "0 Kč",
-      "foto": "/img/zakusky/38.jpg",
-      "kategorie": "zakusky"
-    },
-    {
       "id": "d40",
       "title": "Toffi",
       "cena": "55 Kč",
@@ -801,7 +852,7 @@
     },
     {
       "id": "d49",
-      "title": "Věneček",
+      "title": "Věneček s fondánem",
       "cena": "40 Kč",
       "foto": "/img/zakusky/49.jpg",
       "kategorie": "zakusky",
@@ -875,7 +926,7 @@
     },
     {
       "id": "d62",
-      "title": "Zákusek č. 62",
+      "title": "Višňový dort mascarpone",
       "cena": "0 Kč",
       "foto": "/img/zakusky/62.jpg",
       "kategorie": "zakusky"
