@@ -885,13 +885,15 @@
       "kategorie": "zakusky",
       "id": "",
       "cena": "50 Kč",
-      "title": "Tvarohový řez"
+      "title": "Tvarohový řez",
+      "foto": "/img/zakusky/tvaroh.jpg"
     },
     {
-      "weight": 100,
+      "weight": 55,
       "kategorie": "zakusky",
       "title": "Kokosová lahůdka",
-      "cena": "50 Kč"
+      "cena": "50 Kč",
+      "foto": "/img/zakusky/kokos lahudka.jpg"
     },
     {
       "weight": 100,
@@ -923,19 +925,22 @@
       "weight": 100,
       "kategorie": "zakusky",
       "title": "Pavlova ",
-      "cena": "70 Kč"
+      "cena": "70 Kč",
+      "foto": "/img/zakusky/pavlova web.jpg"
     },
     {
       "weight": 100,
       "kategorie": "zakusky",
       "title": "Pistáciový dortík",
-      "cena": "70 Kš"
+      "cena": "70 Kš",
+      "foto": "/img/zakusky/pistaciovy dortik.jpg"
     },
     {
       "weight": 100,
       "kategorie": "zakusky",
       "title": "Větrník malinový mascarpone",
-      "cena": "50 Kč"
+      "cena": "50 Kč",
+      "foto": "/img/zakusky/vetrnik malina.jpg"
     },
     {
       "weight": 100,
@@ -953,13 +958,15 @@
       "weight": 100,
       "kategorie": "zakusky",
       "title": "Jahodový dortík",
-      "cena": "65 Kč"
+      "cena": "65 Kč",
+      "foto": "/img/zakusky/jahodovy dortik v misce.jpg"
     },
     {
       "weight": 100,
       "kategorie": "zakusky",
       "title": "Špička v kelímku",
-      "cena": "65 Kč"
+      "cena": "65 Kč",
+      "foto": "/img/zakusky/spicka v kelimku.jpg"
     },
     {
       "weight": 100,
@@ -979,13 +986,15 @@
       "weight": 100,
       "kategorie": "zakusky",
       "title": "Malinový dort mascarpone",
-      "cena": "75 Kč"
+      "cena": "75 Kč",
+      "foto": "/img/zakusky/malinovy dort.jpg"
     },
     {
-      "weight": 100,
+      "weight": 3,
       "kategorie": "zakusky",
       "title": "Schwarzwaldský dort",
-      "cena": "75 Kč"
+      "cena": "75 Kč",
+      "foto": "/img/zakusky/schwarzvald.jpg"
     },
     {
       "weight": 100,
