@@ -481,86 +481,6 @@
       "porce": "20 porcí",
       "foto": "/img/dorty/61.jpg",
       "kategorie": "dorty"
-    },
-    {
-      "weight": 100,
-      "kategorie": "dorty"
-    },
-    {
-      "weight": 100,
-      "kategorie": "dorty"
-    },
-    {
-      "weight": 100,
-      "kategorie": "dorty"
-    },
-    {
-      "weight": 100,
-      "kategorie": "dorty"
-    },
-    {
-      "weight": 100,
-      "kategorie": "dorty"
-    },
-    {
-      "weight": 100,
-      "kategorie": "dorty"
-    },
-    {
-      "weight": 100,
-      "kategorie": "dorty"
-    },
-    {
-      "weight": 100,
-      "kategorie": "dorty"
-    },
-    {
-      "weight": 100,
-      "kategorie": "dorty"
-    },
-    {
-      "weight": 100,
-      "kategorie": "dorty"
-    },
-    {
-      "weight": 100,
-      "kategorie": "dorty"
-    },
-    {
-      "weight": 100,
-      "kategorie": "dorty"
-    },
-    {
-      "weight": 100,
-      "kategorie": "dorty"
-    },
-    {
-      "weight": 100,
-      "kategorie": "dorty"
-    },
-    {
-      "weight": 100,
-      "kategorie": "dorty"
-    },
-    {
-      "weight": 100,
-      "kategorie": "dorty"
-    },
-    {
-      "weight": 100,
-      "kategorie": "dorty"
-    },
-    {
-      "weight": 100,
-      "kategorie": "dorty"
-    },
-    {
-      "weight": 100,
-      "kategorie": "dorty"
-    },
-    {
-      "weight": 100,
-      "kategorie": "dorty"
     }
   ],
   "desserts": [
@@ -959,6 +879,127 @@
       "cena": "45 Kč",
       "foto": "/img/zakusky/71.jpg",
       "kategorie": "zakusky"
+    },
+    {
+      "weight": 100,
+      "kategorie": "zakusky",
+      "id": "",
+      "cena": "50 Kč",
+      "title": "Tvarohový řez"
+    },
+    {
+      "weight": 100,
+      "kategorie": "zakusky",
+      "title": "Kokosová lahůdka",
+      "cena": "50 Kč"
+    },
+    {
+      "weight": 100,
+      "kategorie": "zakusky",
+      "title": "Cupcake",
+      "cena": "50 Kč"
+    },
+    {
+      "weight": 100,
+      "kategorie": "zakusky",
+      "id": "Nanuk nepečený",
+      "cena": "55 Kč"
+    },
+    {
+      "weight": 100,
+      "kategorie": "zakusky",
+      "title": "Černý rybíz",
+      "cena": "50 Kč"
+    },
+    {
+      "weight": 100,
+      "kategorie": "zakusky",
+      "title": "Red Velvet",
+      "cena": "70 Kč"
+    },
+    {
+      "weight": 100,
+      "kategorie": "zakusky",
+      "title": "Pavlova ",
+      "cena": "70 Kč"
+    },
+    {
+      "weight": 100,
+      "kategorie": "zakusky",
+      "title": "Pistáciový dortík",
+      "cena": "70 Kš"
+    },
+    {
+      "weight": 100,
+      "kategorie": "zakusky",
+      "title": "Větrník malinový mascarpone",
+      "cena": "50 Kč"
+    },
+    {
+      "weight": 100,
+      "kategorie": "zakusky",
+      "title": "Větrník slaný karamel",
+      "cena": "45Kč"
+    },
+    {
+      "weight": 100,
+      "kategorie": "zakusky",
+      "title": "Sachr dort",
+      "cena": "65 Kč"
+    },
+    {
+      "weight": 100,
+      "kategorie": "zakusky",
+      "title": "Jahodový dortík",
+      "cena": "65 Kč"
+    },
+    {
+      "weight": 100,
+      "kategorie": "zakusky",
+      "title": "Špička v kelímku",
+      "cena": "65 Kč"
+    },
+    {
+      "weight": 100,
+      "kategorie": "zakusky",
+      "title": "Šodo čokoládové",
+      "cena": "60 Kč"
+    },
+    {
+      "weight": 100,
+      "kategorie": "zakusky",
+      "title": "Brownies koule",
+      "cena": "45 Kč"
+    },
+    {
+      "weight": 100,
+      "kategorie": "zakusky",
+      "title": "Malinový dort mascarpone",
+      "cena": "75 Kč"
+    },
+    {
+      "weight": 100,
+      "kategorie": "zakusky",
+      "title": "Schwarzwaldský dort",
+      "cena": "75 Kč"
+    },
+    {
+      "weight": 100,
+      "kategorie": "zakusky",
+      "title": "Cheesecake malinový",
+      "cena": "70 Kč"
+    },
+    {
+      "weight": 100,
+      "kategorie": "zakusky",
+      "title": "Jahodový dort mascarpone",
+      "cena": "75 Kč"
+    },
+    {
+      "weight": 100,
+      "kategorie": "zakusky",
+      "title": "Cheesecake borůvkový",
+      "cena": "70 Kč"
     }
   ]
 }
