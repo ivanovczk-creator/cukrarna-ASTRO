@@ -902,8 +902,9 @@
     {
       "weight": 100,
       "kategorie": "zakusky",
-      "id": "Nanuk nepečený",
-      "cena": "55 Kč"
+      "id": "",
+      "cena": "55 Kč",
+      "title": "Nanuk nepečený"
     },
     {
       "weight": 100,
