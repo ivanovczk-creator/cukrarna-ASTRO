@@ -569,7 +569,7 @@
       "id": "d13",
       "title": "Karamelová tartaletka",
       "cena": "55 Kč",
-      "foto": "/img/zakusky/13.jpg",
+      "foto": "/img/zakusky/tartaletka karamel.jpg",
       "kategorie": "zakusky"
     },
     {
@@ -1020,6 +1020,13 @@
       "title": "Tartaletka čokoládová",
       "cena": "55 Kč",
       "foto": "/img/zakusky/tartaletka coko.jpg"
+    },
+    {
+      "weight": 9,
+      "kategorie": "zakusky",
+      "title": "Mrkvový dort",
+      "cena": "75 Kč",
+      "foto": "/img/zakusky/mrkvovy dort.jpg"
     }
   ]
 }
