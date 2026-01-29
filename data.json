@@ -650,7 +650,7 @@
     {
       "id": "d27",
       "title": "Punčový",
-      "cena": "0 Kč",
+      "cena": "50 Kč",
       "foto": "/img/zakusky/27.jpg",
       "kategorie": "zakusky"
     },
@@ -847,7 +847,7 @@
     {
       "id": "d62",
       "title": "Višňový dort mascarpone",
-      "cena": "0 Kč",
+      "cena": "75 Kč",
       "foto": "/img/zakusky/62.jpg",
       "kategorie": "zakusky"
     },
@@ -922,7 +922,7 @@
       "foto": "/img/zakusky/red velvet.jpg"
     },
     {
-      "weight": 100,
+      "weight": 7,
       "kategorie": "zakusky",
       "title": "Pavlova ",
       "cena": "70 Kč",
