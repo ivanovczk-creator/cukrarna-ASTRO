@@ -6,18 +6,18 @@ import ReservationForm from '../components/ReservationForm.tsx';
 import EdiblePrintForm from '../components/EdiblePrintForm.tsx';
 import { Image } from 'astro:assets';
 
-// Importování všech obrázků z public/img pro optimalizaci
-const cakeImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/dorty/*.{jpeg,jpg,png,webp}');
-const dessertImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/zakusky/*.{jpeg,jpg,png,webp}');
+// 1. Načtení obrázků (Astro potřebuje vědět o všech souborech v src nebo public pro optimalizaci)
+const cakeImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/dorty/*.{jpeg,jpg,png,webp,JPG}');
+const dessertImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/zakusky/*.{jpeg,jpg,png,webp,JPG}');
 
 const cakes = (productsData?.cakes || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 
 const stores = [
-	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1, 735 41 Petřvald', phone: '+420 778 157 857', mapUrl: 'https://maps.google.com/?q=Cukrářství+Blahutovi+Petřvald', hours: 'Út–Ne: 9:00–17:00' },
-	{ id: 'pist', name: 'Píšť', address: 'Opavská 218/101, 747 18 Píšť', phone: '+420 602 323 788', mapUrl: 'https://maps.google.com/?q=Cukrářství+Blahutovi+Píšť', hours: 'Po–Pá: 6:00–15:00' },
-	{ id: 'karvina', name: 'Karviná', address: 'tř. Těreškovové 2233/28, 734 01 Karviná', phone: '+420 778 157 867', mapUrl: 'https://maps.google.com/?q=Cukrářství+Blahutovi+Karviná', hours: 'Po–Pá: 9:00–17:00, So: 8:00–12:00' },
-	{ id: 'ostrava', name: 'Ostrava (Zábřeh)', address: 'Výškovická 116a, 700 30 Ostrava-jih', phone: '+420 775 271 101', mapUrl: 'https://maps.google.com/?q=Cukrářství+Blahutovi+Ostrava', hours: 'Po–Pá: 9:00–17:00, So: 9:00–12:00' }
+	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1, 735 41 Petřvald', phone: '+420 778 157 857', mapUrl: 'https://maps.app.goo.gl/xxx', hours: 'Út–Ne: 9:00–17:00' },
+	{ id: 'pist', name: 'Píšť', address: 'Opavská 218/101, 747 18 Píšť', phone: '+420 602 323 788', mapUrl: 'https://maps.app.goo.gl/xxx', hours: 'Po–Pá: 6:00–15:00' },
+	{ id: 'karvina', name: 'Karviná', address: 'tř. Těreškovové 2233/28, 734 01 Karviná', phone: '+420 778 157 867', mapUrl: 'https://maps.app.goo.gl/xxx', hours: 'Po–Pá: 9:00–17:00, So: 8:00–12:00' },
+	{ id: 'ostrava', name: 'Ostrava (Zábřeh)', address: 'Výškovická 116a, 700 30 Ostrava-jih', phone: '+420 775 271 101', mapUrl: 'https://maps.app.goo.gl/xxx', hours: 'Po–Pá: 9:00–17:00, So: 9:00–12:00' }
 ];
 ---
 
@@ -48,17 +48,20 @@ const stores = [
 		<section id="dorty" class="py-16 px-4 max-w-7xl mx-auto text-[#0a192f]">
 			<h2 class="text-4xl font-serif text-center mb-12 italic">Naše Dorty</h2>
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-				{cakes.map(cake => (
+				{cakes.map(cake => {
+					// Dynamické propojení cesty z JSONu s optimalizovaným importem
+					const imagePath = cake.foto.startsWith('/') ? cake.foto : `/${cake.foto}`;
+					return (
 					<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col">
 						<div class="h-64 overflow-hidden relative text-center bg-slate-50">
 							<a href={cake.foto} class="glightbox">
-								<img 
-									src={cake.foto} 
-									alt={`Dort ${cake.title}`} 
-									class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" 
-									loading="lazy"
-									width="400"
-									height="300"
+								<Image 
+									src={cakeImages[imagePath]()} 
+									alt={`Dort ${cake.title}`} 
+									class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" 
+									width={400}
+									height={300}
+									format="webp"
 								/>
 							</a>
 						</div>
@@ -70,7 +73,7 @@ const stores = [
 							<div>
 								<p class="text-[#d4af37] font-black text-2xl mb-4">{cake.cena}</p>
 								<button 
-									onclick={`gtag('event', 'add_to_cart', { items: [{ item_name: '${cake.title}', price: '${cake.cena}' }] }); window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: '${cake.title}', price: '${cake.cena}', img: '${cake.foto}' } }))`}
+									onclick={`window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: '${cake.title}', price: '${cake.cena}', img: '${cake.foto}' } }))`}
 									class="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all shadow-lg active:scale-95"
 								>
 									Přidat do objednávky
@@ -78,7 +81,7 @@ const stores = [
 							</div>
 						</div>
 					</div>
-				))}
+				)})}
 			</div>
 		</section>
 
@@ -86,17 +89,19 @@ const stores = [
 			<div class="max-w-7xl mx-auto">
 				<h2 class="text-4xl font-serif text-center mb-12 italic">Naše Zákusky</h2>
 				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-					{desserts.map(dessert => (
+					{desserts.map(dessert => {
+						const imagePath = dessert.foto.startsWith('/') ? dessert.foto : `/${dessert.foto}`;
+						return (
 						<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col transition-transform hover:-translate-y-1">
 							<div class="h-56 overflow-hidden relative bg-slate-50">
 								<a href={dessert.foto} class="glightbox">
-									<img 
-										src={dessert.foto} 
-										alt={`Zákusek ${dessert.title}`} 
-										class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" 
-										loading="lazy"
-										width="300"
-										height="300"
+									<Image 
+										src={dessertImages[imagePath]()} 
+										alt={`Zákusek ${dessert.title}`} 
+										class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" 
+										width={300}
+										height={300}
+										format="webp"
 									/>
 								</a>
 							</div>
@@ -105,7 +110,7 @@ const stores = [
 								<div>
 									<p class="text-[#d4af37] font-black text-xl mb-4">{dessert.cena}</p>
 									<button 
-										onclick={`gtag('event', 'add_to_cart', { items: [{ item_name: '${dessert.title}', price: '${dessert.cena}' }] }); window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: '${dessert.title}', price: '${dessert.cena}', img: '${dessert.foto}' } }))`}
+										onclick={`window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: '${dessert.title}', price: '${dessert.cena}', img: '${dessert.foto}' } }))`}
 										class="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all shadow-lg active:scale-95"
 									>
 										Přidat do objednávky
@@ -113,7 +118,7 @@ const stores = [
 								</div>
 							</div>
 						</div>
-					))}
+					)})}
 				</div>
 			</div>
 		</section>
@@ -129,7 +134,7 @@ const stores = [
 		<section id="b2b" class="py-24 bg-[#0a192f] text-white">
 			<div class="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
 				<div>
-					<h2 class="text-4xl font-serif text-[#d4af37] mb-6 italic text-navy-900">Partnerství pro firmy</h2>
+					<h2 class="text-4xl font-serif text-[#d4af37] mb-6 italic">Partnerství pro firmy</h2>
 					<p class="text-slate-300 mb-6 italic">Zajišťujeme pravidelný závoz gastro provozů a prodejen v okresech Opava, Ostrava, Havířov, Bohumín a Karviná.</p>
 				</div>
 				<div class="bg-white/5 p-8 rounded-[3rem] border border-[#d4af37]/20 shadow-2xl">
@@ -164,33 +169,42 @@ const stores = [
 
 	<footer class="bg-[#0a192f] py-12 text-center text-white/40 text-xs border-t border-[#d4af37]/10">
 		<p class="mb-2 italic text-[#d4af37]">Cukrářství Blahutovi</p>
-		<p>© {new Date().getFullYear()} — Všechna práva vyhrazena</p>
+		<p>© {new Date().getFullYear()} — Všechna práva vyzrazena</p>
 	</footer>
 
+    {/* Skryté Netlify formuláře pro detekci botem */}
 	<form name="objednavka" data-netlify="true" hidden>
 		<input name="Jmeno" /> <input name="Email" /> <input name="Telefon" /> <input name="Prodejna" /> <input name="Datum" />
 		<textarea name="Poznamka"></textarea> <textarea name="Produkty-Seznam"></textarea>
 	</form>
 	<form name="dort-na-prani" data-netlify="true" hidden><input name="Jmeno" /><input name="Email" /><input name="Telefon" /><textarea name="Zprava" /><input type="file" name="Inspiro-Foto" /></form>
 	<form name="tisk-na-papir" data-netlify="true" hidden><input name="Jmeno" /><input name="Email" /><input name="Telefon" /><input name="Prodejna" /><input name="Datum" /><input type="file" name="Tisk-Soubory[]" multiple /><textarea name="Poznamka"></textarea></form>
-	<form name="b2b-poptavka" data-netlify="true" hidden><input name="Firma" /><input name="Email" /><textarea name="Zprava" /></form>
-
-	<script is:inline>
-		const menuToggle = document.getElementById('menu-toggle');
-		if (menuToggle) {
-			menuToggle.onclick = () => {
-				const nav = document.querySelector('nav');
-				nav.classList.toggle('hidden');
-				nav.classList.toggle('flex');
-				nav.classList.toggle('absolute');
-				nav.classList.toggle('top-20');
-				nav.classList.toggle('left-0');
-				nav.classList.toggle('w-full');
-				nav.classList.toggle('bg-[#0a192f]');
-				nav.classList.toggle('flex-col');
-				nav.classList.toggle('p-6');
-				nav.classList.toggle('z-50');
-			};
-		}
-	</script>
 </Layout>
+
+<script is:inline>
+    // Mobilní menu toggle
+    const menuToggle = document.getElementById('menu-toggle');
+    const nav = document.querySelector('nav');
+    if (menuToggle && nav) {
+        menuToggle.onclick = () => {
+            nav.classList.toggle('hidden');
+            nav.classList.toggle('flex');
+            nav.classList.toggle('absolute');
+            nav.classList.toggle('top-20');
+            nav.classList.toggle('left-0');
+            nav.classList.toggle('w-full');
+            nav.classList.toggle('bg-[#0a192f]');
+            nav.classList.toggle('flex-col');
+            nav.classList.toggle('p-6');
+            nav.classList.toggle('z-50');
+            nav.classList.toggle('border-b');
+            nav.classList.toggle('border-[#d4af37]');
+        };
+        // Zavření menu po kliknutí na odkaz
+        nav.querySelectorAll('a').forEach(link => {
+            link.onclick = () => {
+                if (!nav.classList.contains('hidden')) menuToggle.click();
+            };
+        });
+    }
+</script>
