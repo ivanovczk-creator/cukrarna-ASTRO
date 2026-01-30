@@ -41,6 +41,35 @@ const {
 	<body class="bg-[#f8f9fa] text-[#0a192f]">
 		<slot />
 
+		<div class="fixed-call-container md:hidden">
+			<input type="checkbox" id="call-toggle" class="hidden peer">
+			
+			<label for="call-toggle" class="bg-[#d4af37] text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center cursor-pointer z-[100] relative animate-bounce peer-checked:animate-none" aria-label="Kontaktovat provozovnu">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+				</svg>
+			</label>
+
+			<div class="hidden peer-checked:flex flex-col gap-2 absolute bottom-16 right-0 items-end w-56">
+				<a href="tel:+420000000001" class="bg-[#0a192f] text-white px-4 py-2 rounded-lg shadow-lg border-l-4 border-[#d4af37] w-full text-right no-underline">
+					<p class="text-[10px] uppercase tracking-wider text-[#d4af37] m-0">Provozovna</p>
+					<p class="font-bold m-0 italic">Píšť</p>
+				</a>
+				<a href="tel:+420000000002" class="bg-[#0a192f] text-white px-4 py-2 rounded-lg shadow-lg border-l-4 border-[#d4af37] w-full text-right no-underline">
+					<p class="text-[10px] uppercase tracking-wider text-[#d4af37] m-0">Provozovna</p>
+					<p class="font-bold m-0 italic">Hlučín</p>
+				</a>
+				<a href="tel:+420000000003" class="bg-[#0a192f] text-white px-4 py-2 rounded-lg shadow-lg border-l-4 border-[#d4af37] w-full text-right no-underline">
+					<p class="text-[10px] uppercase tracking-wider text-[#d4af37] m-0">Provozovna</p>
+					<p class="font-bold m-0 italic">Město 3</p>
+				</a>
+				<a href="tel:+420000000004" class="bg-[#0a192f] text-white px-4 py-2 rounded-lg shadow-lg border-l-4 border-[#d4af37] w-full text-right no-underline">
+					<p class="text-[10px] uppercase tracking-wider text-[#d4af37] m-0">Provozovna</p>
+					<p class="font-bold m-0 italic">Město 4</p>
+				</a>
+			</div>
+		</div>
+
 		<script is:inline src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 		<script is:inline>
 			function initLightbox() {
@@ -54,20 +83,15 @@ const {
 				const nav = document.querySelector('nav');
 				
 				if (menuToggle && nav) {
-					// Nastavení výchozích ARIA stavů pro roboty
 					menuToggle.setAttribute('aria-expanded', 'false');
 					menuToggle.setAttribute('aria-controls', 'main-nav');
 					nav.setAttribute('id', 'main-nav');
 
 					menuToggle.onclick = () => {
 						const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
-						
-						// Přepnutí stavů
 						menuToggle.setAttribute('aria-expanded', !isExpanded);
 						nav.classList.toggle('hidden');
 						nav.classList.toggle('flex');
-						
-						// Přidání/odebrání mobilních tříd
 						nav.classList.toggle('absolute');
 						nav.classList.toggle('top-20');
 						nav.classList.toggle('left-0');
@@ -78,7 +102,6 @@ const {
 						nav.classList.toggle('z-50');
 					};
 
-					// Zavřít menu po kliknutí na odkaz (pro plynulý scroll)
 					const navLinks = nav.querySelectorAll('a');
 					navLinks.forEach(link => {
 						link.onclick = () => {
@@ -132,7 +155,13 @@ const {
 	.text-navy-900 { color: var(--navy-900) !important; }
 	.text-gold-500 { color: var(--gold-500) !important; }
 
-	/* Pěkný scrollbar */
+	.fixed-call-container {
+		position: fixed;
+		bottom: 20px;
+		right: 20px;
+		z-index: 1000;
+	}
+
 	::-webkit-scrollbar { width: 10px; }
 	::-webkit-scrollbar-track { background: #f1f1f1; }
 	::-webkit-scrollbar-thumb { background: #0a192f; border-radius: 5px; }
