@@ -6,12 +6,19 @@ import ReservationForm from '../components/ReservationForm.tsx';
 import EdiblePrintForm from '../components/EdiblePrintForm.tsx';
 import { Image } from 'astro:assets';
 
-// 1. Načtení obrázků s podporou velkých přípon
+// 1. Načtení obrázků s podporou velkých přípon a okamžitým zpracováním
 const cakeImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/dorty/*.{jpeg,jpg,png,webp,JPG,JPEG}', { eager: true });
 const dessertImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/zakusky/*.{jpeg,jpg,png,webp,JPG,JPEG}', { eager: true });
 
 const cakes = (productsData?.cakes || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
+
+// Pomocná funkce pro bezpečné nalezení obrázku v globusu (řeší cesty s /public i bez)
+function getImage(path: string, images: Record<string, any>) {
+	if (!path) return null;
+	const normalizedPath = path.startsWith('/public') ? path : (path.startsWith('/') ? `/public${path}` : `/public/${path}`);
+	return images[normalizedPath]?.default || null;
+}
 
 const stores = [
 	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1, 735 41 Petřvald', phone: '+420 778 157 857', mapUrl: 'https://maps.google.com/?q=Cukrářství+Blahutovi+Petřvald', hours: 'Út–Ne: 9:00–17:00' },
@@ -26,11 +33,11 @@ const stores = [
 		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative">
 			<h1 class="text-xl md:text-2xl font-serif text-[#d4af37]">Cukrářství Blahutovi</h1>
 			<nav id="nav-menu" class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-white/90">
-				<a href="#dorty" class="hover:text-[#d4af37] cursor-pointer">Dorty</a>
-				<a href="#zakusky" class="hover:text-[#d4af37] cursor-pointer">Zákusky</a>
-				<a href="#jedly-tisk" class="hover:text-[#d4af37] cursor-pointer">Jedlý tisk</a>
-				<a href="#dort-na-prani" class="hover:text-[#d4af37] cursor-pointer">Dort na přání</a>
-				<a href="#prodejny" class="hover:text-[#d4af37] cursor-pointer">Prodejny</a>
+				<a href="#dorty" class="hover:text-[#d4af37] cursor-pointer py-2">Dorty</a>
+				<a href="#zakusky" class="hover:text-[#d4af37] cursor-pointer py-2">Zákusky</a>
+				<a href="#jedly-tisk" class="hover:text-[#d4af37] cursor-pointer py-2">Jedlý tisk</a>
+				<a href="#dort-na-prani" class="hover:text-[#d4af37] cursor-pointer py-2">Dort na přání</a>
+				<a href="#prodejny" class="hover:text-[#d4af37] cursor-pointer py-2">Prodejny</a>
 			</nav>
 			<div class="flex items-center gap-4">
 				<ReservationForm client:load />
@@ -48,10 +55,8 @@ const stores = [
 			<h2 class="text-4xl font-serif text-center mb-12 italic">Naše Dorty</h2>
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-center">
 				{cakes.map(cake => {
-					// OCHRANA: Pokud chybí foto v JSONu, nahradíme ho prázdným řetězcem
 					const fotoUrl = cake.foto || "";
-					const imagePath = fotoUrl.startsWith('/') ? fotoUrl : `/${fotoUrl}`;
-					const imageSrc = cakeImages[imagePath]?.default;
+					const imageSrc = getImage(fotoUrl, cakeImages);
 
 					return (
 					<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col transition-all hover:shadow-xl">
@@ -90,8 +95,7 @@ const stores = [
 				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
 					{desserts.map(dessert => {
 						const fotoUrl = dessert.foto || "";
-						const imagePath = fotoUrl.startsWith('/') ? fotoUrl : `/${fotoUrl}`;
-						const imageSrc = dessertImages[imagePath]?.default;
+						const imageSrc = getImage(fotoUrl, dessertImages);
 						const dessertId = dessert.title.replace(/\s+/g, '-').toLowerCase();
 
 						return (
