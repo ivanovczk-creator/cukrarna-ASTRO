@@ -6,17 +6,18 @@ import ReservationForm from '../components/ReservationForm.tsx';
 import EdiblePrintForm from '../components/EdiblePrintForm.tsx';
 import { Image } from 'astro:assets';
 
-const cakeImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/dorty/*.{jpeg,jpg,png,webp,JPG,JPEG}');
-const dessertImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/zakusky/*.{jpeg,jpg,png,webp,JPG,JPEG}');
+// 1. Změna: Přidáváme { eager: true }, aby obrázky byly dostupné ihned jako data, ne jako slib/funkce
+const cakeImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/dorty/*.{jpeg,jpg,png,webp,JPG,JPEG}', { eager: true });
+const dessertImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/zakusky/*.{jpeg,jpg,png,webp,JPG,JPEG}', { eager: true });
 
 const cakes = (productsData?.cakes || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 
 const stores = [
-	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1, 735 41 Petřvald', phone: '+420 778 157 857', mapUrl: 'https://maps.app.goo.gl/vQf2t9PPrY8M6M7v9', hours: 'Út–Ne: 9:00–17:00' },
-	{ id: 'pist', name: 'Píšť', address: 'Opavská 218/101, 747 18 Píšť', phone: '+420 602 323 788', mapUrl: 'https://maps.app.goo.gl/YjK6wK5WJm7zF6YV8', hours: 'Po–Pá: 6:00–15:00' },
-	{ id: 'karvina', name: 'Karviná', address: 'tř. Těreškovové 2233/28, 734 01 Karviná', phone: '+420 778 157 867', mapUrl: 'https://maps.app.goo.gl/9N1G2X9WvY8P6T7r7', hours: 'Po–Pá: 9:00–17:00, So: 8:00–12:00' },
-	{ id: 'ostrava', name: 'Ostrava (Zábřeh)', address: 'Výškovická 116a, 700 30 Ostrava-jih', phone: '+420 775 271 101', mapUrl: 'https://maps.app.goo.gl/fQ8M2X8WzY7P5M6L6', hours: 'Po–Pá: 9:00–17:00, So: 9:00–12:00' }
+	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1, 735 41 Petřvald', phone: '+420 778 157 857', mapUrl: 'https://maps.app.goo.gl/petrvald-id', hours: 'Út–Ne: 9:00–17:00' },
+	{ id: 'pist', name: 'Píšť', address: 'Opavská 218/101, 747 18 Píšť', phone: '+420 602 323 788', mapUrl: 'https://maps.app.goo.gl/pist-id', hours: 'Po–Pá: 6:00–15:00' },
+	{ id: 'karvina', name: 'Karviná', address: 'tř. Těreškovové 2233/28, 734 01 Karviná', phone: '+420 778 157 867', mapUrl: 'https://maps.app.goo.gl/karvina-id', hours: 'Po–Pá: 9:00–17:00, So: 8:00–12:00' },
+	{ id: 'ostrava', name: 'Ostrava (Zábřeh)', address: 'Výškovická 116a, 700 30 Ostrava-jih', phone: '+420 775 271 101', mapUrl: 'https://maps.app.goo.gl/ostrava-id', hours: 'Po–Pá: 9:00–17:00, So: 9:00–12:00' }
 ];
 ---
 
@@ -51,11 +52,14 @@ const stores = [
 				{cakes.map(cake => {
 					const imagePath = cake.foto.startsWith('/') ? cake.foto : `/${cake.foto}`;
 					const cakeId = cake.title.replace(/\s+/g, '-').toLowerCase();
+					// Změna: Přistupujeme přímo k .default, nevoláme funkci
+					const imageMetadata = cakeImages[imagePath]?.default;
+					
 					return (
 					<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col text-center">
 						<div class="h-64 overflow-hidden relative bg-slate-50">
 							<a href={cake.foto} class="glightbox">
-								<Image src={cakeImages[imagePath]()} alt={cake.title} class="w-full h-full object-cover" width={400} height={300} format="webp" />
+								{imageMetadata && <Image src={imageMetadata} alt={cake.title} class="w-full h-full object-cover" width={400} height={300} format="webp" />}
 							</a>
 						</div>
 						<div class="p-6 flex-grow flex flex-col justify-between text-center">
@@ -63,12 +67,12 @@ const stores = [
 								<h3 class="text-xl font-bold mb-1">{cake.title}</h3>
 								<p class="text-slate-500 text-sm mb-4">{cake.porce}</p>
 							</div>
-							<div class="space-y-4">
+							<div class="space-y-4 text-navy-900">
 								<p class="text-[#d4af37] font-black text-2xl">{cake.cena}</p>
 								<div class="flex items-center gap-2">
 									<input type="number" id={`qty-${cakeId}`} min="1" defaultValue="1" class="w-16 p-3 bg-slate-50 border border-slate-200 rounded-xl text-center font-bold outline-none" />
 									<button 
-										onclick={`const q=document.getElementById('qty-${cakeId}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: '${cake.title}', price: '${cake.cena}', img: '${cake.foto}', quantity: q } }))`}
+										onclick={`const q=document.getElementById('qty-${cakeId}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${cake.title}", price: "${cake.cena}", img: "${cake.foto}", quantity: q } }))`}
 										class="flex-grow bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all text-[10px] uppercase tracking-widest"
 									>
 										Přidat
@@ -88,21 +92,24 @@ const stores = [
 					{desserts.map(dessert => {
 						const imagePath = dessert.foto.startsWith('/') ? dessert.foto : `/${dessert.foto}`;
 						const dessertId = dessert.title.replace(/\s+/g, '-').toLowerCase();
+						// Změna: Přistupujeme přímo k .default
+						const imageMetadata = dessertImages[imagePath]?.default;
+
 						return (
 						<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col text-center">
 							<div class="h-56 overflow-hidden relative">
 								<a href={dessert.foto} class="glightbox">
-									<Image src={dessertImages[imagePath]()} alt={dessert.title} class="w-full h-full object-cover" width={300} height={300} format="webp" />
+									{imageMetadata && <Image src={imageMetadata} alt={dessert.title} class="w-full h-full object-cover" width={300} height={300} format="webp" />}
 								</a>
 							</div>
 							<div class="p-6 flex-grow flex flex-col justify-between">
 								<h3 class="text-lg font-bold mb-1 leading-tight">{dessert.title}</h3>
-								<div class="space-y-4 text-center">
+								<div class="space-y-4 text-navy-900 text-center">
 									<p class="text-[#d4af37] font-black text-xl">{dessert.cena}</p>
 									<div class="flex items-center gap-2">
 										<input type="number" id={`qty-${dessertId}`} min="1" defaultValue="1" class="w-16 p-3 bg-slate-50 border border-slate-200 rounded-xl text-center font-bold outline-none" />
 										<button 
-											onclick={`const q=document.getElementById('qty-${dessertId}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: '${dessert.title}', price: '${dessert.cena}', img: '${dessert.foto}', quantity: q } }))`}
+											onclick={`const q=document.getElementById('qty-${dessertId}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${dessert.title}", price: "${dessert.cena}", img: "${dessert.foto}", quantity: q } }))`}
 											class="flex-grow bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all text-[10px] uppercase tracking-widest"
 										>
 											Přidat
@@ -120,7 +127,7 @@ const stores = [
 		<section id="dort-na-prani" class="py-20 bg-slate-50"><CustomCakeForm client:load /></section>
 
 		<section id="prodejny" class="py-20 px-4 max-w-7xl mx-auto">
-			<h2 class="text-4xl font-serif text-center mb-12 italic">Navštivte nás</h2>
+			<h2 class="text-4xl font-serif text-center mb-12 italic text-navy-900">Navštivte nás</h2>
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-white text-left">
 				{stores.map(store => (
 					<div class="bg-[#0a192f] p-6 rounded-[2rem] border border-[#d4af37]/20 shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1">
@@ -130,7 +137,7 @@ const stores = [
 							<p class="text-sm opacity-80 mb-1 leading-relaxed">{store.address}</p>
 							<p class="text-sm font-bold mb-4">{store.phone}</p>
 						</div>
-						<a href={store.mapUrl} target="_blank" class="block w-full text-center py-3 rounded-xl border border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#0a192f] transition-all font-bold text-[10px] uppercase tracking-widest" rel="noopener noreferrer text-navy-900">Ukázat na mapě</a>
+						<a href={store.mapUrl} target="_blank" class="block w-full text-center py-3 rounded-xl border border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#0a192f] transition-all font-bold text-[10px] uppercase tracking-widest" rel="noopener noreferrer">Ukázat na mapě</a>
 					</div>
 				))}
 			</div>
@@ -164,7 +171,6 @@ const stores = [
 				nav.classList.toggle('border-[#d4af37]');
 			};
 
-			// Zavření menu po kliku na odkaz
 			nav.querySelectorAll('a').forEach(link => {
 				link.onclick = () => {
 					if (!nav.classList.contains('hidden')) btn.click();
@@ -173,7 +179,6 @@ const stores = [
 		}
 	}
 
-	// Spustit hned i po případné navigaci
 	init();
 	document.addEventListener('astro:after-swap', init);
 </script>
