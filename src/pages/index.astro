@@ -39,7 +39,7 @@ const stores = [
 			</nav>
 			<div class="flex items-center gap-4">
 				<ReservationForm client:load />
-				<button id="menu-toggle" class="lg:hidden text-[#d4af37] p-2 cursor-pointer outline-none" aria-label="Menu">
+				<button id="menu-toggle" class="lg:hidden text-[#d4af37] p-2 cursor-pointer outline-none" aria-label="Otevřít mobilní menu">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
 					</svg>
@@ -52,7 +52,7 @@ const stores = [
 		<section id="dorty" class="py-16 px-4 max-w-7xl mx-auto text-[#0a192f]">
 			<h2 class="text-4xl font-serif text-center mb-12 italic text-navy-900">Naše Dorty</h2>
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-center">
-				{cakes.map(cake => {
+				{cakes.map((cake, index) => {
 					const fotoUrl = cake.foto || "";
 					const imageSrc = getImage(fotoUrl, cakeImages);
 
@@ -61,7 +61,16 @@ const stores = [
 						<div class="h-64 overflow-hidden relative bg-slate-50">
 							{imageSrc ? (
 								<a href={fotoUrl} class="glightbox cursor-zoom-in">
-									<Image src={imageSrc} alt={cake.title} class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" width={400} height={300} format="webp" />
+									<Image 
+										src={imageSrc} 
+										alt={`Dort ${cake.title}`} 
+										class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" 
+										width={400} 
+										height={300} 
+										format="webp"
+										loading={index < 2 ? "eager" : "lazy"}
+										fetchpriority={index === 0 ? "high" : "auto"}
+									/>
 								</a>
 							) : (
 								<div class="flex items-center justify-center h-full text-xs text-slate-300 italic">Foto připravujeme</div>
@@ -75,6 +84,7 @@ const stores = [
 							<div>
 								<p class="text-[#d4af37] font-black text-2xl mb-4">{cake.cena}</p>
 								<button 
+									aria-label={`Přidat dort ${cake.title} do objednávky`}
 									onclick={`window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${cake.title}", price: "${cake.cena}", img: "${fotoUrl}", quantity: 1 } }))`}
 									class="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all cursor-pointer uppercase tracking-widest text-[10px] active:scale-95 shadow-md"
 								>
@@ -101,7 +111,7 @@ const stores = [
 							<div class="h-56 overflow-hidden relative bg-slate-50 text-center">
 								{imageSrc ? (
 									<a href={fotoUrl} class="glightbox cursor-zoom-in">
-										<Image src={imageSrc} alt={dessert.title} class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" width={300} height={300} format="webp" />
+										<Image src={imageSrc} alt={`Zákusek ${dessert.title}`} class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" width={300} height={300} format="webp" />
 									</a>
 								) : (
 									<div class="flex items-center justify-center h-full text-xs text-slate-300 italic">Foto připravujeme</div>
@@ -113,9 +123,9 @@ const stores = [
 									<p class="text-[#d4af37] font-black text-xl">{dessert.cena}</p>
 									
 									<div class="flex flex-col items-center gap-2">
-										{/* Původní tlačítko Přidat */}
 										<button 
 											id={`init-btn-${dessertId}`}
+											aria-label={`Zvolit množství pro ${dessert.title}`}
 											onclick={`
 												document.getElementById('init-btn-${dessertId}').classList.add('hidden');
 												document.getElementById('counter-${dessertId}').classList.remove('hidden');
@@ -126,9 +136,9 @@ const stores = [
 											Přidat
 										</button>
 
-										{/* Nové ovládání množství */}
 										<div id={`counter-${dessertId}`} class="hidden w-full items-center justify-between bg-slate-100 rounded-xl overflow-hidden border border-slate-200">
 											<button 
+												aria-label="Snížit množství"
 												onclick={`
 													const input = document.getElementById('qty-${dessertId}');
 													if(parseInt(input.value) > 1) { 
@@ -146,21 +156,23 @@ const stores = [
 											<input 
 												type="number" 
 												id={`qty-${dessertId}`} 
+												aria-label="Množství"
 												min="1" 
 												value="1" 
 												class="w-12 bg-transparent text-center font-bold outline-none border-none p-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
 											/>
 											<button 
+												aria-label="Zvýšit množství"
 												onclick={`const input = document.getElementById('qty-${dessertId}'); input.value = parseInt(input.value) + 1;`}
 												class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer"
 											>
 												+
 											</button>
 											<button 
+												aria-label="Potvrdit množství"
 												onclick={`
 													const q = document.getElementById('qty-${dessertId}').value;
 													window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${dessert.title}", price: "${dessert.cena}", img: "${fotoUrl}", quantity: q } }));
-													// Volitelně vrátit zpět na tlačítko "Přidat" po úspěšném přidání:
 													document.getElementById('counter-${dessertId}').classList.add('hidden');
 													document.getElementById('counter-${dessertId}').classList.remove('flex');
 													document.getElementById('init-btn-${dessertId}').classList.remove('hidden');
