@@ -86,36 +86,12 @@ const {
 			function initLightbox() {
 				if (window.GLightbox) {
 					GLightbox({ selector: '.glightbox', touchNavigation: true, loop: true });
-				} else {
-					// Pokud skript ještě není načten, zkusíme to znovu za chvíli
-					setTimeout(initLightbox, 100);
 				}
 			}
 
-			function initMobileMenu() {
-				const menuToggle = document.getElementById('menu-toggle');
-				const nav = document.querySelector('nav');
-				if (menuToggle && nav) {
-					menuToggle.setAttribute('aria-expanded', 'false');
-					menuToggle.onclick = () => {
-						const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
-						menuToggle.setAttribute('aria-expanded', !isExpanded);
-						nav.classList.toggle('hidden');
-						nav.classList.toggle('flex');
-					};
-				}
-			}
-
-			// Inicializace po načtení okna (předchází forced reflow chybě v Lighthouse)
-			window.addEventListener('load', () => {
-				initLightbox();
-				initMobileMenu();
-			});
-
-			document.addEventListener('astro:after-swap', () => {
-				initLightbox();
-				initMobileMenu();
-			});
+			// Jen inicializace Lightboxu, menu necháme na index.astro
+			window.addEventListener('load', initLightbox);
+			document.addEventListener('astro:after-swap', initLightbox);
 		</script>
 	</body>
 </html>
