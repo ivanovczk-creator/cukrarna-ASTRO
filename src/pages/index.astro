@@ -6,7 +6,7 @@ import ReservationForm from '../components/ReservationForm.tsx';
 import EdiblePrintForm from '../components/EdiblePrintForm.tsx';
 import { Image } from 'astro:assets';
 
-// Optimalizované načítání obrázků
+// 1. Načtení obrázků s podporou velkých přípon
 const cakeImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/dorty/*.{jpeg,jpg,png,webp,JPG,JPEG}', { eager: true });
 const dessertImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/zakusky/*.{jpeg,jpg,png,webp,JPG,JPEG}', { eager: true });
 
@@ -25,15 +25,13 @@ const stores = [
 	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
 		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative">
 			<h1 class="text-xl md:text-2xl font-serif text-[#d4af37]">Cukrářství Blahutovi</h1>
-			
 			<nav id="nav-menu" class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-white/90">
-				<a href="#dorty" class="hover:text-[#d4af37] cursor-pointer py-2">Dorty</a>
-				<a href="#zakusky" class="hover:text-[#d4af37] cursor-pointer py-2">Zákusky</a>
-				<a href="#jedly-tisk" class="hover:text-[#d4af37] cursor-pointer py-2">Jedlý tisk</a>
-				<a href="#dort-na-prani" class="hover:text-[#d4af37] cursor-pointer py-2">Dort na přání</a>
-				<a href="#prodejny" class="hover:text-[#d4af37] cursor-pointer py-2">Prodejny</a>
+				<a href="#dorty" class="hover:text-[#d4af37] cursor-pointer">Dorty</a>
+				<a href="#zakusky" class="hover:text-[#d4af37] cursor-pointer">Zákusky</a>
+				<a href="#jedly-tisk" class="hover:text-[#d4af37] cursor-pointer">Jedlý tisk</a>
+				<a href="#dort-na-prani" class="hover:text-[#d4af37] cursor-pointer">Dort na přání</a>
+				<a href="#prodejny" class="hover:text-[#d4af37] cursor-pointer">Prodejny</a>
 			</nav>
-
 			<div class="flex items-center gap-4">
 				<ReservationForm client:load />
 				<button id="menu-toggle" class="lg:hidden text-[#d4af37] p-2 cursor-pointer outline-none" aria-label="Menu">
@@ -48,16 +46,23 @@ const stores = [
 	<main>
 		<section id="dorty" class="py-16 px-4 max-w-7xl mx-auto text-[#0a192f]">
 			<h2 class="text-4xl font-serif text-center mb-12 italic">Naše Dorty</h2>
-			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-center">
 				{cakes.map(cake => {
-					const imagePath = cake.foto.startsWith('/') ? cake.foto : `/${cake.foto}`;
+					// OCHRANA: Pokud chybí foto v JSONu, nahradíme ho prázdným řetězcem
+					const fotoUrl = cake.foto || "";
+					const imagePath = fotoUrl.startsWith('/') ? fotoUrl : `/${fotoUrl}`;
 					const imageSrc = cakeImages[imagePath]?.default;
+
 					return (
-					<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col text-center transition-all hover:shadow-xl">
+					<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col transition-all hover:shadow-xl">
 						<div class="h-64 overflow-hidden relative bg-slate-50">
-							<a href={cake.foto} class="glightbox cursor-zoom-in">
-								{imageSrc && <Image src={imageSrc} alt={cake.title} class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" width={400} height={300} format="webp" />}
-							</a>
+							{imageSrc ? (
+								<a href={fotoUrl} class="glightbox cursor-zoom-in">
+									<Image src={imageSrc} alt={cake.title} class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" width={400} height={300} format="webp" />
+								</a>
+							) : (
+								<div class="flex items-center justify-center h-full text-xs text-slate-300 italic">Foto připravujeme</div>
+							)}
 						</div>
 						<div class="p-6 flex-grow flex flex-col justify-between">
 							<div>
@@ -66,8 +71,8 @@ const stores = [
 							</div>
 							<div>
 								<p class="text-[#d4af37] font-black text-2xl mb-4">{cake.cena}</p>
-								<button 
-									onclick={`window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${cake.title}", price: "${cake.cena}", img: "${cake.foto}", quantity: 1 } }))`}
+								<button 
+									onclick={`window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${cake.title}", price: "${cake.cena}", img: "${fotoUrl}", quantity: 1 } }))`}
 									class="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all cursor-pointer uppercase tracking-widest text-[10px] active:scale-95 shadow-md"
 								>
 									Přidat do objednávky
@@ -80,19 +85,25 @@ const stores = [
 		</section>
 
 		<section id="zakusky" class="py-16 px-4 bg-slate-50 text-[#0a192f]">
-			<div class="max-w-7xl mx-auto">
+			<div class="max-w-7xl mx-auto text-center">
 				<h2 class="text-4xl font-serif text-center mb-12 italic">Naše Zákusky</h2>
 				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
 					{desserts.map(dessert => {
-						const imagePath = dessert.foto.startsWith('/') ? dessert.foto : `/${dessert.foto}`;
+						const fotoUrl = dessert.foto || "";
+						const imagePath = fotoUrl.startsWith('/') ? fotoUrl : `/${fotoUrl}`;
 						const imageSrc = dessertImages[imagePath]?.default;
 						const dessertId = dessert.title.replace(/\s+/g, '-').toLowerCase();
+
 						return (
-						<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col transition-transform hover:-translate-y-1 text-center">
-							<div class="h-56 overflow-hidden relative bg-slate-50">
-								<a href={dessert.foto} class="glightbox cursor-zoom-in">
-									{imageSrc && <Image src={imageSrc} alt={dessert.title} class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" width={300} height={300} format="webp" />}
-								</a>
+						<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col transition-transform hover:-translate-y-1">
+							<div class="h-56 overflow-hidden relative bg-slate-50 text-center">
+								{imageSrc ? (
+									<a href={fotoUrl} class="glightbox cursor-zoom-in">
+										<Image src={imageSrc} alt={dessert.title} class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" width={300} height={300} format="webp" />
+									</a>
+								) : (
+									<div class="flex items-center justify-center h-full text-xs text-slate-300 italic">Foto připravujeme</div>
+								)}
 							</div>
 							<div class="p-6 flex-grow flex flex-col justify-between">
 								<h3 class="text-lg font-bold mb-1 leading-tight">{dessert.title}</h3>
@@ -100,8 +111,8 @@ const stores = [
 									<p class="text-[#d4af37] font-black text-xl">{dessert.cena}</p>
 									<div class="flex items-center gap-2">
 										<input type="number" id={`qty-${dessertId}`} min="1" defaultValue="1" class="w-16 p-3 bg-slate-50 border border-slate-200 rounded-xl text-center font-bold outline-none focus:ring-1 focus:ring-[#d4af37]" />
-										<button 
-											onclick={`const q=document.getElementById('qty-${dessertId}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${dessert.title}", price: "${dessert.cena}", img: "${dessert.foto}", quantity: q } }))`}
+										<button 
+											onclick={`const q=document.getElementById('qty-${dessertId}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${dessert.title}", price: "${dessert.cena}", img: "${fotoUrl}", quantity: q } }))`}
 											class="flex-grow bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all cursor-pointer uppercase tracking-widest text-[10px] active:scale-95 shadow-md"
 										>
 											Přidat
@@ -119,7 +130,7 @@ const stores = [
 		<section id="dort-na-prani" class="py-20 px-4 bg-slate-50"><CustomCakeForm client:load /></section>
 
 		<section id="prodejny" class="py-20 px-4 max-w-7xl mx-auto text-[#0a192f]">
-			<h2 class="text-4xl font-serif text-center mb-12 italic">Navštivte nás</h2>
+			<h2 class="text-4xl font-serif text-center mb-12 italic text-navy-900">Navštivte nás</h2>
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-white text-left">
 				{stores.map(store => (
 					<div class="bg-[#0a192f] p-6 rounded-[2rem] border border-[#d4af37]/20 shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1">
@@ -137,16 +148,9 @@ const stores = [
 	</main>
 
 	<footer class="bg-[#0a192f] py-12 text-center text-white/40 text-xs border-t border-[#d4af37]/10">
-		<p class="mb-2 italic text-[#d4af37] text-sm">Cukrářství Blahutovi</p>
-		<p>© {new Date().getFullYear()} — Všechna práva vyhrazena</p>
+		<p class="mb-2 italic text-[#d4af37] text-sm font-serif">Cukrářství Blahutovi</p>
+		<p>© {new Date().getFullYear()} — Všechna práva vyzrazena</p>
 	</footer>
-
-    <div class="hidden">
-		<form name="objednavka" data-netlify="true"><input name="Jmeno" /><input name="Email" /><input name="Telefon" /><input name="Prodejna" /><input name="Datum" /><textarea name="Poznamka"></textarea><textarea name="Produkty-Seznam"></textarea></form>
-		<form name="dort-na-prani" data-netlify="true"><input name="Jmeno" /><input name="Email" /><input name="Telefon" /><textarea name="Zprava" /><input type="file" name="Inspiro-Foto" /></form>
-		<form name="tisk-na-papir" data-netlify="true"><input name="Jmeno" /><input name="Email" /><input name="Telefon" /><input name="Prodejna" /><input name="Datum" /><input type="file" name="Tisk-Soubor" /><textarea name="Poznamka"></textarea></form>
-		<form name="b2b-poptavka" data-netlify="true"><input name="Firma" /><input name="Email" /><textarea name="Zprava" /></form>
-	</div>
 </Layout>
 
 <script is:inline>
@@ -167,8 +171,7 @@ const stores = [
 			};
 			nav.querySelectorAll('a').forEach(link => {
 				link.onclick = () => {
-					nav.classList.add('hidden');
-					nav.classList.remove('flex', 'flex-col', 'absolute', 'top-20', 'left-0', 'w-full', 'bg-[#0a192f]', 'p-6', 'z-50', 'border-b', 'border-[#d4af37]');
+					if (!nav.classList.contains('hidden')) btn.click();
 				};
 			});
 		}
