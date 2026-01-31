@@ -24,6 +24,14 @@ const stores = [
 	{ id: 'karvina', name: 'Karviná', address: 'tř. Těreškovové 2233/28, 734 01 Karviná', phone: '+420 778 157 867', mapUrl: 'https://maps.google.com/?q=tř.+Těreškovové+2233+Karviná', hours: 'Po–Pá: 9:00–17:00, So: 8:00–12:00' },
 	{ id: 'ostrava', name: 'Ostrava (Zábřeh)', address: 'Výškovická 116a, 700 30 Ostrava-jih', phone: '+420 775 271 101', mapUrl: 'https://maps.google.com/?q=Výškovická+116a+Ostrava', hours: 'Po–Pá: 9:00–17:00, So: 9:00–12:00' }
 ];
+
+// Definice kategorií pro rozcestník
+const cakeCategories = [
+	{ id: 'detske', name: 'Dětské' },
+	{ id: 'narozeninove', name: 'Narozeninové' },
+	{ id: 'svatebni', name: 'Svatební' },
+	{ id: 'nahe', name: 'Nahé' }
+];
 ---
 
 <Layout title="Cukrářství Blahutovi | Domácí dorty a zákusky">
@@ -50,7 +58,19 @@ const stores = [
 
 	<main>
 		<section id="dorty" class="py-16 px-4 max-w-7xl mx-auto text-[#0a192f]">
-			<h2 class="text-4xl font-serif text-center mb-12 italic">Naše Dorty</h2>
+			<h2 class="text-4xl font-serif text-center mb-6 italic">Naše Dorty</h2>
+			
+			<div class="flex flex-wrap justify-center gap-3 mb-12">
+				{cakeCategories.map(cat => (
+					<a 
+						href={`/dorty/${cat.id}`} 
+						class="px-5 py-2 rounded-full border border-slate-200 text-xs font-bold uppercase tracking-widest hover:border-[#d4af37] hover:text-[#92782a] transition-all shadow-sm bg-white"
+					>
+						{cat.name} dorty
+					</a>
+				))}
+			</div>
+
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-center">
 				{cakes.map((cake, index) => {
 					const fotoUrl = cake.foto || "";
@@ -61,12 +81,12 @@ const stores = [
 						<div class="h-64 overflow-hidden relative bg-slate-50">
 							{imageSrc ? (
 								<a href={fotoUrl} class="glightbox cursor-zoom-in" aria-label={`Zobrazit detail dortu ${cake.title}`}>
-									<Image 
-										src={imageSrc} 
-										alt={`Dort ${cake.title}`} 
-										class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" 
-										width={400} 
-										height={300} 
+									<Image 
+										src={imageSrc} 
+										alt={`Dort ${cake.title}`} 
+										class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" 
+										width={400} 
+										height={300} 
 										format="webp"
 										loading={index < 3 ? "eager" : "lazy"}
 										fetchpriority={index === 0 ? "high" : "auto"}
@@ -83,7 +103,7 @@ const stores = [
 							</div>
 							<div>
 								<p class="text-[#92782a] font-black text-2xl mb-4">{cake.cena}</p>
-								<button 
+								<button 
 									aria-label={`Přidat dort ${cake.title} do objednávky`}
 									onclick={`window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${cake.title}", price: "${cake.cena}", img: "${fotoUrl}", quantity: 1 } }))`}
 									class="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all cursor-pointer uppercase tracking-widest text-[10px] active:scale-95 shadow-md"
@@ -123,7 +143,7 @@ const stores = [
 									<p class="text-[#92782a] font-black text-xl">{dessert.cena}</p>
 									
 									<div class="flex flex-col items-center gap-2">
-										<button 
+										<button 
 											id={`init-btn-${dessertId}`}
 											aria-label={`Zvolit počet kusů pro ${dessert.title}`}
 											onclick={`
@@ -137,11 +157,11 @@ const stores = [
 										</button>
 
 										<div id={`counter-${dessertId}`} class="hidden w-full items-center justify-between bg-slate-100 rounded-xl overflow-hidden border border-slate-200">
-											<button 
+											<button 
 												aria-label="Snížit množství"
 												onclick={`
 													const input = document.getElementById('qty-${dessertId}');
-													if(parseInt(input.value) > 1) { 
+													if(parseInt(input.value) > 1) { 
 														input.value = parseInt(input.value) - 1;
 													} else {
 														document.getElementById('counter-${dessertId}').classList.add('hidden');
@@ -154,21 +174,21 @@ const stores = [
 												−
 											</button>
 											<label for={`qty-${dessertId}`} class="sr-only">Počet kusů zákusku {dessert.title}</label>
-											<input 
-												type="number" 
-												id={`qty-${dessertId}`} 
-												min="1" 
-												value="1" 
+											<input 
+												type="number" 
+												id={`qty-${dessertId}`} 
+												min="1" 
+												value="1" 
 												class="w-12 bg-transparent text-center font-bold outline-none border-none p-0"
 											/>
-											<button 
+											<button 
 												aria-label="Zvýšit množství"
 												onclick={`const input = document.getElementById('qty-${dessertId}'); input.value = parseInt(input.value) + 1;`}
 												class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer"
 											>
 												+
 											</button>
-											<button 
+											<button 
 												aria-label="Potvrdit výběr a přidat do košíku"
 												onclick={`
 													const q = document.getElementById('qty-${dessertId}').value;
@@ -196,7 +216,7 @@ const stores = [
 		<section id="dort-na-prani" class="py-20 px-4 bg-slate-50"><CustomCakeForm client:load /></section>
 
 		<section id="prodejny" class="py-20 px-4 max-w-7xl mx-auto text-[#0a192f]">
-			<h2 class="text-4xl font-serif text-center mb-12 italic">Navštivte nás</h2>
+			<h2 class="text-4xl font-serif text-center mb-12 italic text-navy-900">Navštivte nás</h2>
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-white text-left">
 				{stores.map(store => (
 					<div class="bg-[#0a192f] p-6 rounded-[2rem] border border-[#d4af37]/20 shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1">
