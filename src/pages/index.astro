@@ -18,19 +18,22 @@ function getImage(path: string, images: Record<string, any>) {
 	return images[normalizedPath]?.default || null;
 }
 
-const stores = [
-	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1, 735 41 Petřvald', phone: '+420 778 157 857', mapUrl: 'https://maps.google.com/?q=Šenovská+1+Petřvald', hours: 'Út–Ne: 9:00–17:00' },
-	{ id: 'pist', name: 'Píšť', address: 'Opavská 218/101, 747 18 Píšť', phone: '+420 602 323 788', mapUrl: 'https://maps.google.com/?q=Opavská+218+Píšť', hours: 'Po–Pá: 6:00–15:00' },
-	{ id: 'karvina', name: 'Karviná', address: 'tř. Těreškovové 2233/28, 734 01 Karviná', phone: '+420 778 157 867', mapUrl: 'https://maps.google.com/?q=tř.+Těreškovové+2233+Karviná', hours: 'Po–Pá: 9:00–17:00, So: 8:00–12:00' },
-	{ id: 'ostrava', name: 'Ostrava (Zábřeh)', address: 'Výškovická 116a, 700 30 Ostrava-jih', phone: '+420 775 271 101', mapUrl: 'https://maps.google.com/?q=Výškovická+116a+Ostrava', hours: 'Po–Pá: 9:00–17:00, So: 9:00–12:00' }
+// Definice kategorií pro vizuální rozcestník
+const cakeCategories = [
+	{ id: 'detske', name: 'Dětské', img: '/img/dorty/1.webp' },
+	{ id: 'narozeninove', name: 'Narozeninové', img: '/img/dorty/10.webp' },
+	{ id: 'svatebni', name: 'Svatební', img: '/img/dorty/51.webp' },
+	{ id: 'krtiny', name: 'Ke křtinám', img: '/img/dorty/58.webp' },
+	{ id: 'elegantni', name: 'Elegantní', img: '/img/dorty/54.webp' },
+	{ id: 'nahe', name: 'Nahé', img: '/img/dorty/40.webp' },
+	{ id: '3d-netradicni', name: '3D / Ostatní', img: '/img/dorty/12.webp' }
 ];
 
-// Definice kategorií pro rozcestník
-const cakeCategories = [
-	{ id: 'detske', name: 'Dětské' },
-	{ id: 'narozeninove', name: 'Narozeninové' },
-	{ id: 'svatebni', name: 'Svatební' },
-	{ id: 'nahe', name: 'Nahé' }
+const stores = [
+	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1, 735 41 Petřvald', phone: '+420 778 157 857', mapUrl: 'http://maps.google.com/?q=Šenovská+1+Petřvald', hours: 'Út–Ne: 9:00–17:00' },
+	{ id: 'pist', name: 'Píšť', address: 'Opavská 218/101, 747 18 Píšť', phone: '+420 602 323 788', mapUrl: 'http://maps.google.com/?q=Opavská+218/101+Píšť', hours: 'Po–Pá: 6:00–15:00' },
+	{ id: 'karvina', name: 'Karviná', address: 'tř. Těreškovové 2233/28, 734 01 Karviná', phone: '+420 778 157 867', mapUrl: 'http://maps.google.com/?q=tř.+Těreškovové+2233/28+Karviná', hours: 'Po–Pá: 9:00–17:00, So: 8:00–12:00' },
+	{ id: 'ostrava', name: 'Ostrava (Zábřeh)', address: 'Výškovická 116a, 700 30 Ostrava-jih', phone: '+420 775 271 101', mapUrl: 'http://maps.google.com/?q=Výškovická+116a+Ostrava', hours: 'Po–Pá: 9:00–17:00, So: 9:00–12:00' }
 ];
 ---
 
@@ -38,7 +41,7 @@ const cakeCategories = [
 	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
 		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative text-navy-900">
 			<h1 class="text-xl md:text-2xl font-serif text-[#d4af37]">Cukrářství Blahutovi</h1>
-			<nav id="nav-menu" class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-white/90" aria-label="Hlavní navigace">
+			<nav id="nav-menu" class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-white/90">
 				<a href="#dorty" class="hover:text-[#d4af37] cursor-pointer py-2">Dorty</a>
 				<a href="#zakusky" class="hover:text-[#d4af37] cursor-pointer py-2">Zákusky</a>
 				<a href="#jedly-tisk" class="hover:text-[#d4af37] cursor-pointer py-2">Jedlý tisk</a>
@@ -47,8 +50,8 @@ const cakeCategories = [
 			</nav>
 			<div class="flex items-center gap-4">
 				<ReservationForm client:load />
-				<button id="menu-toggle" class="lg:hidden text-[#d4af37] p-2 cursor-pointer outline-none" aria-label="Otevřít mobilní menu">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+				<button id="menu-toggle" class="lg:hidden text-[#d4af37] p-2 cursor-pointer outline-none">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
 					</svg>
 				</button>
@@ -58,17 +61,26 @@ const cakeCategories = [
 
 	<main>
 		<section id="dorty" class="py-16 px-4 max-w-7xl mx-auto text-[#0a192f]">
-			<h2 class="text-4xl font-serif text-center mb-6 italic">Naše Dorty</h2>
-			
-			<div class="flex flex-wrap justify-center gap-3 mb-12">
-				{cakeCategories.map(cat => (
-					<a 
-						href={`/dorty/${cat.id}`} 
-						class="px-5 py-2 rounded-full border border-slate-200 text-xs font-bold uppercase tracking-widest hover:border-[#d4af37] hover:text-[#92782a] transition-all shadow-sm bg-white"
-					>
-						{cat.name} dorty
-					</a>
-				))}
+			<h2 class="text-4xl font-serif text-center mb-4 italic">Naše Dorty</h2>
+			<p class="text-center text-slate-500 mb-12 max-w-xl mx-auto text-sm">Vyberte si kategorii nebo si prohlédněte celou naši nabídku níže.</p>
+
+			<div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-6 mb-20 px-4">
+				{cakeCategories.map(cat => {
+					const imageSrc = getImage(cat.img, cakeImages);
+					return (
+						<a href={`/dorty/${cat.id}`} class="group flex flex-col items-center gap-3 no-underline">
+							<div class="w-full aspect-square rounded-full overflow-hidden border-2 border-slate-100 group-hover:border-[#d4af37] transition-all duration-500 shadow-sm relative">
+								{imageSrc ? (
+									<Image src={imageSrc} alt={cat.name} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" width={150} height={150} format="webp" />
+								) : (
+									<div class="w-full h-full bg-slate-50 flex items-center justify-center text-[8px] text-slate-300 italic">Foto</div>
+								)}
+								<div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
+							</div>
+							<span class="text-[10px] font-bold uppercase tracking-widest text-slate-500 group-hover:text-[#92782a] text-center transition-colors leading-tight">{cat.name}</span>
+						</a>
+					)
+				})}
 			</div>
 
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-center">
@@ -80,7 +92,7 @@ const cakeCategories = [
 					<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col transition-all hover:shadow-xl">
 						<div class="h-64 overflow-hidden relative bg-slate-50">
 							{imageSrc ? (
-								<a href={fotoUrl} class="glightbox cursor-zoom-in" aria-label={`Zobrazit detail dortu ${cake.title}`}>
+								<a href={fotoUrl} class="glightbox cursor-zoom-in">
 									<Image 
 										src={imageSrc} 
 										alt={`Dort ${cake.title}`} 
@@ -89,7 +101,6 @@ const cakeCategories = [
 										height={300} 
 										format="webp"
 										loading={index < 3 ? "eager" : "lazy"}
-										fetchpriority={index === 0 ? "high" : "auto"}
 									/>
 								</a>
 							) : (
@@ -104,7 +115,6 @@ const cakeCategories = [
 							<div>
 								<p class="text-[#92782a] font-black text-2xl mb-4">{cake.cena}</p>
 								<button 
-									aria-label={`Přidat dort ${cake.title} do objednávky`}
 									onclick={`window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${cake.title}", price: "${cake.cena}", img: "${fotoUrl}", quantity: 1 } }))`}
 									class="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all cursor-pointer uppercase tracking-widest text-[10px] active:scale-95 shadow-md"
 								>
@@ -127,10 +137,10 @@ const cakeCategories = [
 						const dessertId = dessert.title.replace(/\s+/g, '-').toLowerCase();
 
 						return (
-						<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col transition-transform hover:-translate-y-1 text-navy-900">
+						<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col transition-transform hover:-translate-y-1">
 							<div class="h-56 overflow-hidden relative bg-slate-50 text-center">
 								{imageSrc ? (
-									<a href={fotoUrl} class="glightbox cursor-zoom-in" aria-label={`Zobrazit detail zákusku ${dessert.title}`}>
+									<a href={fotoUrl} class="glightbox cursor-zoom-in">
 										<Image src={imageSrc} alt={`Zákusek ${dessert.title}`} class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" width={300} height={300} format="webp" />
 									</a>
 								) : (
@@ -145,7 +155,6 @@ const cakeCategories = [
 									<div class="flex flex-col items-center gap-2">
 										<button 
 											id={`init-btn-${dessertId}`}
-											aria-label={`Zvolit počet kusů pro ${dessert.title}`}
 											onclick={`
 												document.getElementById('init-btn-${dessertId}').classList.add('hidden');
 												document.getElementById('counter-${dessertId}').classList.remove('hidden');
@@ -158,7 +167,6 @@ const cakeCategories = [
 
 										<div id={`counter-${dessertId}`} class="hidden w-full items-center justify-between bg-slate-100 rounded-xl overflow-hidden border border-slate-200">
 											<button 
-												aria-label="Snížit množství"
 												onclick={`
 													const input = document.getElementById('qty-${dessertId}');
 													if(parseInt(input.value) > 1) { 
@@ -173,7 +181,6 @@ const cakeCategories = [
 											>
 												−
 											</button>
-											<label for={`qty-${dessertId}`} class="sr-only">Počet kusů zákusku {dessert.title}</label>
 											<input 
 												type="number" 
 												id={`qty-${dessertId}`} 
@@ -182,14 +189,12 @@ const cakeCategories = [
 												class="w-12 bg-transparent text-center font-bold outline-none border-none p-0"
 											/>
 											<button 
-												aria-label="Zvýšit množství"
 												onclick={`const input = document.getElementById('qty-${dessertId}'); input.value = parseInt(input.value) + 1;`}
 												class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer"
 											>
 												+
 											</button>
 											<button 
-												aria-label="Potvrdit výběr a přidat do košíku"
 												onclick={`
 													const q = document.getElementById('qty-${dessertId}').value;
 													window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${dessert.title}", price: "${dessert.cena}", img: "${fotoUrl}", quantity: q } }));
@@ -216,7 +221,7 @@ const cakeCategories = [
 		<section id="dort-na-prani" class="py-20 px-4 bg-slate-50"><CustomCakeForm client:load /></section>
 
 		<section id="prodejny" class="py-20 px-4 max-w-7xl mx-auto text-[#0a192f]">
-			<h2 class="text-4xl font-serif text-center mb-12 italic text-navy-900">Navštivte nás</h2>
+			<h2 class="text-4xl font-serif text-center mb-12 italic">Navštivte nás</h2>
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-white text-left">
 				{stores.map(store => (
 					<div class="bg-[#0a192f] p-6 rounded-[2rem] border border-[#d4af37]/20 shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1">
@@ -226,7 +231,7 @@ const cakeCategories = [
 							<p class="text-sm opacity-90 mb-1 leading-relaxed">{store.address}</p>
 							<p class="text-sm font-bold mb-4">{store.phone}</p>
 						</div>
-						<a href={store.mapUrl} target="_blank" class="block w-full text-center py-3 rounded-xl border border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#0a192f] transition-all font-bold text-[10px] uppercase tracking-widest cursor-pointer" rel="noopener noreferrer" aria-label={`Zobrazit prodejnu ${store.name} na mapě`}>Ukázat na mapě</a>
+						<a href={store.mapUrl} target="_blank" class="block w-full text-center py-3 rounded-xl border border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#0a192f] transition-all font-bold text-[10px] uppercase tracking-widest cursor-pointer" rel="noopener noreferrer">Ukázat na mapě</a>
 					</div>
 				))}
 			</div>
@@ -235,7 +240,7 @@ const cakeCategories = [
 
 	<footer class="bg-[#0a192f] py-12 text-center text-white/40 text-xs border-t border-[#d4af37]/10">
 		<p class="mb-2 italic text-[#d4af37] text-sm font-serif">Cukrářství Blahutovi</p>
-		<p>© {new Date().getFullYear()} — Všechna práva vyzrazena</p>
+		<p>© {new Date().getFullYear()} — Všechna práva vyhrazena</p>
 	</footer>
 </Layout>
 
