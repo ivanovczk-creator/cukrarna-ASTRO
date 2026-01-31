@@ -34,8 +34,20 @@ const {
 		
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+		
+		<link 
+			href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" 
+			rel="stylesheet"
+			media="print" 
+			onload="this.media='all'"
+		>
+		
+		<link 
+			rel="stylesheet" 
+			href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" 
+			media="print" 
+			onload="this.media='all'"
+		/>
 	</head>
 	<body class="bg-[#f8f9fa] text-[#0a192f] pb-16 md:pb-0">
 		<slot />
@@ -69,11 +81,14 @@ const {
 			</div>
 		</div>
 
-		<script is:inline src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+		<script is:inline src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js" defer></script>
 		<script is:inline>
 			function initLightbox() {
 				if (window.GLightbox) {
 					GLightbox({ selector: '.glightbox', touchNavigation: true, loop: true });
+				} else {
+					// Pokud skript ještě není načten, zkusíme to znovu za chvíli
+					setTimeout(initLightbox, 100);
 				}
 			}
 
@@ -91,8 +106,12 @@ const {
 				}
 			}
 
-			initLightbox();
-			initMobileMenu();
+			// Inicializace po načtení okna (předchází forced reflow chybě v Lighthouse)
+			window.addEventListener('load', () => {
+				initLightbox();
+				initMobileMenu();
+			});
+
 			document.addEventListener('astro:after-swap', () => {
 				initLightbox();
 				initMobileMenu();
