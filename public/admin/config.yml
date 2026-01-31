@@ -1,6 +1,7 @@
 backend:
   name: git-gateway
   branch: main
+  confirm_actions: true # Zvýšená bezpečnost při ukládání a změnách
 
 media_folder: "public/img/dorty"
 public_folder: "/img/dorty"
@@ -20,7 +21,7 @@ collections:
           - label: "Dorty"
             name: "cakes"
             widget: "list"
-            summary: "Dort {{id}}: {{title}}"
+            summary: "Dort {{id}}: {{title}} ({{category_list}})" # Přehlednější souhrn v adminu
             fields:
               - { label: "ID (Číslo dortu)", name: "id", widget: "number", value_type: "int", required: false }
               - { label: "Pořadí (číslo)", name: "weight", widget: "number", default: 100, value_type: "int", required: false }
@@ -28,7 +29,20 @@ collections:
               - { label: "Cena", name: "cena", widget: "string", hint: "Např. 1900 Kč", required: false }
               - { label: "Počet porcí", name: "porce", widget: "string", hint: "Např. 12 porcí", required: false }
               - { label: "Obrázek", name: "foto", widget: "image", required: false }
-              - { label: "Kategorie", name: "kategorie", widget: "hidden", default: "dorty" }
+              
+              # NOVÉ: Zaškrtávací kategorie pro SEO a filtrování
+              - label: "Kategorie dortu"
+                name: "category_list"
+                widget: "select"
+                multiple: true      # Umožní zaškrtnout více kategorií
+                required: false
+                options:
+                  - { label: "Dětské", value: "detske" }
+                  - { label: "Narozeninové", value: "narozeninove" }
+                  - { label: "Svatební", value: "svatebni" }
+                  - { label: "Nahé", value: "nahe" }
+              
+              - { label: "Kategorie (systémová)", name: "kategorie", widget: "hidden", default: "dorty" }
 
           - label: "Zákusky"
             name: "desserts"
