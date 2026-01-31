@@ -6,14 +6,12 @@ import ReservationForm from '../components/ReservationForm.tsx';
 import EdiblePrintForm from '../components/EdiblePrintForm.tsx';
 import { Image } from 'astro:assets';
 
-// 1. Načtení obrázků s podporou velkých přípon a okamžitým zpracováním
 const cakeImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/dorty/*.{jpeg,jpg,png,webp,JPG,JPEG}', { eager: true });
 const dessertImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/zakusky/*.{jpeg,jpg,png,webp,JPG,JPEG}', { eager: true });
 
 const cakes = (productsData?.cakes || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 
-// Pomocná funkce pro bezpečné nalezení obrázku v globusu (řeší cesty s /public i bez)
 function getImage(path: string, images: Record<string, any>) {
 	if (!path) return null;
 	const normalizedPath = path.startsWith('/public') ? path : (path.startsWith('/') ? `/public${path}` : `/public/${path}`);
@@ -52,7 +50,7 @@ const stores = [
 
 	<main>
 		<section id="dorty" class="py-16 px-4 max-w-7xl mx-auto text-[#0a192f]">
-			<h2 class="text-4xl font-serif text-center mb-12 italic">Naše Dorty</h2>
+			<h2 class="text-4xl font-serif text-center mb-12 italic text-navy-900">Naše Dorty</h2>
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-center">
 				{cakes.map(cake => {
 					const fotoUrl = cake.foto || "";
@@ -90,7 +88,7 @@ const stores = [
 		</section>
 
 		<section id="zakusky" class="py-16 px-4 bg-slate-50 text-[#0a192f]">
-			<div class="max-w-7xl mx-auto text-center">
+			<div class="max-w-7xl mx-auto text-center text-navy-900">
 				<h2 class="text-4xl font-serif text-center mb-12 italic">Naše Zákusky</h2>
 				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
 					{desserts.map(dessert => {
@@ -113,14 +111,66 @@ const stores = [
 								<h3 class="text-lg font-bold mb-1 leading-tight">{dessert.title}</h3>
 								<div class="space-y-4">
 									<p class="text-[#d4af37] font-black text-xl">{dessert.cena}</p>
-									<div class="flex items-center gap-2">
-										<input type="number" id={`qty-${dessertId}`} min="1" defaultValue="1" class="w-16 p-3 bg-slate-50 border border-slate-200 rounded-xl text-center font-bold outline-none focus:ring-1 focus:ring-[#d4af37]" />
+									
+									<div class="flex flex-col items-center gap-2">
+										{/* Původní tlačítko Přidat */}
 										<button 
-											onclick={`const q=document.getElementById('qty-${dessertId}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${dessert.title}", price: "${dessert.cena}", img: "${fotoUrl}", quantity: q } }))`}
-											class="flex-grow bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all cursor-pointer uppercase tracking-widest text-[10px] active:scale-95 shadow-md"
+											id={`init-btn-${dessertId}`}
+											onclick={`
+												document.getElementById('init-btn-${dessertId}').classList.add('hidden');
+												document.getElementById('counter-${dessertId}').classList.remove('hidden');
+												document.getElementById('counter-${dessertId}').classList.add('flex');
+											`}
+											class="w-full bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all cursor-pointer uppercase tracking-widest text-[10px]"
 										>
 											Přidat
 										</button>
+
+										{/* Nové ovládání množství */}
+										<div id={`counter-${dessertId}`} class="hidden w-full items-center justify-between bg-slate-100 rounded-xl overflow-hidden border border-slate-200">
+											<button 
+												onclick={`
+													const input = document.getElementById('qty-${dessertId}');
+													if(parseInt(input.value) > 1) { 
+														input.value = parseInt(input.value) - 1;
+													} else {
+														document.getElementById('counter-${dessertId}').classList.add('hidden');
+														document.getElementById('counter-${dessertId}').classList.remove('flex');
+														document.getElementById('init-btn-${dessertId}').classList.remove('hidden');
+													}
+												`}
+												class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer"
+											>
+												−
+											</button>
+											<input 
+												type="number" 
+												id={`qty-${dessertId}`} 
+												min="1" 
+												value="1" 
+												class="w-12 bg-transparent text-center font-bold outline-none border-none p-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+											/>
+											<button 
+												onclick={`const input = document.getElementById('qty-${dessertId}'); input.value = parseInt(input.value) + 1;`}
+												class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer"
+											>
+												+
+											</button>
+											<button 
+												onclick={`
+													const q = document.getElementById('qty-${dessertId}').value;
+													window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${dessert.title}", price: "${dessert.cena}", img: "${fotoUrl}", quantity: q } }));
+													// Volitelně vrátit zpět na tlačítko "Přidat" po úspěšném přidání:
+													document.getElementById('counter-${dessertId}').classList.add('hidden');
+													document.getElementById('counter-${dessertId}').classList.remove('flex');
+													document.getElementById('init-btn-${dessertId}').classList.remove('hidden');
+													document.getElementById('qty-${dessertId}').value = 1;
+												`}
+												class="bg-[#0a192f] text-white px-3 h-10 font-bold text-[10px] uppercase hover:bg-[#d4af37] cursor-pointer"
+											>
+												OK
+											</button>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -152,7 +202,7 @@ const stores = [
 	</main>
 
 	<footer class="bg-[#0a192f] py-12 text-center text-white/40 text-xs border-t border-[#d4af37]/10">
-		<p class="mb-2 italic text-[#d4af37] text-sm font-serif">Cukrářství Blahutovi</p>
+		<p class="mb-2 italic text-[#d4af37] text-sm font-serif text-navy-900">Cukrářství Blahutovi</p>
 		<p>© {new Date().getFullYear()} — Všechna práva vyzrazena</p>
 	</footer>
 </Layout>
