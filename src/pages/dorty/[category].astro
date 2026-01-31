@@ -4,13 +4,15 @@ import productsData from '../../../data.json';
 import ReservationForm from '../../components/ReservationForm.tsx';
 import { Image } from 'astro:assets';
 
-// DŮLEŽITÉ: Musí zde být "export"
 export async function getStaticPaths() {
   const categories = [
     { id: 'detske', title: 'Dětské dorty', description: 'Veselé a barevné dorty pro vaše nejmenší oslavence.' },
     { id: 'narozeninove', title: 'Narozeninové dorty', description: 'Originální narozeninové dorty pro děti i dospělé.' },
     { id: 'svatebni', title: 'Svatební dorty', description: 'Elegantní svatební dorty, které se stanou ozdobou vaší hostiny.' },
-    { id: 'nahe', title: 'Nahé dorty', description: 'Moderní nahé dorty zdobené čerstvým ovocem a květy.' }
+    { id: 'nahe', title: 'Nahé dorty', description: 'Moderní nahé dorty zdobené čerstvým ovocem a květy.' },
+    { id: 'krtiny', title: 'Dorty ke křtinám', description: 'Jemné a vkusné dorty pro oslavu křtu vašeho miminka.' },
+    { id: 'elegantni', title: 'Elegantní dorty', description: 'Stylové a sofistikované dorty pro významná životní jubilea a oslavy.' },
+    { id: '3d-netradicni', title: 'Netradiční a 3D dorty', description: 'Dorty ve tvaru aut, zvířat nebo předmětů, které vyrazí dech.' }
   ];
 
   return categories.map(cat => ({
@@ -22,7 +24,6 @@ export async function getStaticPaths() {
 const { category } = Astro.params;
 const { info } = Astro.props;
 
-// Filtrujeme dorty podle kategorie
 const filteredCakes = productsData.cakes.filter(cake => 
   cake.category_list && cake.category_list.includes(category)
 );
@@ -38,7 +39,7 @@ function getImage(path: string, images: Record<string, any>) {
 
 <Layout title={`${info.title} | Cukrářství Blahutovi`} description={info.description}>
 	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
-		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative">
+		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
 			<a href="/" class="text-xl md:text-2xl font-serif text-[#d4af37] no-underline">Cukrářství Blahutovi</a>
 			<div class="flex items-center gap-4">
 				<ReservationForm client:load />
@@ -47,49 +48,66 @@ function getImage(path: string, images: Record<string, any>) {
 		</div>
 	</header>
 
-	<main class="py-16 px-4">
-		<div class="max-w-7xl mx-auto text-[#0a192f]">
-			<nav class="text-xs uppercase tracking-widest text-slate-400 mb-8 font-bold">
-				<a href="/" class="hover:text-[#d4af37]">Domů</a> / <span>Kategorie {info.title}</span>
+	<main class="py-16 px-4 bg-slate-50 min-h-screen">
+		<div class="max-w-7xl mx-auto">
+			<nav class="text-xs uppercase tracking-widest text-slate-400 mb-6 font-bold">
+				<a href="/" class="hover:text-[#d4af37]">Domů</a> / <a href="/#dorty" class="hover:text-[#d4af37]">Dorty</a> / <span class="text-slate-600">{info.title}</span>
 			</nav>
 
-			<h2 class="text-4xl md:text-5xl font-serif mb-4 italic">{info.title}</h2>
-			<p class="text-slate-600 mb-12 max-w-2xl text-lg leading-relaxed">{info.description}</p>
+			<div class="mb-12 border-l-4 border-[#d4af37] pl-6 py-2">
+				<h1 class="text-4xl md:text-5xl font-serif mb-4 text-[#0a192f] italic">{info.title}</h1>
+				<p class="text-slate-600 max-w-2xl text-lg leading-relaxed">{info.description}</p>
+			</div>
 
 			{filteredCakes.length > 0 ? (
-				<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-center">
+				<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
 					{filteredCakes.map((cake) => {
 						const imageSrc = getImage(cake.foto, cakeImages);
 						return (
-							<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col transition-all hover:shadow-xl">
-								<div class="h-64 overflow-hidden relative bg-slate-50">
+							<div class="group bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden flex flex-col hover:shadow-2xl transition-all duration-500">
+								<div class="h-72 overflow-hidden relative">
 									{imageSrc ? (
-										<a href={cake.foto} class="glightbox cursor-zoom-in" aria-label={`Detail dortu ${cake.title}`}>
-											<Image src={imageSrc} alt={cake.title} class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" width={400} height={300} format="webp" />
+										<a href={cake.foto} class="glightbox block h-full" aria-label={`Detail ${cake.title}`}>
+											<Image 
+                        src={imageSrc} 
+                        alt={cake.title} 
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                        width={400} 
+                        height={500} 
+                        format="webp" 
+                      />
+                      <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500"></div>
 										</a>
 									) : (
-										<div class="flex items-center justify-center h-full text-xs text-slate-300 italic">Foto připravujeme</div>
+										<div class="flex items-center justify-center h-full bg-slate-100 text-slate-300 italic uppercase text-[10px] tracking-widest">Foto připravujeme</div>
 									)}
 								</div>
-								<div class="p-6 flex-grow flex flex-col justify-between">
-									<h3 class="text-xl font-bold mb-1">{cake.title}</h3>
-									<p class="text-slate-500 text-sm mb-4">{cake.porce}</p>
-									<p class="text-[#92782a] font-black text-2xl mb-4">{cake.cena}</p>
-									<button 
-										aria-label={`Přidat ${cake.title} do objednávky`}
-										onclick={`window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${cake.title}", price: "${cake.cena}", img: "${cake.foto}", quantity: 1 } }))`}
-										class="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all cursor-pointer uppercase tracking-widest text-[10px] active:scale-95 shadow-md"
-									>
-										Přidat do objednávky
-									</button>
+								<div class="p-8 flex-grow flex flex-col">
+									<h3 class="text-xl font-bold text-[#0a192f] mb-2 leading-tight">{cake.title}</h3>
+									<p class="text-slate-400 text-[10px] uppercase tracking-[0.2em] font-bold mb-6">{cake.porce}</p>
+									<div class="mt-auto flex justify-between items-center pt-6 border-t border-slate-50">
+										<span class="text-[#92782a] font-black text-2xl">{cake.cena}</span>
+										<button 
+											onclick={`window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${cake.title}", price: "${cake.cena}", img: "${cake.foto}", quantity: 1 } }))`}
+											class="bg-[#0a192f] text-white w-12 h-12 rounded-2xl hover:bg-[#d4af37] transition-all duration-300 flex items-center justify-center shadow-lg active:scale-90"
+                      title="Přidat do objednávky"
+										>
+											<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
+											</svg>
+										</button>
+									</div>
 								</div>
 							</div>
 						);
 					})}
 				</div>
 			) : (
-				<div class="bg-slate-50 rounded-[2rem] p-12 text-center border-2 border-dashed border-slate-200">
-					<p class="text-slate-400 italic">V této kategorii zatím nemáme žádné dorty, ale brzy je přidáme!</p>
+				<div class="bg-white rounded-[3rem] p-20 text-center border-2 border-dashed border-slate-200 shadow-sm">
+					<div class="text-6xl mb-6 opacity-20">🎂</div>
+					<h3 class="text-2xl font-serif text-slate-400 italic">V této kategorii zatím nic není</h3>
+					<p class="text-slate-400 mt-2">Pracujeme na tom, abyste si brzy mohli vybrat!</p>
+          <a href="/#dorty" class="inline-block mt-8 text-[#d4af37] font-bold uppercase text-xs tracking-widest border-b border-[#d4af37] pb-1">Zpět na všechny dorty</a>
 				</div>
 			)}
 		</div>
