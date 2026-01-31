@@ -17,6 +17,7 @@ const EdiblePrintForm = () => {
         <p className="text-slate-600 max-w-2xl mx-auto">
           Nahrajte své obrázky a my je vytiskneme na kvalitní fondánový list A4.
         </p>
+        {/* Oprava kontrastu: text v badge je tmavý pro lepší čitelnost na zlaté */}
         <div className="mt-4 inline-block bg-[#d4af37] text-[#0a192f] px-6 py-2 rounded-full font-bold shadow-sm">
           Cena: 160 Kč / list A4
         </div>
@@ -34,23 +35,23 @@ const EdiblePrintForm = () => {
         
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2 ml-2">Vaše jméno</label>
-            <input type="text" name="Jmeno" required className="w-full p-4 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]" />
+            <label htmlFor="edible-name" className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 ml-2">Vaše jméno</label>
+            <input id="edible-name" type="text" name="Jmeno" required className="w-full p-4 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]" />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-               <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2 ml-2">E-mail</label>
-               <input type="email" name="Email" required className="w-full p-4 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]" />
+               <label htmlFor="edible-email" className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 ml-2">E-mail</label>
+               <input id="edible-email" type="email" name="Email" required className="w-full p-4 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]" />
             </div>
             <div>
-               <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2 ml-2">Telefon</label>
-               <input type="tel" name="Telefon" required className="w-full p-4 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]" />
+               <label htmlFor="edible-phone" className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 ml-2">Telefon</label>
+               <input id="edible-phone" type="tel" name="Telefon" required className="w-full p-4 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]" />
             </div>
           </div>
           
           <div>
-            <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2 ml-2">Místo vyzvednutí</label>
-            <select name="Prodejna" required className="w-full p-4 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]">
+            <label htmlFor="edible-store" className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 ml-2">Místo vyzvednutí</label>
+            <select id="edible-store" name="Prodejna" required className="w-full p-4 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]">
               <option value="">Vyberte prodejnu...</option>
               <option value="Petřvald">Petřvald</option>
               <option value="Píšť">Píšť</option>
@@ -60,16 +61,17 @@ const EdiblePrintForm = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2 ml-2">Datum vyzvednutí</label>
-            <input type="date" name="Datum" required className="w-full p-4 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]" />
+            <label htmlFor="edible-date" className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 ml-2">Datum vyzvednutí</label>
+            <input id="edible-date" type="date" name="Datum" required className="w-full p-4 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]" />
           </div>
         </div>
 
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2 ml-2">Obrázky (můžete vybrat více najednou)</label>
+            <label htmlFor="edible-file" className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 ml-2">Obrázky (A4)</label>
             <div className="relative w-full p-6 bg-white border-2 border-dashed border-slate-200 rounded-2xl text-center hover:border-[#d4af37] transition-all cursor-pointer">
               <input 
+                id="edible-file"
                 type="file" 
                 name="Tisk-Soubory[]" 
                 multiple 
@@ -91,13 +93,13 @@ const EdiblePrintForm = () => {
             </div>
           </div>
           <div>
-            <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2 ml-2">Poznámka</label>
-            <textarea name="Poznamka" className="w-full p-4 h-24 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]" placeholder="Např. ořez, nápis..."></textarea>
+            <label htmlFor="edible-note" className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 ml-2">Poznámka</label>
+            <textarea id="edible-note" name="Poznamka" className="w-full p-4 h-24 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]" placeholder="Např. ořez, nápis..."></textarea>
           </div>
         </div>
 
         <div className="md:col-span-2">
-          <button type="submit" className="w-full bg-[#0a192f] text-white py-5 rounded-2xl font-bold hover:bg-[#d4af37] transition-all shadow-lg text-lg uppercase tracking-widest">
+          <button type="submit" className="w-full bg-[#0a192f] text-white py-5 rounded-2xl font-bold hover:bg-[#d4af37] hover:text-[#0a192f] transition-all shadow-lg text-lg uppercase tracking-widest cursor-pointer">
             Objednat tisk
           </button>
         </div>
