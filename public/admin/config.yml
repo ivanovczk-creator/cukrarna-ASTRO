@@ -1,7 +1,7 @@
 backend:
   name: git-gateway
   branch: main
-  confirm_actions: true # Zvýšená bezpečnost při ukládání a změnách
+  confirm_actions: true # Aktivuje potvrzování změn v adminu
 
 media_folder: "public/img/dorty"
 public_folder: "/img/dorty"
@@ -21,7 +21,7 @@ collections:
           - label: "Dorty"
             name: "cakes"
             widget: "list"
-            summary: "Dort {{id}}: {{title}} ({{category_list}})" # Přehlednější souhrn v adminu
+            summary: "Dort {{id}}: {{title}} ({{category_list}})"
             fields:
               - { label: "ID (Číslo dortu)", name: "id", widget: "number", value_type: "int", required: false }
               - { label: "Pořadí (číslo)", name: "weight", widget: "number", default: 100, value_type: "int", required: false }
@@ -30,17 +30,20 @@ collections:
               - { label: "Počet porcí", name: "porce", widget: "string", hint: "Např. 12 porcí", required: false }
               - { label: "Obrázek", name: "foto", widget: "image", required: false }
               
-              # NOVÉ: Zaškrtávací kategorie pro SEO a filtrování
+              # AKTUALIZOVANÉ KATEGORIE
               - label: "Kategorie dortu"
                 name: "category_list"
                 widget: "select"
-                multiple: true      # Umožní zaškrtnout více kategorií
+                multiple: true
                 required: false
                 options:
                   - { label: "Dětské", value: "detske" }
                   - { label: "Narozeninové", value: "narozeninove" }
                   - { label: "Svatební", value: "svatebni" }
                   - { label: "Nahé", value: "nahe" }
+                  - { label: "Ke křtinám", value: "krtiny" }
+                  - { label: "Elegantní", value: "elegantni" }
+                  - { label: "3D a netradiční", value: "3d-netradicni" }
               
               - { label: "Kategorie (systémová)", name: "kategorie", widget: "hidden", default: "dorty" }
 
