@@ -68,7 +68,7 @@ const stores = [
 										width={400} 
 										height={300} 
 										format="webp"
-										loading={index < 2 ? "eager" : "lazy"}
+										loading={index < 3 ? "eager" : "lazy"}
 										fetchpriority={index === 0 ? "high" : "auto"}
 									/>
 								</a>
@@ -159,7 +159,7 @@ const stores = [
 												aria-label="Množství"
 												min="1" 
 												value="1" 
-												class="w-12 bg-transparent text-center font-bold outline-none border-none p-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+												class="w-12 bg-transparent text-center font-bold outline-none border-none p-0"
 											/>
 											<button 
 												aria-label="Zvýšit množství"
