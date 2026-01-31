@@ -1,150 +1,147 @@
 ---
-interface Props {
-	title?: string;
-	description?: string;
-	keywords?: string;
-	image?: string;
-}
+import Layout from '../layouts/Layout.astro';
+import productsData from '../../data.json';
+import CustomCakeForm from '../components/CustomCakeForm';
+import ReservationForm from '../components/ReservationForm.tsx';
+import EdiblePrintForm from '../components/EdiblePrintForm.tsx';
+import { Image } from 'astro:assets';
 
-const {
-	title = 'Cukrářství Blahutovi - Tradiční pečivo a dorty s tradicí',
-	description = 'Poctivé domácí dorty, zákusky a jedlý tisk. Navštivte naše prodejny v Píšti, Petřvaldě, Karviné a Ostravě. Tradice od roku 1985.',
-	keywords = 'cukrářství, dorty na zakázku, domácí zákusky, jedlý tisk, Cukrářství Blahutovi, Píšť, Ostrava, Karviná',
-	image = '/og-image.jpg' // Doporučuji vytvořit a vložit do složky public
-} = Astro.props;
+const cakeImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/dorty/*.{jpeg,jpg,png,webp,JPG,JPEG}');
+const dessertImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/zakusky/*.{jpeg,jpg,png,webp,JPG,JPEG}');
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const cakes = (productsData?.cakes || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
+const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
+
+const stores = [
+	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1, 735 41 Petřvald', phone: '+420 778 157 857', mapUrl: 'https://maps.google.com/?q=Šenovská+1+Petřvald', hours: 'Út–Ne: 9:00–17:00' },
+	{ id: 'pist', name: 'Píšť', address: 'Opavská 218/101, 747 18 Píšť', phone: '+420 602 323 788', mapUrl: 'https://maps.google.com/?q=Opavská+218+Píšť', hours: 'Po–Pá: 6:00–15:00' },
+	{ id: 'karvina', name: 'Karviná', address: 'tř. Těreškovové 2233/28, 734 01 Karviná', phone: '+420 778 157 867', mapUrl: 'https://maps.google.com/?q=Těreškovové+2233+Karviná', hours: 'Po–Pá: 9:00–17:00, So: 8:00–12:00' },
+	{ id: 'ostrava', name: 'Ostrava (Zábřeh)', address: 'Výškovická 116a, 700 30 Ostrava-jih', phone: '+420 775 271 101', mapUrl: 'https://maps.google.com/?q=Výškovická+116a+Ostrava', hours: 'Po–Pá: 9:00–17:00, So: 9:00–12:00' }
+];
 ---
 
-<!doctype html>
-<html lang="cs">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<link rel="canonical" href={canonicalURL} />
-
-		<title>{title}</title>
-		<meta name="description" content={description} />
-		<meta name="keywords" content={keywords} />
-		<meta name="theme-color" content="#0a192f" />
-
-		{/* Open Graph / Facebook */}
-		<meta property="og:type" content="website" />
-		<meta property="og:url" content={Astro.url} />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
-		<meta property="og:image" content={new URL(image, Astro.url)} />
-
-		{/* Twitter */}
-		<meta property="twitter:card" content="summary_large_image" />
-		<meta property="twitter:url" content={Astro.url} />
-		<meta property="twitter:title" content={title} />
-		<meta property="twitter:description" content={description} />
-		<meta property="twitter:image" content={new URL(image, Astro.url)} />
-
-		<script async src="https://www.googletagmanager.com/gtag/js?id=G-5JPLYYKGGN"></script>
-		<script is:inline>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
-			gtag('config', 'G-5JPLYYKGGN');
-		</script>
-		
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
-	</head>
-	<body class="bg-[#f8f9fa] text-[#0a192f] pb-16 md:pb-0 antialiased">
-		<slot />
-
-		{/* Plovoucí menu s kontakty */}
-		<div class="fixed bottom-6 right-6 z-[9999] md:hidden">
-			<input type="checkbox" id="call-menu-toggle" class="hidden peer">
-			
-			<label for="call-menu-toggle" class="flex items-center justify-center w-16 h-16 bg-[#d4af37] text-white rounded-full shadow-2xl cursor-pointer transition-transform active:scale-95 peer-checked:rotate-45" aria-label="Zobrazit telefonní čísla na prodejny">
-				<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-				</svg>
-			</label>
-
-			<div class="absolute bottom-20 right-0 hidden peer-checked:flex flex-col gap-3 w-64 animate-in slide-in-from-bottom-5 duration-300">
-				<a href="tel:+420778157857" class="bg-[#0a192f] border-r-4 border-[#d4af37] p-3 rounded-lg shadow-xl no-underline text-white flex flex-col items-end transition-transform hover:scale-105">
-					<span class="text-[10px] text-[#d4af37] font-bold uppercase tracking-widest">Petřvald</span>
-					<span class="text-lg font-bold">778 157 857</span>
-				</a>
-				<a href="tel:+420602323788" class="bg-[#0a192f] border-r-4 border-[#d4af37] p-3 rounded-lg shadow-xl no-underline text-white flex flex-col items-end transition-transform hover:scale-105">
-					<span class="text-[10px] text-[#d4af37] font-bold uppercase tracking-widest">Píšť (Centrála)</span>
-					<span class="text-lg font-bold">602 323 788</span>
-				</a>
-				<a href="tel:+420778157867" class="bg-[#0a192f] border-r-4 border-[#d4af37] p-3 rounded-lg shadow-xl no-underline text-white flex flex-col items-end transition-transform hover:scale-105">
-					<span class="text-[10px] text-[#d4af37] font-bold uppercase tracking-widest">Karviná</span>
-					<span class="text-lg font-bold">778 157 867</span>
-				</a>
-				<a href="tel:+420775271101" class="bg-[#0a192f] border-r-4 border-[#d4af37] p-3 rounded-lg shadow-xl no-underline text-white flex flex-col items-end transition-transform hover:scale-105">
-					<span class="text-[10px] text-[#d4af37] font-bold uppercase tracking-widest">Ostrava (Zábřeh)</span>
-					<span class="text-lg font-bold">775 271 101</span>
-				</a>
+<Layout title="Cukrářství Blahutovi | Domácí dorty a zákusky">
+	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
+		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
+			<h1 class="text-xl md:text-2xl font-serif text-[#d4af37]">Cukrářství Blahutovi</h1>
+			<nav id="main-nav" class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-white/90">
+				<a href="#dorty" class="hover:text-[#d4af37]">Dorty</a>
+				<a href="#zakusky" class="hover:text-[#d4af37]">Zákusky</a>
+				<a href="#jedly-tisk" class="hover:text-[#d4af37]">Jedlý tisk</a>
+				<a href="#dort-na-prani" class="hover:text-[#d4af37]">Dort na přání</a>
+				<a href="#prodejny" class="hover:text-[#d4af37]">Prodejny</a>
+				<a href="#b2b" class="hover:text-[#d4af37]">Pro firmy</a>
+			</nav>
+			<div class="flex items-center gap-4">
+				<ReservationForm client:load />
+				<button id="menu-toggle" class="lg:hidden text-[#d4af37] p-2" aria-label="Menu">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor font-bold">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+					</svg>
+				</button>
 			</div>
 		</div>
+	</header>
 
-		<script is:inline src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
-		<script is:inline>
-			function initLightbox() {
-				if (window.GLightbox) {
-					GLightbox({ selector: '.glightbox', touchNavigation: true, loop: true });
-				}
-			}
+	<main>
+		{/* Sekce Dorty */}
+		<section id="dorty" class="py-16 px-4 max-w-7xl mx-auto text-[#0a192f]">
+			<h2 class="text-4xl font-serif text-center mb-12 italic">Naše Dorty</h2>
+			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+				{cakes.map(cake => {
+					const imagePath = cake.foto.startsWith('/') ? cake.foto : `/${cake.foto}`;
+					const id = `qty-${cake.title.replace(/\s+/g, '-').toLowerCase()}`;
+					return (
+					<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col">
+						<div class="h-64 overflow-hidden relative text-center bg-slate-50">
+							<a href={cake.foto} class="glightbox">
+								<Image src={cakeImages[imagePath]()} alt={cake.title} class="w-full h-full object-cover" width={400} height={300} />
+							</a>
+						</div>
+						<div class="p-6 text-center flex-grow flex flex-col justify-between">
+							<div>
+								<h3 class="text-xl font-bold mb-1">{cake.title}</h3>
+								<p class="text-slate-500 text-sm mb-4">{cake.porce}</p>
+							</div>
+							<div class="space-y-3">
+								<p class="text-[#d4af37] font-black text-2xl">{cake.cena}</p>
+								<div class="flex items-center justify-center gap-2">
+									<input type="number" id={id} min="1" defaultValue="1" class="w-16 p-2 border border-slate-200 rounded-xl text-center font-bold outline-none focus:ring-1 focus:ring-[#d4af37]" />
+									<button 
+										onclick={`const q=document.getElementById('${id}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${cake.title}", price: "${cake.cena}", img: "${cake.foto}", quantity: parseInt(q) } }))`}
+										class="flex-grow bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all text-xs uppercase tracking-widest"
+									>
+										Přidat
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				)})}
+			</div>
+		</section>
 
-			function initMobileMenu() {
-				const menuToggle = document.getElementById('menu-toggle');
-				const nav = document.querySelector('nav');
-				if (menuToggle && nav) {
-					menuToggle.setAttribute('aria-expanded', 'false');
-					menuToggle.onclick = () => {
-						const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
-						menuToggle.setAttribute('aria-expanded', !isExpanded);
-						nav.classList.toggle('hidden');
-						nav.classList.toggle('flex');
-					};
-				}
-			}
+		{/* Sekce Zákusky - Stejná logika s množstvím */}
+		<section id="zakusky" class="py-16 px-4 bg-slate-50 text-[#0a192f]">
+			<div class="max-w-7xl mx-auto text-center">
+				<h2 class="text-4xl font-serif mb-12 italic">Naše Zákusky</h2>
+				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+					{desserts.map(dessert => {
+						const imagePath = dessert.foto.startsWith('/') ? dessert.foto : `/${dessert.foto}`;
+						const id = `qty-${dessert.title.replace(/\s+/g, '-').toLowerCase()}`;
+						return (
+						<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col">
+							<div class="h-56 overflow-hidden relative">
+								<a href={dessert.foto} class="glightbox">
+									<Image src={dessertImages[imagePath]()} alt={dessert.title} class="w-full h-full object-cover" width={300} height={300} />
+								</a>
+							</div>
+							<div class="p-6 text-center flex-grow flex flex-col justify-between">
+								<h3 class="text-lg font-bold mb-1 leading-tight">{dessert.title}</h3>
+								<div class="space-y-3">
+									<p class="text-[#d4af37] font-black text-xl">{dessert.cena}</p>
+									<div class="flex items-center justify-center gap-2">
+										<input type="number" id={id} min="1" defaultValue="1" class="w-16 p-2 border border-slate-200 rounded-xl text-center font-bold outline-none focus:ring-1 focus:ring-[#d4af37]" />
+										<button 
+											onclick={`const q=document.getElementById('${id}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${dessert.title}", price: "${dessert.cena}", img: "${dessert.foto}", quantity: parseInt(q) } }))`}
+											class="flex-grow bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all text-xs uppercase tracking-widest"
+										>
+											Přidat
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					)})}
+				</div>
+			</div>
+		</section>
 
-			initLightbox();
-			initMobileMenu();
-			
-			// Podpora pro View Transitions (pokud budou zapnuté)
-			document.addEventListener('astro:after-swap', () => {
-				initLightbox();
-				initMobileMenu();
-			});
-		</script>
-	</body>
-</html>
+		<section id="jedly-tisk"><EdiblePrintForm client:load /></section>
+		<section id="dort-na-prani"><CustomCakeForm client:load /></section>
+		<section id="prodejny" class="py-20 bg-white">
+			{/* Tvůj kód pro prodejny... */}
+		</section>
+	</main>
+</Layout>
 
-<style is:global>
-	:root {
-		--navy-900: #0a192f;
-		--gold-500: #d4af37;
-	}
-
-	html { scroll-behavior: smooth; scroll-padding-top: 80px; }
-	body { font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; }
-	h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
-
-	/* Vlastní scrollbar */
-	::-webkit-scrollbar { width: 8px; }
-	::-webkit-scrollbar-track { background: #f1f1f1; }
-	::-webkit-scrollbar-thumb { background: var(--navy-900); border-radius: 4px; }
+<script is:inline>
+	// Oprava mobilního menu
+	const btn = document.getElementById('menu-toggle');
+	const nav = document.getElementById('main-nav');
 	
-	/* Utility pro animaci menu */
-	.animate-in {
-		animation: fadeIn 0.3s ease-out;
+	if (btn && nav) {
+		btn.addEventListener('click', () => {
+			nav.classList.toggle('hidden');
+			nav.classList.toggle('flex');
+			nav.classList.toggle('flex-col');
+			nav.classList.toggle('absolute');
+			nav.classList.toggle('top-20');
+			nav.classList.toggle('left-0');
+			nav.classList.toggle('w-full');
+			nav.classList.toggle('bg-[#0a192f]');
+			nav.classList.toggle('p-6');
+			nav.classList.toggle('z-50');
+		});
 	}
-	@keyframes fadeIn {
-		from { opacity: 0; transform: translateY(10px); }
-		to { opacity: 1; transform: translateY(0); }
-	}
-</style>
+</script>
