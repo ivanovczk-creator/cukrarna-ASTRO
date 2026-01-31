@@ -7,7 +7,10 @@
       "porce": "12 porcí",
       "foto": "/img/dorty/1.webp",
       "kategorie": "dorty",
-      "weight": 1
+      "weight": 1,
+      "category_list": [
+        "detske"
+      ]
     },
     {
       "id": 2,
@@ -15,7 +18,10 @@
       "cena": "1900 Kč",
       "porce": "12 porcí",
       "foto": "/img/dorty/2.webp",
-      "kategorie": "dorty"
+      "kategorie": "dorty",
+      "category_list": [
+        "narozeninove"
+      ]
     },
     {
       "id": 3,
@@ -23,7 +29,11 @@
       "cena": "2800 Kč",
       "porce": "20 porcí",
       "foto": "/img/dorty/3.webp",
-      "kategorie": "dorty"
+      "kategorie": "dorty",
+      "category_list": [
+        "narozeninove",
+        "detske"
+      ]
     },
     {
       "id": 4,
@@ -31,7 +41,10 @@
       "cena": "1700 Kč",
       "porce": "12 porcí",
       "foto": "/img/dorty/4.webp",
-      "kategorie": "dorty"
+      "kategorie": "dorty",
+      "category_list": [
+        "narozeninove"
+      ]
     },
     {
       "id": 5,
@@ -39,7 +52,10 @@
       "cena": "1700 Kč",
       "porce": "12 porcí",
       "foto": "/img/dorty/5.webp",
-      "kategorie": "dorty"
+      "kategorie": "dorty",
+      "category_list": [
+        "detske"
+      ]
     },
     {
       "id": 6,
@@ -312,7 +328,10 @@
       "cena": "1400 Kč",
       "porce": "10 porcí",
       "foto": "/img/dorty/39.webp",
-      "kategorie": "dorty"
+      "kategorie": "dorty",
+      "category_list": [
+        "narozeninove"
+      ]
     },
     {
       "id": 40,
@@ -320,7 +339,11 @@
       "cena": "2000 Kč",
       "porce": "12 porcí",
       "foto": "/img/dorty/40.webp",
-      "kategorie": "dorty"
+      "kategorie": "dorty",
+      "category_list": [
+        "narozeninove",
+        "nahe"
+      ]
     },
     {
       "id": 41,
