@@ -49,7 +49,6 @@ const stores = [
 			<h2 class="text-4xl font-serif text-center mb-12 italic">Naše Dorty</h2>
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
 				{cakes.map(cake => {
-					// Dynamické propojení cesty z JSONu s optimalizovaným importem
 					const imagePath = cake.foto.startsWith('/') ? cake.foto : `/${cake.foto}`;
 					return (
 					<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col">
@@ -171,13 +170,6 @@ const stores = [
 		<p class="mb-2 italic text-[#d4af37]">Cukrářství Blahutovi</p>
 		<p>© {new Date().getFullYear()} — Všechna práva vyzrazena</p>
 	</footer>
-
-	<form name="objednavka" data-netlify="true" hidden>
-		<input name="Jmeno" /> <input name="Email" /> <input name="Telefon" /> <input name="Prodejna" /> <input name="Datum" />
-		<textarea name="Poznamka"></textarea> <textarea name="Produkty-Seznam"></textarea>
-	</form>
-	<form name="dort-na-prani" data-netlify="true" hidden><input name="Jmeno" /><input name="Email" /><input name="Telefon" /><textarea name="Zprava" /><input type="file" name="Inspiro-Foto" /></form>
-	<form name="tisk-na-papir" data-netlify="true" hidden><input name="Jmeno" /><input name="Email" /><input name="Telefon" /><input name="Prodejna" /><input name="Datum" /><input type="file" name="Tisk-Soubory[]" multiple /><textarea name="Poznamka"></textarea></form>
 </Layout>
 
 <script is:inline>
