@@ -6,9 +6,9 @@ import ReservationForm from '../components/ReservationForm.tsx';
 import EdiblePrintForm from '../components/EdiblePrintForm.tsx';
 import { Image } from 'astro:assets';
 
-// 1. Načtení obrázků (Astro potřebuje vědět o všech souborech v src nebo public pro optimalizaci)
-const cakeImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/dorty/*.{jpeg,jpg,png,webp,JPG}');
-const dessertImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/zakusky/*.{jpeg,jpg,png,webp,JPG}');
+// 1. OPRAVA: Přidáváme eager: true
+const cakeImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/dorty/*.{jpeg,jpg,png,webp,JPG}', { eager: true });
+const dessertImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/zakusky/*.{jpeg,jpg,png,webp,JPG}', { eager: true });
 
 const cakes = (productsData?.cakes || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
@@ -50,18 +50,22 @@ const stores = [
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
 				{cakes.map(cake => {
 					const imagePath = cake.foto.startsWith('/') ? cake.foto : `/${cake.foto}`;
+					// 2. OPRAVA: Přistupujeme k .default místo volání funkce ()
+					const imgData = cakeImages[imagePath]?.default;
 					return (
 					<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col">
 						<div class="h-64 overflow-hidden relative text-center bg-slate-50">
 							<a href={cake.foto} class="glightbox">
-								<Image 
-									src={cakeImages[imagePath]()} 
-									alt={`Dort ${cake.title}`} 
-									class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" 
-									width={400}
-									height={300}
-									format="webp"
-								/>
+								{imgData && (
+									<Image 
+										src={imgData} 
+										alt={`Dort ${cake.title}`} 
+										class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" 
+										width={400}
+										height={300}
+										format="webp"
+									/>
+								)}
 							</a>
 						</div>
 						<div class="p-6 text-center flex-grow flex flex-col justify-between">
@@ -71,7 +75,7 @@ const stores = [
 							</div>
 							<div>
 								<p class="text-[#d4af37] font-black text-2xl mb-4">{cake.cena}</p>
-								<button 
+								<button 
 									onclick={`window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: '${cake.title}', price: '${cake.cena}', img: '${cake.foto}' } }))`}
 									class="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all shadow-lg active:scale-95"
 								>
@@ -90,25 +94,29 @@ const stores = [
 				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
 					{desserts.map(dessert => {
 						const imagePath = dessert.foto.startsWith('/') ? dessert.foto : `/${dessert.foto}`;
+						// 2. OPRAVA: Přistupujeme k .default místo volání funkce ()
+						const imgData = dessertImages[imagePath]?.default;
 						return (
 						<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col transition-transform hover:-translate-y-1">
 							<div class="h-56 overflow-hidden relative bg-slate-50">
 								<a href={dessert.foto} class="glightbox">
-									<Image 
-										src={dessertImages[imagePath]()} 
-										alt={`Zákusek ${dessert.title}`} 
-										class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" 
-										width={300}
-										height={300}
-										format="webp"
-									/>
+									{imgData && (
+										<Image 
+											src={imgData} 
+											alt={`Zákusek ${dessert.title}`} 
+											class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" 
+											width={300}
+											height={300}
+											format="webp"
+										/>
+									)}
 								</a>
 							</div>
 							<div class="p-6 text-center flex-grow flex flex-col justify-between">
 								<h3 class="text-lg font-bold mb-1 leading-tight">{dessert.title}</h3>
 								<div>
 									<p class="text-[#d4af37] font-black text-xl mb-4">{dessert.cena}</p>
-									<button 
+									<button 
 										onclick={`window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: '${dessert.title}', price: '${dessert.cena}', img: '${dessert.foto}' } }))`}
 										class="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all shadow-lg active:scale-95"
 									>
