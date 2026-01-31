@@ -1,179 +1,283 @@
----
-import Layout from '../layouts/Layout.astro';
-import productsData from '../../data.json';
-import CustomCakeForm from '../components/CustomCakeForm';
-import ReservationForm from '../components/ReservationForm.tsx';
-import EdiblePrintForm from '../components/EdiblePrintForm.tsx';
-import { Image } from 'astro:assets';
+import React, { useState, useEffect } from 'react';
 
-const cakeImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/dorty/*.{jpeg,jpg,png,webp,JPG,JPEG}');
-const dessertImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/zakusky/*.{jpeg,jpg,png,webp,JPG,JPEG}');
 
-const cakes = (productsData?.cakes || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
-const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
 
-const stores = [
-	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1, 735 41 Petřvald', phone: '+420 778 157 857', mapUrl: 'https://maps.app.goo.gl/yYvS6R8xX8xX8xX8', hours: 'Út–Ne: 9:00–17:00' },
-	{ id: 'pist', name: 'Píšť', address: 'Opavská 218/101, 747 18 Píšť', phone: '+420 602 323 788', mapUrl: 'https://maps.app.goo.gl/yYvS6R8xX8xX8xX8', hours: 'Po–Pá: 6:00–15:00' },
-	{ id: 'karvina', name: 'Karviná', address: 'tř. Těreškovové 2233/28, 734 01 Karviná', phone: '+420 778 157 867', mapUrl: 'https://maps.app.goo.gl/yYvS6R8xX8xX8xX8', hours: 'Po–Pá: 9:00–17:00, So: 8:00–12:00' },
-	{ id: 'ostrava', name: 'Ostrava (Zábřeh)', address: 'Výškovická 116a, 700 30 Ostrava-jih', phone: '+420 775 271 101', mapUrl: 'https://maps.app.goo.gl/yYvS6R8xX8xX8xX8', hours: 'Po–Pá: 9:00–17:00, So: 9:00–12:00' }
-];
----
+const ReservationForm = () => {
 
-<Layout title="Cukrářství Blahutovi | Domácí dorty a zákusky">
-	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
-		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
-			<h1 class="text-xl md:text-2xl font-serif text-[#d4af37]">Cukrářství Blahutovi</h1>
-			<nav id="nav-menu" class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-white/90">
-				<a href="#dorty" class="hover:text-[#d4af37]">Dorty</a>
-				<a href="#zakusky" class="hover:text-[#d4af37]">Zákusky</a>
-				<a href="#jedly-tisk" class="hover:text-[#d4af37]">Jedlý tisk</a>
-				<a href="#dort-na-prani" class="hover:text-[#d4af37]">Dort na přání</a>
-				<a href="#prodejny" class="hover:text-[#d4af37]">Prodejny</a>
-			</nav>
-			<div class="flex items-center gap-4">
-				<ReservationForm client:load />
-				<button id="menu-toggle" class="lg:hidden text-[#d4af37] p-2" aria-label="Menu">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-					</svg>
-				</button>
-			</div>
-		</div>
-	</header>
+  const [cart, setCart] = useState<{name: string, price: string, quantity: number, img: string}[]>([]);
 
-	<main>
-		<section id="dorty" class="py-16 px-4 max-w-7xl mx-auto text-[#0a192f]">
-			<h2 class="text-4xl font-serif text-center mb-12 italic text-navy-900">Naše Dorty</h2>
-			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-center">
-				{cakes.map(cake => {
-					const imagePath = cake.foto.startsWith('/') ? cake.foto : `/${cake.foto}`;
-					const cakeId = cake.title.replace(/\s+/g, '-').toLowerCase();
-					return (
-					<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col">
-						<div class="h-64 overflow-hidden relative text-center bg-slate-50">
-							<a href={cake.foto} class="glightbox">
-								<Image src={cakeImages[imagePath]()} alt={cake.title} class="w-full h-full object-cover" width={400} height={300} format="webp" />
-							</a>
-						</div>
-						<div class="p-6 flex-grow flex flex-col justify-between">
-							<div>
-								<h3 class="text-xl font-bold mb-1">{cake.title}</h3>
-								<p class="text-slate-500 text-sm mb-4">{cake.porce}</p>
-							</div>
-							<div class="space-y-4">
-								<p class="text-[#d4af37] font-black text-2xl">{cake.cena}</p>
-								<div class="flex items-center gap-2">
-									<input type="number" id={`qty-${cakeId}`} min="1" defaultValue="1" class="w-16 p-3 bg-slate-50 border border-slate-200 rounded-xl text-center font-bold outline-none" />
-									<button 
-										onclick={`const q=document.getElementById('qty-${cakeId}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${cake.title}", price: "${cake.cena}", img: "${cake.foto}", quantity: q } }))`}
-										class="flex-grow bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all text-[10px] uppercase tracking-widest active:scale-95"
-									>
-										Přidat
-									</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				)})}
-			</div>
-		</section>
+  const [isOpen, setIsOpen] = useState(false);
 
-		<section id="zakusky" class="py-16 px-4 bg-slate-50 text-[#0a192f]">
-			<div class="max-w-7xl mx-auto text-center">
-				<h2 class="text-4xl font-serif text-center mb-12 italic text-navy-900">Naše Zákusky</h2>
-				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-					{desserts.map(dessert => {
-						const imagePath = dessert.foto.startsWith('/') ? dessert.foto : `/${dessert.foto}`;
-						const dessertId = dessert.title.replace(/\s+/g, '-').toLowerCase();
-						return (
-						<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col transition-transform hover:-translate-y-1">
-							<div class="h-56 overflow-hidden relative">
-								<a href={dessert.foto} class="glightbox">
-									<Image src={dessertImages[imagePath]()} alt={dessert.title} class="w-full h-full object-cover" width={300} height={300} format="webp" />
-								</a>
-							</div>
-							<div class="p-6 flex-grow flex flex-col justify-between">
-								<h3 class="text-lg font-bold mb-1 leading-tight">{dessert.title}</h3>
-								<div class="space-y-4">
-									<p class="text-[#d4af37] font-black text-xl">{dessert.cena}</p>
-									<div class="flex items-center gap-2">
-										<input type="number" id={`qty-${dessertId}`} min="1" defaultValue="1" class="w-16 p-3 bg-slate-50 border border-slate-200 rounded-xl text-center font-bold outline-none" />
-										<button 
-											onclick={`const q=document.getElementById('qty-${dessertId}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${dessert.title}", price: "${dessert.cena}", img: "${dessert.foto}", quantity: q } }))`}
-											class="flex-grow bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all text-[10px] uppercase tracking-widest active:scale-95"
-										>
-											Přidat
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					)})}
-				</div>
-			</div>
-		</section>
+  const [justAdded, setJustAdded] = useState(false);
 
-		<section id="jedly-tisk" class="py-20 px-4 bg-white"><EdiblePrintForm client:load /></section>
-		<section id="dort-na-prani" class="py-20 px-4 bg-slate-50"><CustomCakeForm client:load /></section>
+  
 
-		<section id="prodejny" class="py-20 px-4 max-w-7xl mx-auto">
-			<h2 class="text-4xl font-serif text-center mb-12 italic">Navštivte nás</h2>
-			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-white text-left">
-				{stores.map(store => (
-					<div class="bg-[#0a192f] p-6 rounded-[2rem] border border-[#d4af37]/20 shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1">
-						<div>
-							<h3 class="text-[#d4af37] font-bold mb-1 text-xl">{store.name}</h3>
-							<p class="text-[10px] uppercase tracking-widest text-slate-400 mb-4 font-bold">{store.hours}</p>
-							<p class="text-sm opacity-80 mb-1 leading-relaxed">{store.address}</p>
-							<p class="text-sm font-bold mb-4">{store.phone}</p>
-						</div>
-						<a href={store.mapUrl} target="_blank" class="block w-full text-center py-3 rounded-xl border border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#0a192f] transition-all font-bold text-[10px] uppercase tracking-widest" rel="noopener noreferrer">Ukázat na mapě</a>
-					</div>
-				))}
-			</div>
-		</section>
-	</main>
+  const [selectedStore, setSelectedStore] = useState('Petřvald');
 
-	<footer class="bg-[#0a192f] py-12 text-center text-white/40 text-xs border-t border-[#d4af37]/10">
-		<p class="mb-2 italic text-[#d4af37] text-sm">Cukrářství Blahutovi</p>
-		<p>© {new Date().getFullYear()} — Všechna práva vyzrazena</p>
-	</footer>
-</Layout>
+  const [minDate, setMinDate] = useState('');
 
-<script is:inline>
-	function init() {
-		const btn = document.getElementById('menu-toggle');
-		const nav = document.getElementById('nav-menu');
-		
-		if (btn && nav) {
-			btn.onclick = (e) => {
-				e.preventDefault();
-				nav.classList.toggle('hidden');
-				nav.classList.toggle('flex');
-				nav.classList.toggle('flex-col');
-				nav.classList.toggle('absolute');
-				nav.classList.toggle('top-20');
-				nav.classList.toggle('left-0');
-				nav.classList.toggle('w-full');
-				nav.classList.toggle('bg-[#0a192f]');
-				nav.classList.toggle('p-6');
-				nav.classList.toggle('z-50');
-				nav.classList.toggle('border-b-2');
-				nav.classList.toggle('border-[#d4af37]');
-			};
 
-			nav.querySelectorAll('a').forEach(link => {
-				link.onclick = () => {
-					if (!nav.classList.contains('hidden')) {
-						nav.classList.add('hidden');
-						nav.classList.remove('flex', 'flex-col', 'absolute', 'top-20', 'left-0', 'w-full', 'bg-[#0a192f]', 'p-6', 'z-50', 'border-b-2', 'border-[#d4af37]');
-					}
-				};
-			});
-		}
-	}
 
-	init();
-	document.addEventListener('astro:after-swap', init);
-</script>
+  useEffect(() => {
+
+    // Nastavení minimálního data na +2 dny od teď
+
+    const date = new Date();
+
+    date.setDate(date.getDate() + 2);
+
+    setMinDate(date.toISOString().split('T')[0]);
+
+
+
+    const saved = localStorage.getItem('blahutovi_cart');
+
+    if (saved) {
+
+        try {
+
+            setCart(JSON.parse(saved));
+
+        } catch (e) {
+
+            console.error("Chyba při načítání košíku", e);
+
+        }
+
+    }
+
+
+
+    const handleAddToCart = (e: any) => {
+
+      const { name, price, img } = e.detail;
+
+      setCart(prev => {
+
+        const existing = prev.find(item => item.name === name);
+
+        let newCart;
+
+        if (existing) {
+
+          newCart = prev.map(item => item.name === name ? {...item, quantity: item.quantity + 1} : item);
+
+        } else {
+
+          newCart = [...prev, { name, price, quantity: 1, img }];
+
+        }
+
+        localStorage.setItem('blahutovi_cart', JSON.stringify(newCart));
+
+        return newCart;
+
+      });
+
+      setJustAdded(true);
+
+      setTimeout(() => setJustAdded(false), 1000);
+
+    };
+
+
+
+    window.addEventListener('add-to-cart', handleAddToCart);
+
+    return () => window.removeEventListener('add-to-cart', handleAddToCart);
+
+  }, []);
+
+
+
+  const removeItem = (name: string) => {
+
+    const newCart = cart.filter(item => item.name !== name);
+
+    setCart(newCart);
+
+    localStorage.setItem('blahutovi_cart', JSON.stringify(newCart));
+
+  };
+
+
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+    e.preventDefault();
+
+    if (cart.length === 0) {
+
+      alert("Košík je prázdný.");
+
+      return;
+
+    }
+
+
+
+    const formData = new FormData(e.currentTarget);
+
+    const dateVal = new Date(formData.get('Datum') as string);
+
+    const day = dateVal.getDay(); // 0 = Ne, 1 = Po...
+
+
+
+    // Logika zavíracích dnů
+
+    const isClosed = (selectedStore === 'Petřvald' && day === 1) || 
+
+                     (selectedStore === 'Píšť' && (day === 0 || day === 6)) || 
+
+                     (selectedStore === 'Karviná' && day === 0) || 
+
+                     (selectedStore === 'Ostrava (Zábřeh)' && day === 0);
+
+
+
+    if (isClosed) {
+
+      alert(`Vámi vybraná prodejna (${selectedStore}) má v tento den zavřeno. Prosím vyberte jiné datum.`);
+
+      return;
+
+    }
+
+
+
+    // Formátování seznamu pro e-mail
+
+    const list = cart.map(item => 
+
+      `${item.quantity}x - ${item.name} (${item.price})`
+
+    ).join('\n');
+
+    
+
+    formData.append('Produkty-Seznam', list);
+
+    
+
+    fetch("/", {
+
+      method: "POST",
+
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+
+      body: new URLSearchParams(formData as any).toString(),
+
+    })
+
+    .then(() => {
+
+      localStorage.removeItem('blahutovi_cart');
+
+      window.location.href = "/dekujeme";
+
+    })
+
+    .catch((err) => alert("Omlouváme se, došlo k chybě: " + err));
+
+  };
+
+
+
+  const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+
+
+
+  return (
+
+    <div className="relative">
+
+      <button 
+
+        onClick={() => setIsOpen(!isOpen)} 
+
+        className={`relative p-2 text-[#d4af37] transition-all duration-300 ${justAdded ? 'scale-125' : 'scale-100'}`}
+
+        aria-label="Nákupní košík"
+
+      >
+
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+
+        </svg>
+
+        {totalItems > 0 && (
+
+          <span className="absolute top-0 right-0 bg-red-600 text-white text-[10px] min-w-[20px] h-[20px] flex items-center justify-center rounded-full font-bold border-2 border-[#0a192f] animate-in zoom-in">
+
+            {totalItems}
+
+          </span>
+
+        )}
+
+      </button>
+
+
+
+      {isOpen && (
+
+        <>
+
+          {/* Overlay pro zavření kliknutím mimo */}
+
+          <div className="fixed inset-0 z-[90]" onClick={() => setIsOpen(false)}></div>
+
+          
+
+          <div className="absolute right-0 mt-4 w-80 md:w-96 bg-white rounded-[2rem] shadow-2xl p-6 md:p-8 border border-slate-100 text-[#0a192f] z-[100] animate-in fade-in slide-in-from-top-2">
+
+            <div className="flex justify-between items-center mb-6">
+
+              <h3 className="text-xl font-bold font-serif">Vaše objednávka</h3>
+
+              <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors">✕</button>
+
+            </div>
+
+
+
+            {cart.length === 0 ? (
+
+              <p className="text-center text-slate-400 italic py-8">Košík je prázdný</p>
+
+            ) : (
+
+              <form name="objednavka" method="POST" onSubmit={handleSubmit} data-netlify="true">
+
+                <input type="hidden" name="form-name" value="objednavka" />
+
+                <div className="max-h-48 overflow-y-auto mb-6 space-y-3 pr-2 scrollbar-thin">
+
+                  {cart.map((item, i) => (
+
+                    <div key={i} className="flex gap-3 items-center bg-slate-50 p-2 rounded-xl border border-slate-100">
+
+                      <img src={item.img} alt="" className="w-10 h-10 object-cover rounded-lg" />
+
+                      <div className="flex-grow">
+
+                        <p className="font-bold text-xs leading-tight">{item.name}</p>
+
+                        <p className="text-[10px] text-[#d4af37]">{item.quantity}x {item.price}</p>
+
+                      </div>
+
+                      <button 
+
+                        type="button" 
+
+                        onClick={() => removeItem(item.name)} 
+
+                        className="p-2 text-red-400 hover:text-red-600 transition-colors"
+
+                        title="Odstranit"
+
+                      >
