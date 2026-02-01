@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ReservationForm from '../components/ReservationForm.tsx';
+import CustomCakeForm from '../components/CustomCakeForm.tsx';
 ---
 
 <Layout 
@@ -44,8 +45,8 @@ import ReservationForm from '../components/ReservationForm.tsx';
 		</section>
 
 		<section class="py-16 px-4 max-w-7xl mx-auto">
-			<div class="grid lg:grid-cols-2 gap-16 items-center">
-				<div>
+			<div class="grid lg:grid-cols-5 gap-16 items-start">
+				<div class="lg:col-span-2">
 					<h2 class="text-3xl md:text-4xl font-serif mb-6 text-[#0a192f] italic font-bold">Zakázková výroba dortů</h2>
 					<div class="text-slate-600 space-y-4 text-lg leading-relaxed font-bold">
 						<p>
@@ -54,40 +55,31 @@ import ReservationForm from '../components/ReservationForm.tsx';
 						</p>
 						<p>
 							Ať už jde o narozeniny s oblíbeným hrdinou, firemní výročí s logem nebo svatbu v netradičním stylu, 
-							ke každé objednávce přistupujeme individuálně. Nepoužíváme žádné polotovary – vše od korpusu až po poslední kytičku 
-							je naše <strong>poctivá řemeslná práce</strong>.
+							ke každé objednávce přistupujeme individuálně.
 						</p>
 					</div>
 
 					<div class="mt-10 space-y-4">
 						<div class="flex items-center gap-4 text-[#0a192f] font-bold">
-							<span class="bg-[#d4af37] p-2 rounded-lg text-white">✓</span>
-							<p>Vlastní návrhy a předlohy vítány</p>
+							<span class="bg-[#d4af37] p-2 rounded-lg text-white font-bold">✓</span>
+							<p>Nahrání vlastních předloh a fotografií</p>
 						</div>
 						<div class="flex items-center gap-4 text-[#0a192f] font-bold">
-							<span class="bg-[#d4af37] p-2 rounded-lg text-white">✓</span>
-							<p>Možnost kombinace s jedlým tiskem</p>
+							<span class="bg-[#d4af37] p-2 rounded-lg text-white font-bold">✓</span>
+							<p>Hlídání minimální lhůty výroby 7 dní</p>
 						</div>
 						<div class="flex items-center gap-4 text-[#0a192f] font-bold">
-							<span class="bg-[#d4af37] p-2 rounded-lg text-white">✓</span>
-							<p>Výběr z mnoha druhů lehkých krémů a korpusů</p>
+							<span class="bg-[#d4af37] p-2 rounded-lg text-white font-bold">✓</span>
+							<p>Výběr prodejny dle otevírací doby</p>
 						</div>
 					</div>
 				</div>
 
-				<div class="bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl border border-slate-50">
-					<h3 class="text-2xl font-serif mb-6 text-center italic text-[#0a192f] font-bold">Jak objednat?</h3>
-					<p class="text-slate-600 text-center mb-8 font-bold">
-						Pro dorty na zakázku doporučujeme osobní konzultaci nebo telefonickou domluvu alespoň <strong>7–14 dní předem</strong>.
-					</p>
-					<div class="flex flex-col gap-4">
-						<a href="/prodejny" class="block w-full py-4 bg-[#0a192f] text-[#d4af37] text-center rounded-2xl font-bold uppercase text-xs tracking-widest hover:bg-[#d4af37] hover:text-[#0a192f] transition-all">
-							Najít nejbližší prodejnu
-						</a>
-						<div class="flex justify-center">
-							<ReservationForm client:load />
-						</div>
-					</div>
+				<div class="lg:col-span-3 bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl border border-slate-50">
+					<h3 class="text-2xl font-serif mb-2 text-center italic text-[#0a192f] font-bold">Konfigurátor dortu</h3>
+					<p class="text-slate-400 text-center mb-8 text-sm font-bold uppercase tracking-widest">Pošlete nám svou představu</p>
+					
+					<CustomCakeForm client:load />
 				</div>
 			</div>
 		</section>
