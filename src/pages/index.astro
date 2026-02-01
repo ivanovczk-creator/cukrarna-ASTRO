@@ -37,13 +37,13 @@ const stores = [
 
 <Layout title="Cukrářství Blahutovi | Domácí dorty a zákusky">
 	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
-		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative">
+		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative text-navy-900">
 			<h1 class="text-xl md:text-2xl font-serif text-[#d4af37]">Cukrářství Blahutovi</h1>
 			<nav id="nav-menu" class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-white/90">
 				<a href="#dorty" class="hover:text-[#d4af37] cursor-pointer py-2">Dorty</a>
 				<a href="#zakusky" class="hover:text-[#d4af37] cursor-pointer py-2">Zákusky</a>
 				<a href="#jedly-tisk" class="hover:text-[#d4af37] cursor-pointer py-2">Jedlý tisk</a>
-				<a href="#dort-na-prani" class="hover:text-[#d4af37] cursor-pointer py-2">Dort na přání</a>
+				<a href="#dort-na-prani" class="hover:text-[#d4af37] cursor-pointer py-2 font-bold">Dort na přání</a>
 				<a href="#prodejny" class="hover:text-[#d4af37] cursor-pointer py-2">Prodejny</a>
 				<a href="/pro-firmy" class="hover:text-[#d4af37] cursor-pointer py-2">Pro firmy</a>
 			</nav>
@@ -67,16 +67,16 @@ const stores = [
 				{cakeCategories.map(cat => {
 					const imageSrc = getImage(cat.img, cakeImages);
 					return (
-						<a href={`/dorty/${cat.id}`} class="group flex flex-col items-center gap-4 no-underline">
-							<div class="w-full aspect-square rounded-full overflow-hidden border-2 border-slate-100 group-hover:border-[#d4af37] transition-all duration-500 shadow-md relative text-navy-900">
+						<a href={`/dorty/${cat.id}`} class="group flex flex-col items-center gap-4 no-underline text-navy-900">
+							<div class="w-full aspect-square rounded-full overflow-hidden border-2 border-slate-100 group-hover:border-[#d4af37] transition-all duration-500 shadow-md relative">
 								{imageSrc ? (
-									<Image src={imageSrc} alt={cat.name} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 font-bold" width={180} height={180} format="webp" />
+									<Image src={imageSrc} alt={cat.name} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" width={180} height={180} format="webp" />
 								) : (
 									<div class="w-full h-full bg-slate-50 flex items-center justify-center text-[8px] text-slate-300 italic">Foto</div>
 								)}
 								<div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors font-bold"></div>
 							</div>
-							<span class="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500 group-hover:text-[#92782a] text-center transition-colors leading-tight">{cat.name}</span>
+							<span class="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500 group-hover:text-[#92782a] text-center transition-colors leading-tight font-bold">{cat.name}</span>
 						</a>
 					)
 				})}
@@ -84,8 +84,8 @@ const stores = [
 		</section>
 
 		<section id="zakusky" class="py-16 px-4 bg-slate-50 text-[#0a192f]">
-			<div class="max-w-7xl mx-auto text-center">
-				<h2 class="text-4xl font-serif text-center mb-12 italic text-navy-900">Nabídka zákusků</h2>
+			<div class="max-w-7xl mx-auto text-center font-bold">
+				<h2 class="text-4xl font-serif text-center mb-12 italic text-navy-900 font-bold">Nabídka zákusků</h2>
 				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
 					{desserts.map(dessert => {
 						const fotoUrl = dessert.foto || "";
@@ -93,21 +93,21 @@ const stores = [
 						const dessertId = dessert.title.replace(/\s+/g, '-').toLowerCase();
 
 						return (
-						<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col transition-transform hover:-translate-y-1">
-							<div class="h-56 overflow-hidden relative bg-slate-50 text-center font-bold">
+						<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col transition-transform hover:-translate-y-1 font-bold">
+							<div class="h-56 overflow-hidden relative bg-slate-50 text-center font-bold text-navy-900">
 								{imageSrc ? (
 									<a href={fotoUrl} class="glightbox cursor-zoom-in font-bold">
-										<Image src={imageSrc} alt={dessert.title} class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" width={300} height={300} format="webp" />
+										<Image src={imageSrc} alt={dessert.title} class="w-full h-full object-cover transition-transform duration-700 hover:scale-110 font-bold" width={300} height={300} format="webp" />
 									</a>
 								) : (
 									<div class="flex items-center justify-center h-full text-xs text-slate-400 italic font-bold">Foto připravujeme</div>
 								)}
 							</div>
-							<div class="p-6 flex-grow flex flex-col justify-between">
+							<div class="p-6 flex-grow flex flex-col justify-between font-bold">
 								<h3 class="text-lg font-bold mb-1 leading-tight">{dessert.title}</h3>
-								<div class="space-y-4">
+								<div class="space-y-4 font-bold">
 									<p class="text-[#92782a] font-black text-xl">{dessert.cena}</p>
-									<div class="flex flex-col items-center gap-2">
+									<div class="flex flex-col items-center gap-2 font-bold">
 										<button id={`init-btn-${dessertId}`} onclick={`document.getElementById('init-btn-${dessertId}').classList.add('hidden'); document.getElementById('counter-${dessertId}').classList.remove('hidden'); document.getElementById('counter-${dessertId}').classList.add('flex');`} class="w-full bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all cursor-pointer uppercase tracking-widest text-[10px]">Přidat</button>
 										<div id={`counter-${dessertId}`} class="hidden w-full items-center justify-between bg-slate-100 rounded-xl overflow-hidden border border-slate-200 font-bold">
 											<button onclick={`const input = document.getElementById('qty-${dessertId}'); if(parseInt(input.value) > 1) { input.value = parseInt(input.value) - 1; } else { document.getElementById('counter-${dessertId}').classList.add('hidden'); document.getElementById('counter-${dessertId}').classList.remove('flex'); document.getElementById('init-btn-${dessertId}').classList.remove('hidden'); }`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer font-bold">−</button>
@@ -125,13 +125,47 @@ const stores = [
 		</section>
 
 		<section id="jedly-tisk" class="py-20 px-4 bg-white"><EdiblePrintForm client:load /></section>
-		<section id="dort-na-prani" class="py-20 px-4 bg-slate-50"><CustomCakeForm client:load /></section>
+		
+		<section id="dort-na-prani" class="py-24 px-4 bg-slate-50 overflow-hidden">
+			<div class="max-w-7xl mx-auto">
+				<div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					
+					<div class="order-2 lg:order-1 font-bold text-navy-900">
+						<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-[#0a192f] font-bold">Dort přesně podle vašich představ font-bold</h2>
+						<div class="space-y-6 text-slate-600 text-lg leading-relaxed font-bold">
+							<p class="font-bold">
+								Máte konkrétní vizi, jak by měl váš vysněný dort vypadat? Naše **šikovné cukrářky** jsou mistryně svého řemesla a dokáží proměnit vaše sny v sladkou realitu. Ať už plánujete oslavu narozenin, svatbu nebo firemní večírek, vytvoříme pro vás originál, který oslní vzhledem i chutí. font-bold
+							</p>
+							<div class="bg-white p-8 rounded-[2.5rem] shadow-xl border-l-8 border-[#d4af37] relative font-bold font-serif text-navy-900">
+								<h4 class="font-bold text-[#0a192f] mb-3 uppercase text-xs tracking-[0.2em] font-bold">Máte vlastní předlohu? font-bold</h4>
+								<p class="text-sm font-bold">
+									Není nic jednoduššího! Stačí nám **zaslat vlastní fotografii nebo obrázek jako předlohu**. Naše cukrářky podle ní precizně vymodelují figurky, připraví dekorace nebo vytvoří celý 3D tvar dortu tak, aby odpovídal vašemu zadání. font-bold
+								</p>
+							</div>
+							<ul class="grid grid-cols-1 sm:grid-cols-2 gap-y-4 pt-6 font-bold text-navy-900">
+								<li class="flex items-center gap-3 font-bold text-sm text-[#0a192f]"><span class="text-[#d4af37] text-xl font-bold">✦</span> Ruční modelace figurek font-bold</li>
+								<li class="flex items-center gap-3 font-bold text-sm text-[#0a192f]"><span class="text-[#d4af37] text-xl font-bold">✦</span> Dorty podle vaší fotky font-bold</li>
+								<li class="flex items-center gap-3 font-bold text-sm text-[#0a192f]"><span class="text-[#d4af37] text-xl font-bold">✦</span> Netradiční 3D tvary font-bold</li>
+								<li class="flex items-center gap-3 font-bold text-sm text-[#0a192f]"><span class="text-[#d4af37] text-xl font-bold">✦</span> Poctivé domácí suroviny font-bold</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="order-1 lg:order-2 bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl border border-white relative font-bold font-serif text-navy-900">
+						<div class="absolute -top-10 -right-10 w-40 h-40 bg-[#d4af37]/5 rounded-full blur-3xl font-bold"></div>
+						<h3 class="text-2xl font-serif mb-8 text-center text-[#0a192f] italic relative z-10 font-bold">Napište nám svou představu font-bold</h3>
+						<CustomCakeForm client:load />
+					</div>
+
+				</div>
+			</div>
+		</section>
 
 		<section id="prodejny" class="py-20 px-4 max-w-7xl mx-auto text-[#0a192f]">
 			<h2 class="text-4xl font-serif text-center mb-12 italic text-navy-900 font-bold">Navštivte nás</h2>
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-white font-bold">
 				{stores.map(store => (
-					<div class="bg-[#0a192f] p-6 rounded-[2rem] border border-[#d4af37]/20 shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1">
+					<div class="bg-[#0a192f] p-6 rounded-[2rem] border border-[#d4af37]/20 shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1 font-bold">
 						<div>
 							<h3 class="text-[#d4af37] font-bold mb-1 text-xl">{store.name}</h3>
 							<p class="text-[10px] uppercase tracking-widest text-slate-300 mb-4 font-bold">{store.hours}</p>
@@ -145,22 +179,22 @@ const stores = [
 		</section>
 
 		<section id="b2b" class="py-20 px-4 bg-white text-[#0a192f]">
-			<div class="max-w-4xl mx-auto text-center font-bold text-navy-900">
+			<div class="max-w-4xl mx-auto text-center font-bold text-navy-900 font-bold">
 				<h2 class="text-4xl font-serif mb-8 italic text-navy-900 font-bold">Pro firmy a B2B</h2>
 				<p class="text-lg leading-relaxed mb-10 text-slate-600 font-bold">
 					Hledáte poctivé zákusky pro vaši kavárnu, restauraci nebo catering na firemní akci? 
-					Nabízíme pravidelný závoz čerstvých výrobků do měst Ostrava, Karviná, Opava a okolí.
+					Nabízíme pravidelný závoz čerstvých výrobků do měst Ostrava, Karviná, Opava a okolí. font-bold
 				</p>
 				<div class="inline-block bg-[#0a192f] text-white px-10 py-5 rounded-[2rem] font-bold uppercase tracking-widest text-xs hover:bg-[#d4af37] transition-all shadow-xl font-bold">
-					<a href="/pro-firmy" class="no-underline text-inherit font-bold">Velkoobchodní nabídka a poptávka</a>
+					<a href="/pro-firmy" class="no-underline text-inherit font-bold">Velkoobchodní nabídka a poptávka font-bold</a>
 				</div>
 			</div>
 		</section>
 	</main>
 
 	<footer class="bg-[#0a192f] py-12 text-center text-white/40 text-xs border-t border-[#d4af37]/10 font-bold">
-		<p class="mb-2 italic text-[#d4af37] text-sm font-serif font-bold">Cukrářství Blahutovi</p>
-		<p>© {new Date().getFullYear()} — Všechna práva vyhrazena font-bold</p>
+		<p class="mb-2 italic text-[#d4af37] text-sm font-serif font-bold">Cukrářství Blahutovi font-bold</p>
+		<p>© {new Date().getFullYear()} — Všechna práva vyhrazena font-bold font-serif</p>
 	</footer>
 </Layout>
 
