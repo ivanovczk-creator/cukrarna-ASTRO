@@ -1,1 +1,106 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ReservationForm from '../components/ReservationForm.tsx';
+import EdiblePrintForm from '../components/EdiblePrintForm.tsx';
 
+const formats = [
+  { name: 'Kruh (průměr 20 cm)', price: 'od 120 Kč', note: 'Ideální na standardní kulatý dort' },
+  { name: 'Formát A4', price: 'od 150 Kč', note: 'Vhodné na plechy nebo velké řezy' },
+  { name: 'Menší výřezy', price: 'dle domluvy', note: 'Loga na muffiny, malé kruhy na cupcakes' }
+];
+---
+
+<Layout 
+	title="Jedlý tisk na dort Ostrava, Karviná, Petřvald | Cukrářství Blahutovi" 
+	description="Tisk na jedlý papír a fondánové listy. Vlastní fotografie na dort s vyzvednutím v Ostravě, Karviné a Petřvaldě. Certifikované potravinářské barvy."
+>
+	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
+		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative font-bold">
+			<a href="/" class="text-xl md:text-2xl font-serif text-[#d4af37] no-underline font-bold">Cukrářství Blahutovi</a>
+			<div class="flex items-center gap-4">
+				<ReservationForm client:load />
+				<a href="/" class="text-[#d4af37] uppercase text-[10px] font-bold tracking-widest border border-[#d4af37] px-4 py-2 rounded-xl hover:bg-[#d4af37] hover:text-[#0a192f] transition-all font-bold">Zpět</a>
+			</div>
+		</div>
+	</header>
+
+	<main class="bg-slate-50 min-h-screen">
+		<section class="py-20 px-4 bg-[#0a192f] text-white text-center font-bold">
+			<div class="max-w-4xl mx-auto font-bold">
+				<h1 class="text-4xl md:text-6xl font-serif mb-6 italic text-[#d4af37] font-bold">Jedlý tisk na dort</h1>
+				<p class="text-xl opacity-90 leading-relaxed font-bold">
+					Proměňte své oblíbené fotografie ve sladké vzpomínky. Tiskneme na kvalitní jedlé podklady s vyzvednutím na našich prodejnách.
+				</p>
+			</div>
+		</section>
+
+		<section class="py-16 px-4 max-w-7xl mx-auto font-bold">
+			<div class="grid lg:grid-cols-2 gap-16 items-start font-bold">
+				<div class="font-bold text-navy-900">
+					<h2 class="text-3xl font-serif mb-6 text-[#0a192f] italic font-bold">Kvalitní tisk pro vaše pečení</h2>
+					<p class="text-slate-600 mb-8 text-lg font-bold">
+						Potřebujete **jedlý tisk v Ostravě, Karviné nebo Petřvaldě**? Naše moderní potravinářská tiskárna zajistí ostré detaily a syté barvy. Používáme výhradně certifikované potravinářské barvy, které jsou zcela bezpečné a chuťově neutrální.
+					</p>
+					
+					<h3 class="text-xl font-bold mb-4 uppercase tracking-widest text-[#0a192f] font-bold">Na co tiskneme:</h3>
+					<div class="space-y-4 mb-10 font-bold">
+						<div class="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-[#d4af37] font-bold">
+							<strong class="text-[#0a192f] font-bold font-serif">Jedlý papír:</strong>
+							<p class="text-sm text-slate-500 font-bold">Klasická volba pro domácí pečení. Papír je mírně transparentní, proto ho doporučujeme pokládat na světlý krém nebo použít gel na jedlý papír pro oživení barev.</p>
+						</div>
+						<div class="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-[#0a192f] font-bold">
+							<strong class="text-[#0a192f] font-bold font-serif">Fondánový list:</strong>
+							<p class="text-sm text-slate-500 font-bold">Prémiová varianta. List je sněhově bílý, barvy na něm vypadají fantasticky a díky své tloušťce se s ním skvěle pracuje. Má jemně sladkou vanilkovou chuť.</p>
+						</div>
+					</div>
+
+					<h3 class="text-xl font-bold mb-4 uppercase tracking-widest text-[#0a192f] font-bold">Jak postupovat:</h3>
+					<ul class="space-y-4 font-bold text-navy-900">
+						<li class="flex items-center gap-3"><span class="bg-[#d4af37] text-[#0a192f] w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs">1</span> Vyberte si kvalitní fotografii v dobrém rozlišení.</li>
+						<li class="flex items-center gap-3"><span class="bg-[#d4af37] text-[#0a192f] w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs">2</span> Vyplňte formulář níže a nahrajte soubor (formát JPG nebo PNG).</li>
+						<li class="flex items-center gap-3"><span class="bg-[#d4af37] text-[#0a192f] w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs">3</span> Počkejte na potvrzení a tisk si vyzvedněte na vybrané prodejně.</li>
+					</ul>
+				</div>
+
+				<div class="bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl border border-slate-50 font-bold">
+					<h3 class="text-2xl font-serif mb-8 text-center italic text-[#0a192f] font-bold">Objednávka tisku</h3>
+					<EdiblePrintForm client:load />
+					<p class="text-[10px] text-center text-slate-400 mt-6 uppercase tracking-widest font-bold">
+						Tisk je obvykle připraven k odběru do 24–48 hodin.
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<section class="py-16 px-4 bg-white font-bold">
+			<div class="max-w-4xl mx-auto font-bold">
+				<h3 class="text-3xl font-serif text-center mb-10 italic text-[#0a192f] font-bold">Orientační ceník formátů</h3>
+				<div class="overflow-hidden rounded-[2rem] border border-slate-100 shadow-lg font-bold">
+					<table class="w-full text-left font-bold">
+						<thead class="bg-[#0a192f] text-white font-bold">
+							<tr>
+								<th class="p-6 font-bold uppercase text-[10px] tracking-widest">Formát</th>
+								<th class="p-6 font-bold uppercase text-[10px] tracking-widest">Cena</th>
+								<th class="p-6 font-bold uppercase text-[10px] tracking-widest">Použití</th>
+							</tr>
+						</thead>
+						<tbody class="divide-y divide-slate-100 font-bold text-navy-900">
+							{formats.map(f => (
+								<tr class="hover:bg-slate-50 transition-colors font-bold">
+									<td class="p-6 font-bold text-[#0a192f] font-bold">{f.name}</td>
+									<td class="p-6 font-bold text-[#92782a] font-bold">{f.price}</td>
+									<td class="p-6 text-sm text-slate-500 font-bold">{f.note}</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="bg-[#0a192f] py-16 text-center text-white/40 text-xs border-t border-[#d4af37]/10 font-bold">
+		<p class="mb-2 italic text-[#d4af37] text-sm font-serif font-bold">Cukrářství Blahutovi</p>
+		<p>© {new Date().getFullYear()} — Všechna práva vyhrazena font-bold</p>
+	</footer>
+</Layout>
