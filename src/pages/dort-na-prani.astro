@@ -59,25 +59,17 @@ import CustomCakeForm from '../components/CustomCakeForm.tsx';
 						</p>
 					</div>
 
-					<div class="mt-10 space-y-4">
-						<div class="flex items-center gap-4 text-[#0a192f] font-bold">
-							<span class="bg-[#d4af37] p-2 rounded-lg text-white font-bold">✓</span>
-							<p>Nahrání vlastních předloh a fotografií</p>
-						</div>
-						<div class="flex items-center gap-4 text-[#0a192f] font-bold">
-							<span class="bg-[#d4af37] p-2 rounded-lg text-white font-bold">✓</span>
-							<p>Hlídání minimální lhůty výroby 7 dní</p>
-						</div>
-						<div class="flex items-center gap-4 text-[#0a192f] font-bold">
-							<span class="bg-[#d4af37] p-2 rounded-lg text-white font-bold">✓</span>
-							<p>Výběr prodejny dle otevírací doby</p>
-						</div>
+					<div class="mt-10 p-8 bg-white rounded-[2.5rem] shadow-sm border border-slate-100">
+						<h3 class="text-xl font-serif mb-4 italic text-[#0a192f] font-bold">Jak to funguje?</h3>
+						<p class="text-slate-500 text-sm leading-relaxed font-bold">
+							Vyplňte formulář vpravo, nahrajte své předlohy a vyberte si prodejnu pro vyzvednutí. Náš systém automaticky hlídá volné termíny a otevírací doby, abychom vám mohli zaručit 100% kvalitu a čerstvost.
+						</p>
 					</div>
 				</div>
 
 				<div class="lg:col-span-3 bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl border border-slate-50">
 					<h3 class="text-2xl font-serif mb-2 text-center italic text-[#0a192f] font-bold">Konfigurátor dortu</h3>
-					<p class="text-slate-400 text-center mb-8 text-sm font-bold uppercase tracking-widest">Pošlete nám svou představu</p>
+					<p class="text-slate-400 text-center mb-8 text-sm font-bold uppercase tracking-widest">Zadejte detaily vaší objednávky</p>
 					
 					<CustomCakeForm client:load />
 				</div>
