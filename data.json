@@ -137,7 +137,10 @@
       "cena": "3300 Kč",
       "porce": "Bezzubka 3D",
       "foto": "/img/dorty/12.webp",
-      "kategorie": "dorty"
+      "kategorie": "dorty",
+      "category_list": [
+        "3d-netradicni"
+      ]
     },
     {
       "id": 13,
