@@ -67,11 +67,26 @@ function getImage(path: string, images: Record<string, any>) {
 
 <Layout title={`${info.title} | Cukrářství Blahutovi`} description={info.description}>
 	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
-		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
-			<a href="/" class="text-xl md:text-2xl font-serif text-[#d4af37] no-underline">Cukrářství Blahutovi</a>
-			<div class="flex items-center gap-4 font-bold">
+		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative font-bold text-navy-900">
+			<a href="/" class="group no-underline">
+				<h1 class="text-xl md:text-2xl font-serif text-[#d4af37] group-hover:text-white transition-colors font-bold">Cukrářství Blahutovi</h1>
+			</a>
+
+			<nav id="nav-menu" class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-white/90">
+				<a href="/#dorty" class="hover:text-[#d4af37] py-2">Dorty</a>
+				<a href="/zakusky" class="hover:text-[#d4af37] py-2 font-bold">Zákusky</a>
+				<a href="/jedly-tisk" class="hover:text-[#d4af37] py-2">Jedlý tisk</a>
+				<a href="/dort-na-prani" class="hover:text-[#d4af37] py-2">Dort na přání</a>
+				<a href="/prodejny" class="hover:text-[#d4af37] py-2">Prodejny</a>
+			</nav>
+
+			<div class="flex items-center gap-4">
 				<ReservationForm client:load />
-				<a href="/" class="text-[#d4af37] uppercase text-[10px] font-bold tracking-widest border border-[#d4af37] px-4 py-2 rounded-xl hover:bg-[#d4af37] hover:text-[#0a192f] transition-all">Zpět</a>
+				<button id="menu-toggle" class="lg:hidden text-[#d4af37] p-2 outline-none">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+					</svg>
+				</button>
 			</div>
 		</div>
 	</header>
@@ -110,8 +125,8 @@ function getImage(path: string, images: Record<string, any>) {
 										<div class="flex items-center justify-center h-full bg-slate-100 text-slate-300 italic uppercase text-[10px] tracking-widest font-bold">Foto připravujeme</div>
 									)}
 								</div>
-								<div class="p-8 flex-grow flex flex-col font-bold">
-									<h3 class="text-xl font-bold text-[#0a192f] mb-2 leading-tight font-bold">{cake.title}</h3>
+								<div class="p-8 flex-grow flex flex-col font-bold text-navy-900">
+									<h3 class="text-xl font-bold mb-2 leading-tight font-bold">{cake.title}</h3>
 									<p class="text-slate-400 text-[10px] uppercase tracking-[0.2em] font-bold mb-6 font-bold">{cake.porce}</p>
 									<div class="mt-auto flex justify-between items-center pt-6 border-t border-slate-50 font-bold">
 										<span class="text-[#92782a] font-black text-2xl font-bold">{cake.cena}</span>
@@ -134,13 +149,34 @@ function getImage(path: string, images: Record<string, any>) {
 					})}
 				</div>
 			) : (
-				<div class="bg-white rounded-[3rem] p-20 text-center border-2 border-dashed border-slate-200 shadow-sm font-bold">
+				<div class="bg-white rounded-[3rem] p-20 text-center border-2 border-dashed border-slate-200 shadow-sm font-bold text-navy-900">
 					<div class="text-6xl mb-6 opacity-20 font-bold">🎂</div>
 					<h3 class="text-2xl font-serif text-slate-400 italic font-bold">V této kategorii zatím nic není</h3>
-					<p class="text-slate-400 mt-2 font-bold">Pracujeme na tom, abyste si brzy mohli vybrat!</p>
+					<p class="text-slate-400 mt-2 font-bold font-bold text-navy-900">Pracujeme na tom, abyste si brzy mohli vybrat!</p>
           <a href="/#dorty" class="inline-block mt-8 text-[#d4af37] font-bold uppercase text-xs tracking-widest border-b border-[#d4af37] pb-1 font-bold">Zpět na všechny dorty</a>
 				</div>
 			)}
 		</div>
 	</main>
 </Layout>
+
+<script is:inline>
+	function initMenu() {
+		const btn = document.getElementById('menu-toggle');
+		const nav = document.getElementById('nav-menu');
+		if (btn && nav) {
+			btn.onclick = (e) => {
+				e.preventDefault();
+				const isHidden = nav.classList.contains('hidden');
+				if (isHidden) {
+					nav.classList.remove('hidden');
+					nav.classList.add('flex', 'flex-col', 'absolute', 'top-20', 'left-0', 'w-full', 'bg-[#0a192f]', 'p-6', 'z-50', 'border-b', 'border-[#d4af37]');
+				} else {
+					nav.classList.add('hidden');
+					nav.classList.remove('flex', 'flex-col', 'absolute', 'top-20', 'left-0', 'w-full', 'bg-[#0a192f]', 'p-6', 'z-50', 'border-b', 'border-[#d4af37]');
+				}
+			};
+		}
+	}
+	document.addEventListener('astro:page-load', initMenu);
+</script>
