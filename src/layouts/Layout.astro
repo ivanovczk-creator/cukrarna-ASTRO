@@ -7,11 +7,35 @@ interface Props {
 	keywords?: string;
 }
 
+// Automatické generování Canonical URL
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://cukrarstviblahutovi.cz');
+
 const {
-	title = 'Cukrářství Blahutovi - Tradiční pečivo a dorty',
-	description = 'Rodinné cukrářství s tradicí. Pečeme pro vás z poctivých surovin od roku 1991.',
-	keywords = 'cukrářství, dorty, zákusky, jedlý tisk, Ostrava, Karviná, Petřvald'
+	title = 'Cukrářství Blahutovi | Domácí dorty a zákusky Ostrava a okolí',
+	description = 'Poctivé domácí dorty na zakázku, čerstvé zákusky a mini zákusky z rodinného cukrářství. Navštivte nás v Ostravě, Karviné a Petřvaldě. Tradice od roku 1991.',
+	keywords = 'cukrářství, dorty na zakázku, domácí zákusky, mini zákusky, jedlý tisk, Ostrava, Karviná, Petřvald, Píšť'
 } = Astro.props;
+
+// Strukturovaná data pro Google (LocalBusiness)
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "Bakery",
+  "name": "Cukrářství Blahutovi",
+  "url": "https://cukrarstviblahutovi.cz",
+  "logo": "https://cukrarstviblahutovi.cz/favicon.svg",
+  "image": "https://cukrarstviblahutovi.cz/img/dorty/51.webp",
+  "description": "Tradiční rodinné cukrářství. Výroba dortů na zakázku a denní nabídka čerstvých zákusků v Ostravě, Karviné a Petřvaldě.",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Píšť 1",
+    "addressLocality": "Píšť",
+    "addressRegion": "Moravskoslezský kraj",
+    "postalCode": "747 18",
+    "addressCountry": "CZ"
+  },
+  "telephone": "+420602323788",
+  "priceRange": "$$"
+};
 ---
 
 <!doctype html>
@@ -26,6 +50,10 @@ const {
 		<meta name="description" content={description} />
 		<meta name="keywords" content={keywords} />
 
+		<link rel="canonical" href={canonicalURL} />
+
+		<script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+
 		<ViewTransitions />
 
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-5JPLYYKGGN"></script>
@@ -35,7 +63,7 @@ const {
 			gtag('js', new Date());
 			gtag('config', 'G-5JPLYYKGGN');
 
-			// Fix pro ViewTransitions - měření každé změny stránky
+			// Měření každé změny stránky ve ViewTransitions
 			document.addEventListener('astro:page-load', () => {
 				gtag('event', 'page_view', {
 					page_title: document.title,
