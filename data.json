@@ -104,7 +104,10 @@
       "porce": "12 porcí",
       "foto": "/img/dorty/9.webp",
       "kategorie": "dorty",
-      "weight": 9
+      "weight": 9,
+      "category_list": [
+        "detske"
+      ]
     },
     {
       "id": 10,
