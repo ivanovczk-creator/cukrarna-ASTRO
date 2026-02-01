@@ -12,10 +12,14 @@ function getImage(path: string, images: Record<string, any>) {
 	const normalizedPath = path.startsWith('/public') ? path : (path.startsWith('/') ? `/public${path}` : `/public/${path}`);
 	return images[normalizedPath]?.default || null;
 }
+
+// Základní URL pro sdílení (Facebook sharer)
+const shareUrl = "https://cukrarstviblahutovi.cz/zakusky";
+const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
 ---
 
 <Layout 
-	title="Poctivé domácí zákusky | Cukrářství Blahutovi" 
+	title="Poctivé domácí zákusky a mini zákusky | Cukrářství Blahutovi" 
 	description="Prohlédněte si naši kompletní nabídku čerstvých zákusků. Tradiční receptury, kvalitní suroviny a denní výdej v našich prodejnách Ostrava, Karviná a Petřvald."
 >
 	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
@@ -25,7 +29,7 @@ function getImage(path: string, images: Record<string, any>) {
 			</a>
 
 			<nav id="nav-menu" class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-white/90">
-				<a href="/#dorty" class="hover:text-[#d4af37] py-2">Dorty</a>
+				<a href="/dorty" class="hover:text-[#d4af37] py-2">Dorty</a>
 				<a href="/zakusky" class="text-[#d4af37] py-2 font-bold underline underline-offset-8">Zákusky</a>
 				<a href="/jedly-tisk" class="hover:text-[#d4af37] py-2">Jedlý tisk</a>
 				<a href="/dort-na-prani" class="hover:text-[#d4af37] py-2">Dort na přání</a>
@@ -47,7 +51,7 @@ function getImage(path: string, images: Record<string, any>) {
 	<main class="py-16 px-4 bg-slate-50 min-h-screen">
 		<div class="max-w-7xl mx-auto">
 			<div class="text-center mb-16">
-				<h2 class="text-4xl md:text-5xl font-serif mb-6 italic text-navy-900 font-bold font-serif">Denní nabídka čerstvých zákusků</h2>
+				<h2 class="text-4xl md:text-5xl font-serif mb-6 italic text-navy-900 font-bold">Denní nabídka čerstvých zákusků</h2>
 				<p class="text-slate-500 max-w-2xl mx-auto text-lg font-bold">
 					Všechny naše zákusky připravujeme každý den z poctivých surovin. Objednejte si je online a vyzvedněte na vybrané prodejně.
 				</p>
@@ -60,7 +64,7 @@ function getImage(path: string, images: Record<string, any>) {
 					const dessertId = dessert.title.replace(/\s+/g, '-').toLowerCase();
 
 					return (
-					<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col hover:shadow-2xl transition-all duration-500 font-bold text-navy-900">
+					<div class="group bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col hover:shadow-2xl transition-all duration-500 font-bold text-navy-900">
 						<div class="h-56 overflow-hidden relative bg-slate-50 font-bold">
 							{imageSrc ? (
 								<a href={fotoUrl} class="glightbox cursor-zoom-in font-bold text-navy-900">
@@ -72,13 +76,26 @@ function getImage(path: string, images: Record<string, any>) {
 										height={300} 
 										format="webp" 
 									/>
+									<div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500"></div>
 								</a>
 							) : (
 								<div class="flex items-center justify-center h-full text-xs text-slate-400 italic font-bold text-navy-900">Foto připravujeme</div>
 							)}
+
+							<a 
+								href={fbShareLink} 
+								target="_blank" 
+								rel="noopener noreferrer"
+								class="absolute top-4 right-4 bg-white/90 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[#1877F2] hover:text-white text-[#1877F2] z-10"
+								title="Sdílet tento zákusek na Facebooku"
+							>
+								<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+									<path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+								</svg>
+							</a>
 						</div>
 						<div class="p-6 flex-grow flex flex-col justify-between font-bold text-navy-900">
-							<h3 class="text-lg font-bold mb-1 leading-tight text-navy-900 font-bold font-serif italic">{dessert.title}</h3>
+							<h3 class="text-lg font-bold mb-1 leading-tight text-navy-900 font-serif italic">{dessert.title}</h3>
 							<div class="space-y-4 font-bold text-navy-900">
 								<p class="text-[#92782a] font-black text-xl font-bold">{dessert.cena}</p>
 								
@@ -86,10 +103,10 @@ function getImage(path: string, images: Record<string, any>) {
 									<button id={`init-btn-${dessertId}`} onclick={`document.getElementById('init-btn-${dessertId}').classList.add('hidden'); document.getElementById('counter-${dessertId}').classList.remove('hidden'); document.getElementById('counter-${dessertId}').classList.add('flex');`} class="w-full bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all cursor-pointer uppercase tracking-widest text-[10px]">Přidat</button>
 									
 									<div id={`counter-${dessertId}`} class="hidden w-full items-center justify-between bg-slate-100 rounded-xl overflow-hidden border border-slate-200 font-bold text-navy-900">
-										<button onclick={`const input = document.getElementById('qty-${dessertId}'); if(parseInt(input.value) > 1) { input.value = parseInt(input.value) - 1; } else { document.getElementById('counter-${dessertId}').classList.add('hidden'); document.getElementById('counter-${dessertId}').classList.remove('flex'); document.getElementById('init-btn-${dessertId}').classList.remove('hidden'); }`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer font-bold text-navy-900">−</button>
-										<input type="number" id={`qty-${dessertId}`} min="1" value="1" class="w-12 bg-transparent text-center font-bold outline-none border-none p-0 font-bold text-navy-900" />
-										<button onclick={`const input = document.getElementById('qty-${dessertId}'); input.value = parseInt(input.value) + 1;`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer font-bold text-navy-900">+</button>
-										<button onclick={`const q = document.getElementById('qty-${dessertId}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${dessert.title}", price: "${dessert.cena}", img: "${fotoUrl}", quantity: q } })); document.getElementById('counter-${dessertId}').classList.add('hidden'); document.getElementById('counter-${dessertId}').classList.remove('flex'); document.getElementById('init-btn-${dessertId}').classList.remove('hidden'); document.getElementById('qty-${dessertId}').value = 1;`} class="bg-[#0a192f] text-white px-3 h-10 font-bold text-[10px] uppercase hover:bg-[#d4af37] cursor-pointer font-bold">OK</button>
+										<button onclick={`const input = document.getElementById('qty-${dessertId}'); if(parseInt(input.value) > 1) { input.value = parseInt(input.value) - 1; } else { document.getElementById('counter-${dessertId}').classList.add('hidden'); document.getElementById('counter-${dessertId}').classList.remove('flex'); document.getElementById('init-btn-${dessertId}').classList.remove('hidden'); }`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer">−</button>
+										<input type="number" id={`qty-${dessertId}`} min="1" value="1" class="w-12 bg-transparent text-center font-bold outline-none border-none p-0" />
+										<button onclick={`const input = document.getElementById('qty-${dessertId}'); input.value = parseInt(input.value) + 1;`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer">+</button>
+										<button onclick={`const q = document.getElementById('qty-${dessertId}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${dessert.title}", price: "${dessert.cena}", img: "${fotoUrl}", quantity: q } })); document.getElementById('counter-${dessertId}').classList.add('hidden'); document.getElementById('counter-${dessertId}').classList.remove('flex'); document.getElementById('init-btn-${dessertId}').classList.remove('hidden'); document.getElementById('qty-${dessertId}').value = 1;`} class="bg-[#0a192f] text-white px-3 h-10 font-bold text-[10px] uppercase hover:bg-[#d4af37] cursor-pointer">OK</button>
 									</div>
 								</div>
 							</div>
@@ -102,7 +119,7 @@ function getImage(path: string, images: Record<string, any>) {
 
 	<footer class="bg-[#0a192f] py-16 text-center text-white/40 text-[10px] border-t border-[#d4af37]/10 font-bold font-serif uppercase tracking-widest">
 		<div class="max-w-7xl mx-auto px-4 font-bold">
-			<p class="mb-2 italic text-[#d4af37] text-sm font-serif font-bold normal-case font-bold">Cukrářství Blahutovi</p>
+			<p class="mb-2 italic text-[#d4af37] text-sm font-serif font-bold normal-case">Cukrářství Blahutovi</p>
 			<p>© {new Date().getFullYear()} — Všechna práva vyhrazena</p>
 		</div>
 	</footer>
