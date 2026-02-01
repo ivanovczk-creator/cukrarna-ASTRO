@@ -1,4 +1,6 @@
 ---
+import { ViewTransitions } from 'astro:transitions';
+
 interface Props {
 	title?: string;
 	description?: string;
@@ -7,8 +9,8 @@ interface Props {
 
 const {
 	title = 'Cukrářství Blahutovi - Tradiční pečivo a dorty',
-	description = 'Rodinné cukrářství s tradicí od roku 1985.',
-	keywords = 'cukrářství, dorty, zákusky'
+	description = 'Rodinné cukrářství s tradicí. Pečeme pro vás z poctivých surovin od roku 1991.',
+	keywords = 'cukrářství, dorty, zákusky, jedlý tisk, Ostrava, Karviná, Petřvald'
 } = Astro.props;
 ---
 
@@ -23,6 +25,8 @@ const {
 		<title>{title}</title>
 		<meta name="description" content={description} />
 		<meta name="keywords" content={keywords} />
+
+		<ViewTransitions />
 
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-5JPLYYKGGN"></script>
 		<script is:inline>
@@ -67,7 +71,7 @@ const {
 					<span class="text-lg font-bold">778 157 857</span>
 				</a>
 				<a href="tel:+420602323788" class="bg-[#0a192f] border-r-4 border-[#d4af37] p-3 rounded-lg shadow-xl no-underline text-white flex flex-col items-end">
-					<span class="text-[10px] text-[#d4af37] font-bold uppercase tracking-widest">Píšť (Centrála)</span>
+					<span class="text-[10px] text-[#d4af37] font-bold uppercase tracking-widest">Píšť (Sídlo)</span>
 					<span class="text-lg font-bold">602 323 788</span>
 				</a>
 				<a href="tel:+420778157867" class="bg-[#0a192f] border-r-4 border-[#d4af37] p-3 rounded-lg shadow-xl no-underline text-white flex flex-col items-end">
@@ -85,13 +89,12 @@ const {
 		<script is:inline>
 			function initLightbox() {
 				if (window.GLightbox) {
-					GLightbox({ selector: '.glightbox', touchNavigation: true, loop: true });
+					window.lightboxInstance = GLightbox({ selector: '.glightbox', touchNavigation: true, loop: true });
 				}
 			}
 
-			// Jen inicializace Lightboxu, menu necháme na index.astro
-			window.addEventListener('load', initLightbox);
-			document.addEventListener('astro:after-swap', initLightbox);
+			// Inicializace při prvním načtení i při přechodech mezi stránkami
+			document.addEventListener('astro:page-load', initLightbox);
 		</script>
 	</body>
 </html>
