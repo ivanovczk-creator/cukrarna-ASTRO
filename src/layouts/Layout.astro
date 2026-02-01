@@ -34,6 +34,15 @@ const {
 			function gtag(){dataLayer.push(arguments);}
 			gtag('js', new Date());
 			gtag('config', 'G-5JPLYYKGGN');
+
+			// Fix pro ViewTransitions - měření každé změny stránky
+			document.addEventListener('astro:page-load', () => {
+				gtag('event', 'page_view', {
+					page_title: document.title,
+					page_location: window.location.href,
+					page_path: window.location.pathname
+				});
+			});
 		</script>
 		
 		<link rel="preconnect" href="https://fonts.googleapis.com">
@@ -92,8 +101,6 @@ const {
 					window.lightboxInstance = GLightbox({ selector: '.glightbox', touchNavigation: true, loop: true });
 				}
 			}
-
-			// Inicializace při prvním načtení i při přechodech mezi stránkami
 			document.addEventListener('astro:page-load', initLightbox);
 		</script>
 	</body>
@@ -104,12 +111,9 @@ const {
 		--navy-900: #0a192f;
 		--gold-500: #d4af37;
 	}
-
 	html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 	body { font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; }
 	h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
-
-	/* Vlastní scrollbar */
 	::-webkit-scrollbar { width: 8px; }
 	::-webkit-scrollbar-track { background: #f1f1f1; }
 	::-webkit-scrollbar-thumb { background: var(--navy-900); border-radius: 4px; }
