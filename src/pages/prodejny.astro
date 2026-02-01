@@ -12,7 +12,7 @@ const shops = [
       'Po–Pá: 6:00 – 15:00',
       'So–Ne: Dle domluvy'
     ],
-    mapUrl: 'https://www.google.com/maps/dir/?api=1&destination=Opavsk%C3%A1+218/101,+747+18+P%C3%AD%C5%A1%C5%A5',
+    mapUrl: 'https://maps.google.com/?q=Opavská+218/101,+747+18+Píšť',
     isHeadquarters: true
   },
   {
@@ -24,7 +24,7 @@ const shops = [
       'Út–Ne: 9:00 – 17:00',
       'Po: Zavřeno'
     ],
-    mapUrl: 'https://www.google.com/maps/dir/?api=1&destination=%C5%A0enovsk%C3%A1+1,+735+41+Pet%C5%99vald'
+    mapUrl: 'https://maps.google.com/?q=Šenovská+1,+735+41+Petřvald'
   },
   {
     city: 'Karviná',
@@ -36,7 +36,7 @@ const shops = [
       'So: 8:00 – 12:00',
       'Ne: Zavřeno'
     ],
-    mapUrl: 'https://www.google.com/maps/dir/?api=1&destination=t%C5%99.+T%C4%9Bre%C5%A1kovov%C3%A9+2233/28,+734+01+Karvin%C3%A1'
+    mapUrl: 'https://maps.google.com/?q=tř.+Těreškovové+2233/28,+734+01+Karviná-Ráj'
   },
   {
     city: 'Ostrava',
@@ -48,14 +48,14 @@ const shops = [
       'So: 9:00 – 12:00',
       'Ne: Zavřeno'
     ],
-    mapUrl: 'https://www.google.com/maps/dir/?api=1&destination=V%C3%BD%C5%A1kovick%C3%A1+116a,+700+30+Ostrava-jih'
+    mapUrl: 'https://maps.google.com/?q=Výškovická+116a,+700+30+Ostrava-jih'
   }
 ];
 ---
 
 <Layout 
 	title="Naše prodejny a výroba | Cukrářství Blahutovi - Petřvald, Karviná, Ostrava, Píšť" 
-	description="Navštivte naše cukrárny v Petřvaldě, Karviné a Ostravě. Sídlo a výroba v Píšti. Nabízíme čerstvé zákusky a dorty na objednávku."
+	description="Navštivte naše cukrárny v Petřvaldě, Karviné a Ostravě. Sídlo a výroba v Píšti. Nabízíme čerstvé zákusky, dorty na objednávku a výběrovou kávu."
 >
 	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
 		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative font-bold text-navy-900">
@@ -126,13 +126,41 @@ const shops = [
 								href={shop.mapUrl} 
 								target="_blank" 
 								rel="noopener noreferrer"
-								class="block w-full py-3 bg-slate-50 text-[#0a192f] text-center rounded-2xl hover:bg-[#d4af37] hover:text-[#0a192f] transition-all uppercase text-[9px] font-bold tracking-widest border border-slate-100 font-serif font-bold"
+								class="block w-full py-3 bg-slate-50 text-[#0a192f] text-center rounded-2xl hover:bg-[#d4af37] transition-all uppercase text-[9px] font-bold tracking-widest border border-slate-100 font-serif font-bold"
 							>
 								Naplánovat trasu v mapách
 							</a>
 						</div>
 					</div>
 				))}
+			</div>
+		</section>
+
+		<section class="py-20 px-4 bg-white">
+			<div class="max-w-7xl mx-auto text-center font-bold">
+				<h2 class="text-3xl md:text-5xl font-serif mb-16 italic text-[#0a192f]">Více než jen sladké...</h2>
+				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+					<div class="flex flex-col items-center">
+						<div class="w-24 h-24 bg-[#f8f5f0] rounded-full flex items-center justify-center mb-6 text-4xl shadow-inner">☕</div>
+						<h3 class="text-xl font-serif mb-3 italic text-[#0a192f]">Výběrová káva</h3>
+						<p class="text-slate-500 text-sm leading-relaxed">Vychutnejte si u nás čerstvě praženou kávu připravenou ke každému zákusku.</p>
+					</div>
+					<div class="flex flex-col items-center">
+						<div class="w-24 h-24 bg-[#f8f5f0] rounded-full flex items-center justify-center mb-6 text-4xl shadow-inner">🍋</div>
+						<h3 class="text-xl font-serif mb-3 italic text-[#0a192f]">Domácí limonády</h3>
+						<p class="text-slate-500 text-sm leading-relaxed">Osvěžující limonády z poctivých sirupů a čerstvého ovoce.</p>
+					</div>
+					<div class="flex flex-col items-center">
+						<div class="w-24 h-24 bg-[#f8f5f0] rounded-full flex items-center justify-center mb-6 text-4xl shadow-inner">🥪</div>
+						<h3 class="text-xl font-serif mb-3 italic text-[#0a192f]">Slané občerstvení</h3>
+						<p class="text-slate-500 text-sm leading-relaxed">Denně čerstvé obložené chlebíčky pro vaši rychlou svačinu.</p>
+					</div>
+					<div class="flex flex-col items-center">
+						<div class="w-24 h-24 bg-[#f8f5f0] rounded-full flex items-center justify-center mb-6 text-4xl shadow-inner">🍦</div>
+						<h3 class="text-xl font-serif mb-3 italic text-[#0a192f]">Řemeslná zmrzlina</h3>
+						<p class="text-slate-500 text-sm leading-relaxed">V letní sezóně vás osvěžíme naší poctivou kopečkovou zmrzlinou.</p>
+					</div>
+				</div>
 			</div>
 		</section>
 
@@ -152,8 +180,7 @@ const shops = [
 	<footer class="bg-[#0a192f] py-16 text-center text-white/40 text-[10px] border-t border-[#d4af37]/10 font-bold font-serif uppercase tracking-widest">
 		<div class="max-w-7xl mx-auto px-4 font-bold">
 			<p class="mb-2 italic text-[#d4af37] text-sm font-serif font-bold normal-case">Cukrářství Blahutovi</p>
-			<p class="mb-1">Adéla Blahutová</p>
-			<p class="mb-4">IČO: 05244302</p>
+			<p class="mb-2">IČO: 76208371</p>
 			<p>© {new Date().getFullYear()} — Tradiční rodinné cukrářství</p>
 		</div>
 	</footer>
