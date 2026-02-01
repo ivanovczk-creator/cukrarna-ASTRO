@@ -1,126 +1,18 @@
----
-import Layout from '../layouts/Layout.astro';
-import ReservationForm from '../components/ReservationForm.tsx';
-import CustomCakeForm from '../components/CustomCakeForm';
-
-const steps = [
-  { title: 'Vaše vize', desc: 'Pošlete nám fotku, nákres nebo jen popište téma oslavy.' },
-  { title: 'Konzultace', desc: 'Ozveme se vám, doladíme velikost, náplň a potvrdíme cenu.' },
-  { title: 'Realizace', desc: 'Naše šikovné cukrářky ručně vytvoří váš dort z poctivých surovin.' },
-  { title: 'Oslava', desc: 'Dort si vyzvednete na prodejně a oslava může začít!' }
-];
----
-
-<Layout 
-	title="Dort na přání podle vlastní předlohy | Cukrářství Blahutovi" 
-	description="Výroba dortů na zakázku podle vaší fotografie nebo nákresu. Atypické tvary, ručně modelované figurky a poctivé domácí náplně. Objednejte si originál."
->
-	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
-		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative font-bold text-navy-900">
-			<a href="/" class="group no-underline">
-				<h1 class="text-xl md:text-2xl font-serif text-[#d4af37] group-hover:text-white transition-colors font-bold">Cukrářství Blahutovi</h1>
-			</a>
-
-			<nav id="nav-menu" class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-white/90">
-				<a href="/#dorty" class="hover:text-[#d4af37] py-2">Dorty</a>
-				<a href="/zakusky" class="hover:text-[#d4af37] py-2">Zákusky</a>
-				<a href="/jedly-tisk" class="hover:text-[#d4af37] py-2">Jedlý tisk</a>
-				<a href="/dort-na-prani" class="text-[#d4af37] py-2 font-bold">Dort na přání</a>
-				<a href="/prodejny" class="hover:text-[#d4af37] py-2">Prodejny</a>
-				<a href="/pro-firmy" class="hover:text-[#d4af37] py-2">Pro firmy</a>
-			</nav>
-
-			<div class="flex items-center gap-4">
-				<ReservationForm client:load />
-				<button id="menu-toggle" class="lg:hidden text-[#d4af37] p-2 outline-none cursor-pointer">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-					</svg>
-				</button>
-			</div>
-		</div>
-	</header>
-
-	<main class="bg-slate-50 min-h-screen">
-		<section class="py-20 px-4 bg-[#0a192f] text-white text-center font-bold">
-			<div class="max-w-4xl mx-auto font-bold">
-				<h1 class="text-4xl md:text-6xl font-serif mb-6 italic text-[#d4af37] font-bold font-serif">Dort přesně podle vás</h1>
-				<p class="text-xl opacity-90 leading-relaxed font-bold">
-					Máte vlastní předlohu nebo bláznivý nápad? Pro naše cukrářky není nic nemožné. Vytvoříme pro vás sladký unikát.
-				</p>
-			</div>
-		</section>
-
-		<section class="py-16 px-4 max-w-7xl mx-auto font-bold">
-			<div class="grid lg:grid-cols-2 gap-16 items-start font-bold">
-				<div class="font-bold text-navy-900">
-					<h2 class="text-3xl font-serif mb-8 text-[#0a192f] italic font-bold font-serif">Zakázková výroba dortů</h2>
-					<div class="space-y-6 text-slate-600 text-lg leading-relaxed font-bold">
-						<p>
-							Hledáte **atypický dort na zakázku** v okolí Ostravy, Karviné nebo Petřvaldu? Naše rodinné cukrářství se specializuje na **ruční modelaci figurek** a tvorbu dortů podle specifického zadání. 
-						</p>
-						<p>
-							Ať už jde o narozeniny s oblíbeným hrdinou, firemní výročí s logem nebo svatbu v netradičním stylu, ke každé objednávce přistupujeme individuálně. Nepoužíváme žádné polotovary – vše od korpusu až po poslední kytičku je naše **poctivá řemeslná práce**.
-						</p>
-					</div>
-
-					<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-12 font-bold">
-						{steps.map((step, index) => (
-							<div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 font-bold">
-								<span class="text-[#d4af37] font-serif italic text-3xl font-bold font-serif">0{index + 1}</span>
-								<h4 class="text-[#0a192f] font-bold mt-2 uppercase text-xs tracking-widest font-bold">{step.title}</h4>
-								<p class="text-sm text-slate-500 mt-2 font-bold">{step.desc}</p>
-							</div>
-						))}
-					</div>
-				</div>
-
-				<div id="poptavka" class="bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl border border-white relative font-bold text-navy-900">
-					<div class="absolute -top-10 -right-10 w-40 h-40 bg-[#d4af37]/5 rounded-full blur-3xl font-bold"></div>
-					<h3 class="text-2xl font-serif mb-6 text-center italic text-[#0a192f] relative z-10 font-bold font-serif">Pošlete nám předlohu</h3>
-					<p class="text-center text-slate-400 text-sm mb-8 relative z-10 font-bold">Nahrajte fotografii nebo popište své přání a my se vám ozveme s nezávaznou cenovou nabídkou.</p>
-					
-					<CustomCakeForm client:load />
-				</div>
-			</div>
-		</section>
-
-		<section class="py-16 px-4 bg-[#0a192f] text-white text-center font-bold">
-			<div class="max-w-2xl mx-auto font-bold">
-				<h3 class="text-2xl font-serif mb-4 italic text-[#d4af37] font-bold font-serif">Zakládáme si na kvalitě surovin</h3>
-				<p class="opacity-80 font-bold">V našich dortech nenajdete žádné náhražky. Používáme pravé máslo, kvalitní čokoládu a čerstvé suroviny, protože dort musí nejen skvěle vypadat, ale hlavně fantasticky chutnat.</p>
-			</div>
-		</section>
-	</main>
-
-	<footer class="bg-[#0a192f] py-16 text-center text-white/40 text-[10px] border-t border-[#d4af37]/10 font-bold font-serif uppercase tracking-widest">
-		<p class="mb-2 italic text-[#d4af37] text-sm font-serif font-bold normal-case">Cukrářství Blahutovi</p>
-		<p>© {new Date().getFullYear()} — Všechna práva vyhrazena</p>
-	</footer>
-</Layout>
-
-<script is:inline>
-	function setupMenu() {
-		const btn = document.getElementById('menu-toggle');
-		const nav = document.getElementById('nav-menu');
-		if (btn && nav) {
-			btn.onclick = (e) => {
-				e.preventDefault();
-				nav.classList.toggle('hidden');
-				nav.classList.toggle('flex');
-				nav.classList.toggle('flex-col');
-				nav.classList.toggle('absolute');
-				nav.classList.toggle('top-20');
-				nav.classList.toggle('left-0');
-				nav.classList.toggle('w-full');
-				nav.classList.toggle('bg-[#0a192f]');
-				nav.classList.toggle('p-6');
-				nav.classList.toggle('z-50');
-				nav.classList.toggle('border-b');
-				nav.classList.toggle('border-[#d4af37]');
-			};
-		}
-	}
-	setupMenu();
-	document.addEventListener('astro:page-load', setupMenu);
-</script>
+<section class="py-16 px-4 max-w-7xl mx-auto">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div>
+            <h2 class="text-3xl md:text-4xl font-serif mb-6 text-[#0a192f] italic font-bold">Zakázková výroba dortů</h2>
+            <div class="text-slate-600 space-y-4 text-lg leading-relaxed font-bold">
+                <p>
+                    Hledáte <strong>atypický dort na zakázku</strong> v okolí Ostravy, Karviné nebo Petřvaldu? 
+                    Naše rodinné cukrářství se specializuje na <strong>ruční modelaci figurek</strong> a tvorbu dortů podle specifického zadání.
+                </p>
+                <p>
+                    Ať už jde o narozeniny s oblíbeným hrdinou, firemní výročí s logem nebo svatbu v netradičním stylu, 
+                    ke každé objednávce přistupujeme individuálně. Nepoužíváme žádné polotovary – vše od korpusu až po poslední kytičku 
+                    je naše <strong>poctivá řemeslná práce</strong>.
+                </p>
+            </div>
+        </div>
+        </div>
+</section>
