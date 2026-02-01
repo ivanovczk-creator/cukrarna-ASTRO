@@ -4,6 +4,18 @@ import ReservationForm from '../components/ReservationForm.tsx';
 
 const shops = [
   {
+    city: 'Píšť',
+    name: 'Sídlo firmy & Výroba',
+    address: 'Opavská 218/101, 747 18 Píšť',
+    phone: '+420 602 323 788',
+    hours: [
+      'Po–Pá: 6:00 – 15:00',
+      'So–Ne: Dle domluvy'
+    ],
+    mapUrl: 'https://maps.app.goo.gl/9uE4K2C7K8hK9z8A6',
+    isHeadquarters: true
+  },
+  {
     city: 'Petřvald',
     name: 'Cukrárna Petřvald',
     address: 'Šenovská 1, 735 41 Petřvald',
@@ -12,8 +24,7 @@ const shops = [
       'Út–Ne: 9:00 – 17:00',
       'Po: Zavřeno'
     ],
-    mapUrl: 'https://www.google.com/maps?cid=14969249767566164624',
-    note: 'Naše hlavní výrobna a prodejna.'
+    mapUrl: 'https://www.google.com/maps?cid=14969249767566164624'
   },
   {
     city: 'Karviná',
@@ -43,8 +54,8 @@ const shops = [
 ---
 
 <Layout 
-	title="Naše prodejny | Cukrářství Blahutovi - Petřvald, Karviná, Ostrava" 
-	description="Navštivte naše cukrárny v Petřvaldě, Karviné a Ostravě. Nabízíme čerstvé zákusky, dorty na objednávku a vyzvednutí jedlého tisku. Podívejte se na otevírací dobu."
+	title="Naše prodejny a výroba | Cukrářství Blahutovi - Petřvald, Karviná, Ostrava, Píšť" 
+	description="Navštivte naše cukrárny v Petřvaldě, Karviné a Ostravě. Sídlo a výroba v Píšti. Nabízíme čerstvé zákusky a dorty na objednávku."
 >
 	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
 		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative font-bold">
@@ -61,33 +72,33 @@ const shops = [
 			<div class="max-w-4xl mx-auto">
 				<h1 class="text-4xl md:text-6xl font-serif mb-6 italic text-[#d4af37] font-bold">Kde nás najdete</h1>
 				<p class="text-xl opacity-90 leading-relaxed font-bold">
-					Zastavte se za námi pro čerstvý zákusek nebo si přijďte vyzvednout svou objednávku. Těšíme se na vás na třech místech v kraji.
+					Od výroby v Píšti až po naše cukrárny. Těšíme se na vás na čtyřech místech v kraji.
 				</p>
 			</div>
 		</section>
 
 		<section class="py-16 px-4 max-w-7xl mx-auto font-bold">
-			<div class="grid md:grid-cols-3 gap-8">
+			<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
 				{shops.map(shop => (
-					<div class="bg-white rounded-[3rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col font-bold">
-						<div class="p-8 md:p-10 flex-grow">
-							<div class="bg-[#d4af37]/10 text-[#92782a] w-fit px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-4">
-								{shop.city}
+					<div class={`bg-white rounded-[2.5rem] shadow-xl overflow-hidden border flex flex-col font-bold ${shop.isHeadquarters ? 'border-[#d4af37] ring-1 ring-[#d4af37]' : 'border-slate-100'}`}>
+						<div class="p-8 flex-grow">
+							<div class={`${shop.isHeadquarters ? 'bg-[#d4af37] text-[#0a192f]' : 'bg-[#d4af37]/10 text-[#92782a]'} w-fit px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-4`}>
+								{shop.isHeadquarters ? 'Sídlo & Výroba' : shop.city}
 							</div>
-							<h3 class="text-2xl font-serif mb-6 text-[#0a192f] italic font-bold">{shop.name}</h3>
+							<h3 class="text-xl font-serif mb-6 text-[#0a192f] italic font-bold">{shop.name}</h3>
 							
-							<div class="space-y-6 text-slate-600">
+							<div class="space-y-6 text-slate-600 font-bold">
 								<div class="flex items-start gap-4">
 									<span class="text-[#d4af37] mt-1">📍</span>
-									<p class="text-sm leading-relaxed">{shop.address}</p>
+									<p class="text-xs leading-relaxed font-bold">{shop.address}</p>
 								</div>
 								<div class="flex items-start gap-4">
 									<span class="text-[#d4af37] mt-1">📞</span>
-									<a href={`tel:${shop.phone.replace(/\s/g, '')}`} class="hover:text-[#d4af37] transition-colors font-bold">{shop.phone}</a>
+									<a href={`tel:${shop.phone.replace(/\s/g, '')}`} class="hover:text-[#d4af37] transition-colors font-bold text-xs">{shop.phone}</a>
 								</div>
 								<div class="flex items-start gap-4">
 									<span class="text-[#d4af37] mt-1">🕒</span>
-									<div class="text-sm space-y-1 font-bold">
+									<div class="text-xs space-y-1 font-bold">
 										{shop.hours.map(line => <p>{line}</p>)}
 									</div>
 								</div>
@@ -99,9 +110,9 @@ const shops = [
 								href={shop.mapUrl} 
 								target="_blank" 
 								rel="noopener noreferrer"
-								class="block w-full py-4 bg-slate-50 text-[#0a192f] text-center rounded-2xl hover:bg-[#d4af37] hover:text-[#0a192f] transition-all uppercase text-[10px] font-bold tracking-widest border border-slate-100 font-serif"
+								class="block w-full py-3 bg-slate-50 text-[#0a192f] text-center rounded-2xl hover:bg-[#d4af37] hover:text-[#0a192f] transition-all uppercase text-[9px] font-bold tracking-widest border border-slate-100 font-serif font-bold"
 							>
-								Otevřít v navigaci
+								Otevřít mapu
 							</a>
 						</div>
 					</div>
@@ -113,7 +124,7 @@ const shops = [
 			<div class="bg-white p-12 rounded-[3rem] shadow-sm border border-slate-100 font-bold">
 				<h3 class="text-2xl font-serif mb-4 italic text-[#0a192f] font-bold">Plánujete větší odběr?</h3>
 				<p class="text-slate-600 mb-8 font-bold">
-					Pokud si chcete rezervovat větší množství zákusků nebo se poradit o svatebním dortu, doporučujeme volat přímo na prodejnu, kde si chcete zboží vyzvednout.
+					Pokud si chcete rezervovat větší množství zákusků nebo se poradit o svatebním dortu, doporučujeme volat přímo na vybranou prodejnu.
 				</p>
 				<div class="flex flex-wrap justify-center gap-4 font-bold">
 					<ReservationForm client:load />
@@ -122,8 +133,12 @@ const shops = [
 		</section>
 	</main>
 
-	<footer class="bg-[#0a192f] py-16 text-center text-white/40 text-xs border-t border-[#d4af37]/10 font-bold">
-		<p class="mb-2 italic text-[#d4af37] text-sm font-serif font-bold">Cukrářství Blahutovi</p>
-		<p>© {new Date().getFullYear()} — Tradiční rodinné cukrářství font-bold</p>
+	<footer class="bg-[#0a192f] py-16 text-center text-white/40 text-[10px] border-t border-[#d4af37]/10 font-bold font-serif">
+		<div class="max-w-7xl mx-auto px-4 font-bold">
+			<p class="mb-2 italic text-[#d4af37] text-sm font-serif font-bold">Cukrářství Blahutovi</p>
+			<p class="mb-1">Adéla Blahutová</p>
+			<p class="mb-4 uppercase tracking-widest">IČO: 05244302</p>
+			<p>© {new Date().getFullYear()} — Tradiční rodinné cukrářství font-bold</p>
+		</div>
 	</footer>
 </Layout>
