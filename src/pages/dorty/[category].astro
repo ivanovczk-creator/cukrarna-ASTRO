@@ -8,37 +8,37 @@ export async function getStaticPaths() {
   const categories = [
     { 
       id: 'detske', 
-      title: 'Dětské dorty', 
-      description: 'Nechte se unést do světa pohádek! Naše dětské narozeninové dorty tvoříme s ohledem na dětskou fantazii. Od oblíbených postaviček po veselá zvířátka – každý dort je ručně modelovaný originál, který rozzáří oči každého malého oslavence.' 
+      title: 'Dětské narozeninové dorty Ostrava a Karviná', 
+      description: 'Nechte se unést do světa pohádek! Naše dětské narozeninové dorty tvoříme s ohledem na dětskou fantazii. Od oblíbených postaviček po veselá zvířátka – každý dort je ručně modelovaný originál pro oslavy v Ostravě, Karviné a okolí.' 
     },
     { 
       id: 'narozeninove', 
-      title: 'Narozeninové dorty', 
-      description: 'Hledáte dokonalý narozeninový dort pro děti i dospělé? Naše cukrářky pečou z poctivých surovin a zdobí dorty tak, aby byly ozdobou každé oslavy. Vyberte si z klasických příchutí nebo moderních kombinací.' 
+      title: 'Narozeninové dorty na zakázku | Karviná, Ostrava', 
+      description: 'Hledáte dokonalý narozeninový dort? Naše cukrářky pečou z poctivých surovin a zdobí dorty tak, aby byly ozdobou každé oslavy. Vyberte si z klasických příchutí nebo moderních kombinací s vyzvednutím na našich prodejnách.' 
     },
     { 
       id: 'svatebni', 
-      title: 'Svatební dorty', 
-      description: 'Váš velký den si zaslouží dokonalou sladkou tečku. Naše svatební dorty kombinují nadčasovou eleganci s prvotřídní chutí. Nabízíme klasické potahované dorty i moderní styly, které sladíme s barvou a stylem vaší svatby.' 
+      title: 'Svatební dorty na míru Ostrava, Karviná a Petřvald', 
+      description: 'Váš velký den si zaslouží dokonalou sladkou tečku. Naše svatební dorty kombinují nadčasovou eleganci s prvotřídní chutí. Nabízíme klasické i moderní styly, které sladíme s barvou a stylem vaší svatby.' 
     },
     { 
       id: 'nahe', 
-      title: 'Nahé dorty', 
-      description: 'Hledáte přirozenost a svěžest? Nahé a polonahé dorty zdobíme bohatou vrstvou čerstvého sezónního ovoce a živými květy. Ideální volba pro zahradní oslavy a milovníky méně sladkých, lehkých dezertů.' 
+      title: 'Nahé a ovocné dorty | Cukrářství Blahutovi', 
+      description: 'Hledáte přirozenost a svěžest? Nahé a polonahé dorty zdobíme bohatou vrstvou čerstvého sezónního ovoce a živými květy. Ideální volba pro zahradní oslavy a milovníky lehkých dezertů.' 
     },
     { 
       id: 'krtiny', 
-      title: 'Dorty ke křtinám', 
-      description: 'Oslavte první velký milník vašeho miminka s jemností. Dorty ke křtinám připravujeme v decentních pastelových barvách s tradičními symboly andílků či botiček. Zakládáme si na lehkých krémech a jemném zdobení.' 
+      title: 'Dorty ke křtinám a oslavě narození | Píšť', 
+      description: 'Oslavte první velký milník vašeho miminka s jemností. Dorty ke křtinám připravujeme v decentních pastelových barvách s tradičními symboly. Zakládáme si na lehkých krémech a jemném zdobení.' 
     },
     { 
       id: 'elegantni', 
-      title: 'Elegantní dorty', 
-      description: 'Pro významná životní jubilea a luxusní oslavy. Naše elegantní dorty sází na minimalistický design, precizní detaily, jedlé zlato nebo moderní techniky zdobení. Dokonalý dárek pro každého, kdo ocení styl a kvalitu.' 
+      title: 'Elegantní a luxusní dorty pro jubilea', 
+      description: 'Pro významná životní jubilea a luxusní oslavy v regionu Ostrava. Naše elegantní dorty sází na minimalistický design, precizní detaily, jedlé zlato nebo moderní techniky zdobení.' 
     },
     { 
       id: '3d-netradicni', 
-      title: '3D a netradiční dorty', 
+      title: '3D a netradiční dorty na přání', 
       description: 'Pro nás neexistuje nemožné! Potřebujete dort ve tvaru auta, láhve nebo kytary? 3D modelované dorty jsou naší specialitou. Každý detail je ručně vypracován tak, aby výsledek bral dech.' 
     }
   ];
@@ -73,7 +73,7 @@ function getImage(path: string, images: Record<string, any>) {
 			</a>
 
 			<nav id="nav-menu" class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-white/90">
-				<a href="/#dorty" class="hover:text-[#d4af37] py-2">Dorty</a>
+				<a href="/dorty" class="hover:text-[#d4af37] py-2">Dorty</a>
 				<a href="/zakusky" class="hover:text-[#d4af37] py-2">Zákusky</a>
 				<a href="/jedly-tisk" class="hover:text-[#d4af37] py-2">Jedlý tisk</a>
 				<a href="/dort-na-prani" class="hover:text-[#d4af37] py-2">Dort na přání</a>
@@ -95,7 +95,7 @@ function getImage(path: string, images: Record<string, any>) {
 	<main class="py-16 px-4 bg-slate-50 min-h-screen">
 		<div class="max-w-7xl mx-auto font-bold text-navy-900">
 			<nav class="text-xs uppercase tracking-widest text-slate-400 mb-6 font-bold">
-				<a href="/" class="hover:text-[#d4af37]">Domů</a> / <a href="/#dorty" class="hover:text-[#d4af37]">Dorty</a> / <span class="text-slate-600 font-bold">{info.title}</span>
+				<a href="/" class="hover:text-[#d4af37]">Domů</a> / <a href="/dorty" class="hover:text-[#d4af37]">Dorty</a> / <span class="text-slate-600 font-bold">{info.title}</span>
 			</nav>
 
 			<div class="mb-12 border-l-4 border-[#d4af37] pl-6 py-2 max-w-4xl font-bold">
@@ -114,7 +114,7 @@ function getImage(path: string, images: Record<string, any>) {
 										<a href={cake.foto} class="glightbox block h-full font-bold" aria-label={`Detail ${cake.title}`}>
 											<Image 
                         src={imageSrc} 
-                        alt={`${cake.title} - poctivý ${info.title} na zakázku, Cukrářství Blahutovi Ostrava, Karviná a Petřvald`} 
+                        alt={`${cake.title} - poctivý ${info.title} z Cukrářství Blahutovi`} 
                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 font-bold" 
                         width={400} 
                         height={500} 
@@ -154,7 +154,7 @@ function getImage(path: string, images: Record<string, any>) {
 					<div class="text-6xl mb-6 opacity-20 font-bold">🎂</div>
 					<h3 class="text-2xl font-serif text-slate-400 italic font-bold">V této kategorii zatím nic není</h3>
 					<p class="text-slate-400 mt-2 font-bold font-bold text-navy-900">Pracujeme na tom, abyste si brzy mohli vybrat!</p>
-          <a href="/#dorty" class="inline-block mt-8 text-[#d4af37] font-bold uppercase text-xs tracking-widest border-b border-[#d4af37] pb-1 font-bold">Zpět na všechny dorty</a>
+          <a href="/dorty" class="inline-block mt-8 text-[#d4af37] font-bold uppercase text-xs tracking-widest border-b border-[#d4af37] pb-1 font-bold">Zpět na všechny dorty</a>
 				</div>
 			)}
 		</div>
