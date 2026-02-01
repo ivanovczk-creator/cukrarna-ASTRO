@@ -1,9 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import productsData from '../../data.json';
-import CustomCakeForm from '../components/CustomCakeForm';
 import ReservationForm from '../components/ReservationForm.tsx';
-import EdiblePrintForm from '../components/EdiblePrintForm.tsx';
 import { Image } from 'astro:assets';
 
 const cakeImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/dorty/*.{jpeg,jpg,png,webp,JPG,JPEG}', { eager: true });
@@ -26,12 +24,6 @@ const cakeCategories = [
 	{ id: 'nahe', name: 'Nahé', img: '/img/dorty/40.webp' },
 	{ id: '3d-netradicni', name: '3D / Ostatní', img: '/img/dorty/12.webp' }
 ];
-
-const stores = [
-	{ id: 'petrvald', name: 'Petřvald', address: 'Šenovská 1, 735 41 Petřvald', phone: '+420 778 157 857', mapUrl: 'https://maps.google.com/?q=Šenovská+1+Petřvald', hours: 'Út–Ne: 9:00–17:00' },
-	{ id: 'karvina', name: 'Karviná', address: 'tř. Těreškovové 2233/28, 734 01 Karviná', phone: '+420 778 157 867', mapUrl: 'https://maps.google.com/?q=tř.+Těreškovové+2233/28+Karviná', hours: 'Po–Pá: 9:00–17:00, So: 8:00–12:00' },
-	{ id: 'ostrava', name: 'Ostrava (Zábřeh)', address: 'Výškovická 116a, 700 30 Ostrava-jih', phone: '+420 775 271 101', mapUrl: 'https://maps.google.com/?q=Výškovická+116a+Ostrava', hours: 'Po–Pá: 9:00–17:00, So: 9:00–12:00' }
-];
 ---
 
 <Layout title="Cukrářství Blahutovi | Domácí dorty a zákusky Ostrava a okolí">
@@ -39,12 +31,12 @@ const stores = [
 		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative text-navy-900">
 			<h1 class="text-xl md:text-2xl font-serif text-[#d4af37]">Cukrářství Blahutovi</h1>
 			<nav id="nav-menu" class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-white/90">
-				<a href="#dorty" class="hover:text-[#d4af37] cursor-pointer py-2">Dorty</a>
-				<a href="#zakusky" class="hover:text-[#d4af37] cursor-pointer py-2">Zákusky</a>
-				<a href="#jedly-tisk" class="hover:text-[#d4af37] cursor-pointer py-2">Jedlý tisk</a>
-				<a href="#dort-na-prani" class="hover:text-[#d4af37] cursor-pointer py-2 font-bold">Dort na přání</a>
-				<a href="#prodejny" class="hover:text-[#d4af37] cursor-pointer py-2">Prodejny</a>
-				<a href="/pro-firmy" class="hover:text-[#d4af37] cursor-pointer py-2">Pro firmy</a>
+				<a href="#dorty" class="hover:text-[#d4af37] py-2">Dorty</a>
+				<a href="#zakusky" class="hover:text-[#d4af37] py-2">Zákusky</a>
+				<a href="/jedly-tisk" class="hover:text-[#d4af37] py-2">Jedlý tisk</a>
+				<a href="/dort-na-prani" class="hover:text-[#d4af37] py-2 font-bold">Dort na přání</a>
+				<a href="/prodejny" class="hover:text-[#d4af37] py-2 font-bold">Prodejny</a>
+				<a href="/pro-firmy" class="hover:text-[#d4af37] py-2">Pro firmy</a>
 			</nav>
 			<div class="flex items-center gap-4">
 				<ReservationForm client:load />
@@ -60,16 +52,16 @@ const stores = [
 	<main>
 		<section id="dorty" class="py-20 px-4 max-w-7xl mx-auto text-[#0a192f]">
 			<h2 class="text-4xl md:text-5xl font-serif text-center mb-4 italic text-navy-900">Naše Dorty</h2>
-			<p class="text-center text-slate-500 mb-16 max-w-xl mx-auto text-lg leading-relaxed font-bold">Vyberte si kategorii dortu pro vaši příležitost:</p>
+			<p class="text-center text-slate-500 mb-16 max-w-xl mx-auto text-lg leading-relaxed font-bold font-serif">Vyberte si kategorii dortu pro vaši příležitost:</p>
 
 			<div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-8 px-4 font-bold text-navy-900">
 				{cakeCategories.map(cat => {
 					const imageSrc = getImage(cat.img, cakeImages);
 					return (
-						<a href={`/dorty/${cat.id}`} class="group flex flex-col items-center gap-4 no-underline text-navy-900">
+						<a href={`/dorty/${cat.id}`} class="group flex flex-col items-center gap-4 no-underline text-navy-900 font-bold">
 							<div class="w-full aspect-square rounded-full overflow-hidden border-2 border-slate-100 group-hover:border-[#d4af37] transition-all duration-500 shadow-md relative">
 								{imageSrc ? (
-									<Image src={imageSrc} alt={cat.name} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" width={180} height={180} format="webp" />
+									<Image src={imageSrc} alt={cat.name} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 font-bold" width={180} height={180} format="webp" />
 								) : (
 									<div class="w-full h-full bg-slate-50 flex items-center justify-center text-[8px] text-slate-300 italic">Foto</div>
 								)}
@@ -86,39 +78,24 @@ const stores = [
 			<div class="max-w-7xl mx-auto font-bold text-navy-900">
 				<h2 class="text-4xl md:text-5xl font-serif text-center mb-6 italic font-bold">Denní nabídka čerstvých zákusků</h2>
 				<p class="text-center text-slate-500 mb-12 max-w-3xl mx-auto text-lg leading-relaxed font-bold">
-					Zákusky pro vás připravujeme každý den čerstvé v naší výrobně. Navštivte naše prodejny v Petřvaldě, Karviné či Ostravě a vyberte si ze široké nabídky přímo ve vitríně.
+					Zákusky pro vás připravujeme každý den čerstvé. Navštivte naše prodejny v Petřvaldě, Karviné či Ostravě a vyberte si přímo ve vitríně.
 				</p>
 				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-					{desserts.map(dessert => {
+					{desserts.slice(0, 8).map(dessert => { // Zobrazujeme jen prvních 8 jako ochutnávku
 						const fotoUrl = dessert.foto || "";
 						const imageSrc = getImage(fotoUrl, dessertImages);
-						const dessertId = dessert.title.replace(/\s+/g, '-').toLowerCase();
-
 						return (
 						<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col transition-transform hover:-translate-y-1 font-bold">
-							<div class="h-56 overflow-hidden relative bg-slate-50 text-center font-bold text-navy-900">
+							<div class="h-56 overflow-hidden relative bg-slate-50 text-center font-bold">
 								{imageSrc ? (
-									<a href={fotoUrl} class="glightbox cursor-zoom-in font-bold">
-										<Image src={imageSrc} alt={dessert.title} class="w-full h-full object-cover transition-transform duration-700 hover:scale-110 font-bold" width={300} height={300} format="webp" />
-									</a>
+									<Image src={imageSrc} alt={dessert.title} class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" width={300} height={300} format="webp" />
 								) : (
-									<div class="flex items-center justify-center h-full text-xs text-slate-400 italic font-bold text-navy-900">Foto připravujeme</div>
+									<div class="flex items-center justify-center h-full text-xs text-slate-400 italic">Foto připravujeme</div>
 								)}
 							</div>
 							<div class="p-6 flex-grow flex flex-col justify-between font-bold">
-								<h3 class="text-lg font-bold mb-1 leading-tight text-navy-900 font-bold">{dessert.title}</h3>
-								<div class="space-y-4 font-bold">
-									<p class="text-[#92782a] font-black text-xl font-bold">{dessert.cena}</p>
-									<div class="flex flex-col items-center gap-2 font-bold">
-										<button id={`init-btn-${dessertId}`} onclick={`document.getElementById('init-btn-${dessertId}').classList.add('hidden'); document.getElementById('counter-${dessertId}').classList.remove('hidden'); document.getElementById('counter-${dessertId}').classList.add('flex');`} class="w-full bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all cursor-pointer uppercase tracking-widest text-[10px]">Přidat</button>
-										<div id={`counter-${dessertId}`} class="hidden w-full items-center justify-between bg-slate-100 rounded-xl overflow-hidden border border-slate-200 font-bold text-navy-900">
-											<button onclick={`const input = document.getElementById('qty-${dessertId}'); if(parseInt(input.value) > 1) { input.value = parseInt(input.value) - 1; } else { document.getElementById('counter-${dessertId}').classList.add('hidden'); document.getElementById('counter-${dessertId}').classList.remove('flex'); document.getElementById('init-btn-${dessertId}').classList.remove('hidden'); }`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer font-bold text-navy-900">−</button>
-											<input type="number" id={`qty-${dessertId}`} min="1" value="1" class="w-12 bg-transparent text-center font-bold outline-none border-none p-0 font-bold text-navy-900" />
-											<button onclick={`const input = document.getElementById('qty-${dessertId}'); input.value = parseInt(input.value) + 1;`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer font-bold text-navy-900">+</button>
-											<button onclick={`const q = document.getElementById('qty-${dessertId}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${dessert.title}", price: "${dessert.cena}", img: "${fotoUrl}", quantity: q } })); document.getElementById('counter-${dessertId}').classList.add('hidden'); document.getElementById('counter-${dessertId}').classList.remove('flex'); document.getElementById('init-btn-${dessertId}').classList.remove('hidden'); document.getElementById('qty-${dessertId}').value = 1;`} class="bg-[#0a192f] text-white px-3 h-10 font-bold text-[10px] uppercase hover:bg-[#d4af37] cursor-pointer font-bold">OK</button>
-										</div>
-									</div>
-								</div>
+								<h3 class="text-lg font-bold mb-1 leading-tight font-bold">{dessert.title}</h3>
+								<p class="text-[#92782a] font-black text-xl font-bold">{dessert.cena}</p>
 							</div>
 						</div>
 					)})}
@@ -126,102 +103,60 @@ const stores = [
 			</div>
 		</section>
 
-		<section id="jedly-tisk" class="py-24 px-4 bg-white font-bold">
-			<div class="max-w-7xl mx-auto">
-				<div class="grid lg:grid-cols-2 gap-16 items-center">
-					<div class="font-bold text-navy-900">
-						<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-[#0a192f] font-bold">Vlastní fotografie na dortu</h2>
-						<div class="space-y-6 text-slate-600 text-lg font-bold leading-relaxed">
-							<p>
-								Chcete oslavence skutečně překvapit? S naším **jedlým tiskem** na dort vytvoříte nezapomenutelný dárek. Přeneseme jakékoli vaše vlastní foto, logo či obrázek na kvalitní jedlý papír nebo fondánový list s použitím certifikovaných potravinářských barev.
-							</p>
-							<div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
-								<div class="flex items-center gap-3 text-sm font-bold text-[#0a192f]"><span class="text-[#d4af37] text-xl font-bold font-bold">✔</span> Ostrý tisk a syté barvy font-bold</div>
-								<div class="flex items-center gap-3 text-sm font-bold text-[#0a192f]"><span class="text-[#d4af37] text-xl font-bold font-bold">✔</span> Formáty A4 i kruhové výřezy font-bold</div>
-								<div class="flex items-center gap-3 text-sm font-bold text-[#0a192f]"><span class="text-[#d4af37] text-xl font-bold font-bold">✔</span> Zdravotně nezávadné suroviny font-bold</div>
-								<div class="flex items-center gap-3 text-sm font-bold text-[#0a192f]"><span class="text-[#d4af37] text-xl font-bold font-bold">✔</span> Rychlé zpracování zakázek font-bold</div>
-							</div>
-						</div>
-					</div>
-					<div class="bg-slate-50 p-8 md:p-12 rounded-[3rem] shadow-sm border border-slate-100 font-bold">
-						<EdiblePrintForm client:load />
-					</div>
-				</div>
+		<section class="py-24 px-4 bg-white font-bold">
+			<div class="max-w-5xl mx-auto text-center font-bold">
+				<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-[#0a192f] font-bold">Jedlý tisk na dort</h2>
+				<p class="text-lg text-slate-600 mb-10 leading-relaxed font-bold">
+					Chcete na dort vlastní fotografii, obrázek nebo logo? Tiskneme na kvalitní jedlý papír i fondánové listy. Objednejte si tisk online a vyzvedněte si ho na našich prodejnách.
+				</p>
+				<a href="/jedly-tisk" class="inline-block bg-[#0a192f] text-[#d4af37] px-12 py-5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#d4af37] hover:text-[#0a192f] transition-all shadow-xl font-bold">
+					Jak objednat jedlý tisk
+				</a>
 			</div>
 		</section>
 		
-		<section id="dort-na-prani" class="py-24 px-4 bg-slate-50 overflow-hidden font-bold">
-			<div class="max-w-7xl mx-auto">
-				<div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-					<div class="order-2 lg:order-1 font-bold text-navy-900">
-						<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-[#0a192f] font-bold font-serif">Dort přesně podle vašich představ</h2>
-						<div class="space-y-6 text-slate-600 text-lg leading-relaxed font-bold">
-							<p>
-								Máte konkrétní vizi, jak by měl váš vysněný dort vypadat? Naše **šikovné cukrářky** jsou mistryně svého řemesla a dokáží proměnit vaše sny v sladkou realitu. Ať už plánujete oslavu narozenin, svatbu nebo firemní večírek, vytvoříme pro vás originál, který oslní vzhledem i chutí.
-							</p>
-							<div class="bg-white p-8 rounded-[2.5rem] shadow-xl border-l-8 border-[#d4af37] relative font-bold font-serif text-navy-900">
-								<h4 class="font-bold text-[#0a192f] mb-3 uppercase text-xs tracking-[0.2em]">Máte vlastní předlohu?</h4>
-								<p class="text-sm font-bold">
-									Stačí nám **zaslat vlastní fotografii nebo obrázek jako předlohu**. Naše cukrářky podle ní precizně vymodelují figurky, připraví dekorace nebo vytvoří celý 3D tvar dortu tak, aby přesně odpovídal vašemu zadání.
-								</p>
-							</div>
-							<ul class="grid grid-cols-1 sm:grid-cols-2 gap-y-4 pt-6 font-bold text-navy-900 font-bold">
-								<li class="flex items-center gap-3 font-bold text-sm text-[#0a192f]"><span class="text-[#d4af37] text-xl font-bold">✦</span> Ruční modelace figurek</li>
-								<li class="flex items-center gap-3 font-bold text-sm text-[#0a192f]"><span class="text-[#d4af37] text-xl font-bold">✦</span> Dorty podle vaší fotky</li>
-								<li class="flex items-center gap-3 font-bold text-sm text-[#0a192f]"><span class="text-[#d4af37] text-xl font-bold">✦</span> Netradiční 3D tvary</li>
-								<li class="flex items-center gap-3 font-bold text-sm text-[#0a192f]"><span class="text-[#d4af37] text-xl font-bold">✦</span> Poctivé domácí suroviny</li>
-							</ul>
-						</div>
-					</div>
-					<div class="order-1 lg:order-2 bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl border border-white relative font-bold font-serif text-navy-900 font-bold">
-						<div class="absolute -top-10 -right-10 w-40 h-40 bg-[#d4af37]/5 rounded-full blur-3xl font-bold"></div>
-						<h3 class="text-2xl font-serif mb-8 text-center text-[#0a192f] italic relative z-10 font-bold">Napište nám svou představu</h3>
-						<CustomCakeForm client:load />
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<section id="prodejny" class="py-24 px-4 max-w-7xl mx-auto text-[#0a192f] font-bold">
-			<h2 class="text-4xl md:text-5xl font-serif text-center mb-6 italic text-navy-900 font-bold font-serif">Navštivte naše prodejny</h2>
-			<p class="text-center text-slate-500 mb-16 max-w-2xl mx-auto text-lg leading-relaxed font-bold">
-				Denně čerstvé zákusky a možnost osobního vyzvednutí vašich objednávek v jedné z našich provozoven.
-			</p>
-			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-white font-bold text-navy-900">
-				{stores.map(store => (
-					<div class="bg-[#0a192f] p-8 rounded-[2.5rem] border border-[#d4af37]/20 shadow-xl flex flex-col justify-between transition-transform hover:-translate-y-1 font-bold">
-						<div>
-							<h3 class="text-[#d4af37] font-bold mb-1 text-xl font-serif italic">{store.name}</h3>
-							<p class="text-[10px] uppercase tracking-widest text-slate-300 mb-6 font-bold font-bold">{store.hours}</p>
-							<div class="space-y-2 mb-6 font-bold">
-								<p class="text-sm opacity-90 leading-relaxed font-bold">{store.address}</p>
-								<p class="text-sm font-bold text-[#d4af37] font-bold">{store.phone}</p>
-							</div>
-						</div>
-						<a href={store.mapUrl} target="_blank" class="block w-full text-center py-4 rounded-xl border border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#0a192f] transition-all font-bold text-[10px] uppercase tracking-widest cursor-pointer font-bold" rel="noopener noreferrer">Ukázat na mapě</a>
-					</div>
-				))}
-			</div>
-		</section>
-
-		<section id="b2b" class="py-24 px-4 bg-[#0a192f] text-white">
-			<div class="max-w-4xl mx-auto text-center font-bold">
-				<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-[#d4af37] font-bold font-serif">Pro firmy a B2B spolupráci</h2>
-				<p class="text-lg opacity-90 leading-relaxed mb-12 font-bold">
-					Hledáte spolehlivého dodavatele čerstvých zákusků pro vaši kavárnu, restauraci nebo catering na firemní akci? Nabízíme **pravidelný závoz** vlastním chlazeným vozem do měst Ostrava, Karviná, Opava, Bohumín a okolí.
+		<section class="py-24 px-4 bg-slate-50 overflow-hidden font-bold">
+			<div class="max-w-5xl mx-auto text-center font-bold">
+				<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-[#0a192f] font-bold">Dort přesně podle vašich představ</h2>
+				<p class="text-lg text-slate-600 mb-10 leading-relaxed font-bold">
+					Máte vlastní předlohu nebo nápad na originální dort? Naše cukrářky pro vás vytvoří sladké umělecké dílo. Podívejte se, jak probíhá zakázková výroba a pošlete nám svou poptávku.
 				</p>
-				<div class="inline-block bg-[#d4af37] text-[#0a192f] px-12 py-5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-white transition-all shadow-xl font-bold">
-					<a href="/pro-firmy" class="no-underline text-inherit font-bold">Velkoobchodní nabídka a poptávka</a>
-				</div>
+				<a href="/dort-na-prani" class="inline-block bg-[#0a192f] text-white px-12 py-5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#d4af37] transition-all shadow-xl font-bold font-serif italic font-bold">
+					Chci dort na zakázku
+				</a>
+			</div>
+		</section>
+
+		<section class="py-24 px-4 bg-[#0a192f] text-white font-bold">
+			<div class="max-w-5xl mx-auto text-center font-bold">
+				<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-[#d4af37] font-bold font-serif">Navštivte nás</h2>
+				<p class="text-lg opacity-90 mb-12 font-bold font-serif">
+					Najdete nás v **Petřvaldě, Karviné a Ostravě**. Podívejte se na otevírací dobu, přesné adresy a mapy našich prodejen.
+				</p>
+				<a href="/prodejny" class="inline-block border-2 border-[#d4af37] text-[#d4af37] px-12 py-5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#d4af37] hover:text-[#0a192f] transition-all font-bold font-serif italic">
+					Zobrazit otevírací doby a mapy
+				</a>
+			</div>
+		</section>
+
+		<section class="py-24 px-4 bg-white text-[#0a192f] font-bold font-serif">
+			<div class="max-w-4xl mx-auto text-center font-bold">
+				<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-navy-900 font-bold font-serif">Pro firmy a B2B spolupráci</h2>
+				<p class="text-lg text-slate-600 leading-relaxed mb-12 font-bold">
+					Hledáte spolehlivého dodavatele čerstvých zákusků pro vaši kavárnu nebo restauraci? Nabízíme pravidelný závoz a individuální podmínky.
+				</p>
+				<a href="/pro-firmy" class="inline-block bg-[#0a192f] text-[#d4af37] px-12 py-5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#d4af37] hover:text-[#0a192f] transition-all shadow-xl font-bold font-serif">
+					Více o spolupráci
+				</a>
 			</div>
 		</section>
 	</main>
 
-	<footer class="bg-[#0a192f] py-16 text-center text-white/40 text-xs border-t border-[#d4af37]/10 font-bold">
-		<div class="max-w-7xl mx-auto px-4 font-bold text-navy-900">
-			<p class="mb-4 italic text-[#d4af37] text-lg font-serif font-bold font-serif">Cukrářství Blahutovi</p>
-			<p class="max-w-md mx-auto mb-8 opacity-60 leading-relaxed font-bold font-serif">Vaše rodinné cukrářství s tradicí. Pečeme pro vás s láskou a z poctivých surovin již od roku 1991. font-bold</p>
-			<div class="w-20 h-px bg-[#d4af37]/30 mx-auto mb-8 font-bold"></div>
+	<footer class="bg-[#0a192f] py-16 text-center text-white/40 text-xs border-t border-[#d4af37]/10 font-bold font-serif">
+		<div class="max-w-7xl mx-auto px-4 font-bold text-navy-900 font-serif">
+			<p class="mb-4 italic text-[#d4af37] text-lg font-serif font-bold font-serif font-bold">Cukrářství Blahutovi</p>
+			<p class="max-w-md mx-auto mb-8 opacity-60 leading-relaxed font-bold font-serif font-bold font-serif">Tradiční rodinné cukrářství. Pečeme pro vás s láskou a z poctivých surovin již od roku 1991. font-bold font-serif font-bold</p>
+			<div class="w-20 h-px bg-[#d4af37]/30 mx-auto mb-8 font-bold font-serif"></div>
 			<p>© {new Date().getFullYear()} — Všechna práva vyhrazena font-bold font-serif</p>
 		</div>
 	</footer>
