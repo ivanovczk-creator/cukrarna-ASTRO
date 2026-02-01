@@ -30,11 +30,12 @@ function getImage(path: string, images: Record<string, any>) {
 				<a href="/jedly-tisk" class="hover:text-[#d4af37] py-2">Jedlý tisk</a>
 				<a href="/dort-na-prani" class="hover:text-[#d4af37] py-2">Dort na přání</a>
 				<a href="/prodejny" class="hover:text-[#d4af37] py-2">Prodejny</a>
+				<a href="/pro-firmy" class="hover:text-[#d4af37] py-2">Pro firmy</a>
 			</nav>
 
 			<div class="flex items-center gap-4">
 				<ReservationForm client:load />
-				<button id="menu-toggle" class="lg:hidden text-[#d4af37] p-2 outline-none">
+				<button id="menu-toggle" class="lg:hidden text-[#d4af37] p-2 outline-none cursor-pointer">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
 					</svg>
@@ -59,25 +60,25 @@ function getImage(path: string, images: Record<string, any>) {
 					const dessertId = dessert.title.replace(/\s+/g, '-').toLowerCase();
 
 					return (
-					<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col hover:shadow-2xl transition-all duration-500 font-bold">
+					<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col hover:shadow-2xl transition-all duration-500 font-bold text-navy-900">
 						<div class="h-56 overflow-hidden relative bg-slate-50 font-bold">
 							{imageSrc ? (
-								<a href={fotoUrl} class="glightbox cursor-zoom-in font-bold">
-									<Image src={imageSrc} alt={dessert.title} class="w-full h-full object-cover transition-transform duration-700 hover:scale-110 font-bold" width={300} height={300} format="webp" />
+								<a href={fotoUrl} class="glightbox cursor-zoom-in font-bold text-navy-900">
+									<Image src={imageSrc} alt={dessert.title} class="w-full h-full object-cover transition-transform duration-700 hover:scale-110 font-bold text-navy-900" width={300} height={300} format="webp" />
 								</a>
 							) : (
-								<div class="flex items-center justify-center h-full text-xs text-slate-400 italic font-bold">Foto připravujeme</div>
+								<div class="flex items-center justify-center h-full text-xs text-slate-400 italic font-bold text-navy-900">Foto připravujeme</div>
 							)}
 						</div>
-						<div class="p-6 flex-grow flex flex-col justify-between font-bold">
-							<h3 class="text-lg font-bold mb-1 leading-tight text-navy-900 font-bold">{dessert.title}</h3>
-							<div class="space-y-4 font-bold">
+						<div class="p-6 flex-grow flex flex-col justify-between font-bold text-navy-900">
+							<h3 class="text-lg font-bold mb-1 leading-tight text-navy-900 font-bold font-serif italic">{dessert.title}</h3>
+							<div class="space-y-4 font-bold text-navy-900">
 								<p class="text-[#92782a] font-black text-xl font-bold">{dessert.cena}</p>
 								
-								<div class="flex flex-col items-center gap-2 font-bold">
+								<div class="flex flex-col items-center gap-2 font-bold text-navy-900">
 									<button id={`init-btn-${dessertId}`} onclick={`document.getElementById('init-btn-${dessertId}').classList.add('hidden'); document.getElementById('counter-${dessertId}').classList.remove('hidden'); document.getElementById('counter-${dessertId}').classList.add('flex');`} class="w-full bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all cursor-pointer uppercase tracking-widest text-[10px]">Přidat</button>
 									
-									<div id={`counter-${dessertId}`} class="hidden w-full items-center justify-between bg-slate-100 rounded-xl overflow-hidden border border-slate-200 font-bold">
+									<div id={`counter-${dessertId}`} class="hidden w-full items-center justify-between bg-slate-100 rounded-xl overflow-hidden border border-slate-200 font-bold text-navy-900">
 										<button onclick={`const input = document.getElementById('qty-${dessertId}'); if(parseInt(input.value) > 1) { input.value = parseInt(input.value) - 1; } else { document.getElementById('counter-${dessertId}').classList.add('hidden'); document.getElementById('counter-${dessertId}').classList.remove('flex'); document.getElementById('init-btn-${dessertId}').classList.remove('hidden'); }`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer font-bold text-navy-900">−</button>
 										<input type="number" id={`qty-${dessertId}`} min="1" value="1" class="w-12 bg-transparent text-center font-bold outline-none border-none p-0 font-bold text-navy-900" />
 										<button onclick={`const input = document.getElementById('qty-${dessertId}'); input.value = parseInt(input.value) + 1;`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer font-bold text-navy-900">+</button>
@@ -95,28 +96,33 @@ function getImage(path: string, images: Record<string, any>) {
 	<footer class="bg-[#0a192f] py-16 text-center text-white/40 text-[10px] border-t border-[#d4af37]/10 font-bold font-serif uppercase tracking-widest">
 		<div class="max-w-7xl mx-auto px-4 font-bold">
 			<p class="mb-2 italic text-[#d4af37] text-sm font-serif font-bold normal-case font-bold">Cukrářství Blahutovi</p>
-			<p>© {new Date().getFullYear()} — Všechna práva vyhrazena font-bold</p>
+			<p>© {new Date().getFullYear()} — Všechna práva vyhrazena</p>
 		</div>
 	</footer>
 </Layout>
 
 <script is:inline>
-	function initMenu() {
+	function setupMenu() {
 		const btn = document.getElementById('menu-toggle');
 		const nav = document.getElementById('nav-menu');
 		if (btn && nav) {
 			btn.onclick = (e) => {
 				e.preventDefault();
-				const isHidden = nav.classList.contains('hidden');
-				if (isHidden) {
-					nav.classList.remove('hidden');
-					nav.classList.add('flex', 'flex-col', 'absolute', 'top-20', 'left-0', 'w-full', 'bg-[#0a192f]', 'p-6', 'z-50', 'border-b', 'border-[#d4af37]');
-				} else {
-					nav.classList.add('hidden');
-					nav.classList.remove('flex', 'flex-col', 'absolute', 'top-20', 'left-0', 'w-full', 'bg-[#0a192f]', 'p-6', 'z-50', 'border-b', 'border-[#d4af37]');
-				}
+				nav.classList.toggle('hidden');
+				nav.classList.toggle('flex');
+				nav.classList.toggle('flex-col');
+				nav.classList.toggle('absolute');
+				nav.classList.toggle('top-20');
+				nav.classList.toggle('left-0');
+				nav.classList.toggle('w-full');
+				nav.classList.toggle('bg-[#0a192f]');
+				nav.classList.toggle('p-6');
+				nav.classList.toggle('z-50');
+				nav.classList.toggle('border-b');
+				nav.classList.toggle('border-[#d4af37]');
 			};
 		}
 	}
-	document.addEventListener('astro:page-load', initMenu);
+	setupMenu();
+	document.addEventListener('astro:page-load', setupMenu);
 </script>
