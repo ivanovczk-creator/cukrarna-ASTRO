@@ -1,0 +1,68 @@
+---
+import Layout from '../layouts/Layout.astro';
+import productsData from '../../data.json';
+import ReservationForm from '../components/ReservationForm.tsx';
+import { Image } from 'astro:assets';
+
+const dessertImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/zakusky/*.{jpeg,jpg,png,webp,JPG,JPEG}', { eager: true });
+const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
+
+function getImage(path: string, images: Record<string, any>) {
+	if (!path) return null;
+	const normalizedPath = path.startsWith('/public') ? path : (path.startsWith('/') ? `/public${path}` : `/public/${path}`);
+	return images[normalizedPath]?.default || null;
+}
+---
+
+<Layout title="Poctivé domácí zákusky | Cukrářství Blahutovi" description="Prohlédněte si naši kompletní nabídku čerstvých zákusků. Tradiční receptury, kvalitní suroviny a denní výdej v našich prodejnách Ostrava, Karviná a Petřvald.">
+	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
+		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative">
+			<a href="/" class="hover:opacity-80 transition-opacity no-underline">
+				<h1 class="text-xl md:text-2xl font-serif text-[#d4af37] font-bold">Cukrářství Blahutovi</h1>
+			</a>
+			<nav class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-white/90">
+				<a href="/#dorty" class="hover:text-[#d4af37]">Dorty</a>
+				<a href="/zakusky" class="text-[#d4af37]">Zákusky</a>
+				<a href="/jedly-tisk" class="hover:text-[#d4af37]">Jedlý tisk</a>
+				<a href="/dort-na-prani" class="hover:text-[#d4af37]">Dort na přání</a>
+				<a href="/prodejny" class="hover:text-[#d4af37]">Prodejny</a>
+			</nav>
+			<ReservationForm client:load />
+		</div>
+	</header>
+
+	<main class="py-16 px-4 bg-slate-50 min-h-screen">
+		<div class="max-w-7xl mx-auto">
+			<h2 class="text-4xl md:text-5xl font-serif text-center mb-12 italic text-navy-900 font-bold">Naše kompletní nabídka zákusků</h2>
+			
+			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+				{desserts.map(dessert => {
+					const fotoUrl = dessert.foto || "";
+					const imageSrc = getImage(fotoUrl, dessertImages);
+					const dessertId = dessert.title.replace(/\s+/g, '-').toLowerCase();
+
+					return (
+					<div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col hover:shadow-2xl transition-all">
+						<div class="h-56 overflow-hidden relative bg-slate-50">
+							{imageSrc ? (
+								<Image src={imageSrc} alt={dessert.title} class="w-full h-full object-cover" width={300} height={300} format="webp" />
+							) : (
+								<div class="flex items-center justify-center h-full text-xs text-slate-400 italic">Foto připravujeme</div>
+							)}
+						</div>
+						<div class="p-6 flex-grow flex flex-col justify-between">
+							<h3 class="text-lg font-bold mb-1 text-navy-900">{dessert.title}</h3>
+							<div class="space-y-4">
+								<p class="text-[#92782a] font-black text-xl">{dessert.cena}</p>
+								<button id={`btn-${dessertId}`} class="w-full bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all uppercase text-[10px] tracking-widest" 
+									onclick={`window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${dessert.title}", price: "${dessert.cena}", img: "${fotoUrl}", quantity: 1 } }))`}>
+									Přidat do košíku
+								</button>
+							</div>
+						</div>
+					</div>
+				)})}
+			</div>
+		</div>
+	</main>
+</Layout>
