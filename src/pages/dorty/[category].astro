@@ -69,37 +69,37 @@ function getImage(path: string, images: Record<string, any>) {
 	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
 		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
 			<a href="/" class="text-xl md:text-2xl font-serif text-[#d4af37] no-underline">Cukrářství Blahutovi</a>
-			<div class="flex items-center gap-4">
+			<div class="flex items-center gap-4 font-bold">
 				<ReservationForm client:load />
 				<a href="/" class="text-[#d4af37] uppercase text-[10px] font-bold tracking-widest border border-[#d4af37] px-4 py-2 rounded-xl hover:bg-[#d4af37] hover:text-[#0a192f] transition-all">Zpět</a>
 			</div>
 		</div>
 	</header>
 
-	<main class="py-16 px-4 bg-slate-50 min-h-screen font-bold">
-		<div class="max-w-7xl mx-auto">
+	<main class="py-16 px-4 bg-slate-50 min-h-screen">
+		<div class="max-w-7xl mx-auto font-bold">
 			<nav class="text-xs uppercase tracking-widest text-slate-400 mb-6 font-bold">
 				<a href="/" class="hover:text-[#d4af37]">Domů</a> / <a href="/#dorty" class="hover:text-[#d4af37]">Dorty</a> / <span class="text-slate-600 font-bold">{info.title}</span>
 			</nav>
 
-			<div class="mb-12 border-l-4 border-[#d4af37] pl-6 py-2 max-w-4xl">
+			<div class="mb-12 border-l-4 border-[#d4af37] pl-6 py-2 max-w-4xl font-bold">
 				<h1 class="text-4xl md:text-5xl font-serif mb-4 text-[#0a192f] italic font-bold">{info.title}</h1>
 				<p class="text-slate-600 text-lg leading-relaxed font-bold">{info.description}</p>
 			</div>
 
 			{filteredCakes.length > 0 ? (
-				<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+				<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 font-bold">
 					{filteredCakes.map((cake) => {
 						const imageSrc = getImage(cake.foto, cakeImages);
 						return (
 							<div class="group bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden flex flex-col hover:shadow-2xl transition-all duration-500 font-bold">
-								<div class="h-72 overflow-hidden relative">
+								<div class="h-72 overflow-hidden relative font-bold">
 									{imageSrc ? (
-										<a href={cake.foto} class="glightbox block h-full" aria-label={`Detail ${cake.title}`}>
+										<a href={cake.foto} class="glightbox block h-full font-bold" aria-label={`Detail ${cake.title}`}>
 											<Image 
                         src={imageSrc} 
                         alt={cake.title} 
-                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 font-bold" 
                         width={400} 
                         height={500} 
                         format="webp" 
@@ -116,9 +116,31 @@ function getImage(path: string, images: Record<string, any>) {
 									<div class="mt-auto flex justify-between items-center pt-6 border-t border-slate-50 font-bold">
 										<span class="text-[#92782a] font-black text-2xl font-bold">{cake.cena}</span>
 										<button 
-											onclick={`window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${cake.title}", price: "${cake.cena}", img: "${cake.foto}", quantity: 1 } }))`}
+											data-cake-name={cake.title}
+											data-cake-price={cake.cena}
+											data-cake-img={cake.foto}
+											onclick="window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: this.getAttribute('data-cake-name'), price: this.getAttribute('data-cake-price'), img: this.getAttribute('data-cake-img'), quantity: 1 } }))"
 											class="bg-[#0a192f] text-white w-12 h-12 rounded-2xl hover:bg-[#d4af37] transition-all duration-300 flex items-center justify-center shadow-lg active:scale-90 font-bold"
                       title="Přidat do objednávky"
 										>
 											<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
+											</svg>
+										</button>
+									</div>
+								</div>
+							</div>
+						);
+					})}
+				</div>
+			) : (
+				<div class="bg-white rounded-[3rem] p-20 text-center border-2 border-dashed border-slate-200 shadow-sm font-bold">
+					<div class="text-6xl mb-6 opacity-20 font-bold">🎂</div>
+					<h3 class="text-2xl font-serif text-slate-400 italic font-bold">V této kategorii zatím nic není</h3>
+					<p class="text-slate-400 mt-2 font-bold">Pracujeme na tom, abyste si brzy mohli vybrat!</p>
+          <a href="/#dorty" class="inline-block mt-8 text-[#d4af37] font-bold uppercase text-xs tracking-widest border-b border-[#d4af37] pb-1 font-bold">Zpět na všechny dorty</a>
+				</div>
+			)}
+		</div>
+	</main>
+</Layout>
