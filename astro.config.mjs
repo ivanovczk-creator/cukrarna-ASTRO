@@ -1,14 +1,14 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
-import sitemap from '@astrojs/sitemap'; // 1. Musíme přidat tento import
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  // 2. TENTO ŘÁDEK JE KLÍČOVÝ - bez něj sitemapa nevznikne
-  site: 'https://www.cukrarstviblahutovi.cz', 
+  // Změna: odstraněno www, aby to odpovídalo realitě v prohlížeči
+  site: 'https://cukrarstviblahutovi.cz', 
   integrations: [
     react(), 
     tailwind(),
-    sitemap() // 3. Přidáme sitemapu do seznamu integrací
+    sitemap()
   ],
 });
