@@ -1,11 +1,11 @@
-# Staré adresy přesměrujeme na nové podstránky (SEO zlato)
-/dorty/               /dorty              301
-/zakusky/             /zakusky              301
-/nabidka-zakusku/      /zakusky              301
-/pro-firmy/           /pro-firmy            301
-/oteviraci-doba/      /prodejny             301
-/kontakt/             /prodejny             301
-
-# Ostatní
-/cukrovi/             /                     301
-
+# Staré adresy presmerujeme na nové (SEO zlato)
+/nabidka-zakusku/      /zakusky      301
+/nabidka-zakusku       /zakusky      301
+/kontakt/              /prodejny     301
+/kontakt               /prodejny     301
+/oteviraci-doba/       /prodejny     301
+/oteviraci-doba        /prodejny     301
+/cukrovi/              /             301
+/cukrovi               /             301
+/dorty/detske/         /dorty        301
+/dorty/detske          /dorty        301
