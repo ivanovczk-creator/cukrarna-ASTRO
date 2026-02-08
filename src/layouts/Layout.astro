@@ -104,7 +104,7 @@ const schemaData = {
 
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">
 
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-5JPLYYKGGN"></script>
 		<script is:inline>
@@ -187,24 +187,24 @@ const schemaData = {
 	:root { --navy-900: #0a192f; --gold-500: #d4af37; }
 	html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 	
-	/* Zajištění, že se text zobrazí i před načtením fontu (LCP optimalizace) */
+	/* Zajištění zobrazení textu před načtením fontu */
 	body { 
 		font-family: 'Inter', system-ui, -apple-system, sans-serif; 
 		margin: 0; 
 		overflow-x: hidden; 
 		min-height: 100vh; 
-		font-display: swap; 
 	}
 	
-	h1, h2, h3, h4 { 
-		font-family: 'Playfair Display', serif; 
-		font-display: swap; 
-	}
+	h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+
+	/* Globální oprava kontrastu v patičce pro Accessibility skóre */
+	footer { color: rgba(255, 255, 255, 0.75) !important; }
+	footer p { opacity: 1 !important; }
 
 	::-webkit-scrollbar { width: 8px; }
 	::-webkit-scrollbar-track { background: #f1f1f1; }
 	::-webkit-scrollbar-thumb { background: var(--navy-900); border-radius: 4px; }
     
-	/* Zajištění, aby obrázky nezpůsobovaly CLS */
+	/* Zabránění CLS */
     img { content-visibility: auto; max-width: 100%; height: auto; }
 </style>
