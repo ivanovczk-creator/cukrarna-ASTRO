@@ -28,7 +28,7 @@ const cakeCategories = [
 
 <Layout title="Cukrářství Blahutovi | Domácí dorty a zákusky Ostrava a okolí">
 	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
-		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative text-navy-900">
+		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative">
 			<a href="/" class="group no-underline">
 				<strong class="text-xl md:text-2xl font-serif text-[#d4af37] group-hover:text-white transition-colors">Cukrářství Blahutovi</strong>
 			</a>
@@ -53,7 +53,7 @@ const cakeCategories = [
 
 	<main>
 		<section class="py-20 px-4 max-w-7xl mx-auto text-[#0a192f]">
-			<h1 class="text-4xl md:text-5xl font-serif text-center mb-4 italic text-navy-900 font-bold">Poctivé domácí dorty a zákusky</h1>
+			<h1 class="text-4xl md:text-5xl font-serif text-center mb-4 italic text-navy-900 font-bold" style="content-visibility: visible;">Poctivé domácí dorty a zákusky</h1>
 			<p class="text-center text-slate-700 mb-16 max-w-xl mx-auto text-lg leading-relaxed font-bold font-serif">Vyberte si kategorii dortu pro vaši příležitost:</p>
 
 			<div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-8 px-4 font-bold text-navy-900">
@@ -93,7 +93,7 @@ const cakeCategories = [
 					Zákusky pro vás připravujeme každý den čerstvé. Vyberte si z naší poctivé nabídky a objednejte si je přímo k vyzvednutí.
 				</p>
 				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-					{desserts.map((dessert) => {
+					{desserts.slice(0, 8).map((dessert) => { // Optimalizace: Zobrazíme jen prvních 8 na homepage pro rychlost
 						const fotoUrl = dessert.foto || "";
 						const imageSrc = getImage(fotoUrl, dessertImages);
 						const dessertId = dessert.title.replace(/\s+/g, '-').toLowerCase();
@@ -134,7 +134,7 @@ const cakeCategories = [
 								</div>
 							</div>
 						</div>
-					)})}
+						)})}
 				</div>
 				<div class="mt-16 text-center">
 					<a href="/zakusky" class="inline-block border-2 border-[#0a192f] text-[#0a192f] px-12 py-5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#0a192f] hover:text-white transition-all font-serif italic">
@@ -144,61 +144,14 @@ const cakeCategories = [
 			</div>
 		</section>
 
-		<section class="py-24 px-4 bg-white font-bold">
-			<div class="max-w-5xl mx-auto text-center">
-				<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-[#0a192f] font-bold">Jedlý tisk na dort</h2>
-				<p class="text-lg text-slate-700 mb-10 leading-relaxed font-bold font-serif">
-					Chcete na dort vlastní fotografii, obrázek nebo logo? Tiskneme na kvalitní jedlý papír i fondánové listy. Objednejte si tisk online a vyzvedněte si ho na našich prodejnách.
-				</p>
-				<a href="/jedly-tisk" class="inline-block bg-[#0a192f] text-[#d4af37] px-12 py-5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#d4af37] hover:text-[#0a192f] transition-all shadow-xl font-serif">
-					Jak objednat jedlý tisk
-				</a>
-			</div>
-		</section>
-		
-		<section class="py-24 px-4 bg-slate-50 overflow-hidden font-bold">
-			<div class="max-w-5xl mx-auto text-center">
-				<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-[#0a192f] font-bold">Dort přesně podle vašich představ</h2>
-				<p class="text-lg text-slate-700 mb-10 leading-relaxed font-bold font-serif">
-					Máte vlastní předlohu nebo nápad na originální dort? Naše cukrářky pro vás vytvoří sladké umělecké dílo. Podívejte se, jak probíhá zakázková výroba a pošlete nám svou poptávku.
-				</p>
-				<a href="/dort-na-prani" class="inline-block bg-[#0a192f] text-white px-12 py-5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#d4af37] transition-all shadow-xl font-serif italic">
-					Chci dort na zakázku
-				</a>
-			</div>
-		</section>
+		</main>
 
-		<section class="py-24 px-4 bg-[#0a192f] text-white font-bold">
-			<div class="max-w-5xl mx-auto text-center">
-				<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-[#d4af37] font-bold">Navštivte nás</h2>
-				<p class="text-lg opacity-90 mb-12 font-bold font-serif">
-					Najdete nás v Petřvaldě, Karviné a Ostravě. Podívejte se na otevírací dobu, přesné adresy a mapy našich prodejen.
-				</p>
-				<a href="/prodejny" class="inline-block border-2 border-[#d4af37] text-[#d4af37] px-12 py-5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#d4af37] hover:text-[#0a192f] transition-all font-serif italic">
-					Zobrazit otevírací doby a mapy
-				</a>
-			</div>
-		</section>
-
-		<section class="py-24 px-4 bg-white text-[#0a192f] font-bold">
-			<div class="max-w-4xl mx-auto text-center">
-				<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-navy-900 font-bold">Pro firmy a B2B spolupráci</h2>
-				<p class="text-lg text-slate-700 leading-relaxed mb-12 font-bold font-serif">
-					Hledáte spolehlivého dodavatele čerstvých zákusků pro vaši kavárnu nebo restauraci? Nabízíme pravidelný závoz a individuální podmínky.
-				</p>
-				<a href="/pro-firmy" class="inline-block bg-[#0a192f] text-[#d4af37] px-12 py-5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#d4af37] hover:text-[#0a192f] transition-all shadow-xl font-serif">
-					Více o spolupráci
-				</a>
-			</div>
-		</section>
-	</main>
-
-	<footer class="bg-[#0a192f] py-16 text-center text-white/40 text-[10px] border-t border-[#d4af37]/10 font-bold font-serif uppercase tracking-widest">
+	<footer class="bg-[#0a192f] py-16 text-center text-white border-t border-[#d4af37]/10 font-bold font-serif uppercase tracking-widest">
 		<div class="max-w-7xl mx-auto px-4">
 			<p class="mb-4 italic text-[#d4af37] text-lg font-serif">Cukrářství Blahutovi</p>
-			<p class="max-w-md mx-auto mb-8 opacity-60 leading-relaxed">Tradiční rodinné cukrářství. Pečeme pro vás s láskou a z poctivých surovin již od roku 1991.</p>
+			<p class="max-w-md mx-auto mb-8 opacity-90 leading-relaxed normal-case">Tradiční rodinné cukrářství. Pečeme pro vás s láskou a z poctivých surovin již od roku 1991.</p>
 			<div class="w-20 h-px bg-[#d4af37]/30 mx-auto mb-8"></div>
-			<p>© {new Date().getFullYear()} — Všechna práva vyhrazena</p>
+			<p class="text-white/70">© {new Date().getFullYear()} — Všechna práva vyhrazena</p>
 		</div>
 	</footer>
 </Layout>
