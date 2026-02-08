@@ -23,9 +23,9 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 	description="Prohlédněte si naši kompletní nabídku čerstvých zákusků. Tradiční receptury, kvalitní suroviny a denní výdej v našich prodejnách Ostrava, Karviná a Petřvald."
 >
 	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
-		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative font-bold text-navy-900">
+		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative font-bold">
 			<a href="/" class="group no-underline">
-				<h1 class="text-xl md:text-2xl font-serif text-[#d4af37] group-hover:text-white transition-colors font-bold">Cukrářství Blahutovi</h1>
+				<strong class="text-xl md:text-2xl font-serif text-[#d4af37] group-hover:text-white transition-colors">Cukrářství Blahutovi</strong>
 			</a>
 
 			<nav id="nav-menu" class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-white/90">
@@ -39,7 +39,7 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 
 			<div class="flex items-center gap-4">
 				<ReservationForm client:load />
-				<button id="menu-toggle" class="lg:hidden text-[#d4af37] p-2 outline-none cursor-pointer">
+				<button id="menu-toggle" aria-label="Otevřít hlavní menu" class="lg:hidden text-[#d4af37] p-2 outline-none cursor-pointer">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
 					</svg>
@@ -52,13 +52,12 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 		<div class="max-w-7xl mx-auto">
 			<div class="text-center mb-16">
 				<h2 class="text-4xl md:text-5xl font-serif mb-6 italic text-navy-900 font-bold">Denní nabídka čerstvých zákusků</h2>
-				<p class="text-slate-500 max-w-2xl mx-auto text-lg font-bold">
-					Všechny naše zákusky připravujeme každý den z poctivých surovin. Objednejte si je online a vyzvedněte na vybrané prodejně.
+				<p class="text-slate-600 max-w-2xl mx-auto text-lg font-bold"> Všechny naše zákusky připravujeme každý den z poctivých surovin. Objednejte si je online a vyzvedněte na vybrané prodejně.
 				</p>
 			</div>
 			
 			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-				{desserts.map(dessert => {
+				{desserts.map((dessert, index) => {
 					const fotoUrl = dessert.foto || "";
 					const imageSrc = getImage(fotoUrl, dessertImages);
 					const dessertId = dessert.title.replace(/\s+/g, '-').toLowerCase();
@@ -67,19 +66,24 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 					<div class="group bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col hover:shadow-2xl transition-all duration-500 font-bold text-navy-900">
 						<div class="h-56 overflow-hidden relative bg-slate-50 font-bold">
 							{imageSrc ? (
-								<a href={fotoUrl} class="glightbox cursor-zoom-in font-bold text-navy-900">
+								<a href={fotoUrl} class="glightbox cursor-zoom-in block h-full" aria-label={`Zvětšit obrázek ${dessert.title}`}>
 									<Image 
 										src={imageSrc} 
 										alt={`${dessert.title} - tradiční čerstvý mini zákusek, cukrárna Ostrava, Karviná a Petřvald`} 
-										class="w-full h-full object-cover transition-transform duration-700 hover:scale-110 font-bold text-navy-900" 
+										class="w-full h-full object-cover transition-transform duration-700 hover:scale-110 font-bold" 
 										width={300} 
 										height={300} 
-										format="webp" 
+										format="webp"
+										/* OPRAVA LCP: První 4 zákusky se načtou prioritně, zbytek líně */
+										loading={index < 4 ? "eager" : "lazy"}
+										fetchpriority={index < 4 ? "high" : "auto"}
+										decoding="async"
 									/>
 									<div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500"></div>
 								</a>
 							) : (
-								<div class="flex items-center justify-center h-full text-xs text-slate-400 italic font-bold text-navy-900">Foto připravujeme</div>
+								/* OPRAVA: Kontrast textu na 600 */
+								<div class="flex items-center justify-center h-full text-xs text-slate-600 italic font-bold">Foto připravujeme</div>
 							)}
 
 							<a 
@@ -94,18 +98,18 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 								</svg>
 							</a>
 						</div>
-						<div class="p-6 flex-grow flex flex-col justify-between font-bold text-navy-900">
+						<div class="p-6 flex-grow flex flex-col justify-between">
 							<h3 class="text-lg font-bold mb-1 leading-tight text-navy-900 font-serif italic">{dessert.title}</h3>
-							<div class="space-y-4 font-bold text-navy-900">
-								<p class="text-[#92782a] font-black text-xl font-bold">{dessert.cena}</p>
+							<div class="space-y-4">
+								<p class="text-[#92782a] font-black text-xl">{dessert.cena}</p>
 								
-								<div class="flex flex-col items-center gap-2 font-bold text-navy-900">
+								<div class="flex flex-col items-center gap-2">
 									<button id={`init-btn-${dessertId}`} onclick={`document.getElementById('init-btn-${dessertId}').classList.add('hidden'); document.getElementById('counter-${dessertId}').classList.remove('hidden'); document.getElementById('counter-${dessertId}').classList.add('flex');`} class="w-full bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all cursor-pointer uppercase tracking-widest text-[10px]">Přidat</button>
 									
-									<div id={`counter-${dessertId}`} class="hidden w-full items-center justify-between bg-slate-100 rounded-xl overflow-hidden border border-slate-200 font-bold text-navy-900">
-										<button onclick={`const input = document.getElementById('qty-${dessertId}'); if(parseInt(input.value) > 1) { input.value = parseInt(input.value) - 1; } else { document.getElementById('counter-${dessertId}').classList.add('hidden'); document.getElementById('counter-${dessertId}').classList.remove('flex'); document.getElementById('init-btn-${dessertId}').classList.remove('hidden'); }`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer">−</button>
-										<input type="number" id={`qty-${dessertId}`} min="1" value="1" class="w-12 bg-transparent text-center font-bold outline-none border-none p-0" />
-										<button onclick={`const input = document.getElementById('qty-${dessertId}'); input.value = parseInt(input.value) + 1;`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer">+</button>
+									<div id={`counter-${dessertId}`} class="hidden w-full items-center justify-between bg-slate-100 rounded-xl overflow-hidden border border-slate-200">
+										<button onclick={`const input = document.getElementById('qty-${dessertId}'); if(parseInt(input.value) > 1) { input.value = parseInt(input.value) - 1; } else { document.getElementById('counter-${dessertId}').classList.add('hidden'); document.getElementById('counter-${dessertId}').classList.remove('flex'); document.getElementById('init-btn-${dessertId}').classList.remove('hidden'); }`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer" aria-label="Snížit množství">−</button>
+										<input type="number" id={`qty-${dessertId}`} min="1" value="1" class="w-12 bg-transparent text-center font-bold outline-none border-none p-0" aria-label="Množství" />
+										<button onclick={`const input = document.getElementById('qty-${dessertId}'); input.value = parseInt(input.value) + 1;`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer" aria-label="Zvýšit množství">+</button>
 										<button onclick={`const q = document.getElementById('qty-${dessertId}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${dessert.title}", price: "${dessert.cena}", img: "${fotoUrl}", quantity: q } })); document.getElementById('counter-${dessertId}').classList.add('hidden'); document.getElementById('counter-${dessertId}').classList.remove('flex'); document.getElementById('init-btn-${dessertId}').classList.remove('hidden'); document.getElementById('qty-${dessertId}').value = 1;`} class="bg-[#0a192f] text-white px-3 h-10 font-bold text-[10px] uppercase hover:bg-[#d4af37] cursor-pointer">OK</button>
 									</div>
 								</div>
@@ -117,7 +121,7 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 		</div>
 	</main>
 
-	<footer class="bg-[#0a192f] py-16 text-center text-white/40 text-[10px] border-t border-[#d4af37]/10 font-bold font-serif uppercase tracking-widest">
+	<footer class="bg-[#0a192f] py-16 text-center text-white/70 text-[10px] border-t border-[#d4af37]/10 font-bold font-serif uppercase tracking-widest">
 		<div class="max-w-7xl mx-auto px-4 font-bold">
 			<p class="mb-2 italic text-[#d4af37] text-sm font-serif font-bold normal-case">Cukrářství Blahutovi</p>
 			<p>© {new Date().getFullYear()} — Všechna práva vyhrazena</p>
