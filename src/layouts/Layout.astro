@@ -14,31 +14,6 @@ const {
 	description = 'Poctivé domácí dorty na zakázku, čerstvé zákusky a mini zákusky z rodinného cukrářství. Navštivte nás v Ostravě, Karviné a Petřvaldě. Tradice od roku 1991.',
 	keywords = 'cukrářství, dorty na zakázku, domácí zákusky, mini zákusky, jedlý tisk, Ostrava, Karviná, Petřvald, Píšť'
 } = Astro.props;
-
-const schemaData = {
-  "@context": "https://schema.org",
-  "@type": "Bakery",
-  "name": "Cukrářství Blahutovi",
-  "url": "https://cukrarstviblahutovi.cz",
-  "logo": "https://cukrarstviblahutovi.cz/favicon.svg",
-  "image": "https://cukrarstviblahutovi.cz/img/dorty/51.webp",
-  "description": "Tradiční rodinné cukrářství s vlastní výrobou. Specializujeme se na narozeninové dorty, svatební dorty a denně čerstvé zákusky.",
-  "telePhone": "+420602323788",
-  "priceRange": "$$",
-  "taxID": "76208371",
-  "vatID": "CZ8011155427",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "Píšť 1",
-    "addressLocality": "Píšť",
-    "postalCode": "747 18",
-    "addressCountry": "CZ"
-  },
-  "sameAs": [
-    "https://www.facebook.com/CukrarstviBlahutovi",
-    "https://www.instagram.com/cukrarstvi_blahutovi/" 
-  ]
-};
 ---
 
 <!doctype html>
@@ -52,23 +27,19 @@ const schemaData = {
 
 		<title>{title}</title>
 		<meta name="description" content={description} />
-		<meta name="keywords" content={keywords} />
 		<link rel="canonical" href={canonicalURL} />
-
-		<meta property="og:type" content="website" />
-		<meta property="og:url" content={canonicalURL} />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
-		<meta property="og:image" content="https://cukrarstviblahutovi.cz/img/dorty/51.webp" />
-
-		<script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
 
 		<ViewTransitions />
 
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		
-		<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+		<link 
+			rel="stylesheet" 
+			href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;600;700&display=swap" 
+			media="print" 
+			onload="this.media='all'"
+		>
 
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-5JPLYYKGGN"></script>
 		<script is:inline>
@@ -78,29 +49,20 @@ const schemaData = {
 			gtag('config', 'G-5JPLYYKGGN');
 		</script>
 
-		<script is:inline>
-			!function(f,b,e,v,n,t,s)
-			{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-			n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-			if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-			n.queue=[];t=b.createElement(e);t.async=!0;
-			t.src=v;s=b.getElementsByTagName(e)[0];
-			s.parentNode.insertBefore(t,s)}(window, document,'script',
-			'https://connect.facebook.net/en_US/fbevents.js');
-			fbq('init', '1422427109539340');
-			fbq('track', 'PageView');
-		</script>
-
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" media="print" onload="this.media='all'"/>
-
 		<style is:inline>
-			/* OPRAVA 2: Agresivní inline definice pro okamžité vykreslení textu */
-			body { font-family: 'Inter', system-ui, -apple-system, sans-serif; display: block !important; }
-			h1, h2, h3 { font-family: 'Playfair Display', serif; font-display: swap; }
-			.font-bold { font-weight: 700; }
+			:root { --navy: #0a192f; --gold: #d4af37; }
+			/* Fallback fonty zajistí, že se text ukáže okamžitě */
+			body { 
+				background-color: #f8f9fa; 
+				color: #0a192f; 
+				font-family: system-ui, -apple-system, sans-serif; 
+				margin: 0; 
+				display: block !important;
+			}
+			h1, h2, h3 { font-family: serif; font-weight: 700; }
 		</style>
 	</head>
-	<body class="bg-[#f8f9fa] text-[#0a192f] pb-16 md:pb-0">
+	<body class="pb-16 md:pb-0">
 		<slot />
 
 		<div class="fixed bottom-6 right-6 z-[9999] md:hidden">
