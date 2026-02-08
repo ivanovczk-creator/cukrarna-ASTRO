@@ -15,7 +15,6 @@ const {
 	keywords = 'cukrářství, dorty na zakázku, domácí zákusky, mini zákusky, jedlý tisk, Ostrava, Karviná, Petřvald, Píšť'
 } = Astro.props;
 
-// Rozšířená strukturovaná data s doplněným IČO a DIČ pro maximální důvěryhodnost u Google
 const schemaData = {
   "@context": "https://schema.org",
   "@type": "Bakery",
@@ -132,7 +131,7 @@ const schemaData = {
 			fbq('track', 'PageView');
 		</script>
 		<noscript>
-			<img height="1" width="1" style="display:none" 
+			<img height="1" width="1" style="display:none" alt="fb-pixel"
 				 src="https://www.facebook.com/tr?id=1422427109539340&ev=PageView&noscript=1" />
 		</noscript>
 
@@ -186,9 +185,11 @@ const schemaData = {
 <style is:global>
 	:root { --navy-900: #0a192f; --gold-500: #d4af37; }
 	html { scroll-behavior: smooth; scroll-padding-top: 80px; }
-	body { font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; }
+	body { font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; min-height: 100vh; }
 	h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
 	::-webkit-scrollbar { width: 8px; }
 	::-webkit-scrollbar-track { background: #f1f1f1; }
 	::-webkit-scrollbar-thumb { background: var(--navy-900); border-radius: 4px; }
+    /* Zajištění, aby obrázky nezpůsobovaly CLS */
+    img { content-visibility: auto; }
 </style>
