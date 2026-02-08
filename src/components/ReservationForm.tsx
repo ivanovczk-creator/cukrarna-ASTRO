@@ -9,12 +9,20 @@ const ReservationForm = () => {
   const [minDate, setMinDate] = useState('');
 
   useEffect(() => {
+    // Výpočet minimálního data (2 dny dopředu)
     const date = new Date();
     date.setDate(date.getDate() + 2);
     setMinDate(date.toISOString().split('T')[0]);
 
+    // Načtení košíku z localStorage
     const saved = localStorage.getItem('blahutovi_cart');
-    if (saved) setCart(JSON.parse(saved));
+    if (saved) {
+      try {
+        setCart(JSON.parse(saved));
+      } catch (e) {
+        console.error("Chyba při parsování košíku");
+      }
+    }
 
     const handleAddToCart = (e: any) => {
       const { name, price, img, quantity } = e.detail;
@@ -45,12 +53,14 @@ const ReservationForm = () => {
     localStorage.setItem('blahutovi_cart', JSON.stringify(newCart));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    
+    // Validace otevírací doby
     const dateVal = new Date(formData.get('Datum') as string);
     const day = dateVal.getDay();
-
     const isClosed = (selectedStore === 'Petřvald' && day === 1) || 
                      (selectedStore === 'Píšť' && (day === 0 || day === 6)) || 
                      (selectedStore === 'Karviná' && day === 0) || 
@@ -67,105 +77,107 @@ const ReservationForm = () => {
     
     formData.append('Produkty-Seznam', list);
     
-    fetch("/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams(formData as any).toString(),
-    })
-    .then(() => {
+    try {
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formData as any).toString(),
+      });
       localStorage.removeItem('blahutovi_cart');
       window.location.href = "/dekujeme";
-    })
-    .catch((err) => alert("Chyba: " + err));
+    } catch (err) {
+      alert("Chyba při odesílání: " + err);
+    }
   };
 
-  const total = cart.reduce((acc, item) => acc + item.quantity, 0);
+  const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
     <div className="relative">
       <button 
         onClick={() => setIsOpen(!isOpen)} 
-        aria-label={`Nákupní košík, počet položek: ${total}`}
-        className={`p-2 text-[#d4af37] transition-all cursor-pointer ${justAdded ? 'scale-125' : 'scale-100'}`}
+        aria-label={`Nákupní košík, počet položek: ${totalItems}`}
+        className={`p-2 text-[#d4af37] transition-all cursor-pointer outline-none hover:opacity-80 ${justAdded ? 'scale-125' : 'scale-100'}`}
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
         </svg>
-        {total > 0 && <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold border-2 border-[#0a192f]">{total}</span>}
+        {totalItems > 0 && (
+          <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold border-2 border-[#0a192f]">
+            {totalItems}
+          </span>
+        )}
       </button>
 
       {isOpen && (
         <div className="absolute right-0 mt-4 w-80 md:w-96 bg-white rounded-[2rem] shadow-2xl p-6 md:p-8 border border-slate-100 text-[#0a192f] z-[100]">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-xl font-bold font-serif">Vaše objednávka</h3>
-            <button onClick={() => setIsOpen(false)} className="text-slate-400 cursor-pointer p-2" aria-label="Zavřít košík">✕</button>
+            <h3 className="text-xl font-bold font-serif italic">Vaše objednávka</h3>
+            <button 
+              onClick={() => setIsOpen(false)} 
+              className="text-slate-400 cursor-pointer p-2 hover:text-navy-900 transition-colors" 
+              aria-label="Zavřít košík"
+            >
+              ✕
+            </button>
           </div>
 
-          {cart.length === 0 ? <p className="text-center text-slate-500 italic py-8">Košík je prázdný</p> : (
+          {cart.length === 0 ? (
+            <p className="text-center text-slate-500 italic py-8 font-bold">Košík je prázdný</p>
+          ) : (
             <form name="objednavka" method="POST" onSubmit={handleSubmit} className="space-y-4">
               <input type="hidden" name="form-name" value="objednavka" />
-              <div className="max-h-48 overflow-y-auto mb-6 space-y-3 pr-2">
+              <div className="max-h-48 overflow-y-auto mb-6 space-y-3 pr-2 scrollbar-thin">
                 {cart.map((item, i) => (
                   <div key={i} className="flex gap-3 items-center bg-slate-50 p-2 rounded-xl border border-slate-100">
-                    <img src={item.img} alt="" className="w-10 h-10 object-cover rounded-lg" />
+                    <img src={item.img} alt="" className="w-10 h-10 object-cover rounded-lg" loading="lazy" />
                     <div className="flex-grow">
                       <p className="font-bold text-xs leading-tight">{item.name}</p>
-                      {/* Oprava kontrastu: použita tmavší zlatá #92782a */}
-                      <p className="text-[10px] text-[#92782a] font-bold">{item.quantity}x {item.price}</p>
+                      <p className="text-[10px] text-[#92782a] font-black">{item.quantity}x {item.price}</p>
                     </div>
-                    <button type="button" onClick={() => removeItem(item.name)} className="text-red-400 hover:text-red-600 p-2 cursor-pointer" aria-label={`Odebrat ${item.name} z košíku`}>✕</button>
+                    <button 
+                      type="button" 
+                      onClick={() => removeItem(item.name)} 
+                      className="text-red-400 hover:text-red-600 p-2 cursor-pointer transition-colors" 
+                      aria-label={`Odebrat ${item.name} z košíku`}
+                    >
+                      ✕
+                    </button>
                   </div>
                 ))}
               </div>
 
               <div className="space-y-3 pt-4 border-t border-slate-100">
-                <div>
-                  <label htmlFor="cart-name" className="sr-only">Jméno a příjmení</label>
-                  <input id="cart-name" type="text" name="Jmeno" placeholder="Jméno a příjmení" required className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none" />
-                </div>
+                <input type="text" name="Jmeno" placeholder="Jméno a příjmení" required className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none font-bold" />
                 <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label htmlFor="cart-email" className="sr-only">E-mail</label>
-                    <input id="cart-email" type="email" name="Email" placeholder="E-mail" required className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none" />
-                  </div>
-                  <div>
-                    <label htmlFor="cart-phone" className="sr-only">Telefon</label>
-                    <input id="cart-phone" type="tel" name="Telefon" placeholder="Telefon" required className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none" />
-                  </div>
+                    <input type="email" name="Email" placeholder="E-mail" required className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none font-bold" />
+                    <input type="tel" name="Telefon" placeholder="Telefon" required className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none font-bold" />
                 </div>
                 
                 <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label htmlFor="cart-store" className="sr-only">Vyberte prodejnu</label>
                     <select 
-                      id="cart-store"
                       name="Prodejna" 
                       value={selectedStore}
                       onChange={(e) => setSelectedStore(e.target.value)}
-                      className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none"
+                      className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none font-bold"
                     >
-                      <option>Petřvald</option><option>Píšť</option><option>Karviná</option><option>Ostrava (Zábřeh)</option>
+                      <option>Petřvald</option>
+                      <option>Píšť</option>
+                      <option>Karviná</option>
+                      <option>Ostrava (Zábřeh)</option>
                     </select>
-                  </div>
-                  <div>
-                    <label htmlFor="cart-date" className="sr-only">Datum vyzvednutí</label>
                     <input 
-                      id="cart-date"
                       type="date" 
                       name="Datum" 
                       min={minDate}
                       required 
-                      className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none" 
+                      className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none font-bold" 
                     />
-                  </div>
                 </div>
                 
-                <div>
-                  <label htmlFor="cart-note" className="sr-only">Poznámka k objednávce</label>
-                  <textarea id="cart-note" name="Poznamka" placeholder="Poznámka k objednávce (nepovinné)" className="w-full p-3 bg-slate-50 rounded-xl text-sm outline-none h-20 resize-none border border-transparent focus:border-[#d4af37]"></textarea>
-                </div>
+                <textarea name="Poznamka" placeholder="Poznámka k objednávce (nepovinné)" className="w-full p-3 bg-slate-50 rounded-xl text-sm outline-none h-20 resize-none border border-transparent focus:border-[#d4af37] font-bold"></textarea>
 
-                <button type="submit" className="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] hover:text-[#0a192f] transition-all shadow-lg active:scale-95 cursor-pointer uppercase tracking-widest text-xs">
+                <button type="submit" className="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] hover:text-[#0a192f] transition-all shadow-lg active:scale-95 cursor-pointer uppercase tracking-widest text-[10px]">
                   Odeslat rezervaci
                 </button>
               </div>
