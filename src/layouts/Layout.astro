@@ -15,7 +15,7 @@ const {
 	keywords = 'cukrářství, dorty na zakázku, domácí zákusky, mini zákusky, jedlý tisk, Ostrava, Karviná, Petřvald, Píšť'
 } = Astro.props;
 
-// Rozšířená strukturovaná data (LocalBusiness + pobočky + sociální sítě)
+// Rozšířená strukturovaná data s doplněným IČO a DIČ pro maximální důvěryhodnost u Google
 const schemaData = {
   "@context": "https://schema.org",
   "@type": "Bakery",
@@ -26,6 +26,8 @@ const schemaData = {
   "description": "Tradiční rodinné cukrářství s vlastní výrobou. Specializujeme se na narozeninové dorty, svatební dorty a denně čerstvé zákusky.",
   "telePhone": "+420602323788",
   "priceRange": "$$",
+  "taxID": "76208371",
+  "vatID": "CZ76208371",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "Píšť 1",
@@ -131,12 +133,13 @@ const schemaData = {
 			<img height="1" width="1" style="display:none" 
 				 src="https://www.facebook.com/tr?id=1422427109539340&ev=PageView&noscript=1" />
 		</noscript>
+
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" media="print" onload="this.media='all'"/>
 	</head>
-	<body class="bg-[#f8f9fa] text-[#0a192f] pb-16 md:pb-0">
+	<body class="bg-[#f8f9fa] text-[#0a192f] pb-16 md:pb-0 font-bold">
 		<slot />
 
 		<div class="fixed bottom-6 right-6 z-[9999] md:hidden">
