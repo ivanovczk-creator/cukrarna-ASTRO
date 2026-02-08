@@ -30,7 +30,7 @@ const cakeCategories = [
 	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
 		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative text-navy-900">
 			<a href="/" class="group no-underline">
-				<h1 class="text-xl md:text-2xl font-serif text-[#d4af37] group-hover:text-white transition-colors font-bold">Cukrářství Blahutovi</h1>
+				<strong class="text-xl md:text-2xl font-serif text-[#d4af37] group-hover:text-white transition-colors font-bold">Cukrářství Blahutovi</strong>
 			</a>
 			<nav id="nav-menu" class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-white/90">
 				<a href="/dorty" class="hover:text-[#d4af37] py-2">Dorty</a>
@@ -42,7 +42,7 @@ const cakeCategories = [
 			</nav>
 			<div class="flex items-center gap-4">
 				<ReservationForm client:load />
-				<button id="menu-toggle" class="lg:hidden text-[#d4af37] p-2 cursor-pointer outline-none">
+				<button id="menu-toggle" aria-label="Otevřít hlavní menu" class="lg:hidden text-[#d4af37] p-2 cursor-pointer outline-none">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
 					</svg>
@@ -54,29 +54,32 @@ const cakeCategories = [
 	<main>
 		<section class="py-20 px-4 max-w-7xl mx-auto text-[#0a192f]">
 			<h2 class="text-4xl md:text-5xl font-serif text-center mb-4 italic text-navy-900 font-bold">Naše Dorty</h2>
-			<p class="text-center text-slate-500 mb-16 max-w-xl mx-auto text-lg leading-relaxed font-bold font-serif">Vyberte si kategorii dortu pro vaši příležitost:</p>
+			<p class="text-center text-slate-600 mb-16 max-w-xl mx-auto text-lg leading-relaxed font-bold font-serif">Vyberte si kategorii dortu pro vaši příležitost:</p>
 
 			<div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-8 px-4 font-bold text-navy-900">
-				{cakeCategories.map(cat => {
+				{cakeCategories.map((cat, index) => {
 					const imageSrc = getImage(cat.img, cakeImages);
 					return (
 						<a href={`/dorty/${cat.id}`} class="group flex flex-col items-center gap-4 no-underline text-navy-900 font-bold">
 							<div class="w-full aspect-square rounded-full overflow-hidden border-2 border-slate-100 group-hover:border-[#d4af37] transition-all duration-500 shadow-md relative">
 								{imageSrc ? (
-									<Image 
-										src={imageSrc} 
-										alt={`${cat.name} - ${cat.seo}`} 
-										class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 font-bold" 
-										width={180} 
-										height={180} 
-										format="webp" 
+									<Image 
+										src={imageSrc} 
+										alt={`${cat.name} - ${cat.seo}`} 
+										class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 font-bold" 
+										width={180} 
+										height={180} 
+										format="webp"
+										/* OPRAVA LCP: Horní řada kategorií se načte prioritně */
+										loading="eager"
+										fetchpriority="high"
 									/>
 								) : (
-									<div class="w-full h-full bg-slate-50 flex items-center justify-center text-[8px] text-slate-300 italic">Foto</div>
+									<div class="w-full h-full bg-slate-50 flex items-center justify-center text-[8px] text-slate-400 italic">Foto</div>
 								)}
 								<div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors font-bold"></div>
 							</div>
-							<span class="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500 group-hover:text-[#92782a] text-center transition-colors leading-tight font-bold font-serif italic">{cat.name}</span>
+							<span class="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-600 group-hover:text-[#92782a] text-center transition-colors leading-tight font-bold font-serif italic">{cat.name}</span>
 						</a>
 					)
 				})}
@@ -86,11 +89,11 @@ const cakeCategories = [
 		<section class="py-20 px-4 bg-slate-50 text-[#0a192f]">
 			<div class="max-w-7xl mx-auto font-bold text-navy-900">
 				<h2 class="text-4xl md:text-5xl font-serif text-center mb-6 italic font-bold">Denní nabídka čerstvých zákusků</h2>
-				<p class="text-center text-slate-500 mb-12 max-w-3xl mx-auto text-lg leading-relaxed font-bold">
+				<p class="text-center text-slate-600 mb-12 max-w-3xl mx-auto text-lg leading-relaxed font-bold">
 					Zákusky pro vás připravujeme každý den čerstvé. Vyberte si z naší poctivé nabídky a objednejte si je přímo k vyzvednutí.
 				</p>
 				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-					{desserts.map(dessert => {
+					{desserts.map((dessert, index) => {
 						const fotoUrl = dessert.foto || "";
 						const imageSrc = getImage(fotoUrl, dessertImages);
 						const dessertId = dessert.title.replace(/\s+/g, '-').toLowerCase();
@@ -100,17 +103,20 @@ const cakeCategories = [
 							<div class="h-56 overflow-hidden relative bg-slate-50 text-center font-bold">
 								{imageSrc ? (
 									<a href={fotoUrl} class="glightbox cursor-zoom-in font-bold">
-										<Image 
-											src={imageSrc} 
-											alt={`${dessert.title} - tradiční čerstvý mini zákusek, cukrárna Ostrava a Karviná`} 
-											class="w-full h-full object-cover transition-transform duration-700 hover:scale-110 font-bold" 
-											width={300} 
-											height={300} 
-											format="webp" 
+										<Image 
+											src={imageSrc} 
+											alt={`${dessert.title} - tradiční čerstvý mini zákusek, cukrárna Ostrava a Karviná`} 
+											class="w-full h-full object-cover transition-transform duration-700 hover:scale-110 font-bold" 
+											width={300} 
+											height={300} 
+											format="webp"
+											/* OPRAVA: Zákusky jsou níže na stránce, použijeme lazy loading pro ušetření výkonu */
+											loading="lazy"
+											decoding="async"
 										/>
 									</a>
 								) : (
-									<div class="flex items-center justify-center h-full text-xs text-slate-400 italic font-bold">Foto připravujeme</div>
+									<div class="flex items-center justify-center h-full text-xs text-slate-500 italic font-bold">Foto připravujeme</div>
 								)}
 							</div>
 							<div class="p-6 flex-grow flex flex-col justify-between font-bold text-navy-900">
@@ -121,7 +127,7 @@ const cakeCategories = [
 										<button id={`init-btn-${dessertId}`} onclick={`document.getElementById('init-btn-${dessertId}').classList.add('hidden'); document.getElementById('counter-${dessertId}').classList.remove('hidden'); document.getElementById('counter-${dessertId}').classList.add('flex');`} class="w-full bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all cursor-pointer uppercase tracking-widest text-[10px]">Přidat</button>
 										<div id={`counter-${dessertId}`} class="hidden w-full items-center justify-between bg-slate-100 rounded-xl overflow-hidden border border-slate-200 font-bold">
 											<button onclick={`const input = document.getElementById('qty-${dessertId}'); if(parseInt(input.value) > 1) { input.value = parseInt(input.value) - 1; } else { document.getElementById('counter-${dessertId}').classList.add('hidden'); document.getElementById('counter-${dessertId}').classList.remove('flex'); document.getElementById('init-btn-${dessertId}').classList.remove('hidden'); }`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer font-bold">−</button>
-											<input type="number" id={`qty-${dessertId}`} min="1" value="1" class="w-12 bg-transparent text-center font-bold outline-none border-none p-0 font-bold" />
+											<input type="number" id={`qty-${dessertId}`} min="1" value="1" class="w-12 bg-transparent text-center font-bold outline-none border-none p-0 font-bold" aria-label="Množství" />
 											<button onclick={`const input = document.getElementById('qty-${dessertId}'); input.value = parseInt(input.value) + 1;`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer font-bold">+</button>
 											<button onclick={`const q = document.getElementById('qty-${dessertId}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${dessert.title}", price: "${dessert.cena}", img: "${fotoUrl}", quantity: q } })); document.getElementById('counter-${dessertId}').classList.add('hidden'); document.getElementById('counter-${dessertId}').classList.remove('flex'); document.getElementById('init-btn-${dessertId}').classList.remove('hidden'); document.getElementById('qty-${dessertId}').value = 1;`} class="bg-[#0a192f] text-white px-3 h-10 font-bold text-[10px] uppercase hover:bg-[#d4af37] cursor-pointer font-bold">OK</button>
 										</div>
@@ -142,7 +148,7 @@ const cakeCategories = [
 		<section class="py-24 px-4 bg-white font-bold">
 			<div class="max-w-5xl mx-auto text-center font-bold">
 				<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-[#0a192f] font-bold">Jedlý tisk na dort</h2>
-				<p class="text-lg text-slate-600 mb-10 leading-relaxed font-bold font-serif">
+				<p class="text-lg text-slate-700 mb-10 leading-relaxed font-bold font-serif">
 					Chcete na dort vlastní fotografii, obrázek nebo logo? Tiskneme na kvalitní jedlý papír i fondánové listy. Objednejte si tisk online a vyzvedněte si ho na našich prodejnách.
 				</p>
 				<a href="/jedly-tisk" class="inline-block bg-[#0a192f] text-[#d4af37] px-12 py-5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#d4af37] hover:text-[#0a192f] transition-all shadow-xl font-bold font-serif">
@@ -154,7 +160,7 @@ const cakeCategories = [
 		<section class="py-24 px-4 bg-slate-50 overflow-hidden font-bold">
 			<div class="max-w-5xl mx-auto text-center font-bold">
 				<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-[#0a192f] font-bold">Dort přesně podle vašich představ</h2>
-				<p class="text-lg text-slate-600 mb-10 leading-relaxed font-bold font-serif">
+				<p class="text-lg text-slate-700 mb-10 leading-relaxed font-bold font-serif">
 					Máte vlastní předlohu nebo nápad na originální dort? Naše cukrářky pro vás vytvoří sladké umělecké dílo. Podívejte se, jak probíhá zakázková výroba a pošlete nám svou poptávku.
 				</p>
 				<a href="/dort-na-prani" class="inline-block bg-[#0a192f] text-white px-12 py-5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#d4af37] transition-all shadow-xl font-bold font-serif italic">
@@ -165,9 +171,9 @@ const cakeCategories = [
 
 		<section class="py-24 px-4 bg-[#0a192f] text-white font-bold">
 			<div class="max-w-5xl mx-auto text-center font-bold">
-				<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-[#d4af37] font-bold font-serif">Navštivte nás</h2>
+				<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-[#d4af37] font-bold">Navštivte nás</h2>
 				<p class="text-lg opacity-90 mb-12 font-bold font-serif">
-					Najdete nás v **Petřvaldě, Karviné a Ostravě**. Podívejte se na otevírací dobu, přesné adresy a mapy našich prodejen.
+					Najdete nás v Petřvaldě, Karviné a Ostravě. Podívejte se na otevírací dobu, přesné adresy a mapy našich prodejen.
 				</p>
 				<a href="/prodejny" class="inline-block border-2 border-[#d4af37] text-[#d4af37] px-12 py-5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#d4af37] hover:text-[#0a192f] transition-all font-bold font-serif italic">
 					Zobrazit otevírací doby a mapy
@@ -175,10 +181,10 @@ const cakeCategories = [
 			</div>
 		</section>
 
-		<section class="py-24 px-4 bg-white text-[#0a192f] font-bold font-serif">
+		<section class="py-24 px-4 bg-white text-[#0a192f] font-bold">
 			<div class="max-w-4xl mx-auto text-center font-bold">
-				<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-navy-900 font-bold font-serif font-bold">Pro firmy a B2B spolupráci</h2>
-				<p class="text-lg text-slate-600 leading-relaxed mb-12 font-bold font-serif">
+				<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-navy-900 font-bold">Pro firmy a B2B spolupráci</h2>
+				<p class="text-lg text-slate-700 leading-relaxed mb-12 font-bold font-serif">
 					Hledáte spolehlivého dodavatele čerstvých zákusků pro vaši kavárnu nebo restauraci? Nabízíme pravidelný závoz a individuální podmínky.
 				</p>
 				<a href="/pro-firmy" class="inline-block bg-[#0a192f] text-[#d4af37] px-12 py-5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#d4af37] hover:text-[#0a192f] transition-all shadow-xl font-bold font-serif">
@@ -189,11 +195,11 @@ const cakeCategories = [
 	</main>
 
 	<footer class="bg-[#0a192f] py-16 text-center text-white/40 text-xs border-t border-[#d4af37]/10 font-bold font-serif">
-		<div class="max-w-7xl mx-auto px-4 font-bold text-navy-900 font-serif font-bold">
-			<p class="mb-4 italic text-[#d4af37] text-lg font-serif font-bold font-serif">Cukrářství Blahutovi</p>
-			<p class="max-w-md mx-auto mb-8 opacity-60 leading-relaxed font-bold font-serif font-bold">Tradiční rodinné cukrářství. Pečeme pro vás s láskou a z poctivých surovin již od roku 1991.</p>
-			<div class="w-20 h-px bg-[#d4af37]/30 mx-auto mb-8 font-bold font-serif"></div>
-			<p>© {new Date().getFullYear()} — Všechna práva vyhrazena font-bold font-serif</p>
+		<div class="max-w-7xl mx-auto px-4 font-bold">
+			<p class="mb-4 italic text-[#d4af37] text-lg font-serif">Cukrářství Blahutovi</p>
+			<p class="max-w-md mx-auto mb-8 opacity-60 leading-relaxed font-bold">Tradiční rodinné cukrářství. Pečeme pro vás s láskou a z poctivých surovin již od roku 1991.</p>
+			<div class="w-20 h-px bg-[#d4af37]/30 mx-auto mb-8"></div>
+			<p>© {new Date().getFullYear()} — Všechna práva vyhrazena</p>
 		</div>
 	</footer>
 </Layout>
@@ -221,5 +227,5 @@ const cakeCategories = [
 		}
 	}
 	setupMenu();
-	document.addEventListener('astro:after-swap', setupMenu);
+	document.addEventListener('astro:page-load', setupMenu);
 </script>
