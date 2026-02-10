@@ -1117,7 +1117,8 @@
       "weight": 100,
       "kategorie": "zakusky",
       "title": "Černý rybíz",
-      "cena": "50 Kč"
+      "cena": "50 Kč",
+      "foto": "/img/zakusky/rybizovy rez.webp"
     },
     {
       "weight": 100,
@@ -1131,7 +1132,7 @@
       "kategorie": "zakusky",
       "title": "Pavlova ",
       "cena": "70 Kč",
-      "foto": "/img/zakusky/pavlova web.webp"
+      "foto": "/img/zakusky/pavlova.webp"
     },
     {
       "weight": 100,
@@ -1141,17 +1142,18 @@
       "foto": "/img/zakusky/pistaciovy dortik.webp"
     },
     {
-      "weight": 100,
+      "weight": 11,
       "kategorie": "zakusky",
       "title": "Větrník malinový mascarpone",
       "cena": "50 Kč",
-      "foto": "/img/zakusky/vetrnik malina.webp"
+      "foto": "/img/zakusky/malinovy vetrnik.webp"
     },
     {
       "weight": 100,
       "kategorie": "zakusky",
       "title": "Větrník slaný karamel",
-      "cena": "45Kč"
+      "cena": "45Kč",
+      "foto": "/img/zakusky/vetrnik slany karamel.webp"
     },
     {
       "weight": 100,
@@ -1178,7 +1180,7 @@
       "kategorie": "zakusky",
       "title": "Šodo čokoládové",
       "cena": "60 Kč",
-      "foto": "/img/zakusky/coko-sodo.webp"
+      "foto": "/img/zakusky/coko sodo.webp"
     },
     {
       "weight": 50,
@@ -1199,7 +1201,7 @@
       "kategorie": "zakusky",
       "title": "Schwarzwaldský dort",
       "cena": "75 Kč",
-      "foto": "/img/zakusky/schwarzvald.webp"
+      "foto": "/img/zakusky/swarzwald dort.webp"
     },
     {
       "weight": 100,
@@ -1217,7 +1219,8 @@
       "weight": 100,
       "kategorie": "zakusky",
       "title": "Cheesecake borůvkový",
-      "cena": "70 Kč"
+      "cena": "70 Kč",
+      "foto": "/img/zakusky/cheesecake boruvka.webp"
     },
     {
       "weight": 100,
@@ -1232,6 +1235,20 @@
       "title": "Mrkvový dort",
       "cena": "75 Kč",
       "foto": "/img/zakusky/mrkvovy dort.webp"
+    },
+    {
+      "weight": 15,
+      "kategorie": "zakusky",
+      "title": "Cheesecake jahodový",
+      "cena": "70 Kč",
+      "foto": "/img/zakusky/cheesecake jahoda.webp"
+    },
+    {
+      "weight": 13,
+      "kategorie": "zakusky",
+      "cena": "70 Kč",
+      "title": "Cheesecake mango-maracuja",
+      "foto": "/img/zakusky/cheesecake mango-maracuja.webp"
     }
   ]
 }
