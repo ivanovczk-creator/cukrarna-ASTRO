@@ -71,9 +71,14 @@ const ReservationForm = () => {
       return;
     }
 
-    const list = cart.map(item => 
-      `${item.quantity}x ${item.name} (${item.price})\nOdkaz: ${window.location.origin}${item.img}`
-    ).join('\n\n---\n\n');
+    // Úprava seznamu pro e-mail: U zákusků vynecháme odkaz na fotku
+    const list = cart.map(item => {
+      const basicInfo = `${item.quantity}x ${item.name} (${item.price})`;
+      // Podmínka: Pokud je v cestě k fotce slovo "zakusky", odkaz nepřidáváme
+      return item.img.includes('/zakusky/') 
+        ? basicInfo 
+        : `${basicInfo}\nOdkaz: ${window.location.origin}${item.img}`;
+    }).join('\n\n---\n\n');
     
     formData.append('Produkty-Seznam', list);
     
