@@ -31,19 +31,17 @@ const CustomCakeForm = () => {
     const form = e.currentTarget;
     const formData = new FormData();
     
-    // Přidáme všechna pole včetně souborů najednou - moderní prohlížeče to zvládnou
-    // Netlify potřebuje unikátní jména pro React formuláře
+    formData.append('form-name', 'dort-na-prani');
+
     const inputs = form.querySelectorAll('input, select, textarea');
     inputs.forEach((input: any) => {
       if (input.type === 'file') {
         if (input.files) {
-          // Klíčový trik: Pokud je více souborů, Netlify u Reactu 
-          // lépe skousne, když je přidáme pod stejným jménem v cyklu
           for (let i = 0; i < input.files.length; i++) {
             formData.append('Inspiro-Foto', input.files[i]);
           }
         }
-      } else if (input.name) {
+      } else if (input.name && input.name !== 'form-name') {
         formData.append(input.name, input.value);
       }
     });
@@ -63,7 +61,6 @@ const CustomCakeForm = () => {
     <div className="max-w-2xl mx-auto p-8 bg-white rounded-[2.5rem] shadow-xl border border-[#d4af37]/10 font-bold text-[#0a192f]">
       <h2 className="text-3xl font-serif mb-4 text-center italic">Konfigurátor dortu</h2>
       
-      {/* Tento neviditelný formulář pomůže Netlify pochopit, že pole Inspiro-Foto může mít více souborů */}
       <form name="dort-na-prani" data-netlify="true" netlify-honeypot="bot-field" hidden>
         <input type="text" name="Jmeno" />
         <input type="email" name="Email" />
@@ -114,4 +111,14 @@ const CustomCakeForm = () => {
             multiple 
             className="text-xs" 
           />
-          <p className="
+        </div>
+
+        <button type="submit" className="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all uppercase tracking-widest">
+          Odeslat poptávku
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default CustomCakeForm;
