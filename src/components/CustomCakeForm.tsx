@@ -30,31 +30,30 @@ const CustomCakeForm = () => {
     <div className="max-w-2xl mx-auto p-8 bg-white rounded-[2.5rem] shadow-xl border border-[#d4af37]/10 font-bold text-[#0a192f]">
       <h2 className="text-3xl font-serif mb-4 text-center italic">Konfigurátor dortu</h2>
       
-      {/* KLASICKÝ FORMULÁŘ BEZ JAVASCRIPTU - PRO NETLIFY NEJISTĚJŠÍ */}
       <form 
-        name="dort-na-prani" 
+        name="dort-na-prani-v2" 
         method="POST" 
         action="/dekujeme"
         data-netlify="true" 
         encType="multipart/form-data"
         className="space-y-6 flex flex-col"
       >
-        {/* Nutné pro Netlify u React komponent */}
-        <input type="hidden" name="form-name" value="dort-na-prani" />
+        <input type="hidden" name="form-name" value="dort-na-prani-v2" />
         
-        <div className="flex flex-col gap-1">
-          <label className="text-xs uppercase tracking-widest text-[#92782a]">Místo vyzvednutí</label>
-          <select name="Prodejna" value={selectedShop} onChange={(e) => setSelectedShop(e.target.value)} className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200" required>
-            <option value="ostrava">Ostrava - Zábřeh</option>
-            <option value="karvina">Karviná - Ráj</option>
-            <option value="petrvald">Petřvald</option>
-            <option value="pist">Píšť - Sídlo firmy</option>
-          </select>
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <label className="text-xs uppercase tracking-widest text-[#92782a]">Datum vyzvednutí</label>
-          <input type="date" name="Datum_Vyzvednuti" min={minDate} onChange={handleDateChange} className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200" required />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-1">
+            <label className="text-xs uppercase tracking-widest text-[#92782a]">Místo vyzvednutí</label>
+            <select name="Prodejna" value={selectedShop} onChange={(e) => setSelectedShop(e.target.value)} className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200" required>
+              <option value="ostrava">Ostrava - Zábřeh</option>
+              <option value="karvina">Karviná - Ráj</option>
+              <option value="petrvald">Petřvald</option>
+              <option value="pist">Píšť - Sídlo firmy</option>
+            </select>
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-xs uppercase tracking-widest text-[#92782a]">Datum vyzvednutí</label>
+            <input type="date" name="Datum_Vyzvednuti" min={minDate} onChange={handleDateChange} className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200" required />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -65,16 +64,13 @@ const CustomCakeForm = () => {
         <input type="tel" name="Telefon" placeholder="Telefon" required className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200" />
         <textarea name="Zprava" placeholder="Popište vaši představu..." required className="w-full p-3 h-32 bg-slate-50 rounded-xl border border-slate-200"></textarea>
         
-        <div className="p-6 bg-orange-50 border-2 border-dashed border-[#b38f2d]/30 rounded-2xl text-center">
-          <label className="block text-xs font-bold text-[#92782a] uppercase mb-3">Inspirační obrázky (max 5)</label>
-          {/* Změna názvu na prosté Inspiro-Foto bez [] nebo čísel */}
-          <input 
-            type="file" 
-            name="Inspiro-Foto" 
-            accept="image/*" 
-            multiple 
-            className="text-xs" 
-          />
+        <div className="p-6 bg-orange-50 border-2 border-dashed border-[#b38f2d]/30 rounded-2xl">
+          <label className="block text-xs font-bold text-[#92782a] uppercase mb-3 text-center">Inspirační obrázky</label>
+          <div className="space-y-3">
+            <input type="file" name="Foto-1" accept="image/*" className="text-xs w-full" />
+            <input type="file" name="Foto-2" accept="image/*" className="text-xs w-full" />
+            <input type="file" name="Foto-3" accept="image/*" className="text-xs w-full" />
+          </div>
         </div>
 
         <button type="submit" className="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all uppercase tracking-widest">
