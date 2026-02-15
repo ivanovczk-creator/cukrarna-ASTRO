@@ -4,7 +4,7 @@ const CustomCakeForm = () => {
   const [selectedShop, setSelectedShop] = useState('ostrava');
   const [minDate, setMinDate] = useState('');
 
-  // Logika zavíracích dnů (0 = Neděle, 1 = Pondělí, atd.)
+  // Logika zavíracích dnů
   const shopClosingDays: Record<string, number[]> = {
     ostrava: [0], 
     karvina: [0], 
@@ -20,7 +20,6 @@ const CustomCakeForm = () => {
   };
 
   useEffect(() => {
-    // Nastavení minimálního data (Dnešek + 7 dní) - toto prohlížeč zešedí automaticky
     const dt = new Date();
     dt.setDate(dt.getDate() + 7);
     setMinDate(dt.toISOString().split('T')[0]);
@@ -36,21 +35,41 @@ const CustomCakeForm = () => {
     }
   };
 
+  // --- TATO ČÁST JE NOVÁ A OPRAVUJE ODESÍLÁNÍ FOTEK ---
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    // Ručně zajistíme, aby se data odeslala správně přes Netlify
+    fetch("/", {
+      method: "POST",
+      body: formData,
+    })
+      .then(() => {
+        window.location.href = "/dekujeme"; // Přesměrování po úspěchu
+      })
+      .catch((error) => alert("Omlouváme se, nastala chyba: " + error));
+
+    e.preventDefault(); // Zastavíme klasické odeslání
+  };
+  // --------------------------------------------------
+
   return (
     <div className="max-w-2xl mx-auto p-8 bg-white rounded-[2.5rem] shadow-xl border border-[#d4af37]/10 font-bold text-[#0a192f]">
       <h2 className="text-3xl font-serif mb-4 text-center italic">Konfigurátor dortu</h2>
-      
+      <br />
       <form 
         name="dort-na-prani" 
         method="POST" 
+        onSubmit={handleSubmit} // Přidáno ošetření odeslání
         data-netlify="true" 
         action="/dekujeme" 
         encType="multipart/form-data"
         className="space-y-6 flex flex-col"
       >
+        {/* Skrytá pole pro Netlify jsou v Reactu klíčová */}
         <input type="hidden" name="form-name" value="dort-na-prani" />
         
-        {/* Výběr prodejny - čistý bez nápisů o zavíračce */}
         <div className="flex flex-col gap-1">
           <label htmlFor="shop-select" className="text-xs uppercase tracking-widest text-[#92782a]">Místo vyzvednutí</label>
           <select 
@@ -68,7 +87,6 @@ const CustomCakeForm = () => {
           </select>
         </div>
 
-        {/* Kalendář - automaticky zešedne vše před +7 dny */}
         <div className="flex flex-col gap-1">
           <label htmlFor="cake-date" className="text-xs uppercase tracking-widest text-[#92782a]">Datum vyzvednutí</label>
           <input 
