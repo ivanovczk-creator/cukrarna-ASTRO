@@ -26,57 +26,20 @@ const CustomCakeForm = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const formData = new FormData();
-    
-    formData.append('form-name', 'dort-na-prani');
-
-    const inputs = form.querySelectorAll('input, select, textarea');
-    inputs.forEach((input: any) => {
-      if (input.type === 'file') {
-        if (input.files) {
-          for (let i = 0; i < input.files.length; i++) {
-            formData.append('Inspiro-Foto', input.files[i]);
-          }
-        }
-      } else if (input.name && input.name !== 'form-name') {
-        formData.append(input.name, input.value);
-      }
-    });
-
-    try {
-      await fetch("/", {
-        method: "POST",
-        body: formData,
-      });
-      window.location.href = "/dekujeme";
-    } catch (error) {
-      alert("Chyba při odesílání: " + error);
-    }
-  };
-
   return (
     <div className="max-w-2xl mx-auto p-8 bg-white rounded-[2.5rem] shadow-xl border border-[#d4af37]/10 font-bold text-[#0a192f]">
       <h2 className="text-3xl font-serif mb-4 text-center italic">Konfigurátor dortu</h2>
       
-      <form name="dort-na-prani" data-netlify="true" netlify-honeypot="bot-field" hidden>
-        <input type="text" name="Jmeno" />
-        <input type="email" name="Email" />
-        <input type="tel" name="Telefon" />
-        <select name="Prodejna"></select>
-        <input type="date" name="Datum_Vyzvednuti" />
-        <textarea name="Zprava"></textarea>
-        <input type="file" name="Inspiro-Foto" multiple />
-      </form>
-
+      {/* KLASICKÝ FORMULÁŘ BEZ JAVASCRIPTU - PRO NETLIFY NEJISTĚJŠÍ */}
       <form 
         name="dort-na-prani" 
         method="POST" 
-        onSubmit={handleSubmit}
+        action="/dekujeme"
+        data-netlify="true" 
+        encType="multipart/form-data"
         className="space-y-6 flex flex-col"
       >
+        {/* Nutné pro Netlify u React komponent */}
         <input type="hidden" name="form-name" value="dort-na-prani" />
         
         <div className="flex flex-col gap-1">
@@ -103,7 +66,8 @@ const CustomCakeForm = () => {
         <textarea name="Zprava" placeholder="Popište vaši představu..." required className="w-full p-3 h-32 bg-slate-50 rounded-xl border border-slate-200"></textarea>
         
         <div className="p-6 bg-orange-50 border-2 border-dashed border-[#b38f2d]/30 rounded-2xl text-center">
-          <label className="block text-xs font-bold text-[#92782a] uppercase mb-3">Inspirační obrázky</label>
+          <label className="block text-xs font-bold text-[#92782a] uppercase mb-3">Inspirační obrázky (max 5)</label>
+          {/* Změna názvu na prosté Inspiro-Foto bez [] nebo čísel */}
           <input 
             type="file" 
             name="Inspiro-Foto" 
