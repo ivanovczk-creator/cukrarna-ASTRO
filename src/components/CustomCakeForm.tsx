@@ -31,25 +31,22 @@ const CustomCakeForm = () => {
     const form = e.currentTarget;
     const formData = new FormData();
     
-    // 1. Přidáme jméno formuláře pro Netlify
-    formData.append('form-name', 'dort-na-prani');
-
-    // 2. Posbíráme textová pole
+    // Přidáme všechna pole včetně souborů najednou - moderní prohlížeče to zvládnou
+    // Netlify potřebuje unikátní jména pro React formuláře
     const inputs = form.querySelectorAll('input, select, textarea');
     inputs.forEach((input: any) => {
-      if (input.type !== 'file' && input.name && input.name !== 'form-name') {
+      if (input.type === 'file') {
+        if (input.files) {
+          // Klíčový trik: Pokud je více souborů, Netlify u Reactu 
+          // lépe skousne, když je přidáme pod stejným jménem v cyklu
+          for (let i = 0; i < input.files.length; i++) {
+            formData.append('Inspiro-Foto', input.files[i]);
+          }
+        }
+      } else if (input.name) {
         formData.append(input.name, input.value);
       }
     });
-
-    // 3. Zpracování souborů - KLÍČOVÁ ZMĚNA
-    const fileInput = form.querySelector('input[type="file"]') as HTMLInputElement;
-    if (fileInput && fileInput.files && fileInput.files.length > 0) {
-      for (let i = 0; i < fileInput.files.length; i++) {
-        // Každou fotku pošleme pod unikátním jménem, aby ji Netlify nezahodilo
-        formData.append(`Inspiro-Foto-${i + 1}`, fileInput.files[i]);
-      }
-    }
 
     try {
       await fetch("/", {
@@ -65,12 +62,22 @@ const CustomCakeForm = () => {
   return (
     <div className="max-w-2xl mx-auto p-8 bg-white rounded-[2.5rem] shadow-xl border border-[#d4af37]/10 font-bold text-[#0a192f]">
       <h2 className="text-3xl font-serif mb-4 text-center italic">Konfigurátor dortu</h2>
+      
+      {/* Tento neviditelný formulář pomůže Netlify pochopit, že pole Inspiro-Foto může mít více souborů */}
+      <form name="dort-na-prani" data-netlify="true" netlify-honeypot="bot-field" hidden>
+        <input type="text" name="Jmeno" />
+        <input type="email" name="Email" />
+        <input type="tel" name="Telefon" />
+        <select name="Prodejna"></select>
+        <input type="date" name="Datum_Vyzvednuti" />
+        <textarea name="Zprava"></textarea>
+        <input type="file" name="Inspiro-Foto" multiple />
+      </form>
+
       <form 
         name="dort-na-prani" 
         method="POST" 
         onSubmit={handleSubmit}
-        data-netlify="true" 
-        encType="multipart/form-data"
         className="space-y-6 flex flex-col"
       >
         <input type="hidden" name="form-name" value="dort-na-prani" />
@@ -99,17 +106,12 @@ const CustomCakeForm = () => {
         <textarea name="Zprava" placeholder="Popište vaši představu..." required className="w-full p-3 h-32 bg-slate-50 rounded-xl border border-slate-200"></textarea>
         
         <div className="p-6 bg-orange-50 border-2 border-dashed border-[#b38f2d]/30 rounded-2xl text-center">
-          <label className="block text-xs font-bold text-[#92782a] uppercase mb-3">Inspirační obrázky (max 5)</label>
-          <input type="file" name="Inspiro-Foto" accept="image/*" multiple className="text-xs" />
-          <p className="text-[10px] text-slate-400 mt-2">Při výběru více fotek je Netlify odešle jako samostatné odkazy.</p>
-        </div>
-
-        <button type="submit" className="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all uppercase tracking-widest shadow-lg">
-          Odeslat poptávku
-        </button>
-      </form>
-    </div>
-  );
-};
-
-export default CustomCakeForm;
+          <label className="block text-xs font-bold text-[#92782a] uppercase mb-3">Inspirační obrázky</label>
+          <input 
+            type="file" 
+            name="Inspiro-Foto" 
+            accept="image/*" 
+            multiple 
+            className="text-xs" 
+          />
+          <p className="
