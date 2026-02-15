@@ -1255,41 +1255,6 @@
       "title": "Tartaletka pistácie-malina",
       "cena": "60 Kč",
       "foto": "/img/zakusky/image-17.webp"
-    },
-    {
-      "weight": 1,
-      "kategorie": "zakusky",
-      "title": "Valentýnský cupcake malinový",
-      "cena": "55 Kč",
-      "foto": "/img/zakusky/image-20.webp"
-    },
-    {
-      "weight": 1,
-      "kategorie": "zakusky",
-      "title": "Valentýnský ovocný dortík s potiskem čoko-malina",
-      "cena": "120 Kč",
-      "foto": "/img/zakusky/image-28.webp"
-    },
-    {
-      "weight": 1,
-      "kategorie": "zakusky",
-      "title": "Tartaletka mango - kokos k Valentýnu",
-      "foto": "/img/zakusky/image-22.webp",
-      "cena": "60 Kč"
-    },
-    {
-      "weight": 1,
-      "kategorie": "zakusky",
-      "title": "Ovocná tartaletka k Valentýnu",
-      "cena": "60 Kč",
-      "foto": "/img/zakusky/image-24.webp"
-    },
-    {
-      "weight": 1,
-      "kategorie": "zakusky",
-      "title": "Čokoládové srdíčko k Valentýnu",
-      "cena": "55 Kč",
-      "foto": "/img/zakusky/image-27.webp"
     }
   ]
 }
