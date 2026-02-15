@@ -35,24 +35,35 @@ const CustomCakeForm = () => {
     }
   };
 
-  // --- TATO ČÁST JE NOVÁ A OPRAVUJE ODESÍLÁNÍ FOTEK ---
+  // --- OPRAVENÁ FUNKCE PRO VÍCE FOTEK ---
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
 
-    // Ručně zajistíme, aby se data odeslala správně přes Netlify
+    // Najdeme input se soubory
+    const fileInput = form.querySelector('input[type="file"]') as HTMLInputElement;
+    
+    if (fileInput && fileInput.files && fileInput.files.length > 0) {
+      // Smažeme původní (neúplný) záznam o fotkách
+      formData.delete("Inspiro-Foto");
+      
+      // Přidáme každý vybraný soubor zvlášť
+      Array.from(fileInput.files).forEach((file) => {
+        formData.append("Inspiro-Foto", file);
+      });
+    }
+
+    // Odeslání na Netlify
     fetch("/", {
       method: "POST",
       body: formData,
     })
       .then(() => {
-        window.location.href = "/dekujeme"; // Přesměrování po úspěchu
+        window.location.href = "/dekujeme";
       })
-      .catch((error) => alert("Omlouváme se, nastala chyba: " + error));
-
-    e.preventDefault(); // Zastavíme klasické odeslání
+      .catch((error) => alert("Omlouváme se, nastala chyba při odesílání: " + error));
   };
-  // --------------------------------------------------
 
   return (
     <div className="max-w-2xl mx-auto p-8 bg-white rounded-[2.5rem] shadow-xl border border-[#d4af37]/10 font-bold text-[#0a192f]">
@@ -61,13 +72,12 @@ const CustomCakeForm = () => {
       <form 
         name="dort-na-prani" 
         method="POST" 
-        onSubmit={handleSubmit} // Přidáno ošetření odeslání
+        onSubmit={handleSubmit}
         data-netlify="true" 
         action="/dekujeme" 
         encType="multipart/form-data"
         className="space-y-6 flex flex-col"
       >
-        {/* Skrytá pole pro Netlify jsou v Reactu klíčová */}
         <input type="hidden" name="form-name" value="dort-na-prani" />
         
         <div className="flex flex-col gap-1">
