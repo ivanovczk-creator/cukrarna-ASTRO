@@ -31,20 +31,23 @@ const CustomCakeForm = () => {
     const form = e.currentTarget;
     const formData = new FormData();
     
-    // Ručně posbíráme všechny textové hodnoty
+    // 1. Přidáme jméno formuláře pro Netlify
+    formData.append('form-name', 'dort-na-prani');
+
+    // 2. Posbíráme textová pole
     const inputs = form.querySelectorAll('input, select, textarea');
     inputs.forEach((input: any) => {
-      if (input.type !== 'file' && input.name) {
+      if (input.type !== 'file' && input.name && input.name !== 'form-name') {
         formData.append(input.name, input.value);
       }
     });
 
-    // Ručně posbíráme VŠECHNY soubory
+    // 3. Zpracování souborů - KLÍČOVÁ ZMĚNA
     const fileInput = form.querySelector('input[type="file"]') as HTMLInputElement;
-    if (fileInput && fileInput.files) {
+    if (fileInput && fileInput.files && fileInput.files.length > 0) {
       for (let i = 0; i < fileInput.files.length; i++) {
-        // Klíčové pro Netlify: posílat pod stejným jménem 'Inspiro-Foto'
-        formData.append('Inspiro-Foto', fileInput.files[i]);
+        // Každou fotku pošleme pod unikátním jménem, aby ji Netlify nezahodilo
+        formData.append(`Inspiro-Foto-${i + 1}`, fileInput.files[i]);
       }
     }
 
@@ -96,11 +99,12 @@ const CustomCakeForm = () => {
         <textarea name="Zprava" placeholder="Popište vaši představu..." required className="w-full p-3 h-32 bg-slate-50 rounded-xl border border-slate-200"></textarea>
         
         <div className="p-6 bg-orange-50 border-2 border-dashed border-[#b38f2d]/30 rounded-2xl text-center">
-          <label className="block text-xs font-bold text-[#92782a] uppercase mb-3">Inspirační obrázky</label>
+          <label className="block text-xs font-bold text-[#92782a] uppercase mb-3">Inspirační obrázky (max 5)</label>
           <input type="file" name="Inspiro-Foto" accept="image/*" multiple className="text-xs" />
+          <p className="text-[10px] text-slate-400 mt-2">Při výběru více fotek je Netlify odešle jako samostatné odkazy.</p>
         </div>
 
-        <button type="submit" className="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all uppercase tracking-widest">
+        <button type="submit" className="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all uppercase tracking-widest shadow-lg">
           Odeslat poptávku
         </button>
       </form>
