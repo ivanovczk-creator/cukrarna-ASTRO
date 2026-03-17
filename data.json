@@ -685,6 +685,44 @@
         "3d-netradicni",
         "narozeninove"
       ]
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty",
+      "id": 62,
+      "title": "Dort lyže a šipky",
+      "cena": "3500",
+      "porce": "20",
+      "foto": "/img/dorty/tématický-dort.webp",
+      "category_list": [
+        "narozeninove"
+      ]
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty",
+      "id": 62,
+      "title": "Dort s ovocem",
+      "cena": "2000",
+      "porce": "12",
+      "foto": "/img/dorty/ovocný-dort.webp",
+      "category_list": [
+        "narozeninove",
+        "elegantni"
+      ]
+    },
+    {
+      "weight": 100,
+      "kategorie": "dorty",
+      "id": 64,
+      "title": "Dort louka les",
+      "cena": "2000",
+      "foto": "/img/dorty/narozeninový-dort.webp",
+      "porce": "12",
+      "category_list": [
+        "narozeninove",
+        "detske"
+      ]
     }
   ],
   "desserts": [
