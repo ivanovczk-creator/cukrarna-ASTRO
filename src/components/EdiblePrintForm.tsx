@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
 
 const EdiblePrintForm = () => {
-  const [fileNames, setFileNames] = useState<string[]>([]);
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const names = Array.from(e.target.files).map(file => file.name);
-      setFileNames(names);
-    }
-  };
+  const [userName, setUserName] = useState(''); // State pro jméno kvůli předmětu e-mailu
+  const [selectedStore, setSelectedStore] = useState('');
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-16 bg-[#f8fafc] rounded-[3rem] border border-slate-200 shadow-xl text-[#0a192f]">
@@ -17,26 +11,40 @@ const EdiblePrintForm = () => {
         <p className="text-slate-600 max-w-2xl mx-auto">
           Nahrajte své obrázky a my je vytiskneme na kvalitní fondánový list A4.
         </p>
-        {/* Oprava kontrastu: text v badge je tmavý pro lepší čitelnost na zlaté */}
         <div className="mt-4 inline-block bg-[#d4af37] text-[#0a192f] px-6 py-2 rounded-full font-bold shadow-sm">
           Cena: 160 Kč / list A4
         </div>
       </div>
 
       <form 
-        name="tisk-na-papir" 
+        name="tisk-na-papir-v2" 
         method="POST" 
         data-netlify="true" 
         encType="multipart/form-data"
         action="/dekujeme"
         className="grid grid-cols-1 md:grid-cols-2 gap-6"
       >
-        <input type="hidden" name="form-name" value="tisk-na-papir" />
+        <input type="hidden" name="form-name" value="tisk-na-papir-v2" />
+        
+        {/* DYNAMICKÝ PŘEDMĚT PRO BLUEMAIL */}
+        <input 
+          type="hidden" 
+          name="subject" 
+          value={`TISK: ${userName || 'Nová poptávka'} - ${selectedStore || 'Nespecifikováno'}`} 
+        />
         
         <div className="space-y-4">
           <div>
             <label htmlFor="edible-name" className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 ml-2">Vaše jméno</label>
-            <input id="edible-name" type="text" name="Jmeno" required className="w-full p-4 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]" />
+            <input 
+              id="edible-name" 
+              type="text" 
+              name="Jmeno" 
+              required 
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              className="w-full p-4 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]" 
+            />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -51,7 +59,14 @@ const EdiblePrintForm = () => {
           
           <div>
             <label htmlFor="edible-store" className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 ml-2">Místo vyzvednutí</label>
-            <select id="edible-store" name="Prodejna" required className="w-full p-4 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]">
+            <select 
+              id="edible-store" 
+              name="Prodejna" 
+              required 
+              value={selectedStore}
+              onChange={(e) => setSelectedStore(e.target.value)}
+              className="w-full p-4 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]"
+            >
               <option value="">Vyberte prodejnu...</option>
               <option value="Petřvald">Petřvald</option>
               <option value="Píšť">Píšť</option>
@@ -68,33 +83,16 @@ const EdiblePrintForm = () => {
 
         <div className="space-y-4">
           <div>
-            <label htmlFor="edible-file" className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 ml-2">Obrázky (A4)</label>
-            <div className="relative w-full p-6 bg-white border-2 border-dashed border-slate-200 rounded-2xl text-center hover:border-[#d4af37] transition-all cursor-pointer">
-              <input 
-                id="edible-file"
-                type="file" 
-                name="Tisk-Soubory[]" 
-                multiple 
-                onChange={handleFileChange}
-                required 
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
-                accept="image/*" 
-              />
-              <div className="text-sm text-slate-500">
-                {fileNames.length > 0 ? (
-                  <div className="text-[#0a192f] font-medium">
-                    <p className="text-xs text-slate-400 mb-1 font-bold">Vybrané soubory:</p>
-                    {fileNames.map((name, i) => <div key={i}>{name}</div>)}
-                  </div>
-                ) : (
-                  "Klikněte pro výběr obrázků"
-                )}
-              </div>
+            <label className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 ml-2">Obrázky k tisku (max. 3)</label>
+            <div className="p-4 bg-white border border-slate-200 rounded-2xl space-y-3">
+              <input type="file" name="Tisk-Foto-1" accept="image/*" className="text-xs w-full file:bg-[#0a192f] file:text-white file:rounded-lg file:border-0 file:px-3 file:py-1 file:mr-3" />
+              <input type="file" name="Tisk-Foto-2" accept="image/*" className="text-xs w-full file:bg-[#0a192f] file:text-white file:rounded-lg file:border-0 file:px-3 file:py-1 file:mr-3" />
+              <input type="file" name="Tisk-Foto-3" accept="image/*" className="text-xs w-full file:bg-[#0a192f] file:text-white file:rounded-lg file:border-0 file:px-3 file:py-1 file:mr-3" />
             </div>
           </div>
           <div>
             <label htmlFor="edible-note" className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 ml-2">Poznámka</label>
-            <textarea id="edible-note" name="Poznamka" className="w-full p-4 h-24 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]" placeholder="Např. ořez, nápis..."></textarea>
+            <textarea id="edible-note" name="Poznamka" className="w-full p-4 h-24 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37] resize-none" placeholder="Např. ořez, nápis..."></textarea>
           </div>
         </div>
 
