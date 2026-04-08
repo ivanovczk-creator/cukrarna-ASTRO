@@ -9,7 +9,8 @@ const getInitialMinDate = () => {
 
 const CustomCakeForm = () => {
   const [selectedShop, setSelectedShop] = useState('ostrava');
-  const [minDate] = useState(getInitialMinDate()); // Stačí nastavit jednou při startu
+  const [userName, setUserName] = useState(''); // State pro jméno kvůli předmětu e-mailu
+  const [minDate] = useState(getInitialMinDate());
 
   const shopClosingDays: Record<string, number[]> = {
     ostrava: [0], karvina: [0], petrvald: [1], pist: [0, 6] 
@@ -41,6 +42,13 @@ const CustomCakeForm = () => {
       >
         <input type="hidden" name="form-name" value="dort-na-prani-v2" />
         
+        {/* TENTO ŘÁDEK NASTAVUJE PŘEDMĚT E-MAILU PRO BLUEMAIL */}
+        <input 
+          type="hidden" 
+          name="subject" 
+          value={`DORT: ${userName || 'Nová poptávka'} - ${selectedShop.toUpperCase()}`} 
+        />
+        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1">
             <label className="text-xs uppercase tracking-widest text-[#92782a]">Místo vyzvednutí</label>
@@ -58,7 +66,15 @@ const CustomCakeForm = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input type="text" name="Jmeno" placeholder="Vaše jméno" required className="p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" />
+          <input 
+            type="text" 
+            name="Jmeno" 
+            placeholder="Vaše jméno" 
+            required 
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)} // Ukládáme jméno pro předmět
+            className="p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" 
+          />
           <input type="email" name="Email" placeholder="Váš e-mail" required className="p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" />
         </div>
         
