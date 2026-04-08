@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 
 const EdiblePrintForm = () => {
-  const [userName, setUserName] = useState(''); // State pro jméno kvůli předmětu e-mailu
-  const [selectedStore, setSelectedStore] = useState('');
+  const [userName, setUserName] = useState(''); // Pro dynamický předmět e-mailu
+  const [selectedStore, setSelectedStore] = useState(''); // Pro dynamický předmět e-mailu
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-16 bg-[#f8fafc] rounded-[3rem] border border-slate-200 shadow-xl text-[#0a192f]">
       <div className="text-center mb-10">
         <h2 className="text-4xl font-serif mb-4 italic">Tisk na jedlý papír</h2>
         <p className="text-slate-600 max-w-2xl mx-auto">
-          Nahrajte své obrázky a my je vytiskneme na kvalitní fondánový list A4.
+          Nahrajte svůj obrázek a my ho vytiskneme na kvalitní fondánový list A4.
         </p>
         <div className="mt-4 inline-block bg-[#d4af37] text-[#0a192f] px-6 py-2 rounded-full font-bold shadow-sm">
           Cena: 160 Kč / list A4
@@ -17,16 +17,17 @@ const EdiblePrintForm = () => {
       </div>
 
       <form 
-        name="tisk-na-papir-v2" 
+        name="tisk-na-papir-v4" 
         method="POST" 
         data-netlify="true" 
         encType="multipart/form-data"
         action="/dekujeme"
         className="grid grid-cols-1 md:grid-cols-2 gap-6"
       >
-        <input type="hidden" name="form-name" value="tisk-na-papir-v2" />
+        {/* Identifikace formuláře pro Netlify - verze v4 pro čistý start */}
+        <input type="hidden" name="form-name" value="tisk-na-papir-v4" />
         
-        {/* DYNAMICKÝ PŘEDMĚT PRO BLUEMAIL */}
+        {/* PŘEDMĚT PRO BLUEMAIL */}
         <input 
           type="hidden" 
           name="subject" 
@@ -83,11 +84,16 @@ const EdiblePrintForm = () => {
 
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 ml-2">Obrázky k tisku (max. 3)</label>
-            <div className="p-4 bg-white border border-slate-200 rounded-2xl space-y-3">
-              <input type="file" name="Tisk-Foto-1" accept="image/*" className="text-xs w-full file:bg-[#0a192f] file:text-white file:rounded-lg file:border-0 file:px-3 file:py-1 file:mr-3" />
-              <input type="file" name="Tisk-Foto-2" accept="image/*" className="text-xs w-full file:bg-[#0a192f] file:text-white file:rounded-lg file:border-0 file:px-3 file:py-1 file:mr-3" />
-              <input type="file" name="Tisk-Foto-3" accept="image/*" className="text-xs w-full file:bg-[#0a192f] file:text-white file:rounded-lg file:border-0 file:px-3 file:py-1 file:mr-3" />
+            <label htmlFor="edible-file" className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 ml-2">Obrázek k tisku (A4)</label>
+            <div className="p-6 bg-white border-2 border-dashed border-slate-200 rounded-2xl text-center hover:border-[#d4af37] transition-all">
+              <input 
+                id="edible-file"
+                type="file" 
+                name="Soubor-k-tisku" 
+                accept="image/*" 
+                required
+                className="text-xs w-full file:bg-[#0a192f] file:text-white file:rounded-lg file:border-0 file:px-3 file:py-2 file:mr-3 cursor-pointer" 
+              />
             </div>
           </div>
           <div>
