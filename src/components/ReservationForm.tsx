@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 
 const ReservationForm = () => {
@@ -6,7 +7,6 @@ const ReservationForm = () => {
   const [justAdded, setJustAdded] = useState(false);
   
   const [selectedStore, setSelectedStore] = useState('Petřvald');
-  const [customerName, setCustomerName] = useState(''); // State pro jméno kvůli předmětu mailu
   const [minDate, setMinDate] = useState('');
 
   useEffect(() => {
@@ -72,8 +72,10 @@ const ReservationForm = () => {
       return;
     }
 
+    // Úprava seznamu pro e-mail: U zákusků vynecháme odkaz na fotku
     const list = cart.map(item => {
       const basicInfo = `${item.quantity}x ${item.name} (${item.price})`;
+      // Podmínka: Pokud je v cestě k fotce slovo "zakusky", odkaz nepřidáváme
       return item.img.includes('/zakusky/') 
         ? basicInfo 
         : `${basicInfo}\nOdkaz: ${window.location.origin}${item.img}`;
@@ -131,14 +133,6 @@ const ReservationForm = () => {
           ) : (
             <form name="objednavka" method="POST" onSubmit={handleSubmit} className="space-y-4">
               <input type="hidden" name="form-name" value="objednavka" />
-              
-              {/* NASTAVENÍ PŘEDMĚTU MAILU PRO NETLIFY */}
-              <input 
-                type="hidden" 
-                name="subject" 
-                value={`ZÁKUSKY: ${customerName || 'Nová objednávka'} - ${selectedStore}`} 
-              />
-
               <div className="max-h-48 overflow-y-auto mb-6 space-y-3 pr-2 scrollbar-thin">
                 {cart.map((item, i) => (
                   <div key={i} className="flex gap-3 items-center bg-slate-50 p-2 rounded-xl border border-slate-100">
@@ -160,15 +154,7 @@ const ReservationForm = () => {
               </div>
 
               <div className="space-y-3 pt-4 border-t border-slate-100">
-                <input 
-                  type="text" 
-                  name="Jmeno" 
-                  placeholder="Jméno a příjmení" 
-                  required 
-                  value={customerName}
-                  onChange={(e) => setCustomerName(e.target.value)}
-                  className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none font-bold" 
-                />
+                <input type="text" name="Jmeno" placeholder="Jméno a příjmení" required className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none font-bold" />
                 <div className="grid grid-cols-2 gap-2">
                     <input type="email" name="Email" placeholder="E-mail" required className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none font-bold" />
                     <input type="tel" name="Telefon" placeholder="Telefon" required className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none font-bold" />
