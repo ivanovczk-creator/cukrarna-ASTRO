@@ -1229,21 +1229,8 @@
     {
       "weight": 100,
       "kategorie": "zakusky",
-      "title": "Cheesecake malinový",
-      "cena": "70 Kč"
-    },
-    {
-      "weight": 100,
-      "kategorie": "zakusky",
       "title": "Jahodový dort mascarpone",
       "cena": "75 Kč"
-    },
-    {
-      "weight": 100,
-      "kategorie": "zakusky",
-      "title": "Cheesecake borůvkový",
-      "cena": "70 Kč",
-      "foto": "/img/zakusky/cheesecake boruvka.webp"
     },
     {
       "weight": 100,
@@ -1258,20 +1245,6 @@
       "title": "Mrkvový dort",
       "cena": "75 Kč",
       "foto": "/img/zakusky/mrkvovy dort.webp"
-    },
-    {
-      "weight": 15,
-      "kategorie": "zakusky",
-      "title": "Cheesecake jahodový",
-      "cena": "70 Kč",
-      "foto": "/img/zakusky/cheesecake jahoda.webp"
-    },
-    {
-      "weight": 13,
-      "kategorie": "zakusky",
-      "cena": "70 Kč",
-      "title": "Cheesecake mango-maracuja",
-      "foto": "/img/zakusky/cheesecake mango-maracuja.webp"
     },
     {
       "weight": 1,
