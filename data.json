@@ -1253,5 +1253,15 @@
       "cena": "60 Kč",
       "foto": "/img/zakusky/image-17.webp"
     }
+  ],
+  "toppers": [
+    {
+      "id": "z1",
+      "title": "Zápich Číslovka (Zlatý)",
+      "cena": "45 Kč",
+      "foto": "/img/zapichy/cislovka-zlata.jpg",
+      "kategorie": "zapichy",
+      "weight": 1
+    }
   ]
 }
