@@ -2,8 +2,8 @@ backend:
   name: git-gateway
   branch: main
 
-media_folder: "public/img/dorty"
-public_folder: "/img/dorty"
+media_folder: "public/img/zapichy"
+public_folder: "/img/zapichy"
 
 collections:
   - name: "products"
@@ -39,7 +39,7 @@ collections:
               - { label: "Pořadí (číslo)", name: "weight", widget: "number", default: 100, value_type: "int", required: false }
               - { label: "Název", name: "title", widget: "string", required: false }
               - { label: "Cena", name: "cena", widget: "string", hint: "Např. 45 Kč", required: false }
-              - { label: "Obrázek", name: "foto", widget: "image", required: false, media_folder: "public/img/zakusky", public_folder: "/img/zakusky" }
+              - { label: "Obrázek", name: "foto", widget: "image", required: false }
               - { label: "Popis", name: "popis", widget: "string", required: false }
               - { label: "Kategorie", name: "kategorie", widget: "hidden", default: "zakusky" }
 
@@ -52,5 +52,5 @@ collections:
               - { label: "Pořadí (číslo)", name: "weight", widget: "number", default: 100, value_type: "int", required: false }
               - { label: "Název", name: "title", widget: "string", required: false }
               - { label: "Cena", name: "cena", widget: "string", hint: "Např. 45 Kč", required: false }
-              - { label: "Obrázek", name: "foto", widget: "image", required: false, media_folder: "public/img/zapichy", public_folder: "/img/zapichy" }
+              - { label: "Obrázek", name: "foto", widget: "image", required: false }
               - { label: "Kategorie", name: "kategorie", widget: "hidden", default: "zapichy" }
