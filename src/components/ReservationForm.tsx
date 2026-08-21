@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 
 const ReservationForm = () => {
@@ -72,11 +71,12 @@ const ReservationForm = () => {
       return;
     }
 
-    // Úprava seznamu pro e-mail: U zákusků vynecháme odkaz na fotku
+    // Úprava seznamu pro e-mail: U zákusků i zápichů vynecháme odkaz na fotku
     const list = cart.map(item => {
       const basicInfo = `${item.quantity}x ${item.name} (${item.price})`;
-      // Podmínka: Pokud je v cestě k fotce slovo "zakusky", odkaz nepřidáváme
-      return item.img.includes('/zakusky/') 
+      const isSimpleItem = item.img.includes('/zakusky/') || item.img.includes('/zapichy/');
+      
+      return isSimpleItem 
         ? basicInfo 
         : `${basicInfo}\nOdkaz: ${window.location.origin}${item.img}`;
     }).join('\n\n---\n\n');
