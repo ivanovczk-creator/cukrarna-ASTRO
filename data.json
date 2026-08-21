@@ -1266,7 +1266,7 @@
     {
       "id": "z2",
       "title": "Zápich Stitch",
-      "cena": "120 Kč",
+      "cena": "130 Kč",
       "foto": "/img/zapichy/zapich-stich.webp",
       "kategorie": "zapichy",
       "weight": 2
@@ -1274,7 +1274,7 @@
     {
       "id": "z3",
       "title": "Zápich Olaf",
-      "cena": "100 Kč",
+      "cena": "130 Kč",
       "foto": "/img/zapichy/zapich-na-dort-olaf.webp",
       "kategorie": "zapichy",
       "weight": 3
@@ -1282,7 +1282,7 @@
     {
       "id": "z4",
       "title": "Zápich Happy Birthday",
-      "cena": "90 Kč",
+      "cena": "100 Kč",
       "foto": "/img/zapichy/zapich-na-dort-happy-birthday.webp",
       "kategorie": "zapichy",
       "weight": 4
@@ -1308,14 +1308,15 @@
       "kategorie": "zapichy",
       "id": "z7",
       "title": "Rocky",
-      "foto": "/img/zapichy/zapich-na-dort-rocky.webp"
+      "foto": "/img/zapichy/zapich-na-dort-rocky.webp",
+      "cena": "130"
     },
     {
       "weight": 8,
       "kategorie": "zapichy",
       "id": "z8",
       "title": "Marshall",
-      "cena": "120",
+      "cena": "130 Kč",
       "foto": "/img/zapichy/zapich-paw-patrol-marshall.webp"
     },
     {
@@ -1323,28 +1324,32 @@
       "kategorie": "zapichy",
       "id": "z9",
       "title": "Chase",
-      "foto": "/img/zapichy/zapich-chase-tlakova-patrola.webp"
+      "foto": "/img/zapichy/zapich-chase-tlakova-patrola.webp",
+      "cena": "130 Kč"
     },
     {
       "weight": 10,
       "kategorie": "zapichy",
       "id": "z10",
       "title": "Sky",
-      "foto": "/img/zapichy/zapich-tlapkova-patrola-sky.webp"
+      "foto": "/img/zapichy/zapich-tlapkova-patrola-sky.webp",
+      "cena": "130 Kč"
     },
     {
       "weight": 11,
       "kategorie": "zapichy",
       "id": "z11",
       "title": "Rubble",
-      "foto": "/img/zapichy/zapich-na-dort-rubble-paw-patrol.webp"
+      "foto": "/img/zapichy/zapich-na-dort-rubble-paw-patrol.webp",
+      "cena": "130 Kč"
     },
     {
       "weight": 12,
       "kategorie": "zapichy",
       "id": "z12",
       "title": "Happy Birthday",
-      "foto": "/img/zapichy/zapich-happy-birthday.webp"
+      "foto": "/img/zapichy/zapich-happy-birthday.webp",
+      "cena": "100 Kč"
     }
   ]
 }
