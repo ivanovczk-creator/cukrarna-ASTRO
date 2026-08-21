@@ -42,3 +42,15 @@ collections:
               - { label: "Obrázek", name: "foto", widget: "image", required: false, media_folder: "public/img/zakusky", public_folder: "/img/zakusky" }
               - { label: "Popis", name: "popis", widget: "string", required: false }
               - { label: "Kategorie", name: "kategorie", widget: "hidden", default: "zakusky" }
+
+          - label: "Zápichy"
+            name: "toppers"
+            widget: "list"
+            summary: "Zápich: {{title}}"
+            fields:
+              - { label: "ID (Např. z1, z2...)", name: "id", widget: "string", required: false }
+              - { label: "Pořadí (číslo)", name: "weight", widget: "number", default: 100, value_type: "int", required: false }
+              - { label: "Název", name: "title", widget: "string", required: false }
+              - { label: "Cena", name: "cena", widget: "string", hint: "Např. 45 Kč", required: false }
+              - { label: "Obrázek", name: "foto", widget: "image", required: false, media_folder: "public/img/zapichy", public_folder: "/img/zapichy" }
+              - { label: "Kategorie", name: "kategorie", widget: "hidden", default: "zapichy" }
