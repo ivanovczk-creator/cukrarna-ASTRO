@@ -1258,7 +1258,7 @@
     {
       "id": "z1",
       "title": "Zápich Spiderman",
-      "cena": "45 Kč",
+      "cena": "120 Kč",
       "foto": "/img/zapichy/zapich-na-dort-spiderman.webp",
       "kategorie": "zapichy",
       "weight": 1
@@ -1266,7 +1266,7 @@
     {
       "id": "z2",
       "title": "Zápich Stitch",
-      "cena": "45 Kč",
+      "cena": "120 Kč",
       "foto": "/img/zapichy/zapich-stich.webp",
       "kategorie": "zapichy",
       "weight": 2
@@ -1274,7 +1274,7 @@
     {
       "id": "z3",
       "title": "Zápich Olaf",
-      "cena": "45 Kč",
+      "cena": "100 Kč",
       "foto": "/img/zapichy/zapich-na-dort-olaf.webp",
       "kategorie": "zapichy",
       "weight": 3
@@ -1282,7 +1282,7 @@
     {
       "id": "z4",
       "title": "Zápich Happy Birthday",
-      "cena": "45 Kč",
+      "cena": "90 Kč",
       "foto": "/img/zapichy/zapich-na-dort-happy-birthday.webp",
       "kategorie": "zapichy",
       "weight": 4
@@ -1290,7 +1290,7 @@
     {
       "id": "z5",
       "title": "Zápich Číslovky",
-      "cena": "45 Kč",
+      "cena": "40 Kč",
       "foto": "/img/zapichy/zapich-na-dort-cislovky.webp",
       "kategorie": "zapichy",
       "weight": 5
@@ -1298,7 +1298,7 @@
     {
       "id": "z6",
       "title": "Zápich Krásné narozeniny",
-      "cena": "45 Kč",
+      "cena": "90 Kč",
       "foto": "/img/zapichy/zapich-krasne-narozeniny.webp",
       "kategorie": "zapichy",
       "weight": 6
