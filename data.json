@@ -1302,6 +1302,49 @@
       "foto": "/img/zapichy/zapich-krasne-narozeniny.webp",
       "kategorie": "zapichy",
       "weight": 6
+    },
+    {
+      "weight": 7,
+      "kategorie": "zapichy",
+      "id": "z7",
+      "title": "Rocky",
+      "foto": "/img/zapichy/zapich-na-dort-rocky.webp"
+    },
+    {
+      "weight": 8,
+      "kategorie": "zapichy",
+      "id": "z8",
+      "title": "Marshall",
+      "cena": "120",
+      "foto": "/img/zapichy/zapich-paw-patrol-marshall.webp"
+    },
+    {
+      "weight": 9,
+      "kategorie": "zapichy",
+      "id": "z9",
+      "title": "Chase",
+      "foto": "/img/zapichy/zapich-chase-tlakova-patrola.webp"
+    },
+    {
+      "weight": 10,
+      "kategorie": "zapichy",
+      "id": "z10",
+      "title": "Sky",
+      "foto": "/img/zapichy/zapich-tlapkova-patrola-sky.webp"
+    },
+    {
+      "weight": 11,
+      "kategorie": "zapichy",
+      "id": "z11",
+      "title": "Rubble",
+      "foto": "/img/zapichy/zapich-na-dort-rubble-paw-patrol.webp"
+    },
+    {
+      "weight": 12,
+      "kategorie": "zapichy",
+      "id": "z12",
+      "title": "Happy Birthday",
+      "foto": "/img/zapichy/zapich-happy-birthday.webp"
     }
   ]
 }
