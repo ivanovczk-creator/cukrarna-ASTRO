@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 
 const EdiblePrintForm = () => {
@@ -18,7 +17,6 @@ const EdiblePrintForm = () => {
         <p className="text-slate-600 max-w-2xl mx-auto">
           Nahrajte své obrázky a my je vytiskneme na kvalitní fondánový list A4.
         </p>
-        {/* Oprava kontrastu: text v badge je tmavý pro lepší čitelnost na zlaté */}
         <div className="mt-4 inline-block bg-[#d4af37] text-[#0a192f] px-6 py-2 rounded-full font-bold shadow-sm">
           Cena: 160 Kč / list A4
         </div>
@@ -79,7 +77,7 @@ const EdiblePrintForm = () => {
                 onChange={handleFileChange}
                 required 
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
-                accept="image/*" 
+                accept="image/*,.heic,.heif,.pdf,.png,.jpg,.jpeg,.webp" 
               />
               <div className="text-sm text-slate-500">
                 {fileNames.length > 0 ? (
@@ -88,7 +86,10 @@ const EdiblePrintForm = () => {
                     {fileNames.map((name, i) => <div key={i}>{name}</div>)}
                   </div>
                 ) : (
-                  "Klikněte pro výběr obrázků"
+                  <div>
+                    <p className="font-bold text-slate-700">Klikněte pro výběr obrázků nebo PDF</p>
+                    <p className="text-[10px] text-slate-400 mt-1">Podporuje JPG, PNG, HEIC (iPhone), WEBP i PDF</p>
+                  </div>
                 )}
               </div>
             </div>
