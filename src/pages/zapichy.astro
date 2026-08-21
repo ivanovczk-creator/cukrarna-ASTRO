@@ -1,0 +1,157 @@
+---
+import Layout from '../layouts/Layout.astro';
+import productsData from '../../data.json';
+import ReservationForm from '../components/ReservationForm.tsx';
+import { Image } from 'astro:assets';
+
+// Načtení obrázků ze složky /public/img/zapichy/
+const topperImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/zapichy/*.{jpeg,jpg,png,webp,JPG,JPEG}', { eager: true });
+const toppers = (productsData?.toppers || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
+
+function getImage(path: string, images: Record<string, any>) {
+	if (!path) return null;
+	const normalizedPath = path.startsWith('/public') ? path : (path.startsWith('/') ? `/public${path}` : `/public/${path}`);
+	return images[normalizedPath]?.default || null;
+}
+
+// URL pro sdílení
+const shareUrl = "https://cukrarstviblahutovi.cz/zapichy";
+const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+---
+
+<Layout 
+	title="Zápichy na dorty na zakázku | Cukrářství Blahutovi" 
+	description="Prohlédněte si naši nabídku zápichů na dorty. Akrylové i dřevěné zápichy pro vaše narozeninové a svatební dorty. Výdej v našich prodejnách Ostrava, Karviná a Petřvald."
+>
+	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
+		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative font-bold">
+			<a href="/" class="group no-underline">
+				<strong class="text-xl md:text-2xl font-serif text-[#d4af37] group-hover:text-white transition-colors">Cukrářství Blahutovi</strong>
+			</a>
+
+			<nav id="nav-menu" class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-white/90">
+				<a href="/dorty" class="hover:text-[#d4af37] py-2">Dorty</a>
+				<a href="/zakusky" class="hover:text-[#d4af37] py-2">Zákusky</a>
+				<a href="/zapichy" class="text-[#d4af37] py-2 font-bold underline underline-offset-8">Zápichy</a>
+				<a href="/jedly-tisk" class="hover:text-[#d4af37] py-2">Jedlý tisk</a>
+				<a href="/dort-na-prani" class="hover:text-[#d4af37] py-2">Dort na přání</a>
+				<a href="/prodejny" class="hover:text-[#d4af37] py-2">Prodejny</a>
+				<a href="/pro-firmy" class="hover:text-[#d4af37] py-2">Pro firmy</a>
+			</nav>
+
+			<div class="flex items-center gap-4">
+				<ReservationForm client:load />
+				<button id="menu-toggle" aria-label="Otevřít hlavní menu" class="lg:hidden text-[#d4af37] p-2 outline-none cursor-pointer">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+					</svg>
+				</button>
+			</div>
+		</div>
+	</header>
+
+	<main class="py-16 px-4 bg-slate-50 min-h-screen">
+		<div class="max-w-7xl mx-auto">
+			<div class="text-center mb-16">
+				<h2 class="text-4xl md:text-5xl font-serif mb-6 italic text-navy-900 font-bold">Zápichy na dorty</h2>
+				<p class="text-slate-600 max-w-2xl mx-auto text-lg font-bold">
+					Doplňte svůj dort o originální zápich na přání. Vyberte si z naší nabídky a vyzvedněte si ho společně s vaší objednávkou na vybrané prodejně.
+				</p>
+			</div>
+			
+			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+				{toppers.map((topper, index) => {
+					const fotoUrl = topper.foto || "";
+					const imageSrc = getImage(fotoUrl, topperImages);
+					const topperId = (topper.title || 'zapich').replace(/\s+/g, '-').toLowerCase();
+
+					return (
+					<div class="group bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col hover:shadow-2xl transition-all duration-500 font-bold text-navy-900">
+						<div class="h-56 overflow-hidden relative bg-slate-50 font-bold">
+							{imageSrc ? (
+								<a href={fotoUrl} class="glightbox cursor-zoom-in block h-full" aria-label={`Zvětšit obrázek ${topper.title}`}>
+									<Image 
+										src={imageSrc} 
+										alt={`${topper.title} - zápich na dort, cukrárna Ostrava, Karviná a Petřvald`} 
+										class="w-full h-full object-cover transition-transform duration-700 hover:scale-110 font-bold" 
+										width={300} 
+										height={300} 
+										format="webp"
+										loading={index < 4 ? "eager" : "lazy"}
+										fetchpriority={index < 4 ? "high" : "auto"}
+										decoding="async"
+									/>
+									<div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500"></div>
+								</a>
+							) : (
+								<div class="flex items-center justify-center h-full text-xs text-slate-600 italic font-bold">Foto připravujeme</div>
+							)}
+
+							<a 
+								href={fbShareLink} 
+								target="_blank" 
+								rel="noopener noreferrer"
+								class="absolute top-4 right-4 bg-white/90 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[#1877F2] hover:text-white text-[#1877F2] z-10"
+								title="Sdílet tento zápich na Facebooku"
+							>
+								<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+									<path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+								</svg>
+							</a>
+						</div>
+						<div class="p-6 flex-grow flex flex-col justify-between">
+							<h3 class="text-lg font-bold mb-1 leading-tight text-navy-900 font-serif italic">{topper.title}</h3>
+							<div class="space-y-4">
+								<p class="text-[#92782a] font-black text-xl">{topper.cena}</p>
+								
+								<div class="flex flex-col items-center gap-2">
+									<button id={`init-btn-${topperId}`} onclick={`document.getElementById('init-btn-${topperId}').classList.add('hidden'); document.getElementById('counter-${topperId}').classList.remove('hidden'); document.getElementById('counter-${topperId}').classList.add('flex');`} class="w-full bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all cursor-pointer uppercase tracking-widest text-[10px]">Přidat</button>
+									
+									<div id={`counter-${topperId}`} class="hidden w-full items-center justify-between bg-slate-100 rounded-xl overflow-hidden border border-slate-200">
+										<button onclick={`const input = document.getElementById('qty-${topperId}'); if(parseInt(input.value) > 1) { input.value = parseInt(input.value) - 1; } else { document.getElementById('counter-${topperId}').classList.add('hidden'); document.getElementById('counter-${topperId}').classList.remove('flex'); document.getElementById('init-btn-${topperId}').classList.remove('hidden'); }`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer" aria-label="Snížit množství">−</button>
+										<input type="number" id={`qty-${topperId}`} min="1" value="1" class="w-12 bg-transparent text-center font-bold outline-none border-none p-0" aria-label="Množství" />
+										<button onclick={`const input = document.getElementById('qty-${topperId}'); input.value = parseInt(input.value) + 1;`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer" aria-label="Zvýšit množství">+</button>
+										<button onclick={`const q = document.getElementById('qty-${topperId}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${topper.title}", price: "${topper.cena}", img: "${fotoUrl}", quantity: q } })); document.getElementById('counter-${topperId}').classList.add('hidden'); document.getElementById('counter-${topperId}').classList.remove('flex'); document.getElementById('init-btn-${topperId}').classList.remove('hidden'); document.getElementById('qty-${topperId}').value = 1;`} class="bg-[#0a192f] text-white px-3 h-10 font-bold text-[10px] uppercase hover:bg-[#d4af37] cursor-pointer">OK</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				)})}
+			</div>
+		</div>
+	</main>
+
+	<footer class="bg-[#0a192f] py-16 text-center text-white/70 text-[10px] border-t border-[#d4af37]/10 font-bold font-serif uppercase tracking-widest">
+		<div class="max-w-7xl mx-auto px-4 font-bold">
+			<p class="mb-2 italic text-[#d4af37] text-sm font-serif font-bold normal-case">Cukrářství Blahutovi</p>
+			<p>© {new Date().getFullYear()} — Všechna práva vyhrazena</p>
+		</div>
+	</footer>
+</Layout>
+
+<script is:inline>
+	function setupMenu() {
+		const btn = document.getElementById('menu-toggle');
+		const nav = document.getElementById('nav-menu');
+		if (btn && nav) {
+			btn.onclick = (e) => {
+				e.preventDefault();
+				nav.classList.toggle('hidden');
+				nav.classList.toggle('flex');
+				nav.classList.toggle('flex-col');
+				nav.classList.toggle('absolute');
+				nav.classList.toggle('top-20');
+				nav.classList.toggle('left-0');
+				nav.classList.toggle('w-full');
+				nav.classList.toggle('bg-[#0a192f]');
+				nav.classList.toggle('p-6');
+				nav.classList.toggle('z-50');
+				nav.classList.toggle('border-b');
+				nav.classList.toggle('border-[#d4af37]');
+			};
+		}
+	}
+	setupMenu();
+	document.addEventListener('astro:page-load', setupMenu);
+</script>
