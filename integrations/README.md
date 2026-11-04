@@ -107,6 +107,21 @@ node integrations/pohoda/send-to-pohoda.mjs integrations/pohoda/sample-order.jso
 > Jde o vzorovou implementaci – před ostrým provozem ji ověřte na zkušební účetní jednotce
 > (struktura mXML se může lišit podle verze POHODY a nastavení číselných řad).
 
+## Soubory k jedlému tisku (formulář `tisk-na-papir`)
+
+Přílohy Netlify Forms se v e-mailu zobrazují jako odkazy za přihlášením (CloudFront), proto se **nenahrávají přes Netlify Forms**:
+
+1. `EdiblePrintForm.tsx` ověří výběr (JPG, PNG, WEBP, HEIC, PDF; max. 5 souborů, každý do 5 MB; příliš velké JPG/PNG/WEBP se v prohlížeči zmenší na A4 @ 300 dpi).
+2. Každý soubor se nahraje na `POST /api/upload-print` (`netlify/functions/upload-print.mjs`) do **Netlify Blobs**; server znovu ověří příponu, velikost a obsah souboru.
+3. Do formuláře se pole `Tisk-Odkazy` vyplní veřejnými odkazy `https://cukrarstviblahutovi.cz/tisk-soubory/<uuid>/<soubor>`, které vyřizuje `netlify/functions/print-file.mjs`. Odkaz se po kliknutí rovnou stáhne, není potřeba přihlášení; `<uuid>` je náhodné a neuhodnutelné.
+4. Odkazy jsou v e-mailovém upozornění Netlify Forms v poli **Tisk-Odkazy**.
+
+Stejný mechanismus používá formulář **dort na přání** (`CustomCakeForm.tsx`): jeden nepovinný inspirační obrázek, odkaz v e-mailu je v poli **Foto-Odkaz**.
+
+Nutné: `@netlify/blobs` (už v `package.json`), žádné další proměnné prostředí – Blobs se na Netlify konfigurují automaticky.
+Nahrávání nefunguje v `astro dev` / `astro preview` (chybí funkce) – formulář v tom případě zobrazí srozumitelnou hlášku. Pro lokální test použijte `netlify dev`.
+Soubory se automaticky nemažou – občas je promažte v Netlify → Blobs (store `print-uploads`).
+
 ## Lokální testování funkcí
 
 ```bash

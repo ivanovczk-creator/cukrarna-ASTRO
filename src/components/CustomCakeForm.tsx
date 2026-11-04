@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PickupDateInput from './PickupDateInput';
 import { BLOCKED_DATE_MESSAGE, isBlockedDate } from '../lib/blockedDates';
+import { MAX_FILE_BYTES, uploadPrintFiles, validateSelection } from '../lib/printUpload';
 
 // Výpočet minimálního data mimo hlavní render (šetří výkon)
 const getInitialMinDate = () => {
@@ -12,6 +13,10 @@ const getInitialMinDate = () => {
 const CustomCakeForm = () => {
   const [selectedShop, setSelectedShop] = useState('ostrava');
   const [minDate] = useState(getInitialMinDate()); // Stačí nastavit jednou při startu
+  const [photo, setPhoto] = useState<File | null>(null);
+  const [photoError, setPhotoError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const shopClosingDays: Record<string, number[]> = {
     ostrava: [0], karvina: [0], petrvald: [1], pist: [0, 6] 
@@ -31,11 +36,44 @@ const CustomCakeForm = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    const rawDate = new FormData(e.currentTarget).get('Datum_Vyzvednuti');
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    const problem = file ? validateSelection([file]) : null;
+    setPhoto(file);
+    setPhotoError(problem);
+    e.target.setCustomValidity(problem ?? '');
+  };
+
+  // Obrázek se nenahrává přes Netlify Forms (odkaz v e-mailu je za přihlášením),
+  // ale přes /api/upload-print – do formuláře jde jen jeden veřejný odkaz ke stažení.
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    setSubmitError(null);
+
+    const rawDate = formData.get('Datum_Vyzvednuti');
     if (typeof rawDate === 'string' && isBlockedDate(rawDate)) {
-      e.preventDefault();
       alert(BLOCKED_DATE_MESSAGE);
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      if (photo) {
+        const [link] = await uploadPrintFiles([photo]);
+        formData.set('Foto-Odkaz', link);
+      }
+
+      const res = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData as any).toString(),
+      });
+      if (!res.ok) throw new Error(`Server vrátil ${res.status}`);
+      window.location.href = '/dekujeme';
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : 'Odeslání se nezdařilo.');
+      setIsSubmitting(false);
     }
   };
 
@@ -46,13 +84,13 @@ const CustomCakeForm = () => {
       <form 
         name="dort-na-prani-v2" 
         method="POST" 
-        action="/dekujeme"
         data-netlify="true" 
-        encType="multipart/form-data"
         onSubmit={handleSubmit}
         className="space-y-6 flex flex-col"
       >
         <input type="hidden" name="form-name" value="dort-na-prani-v2" />
+        {/* naplní se při odeslání veřejným odkazem na nahraný obrázek (viz handleSubmit) */}
+        <input type="hidden" name="Foto-Odkaz" defaultValue="" />
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1">
@@ -79,16 +117,15 @@ const CustomCakeForm = () => {
         <textarea name="Zprava" placeholder="Popište vaši představu..." required className="w-full p-3 h-32 bg-slate-50 rounded-xl border border-slate-200 outline-none resize-none"></textarea>
         
         <div className="p-6 bg-orange-50 border-2 border-dashed border-[#b38f2d]/30 rounded-2xl">
-          <label className="block text-xs font-bold text-[#92782a] uppercase mb-3 text-center">Inspirační obrázky</label>
-          <div className="space-y-2">
-            <input type="file" name="Foto-1" accept="image/*" className="text-[10px] w-full" />
-            <input type="file" name="Foto-2" accept="image/*" className="text-[10px] w-full" />
-            <input type="file" name="Foto-3" accept="image/*" className="text-[10px] w-full" />
-          </div>
+          <label htmlFor="cake-photo" className="block text-xs font-bold text-[#92782a] uppercase mb-3 text-center">Inspirační obrázek (nepovinné)</label>
+          <input id="cake-photo" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.heic,.heif" onChange={handlePhotoChange} className="text-[10px] w-full" />
+          <p className="mt-2 text-[10px] text-slate-500 text-center">Jedna fotka (JPG, PNG, WEBP, HEIC), max. {MAX_FILE_BYTES / 1024 / 1024} MB</p>
+          {photoError && <p role="alert" className="mt-2 text-xs font-bold text-red-600 text-center">{photoError}</p>}
         </div>
 
-        <button type="submit" className="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all uppercase tracking-widest active:scale-[0.98]">
-          Odeslat poptávku
+        {submitError && <p role="alert" className="text-sm font-bold text-red-600 text-center">{submitError}</p>}
+        <button type="submit" disabled={isSubmitting || !!photoError} className="w-full disabled:opacity-60 disabled:cursor-not-allowed bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all uppercase tracking-widest active:scale-[0.98]">
+          {isSubmitting ? 'Odesílám…' : 'Odeslat poptávku'}
         </button>
       </form>
     </div>
