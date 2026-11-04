@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
+import PickupDateInput from './PickupDateInput';
+import { BLOCKED_DATE_MESSAGE, isBlockedDate } from '../lib/blockedDates';
 
 const EdiblePrintForm = () => {
   const [fileNames, setFileNames] = useState<string[]>([]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const rawDate = new FormData(e.currentTarget).get('Datum');
+    if (typeof rawDate === 'string' && isBlockedDate(rawDate)) {
+      e.preventDefault();
+      alert(BLOCKED_DATE_MESSAGE);
+    }
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -28,6 +38,7 @@ const EdiblePrintForm = () => {
         data-netlify="true" 
         encType="multipart/form-data"
         action="/dekujeme"
+        onSubmit={handleSubmit}
         className="grid grid-cols-1 md:grid-cols-2 gap-6"
       >
         <input type="hidden" name="form-name" value="tisk-na-papir" />
@@ -61,7 +72,7 @@ const EdiblePrintForm = () => {
 
           <div>
             <label htmlFor="edible-date" className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 ml-2">Datum vyzvednutí</label>
-            <input id="edible-date" type="date" name="Datum" required className="w-full p-4 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]" />
+            <PickupDateInput id="edible-date" name="Datum" required className="w-full p-4 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]" />
           </div>
         </div>
 

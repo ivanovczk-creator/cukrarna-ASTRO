@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import PickupDateInput from './PickupDateInput';
+import { BLOCKED_DATE_MESSAGE, isBlockedDate } from '../lib/blockedDates';
 
 // Výpočet minimálního data mimo hlavní render (šetří výkon)
 const getInitialMinDate = () => {
@@ -20,10 +22,20 @@ const CustomCakeForm = () => {
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.value) return;
+
     const date = new Date(e.target.value);
     if (shopClosingDays[selectedShop].includes(date.getDay())) {
       alert(`Omlouváme se, ale v tento den má naše prodejna ${shopNames[selectedShop]} zavřeno.`);
       e.target.value = '';
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const rawDate = new FormData(e.currentTarget).get('Datum_Vyzvednuti');
+    if (typeof rawDate === 'string' && isBlockedDate(rawDate)) {
+      e.preventDefault();
+      alert(BLOCKED_DATE_MESSAGE);
     }
   };
 
@@ -37,6 +49,7 @@ const CustomCakeForm = () => {
         action="/dekujeme"
         data-netlify="true" 
         encType="multipart/form-data"
+        onSubmit={handleSubmit}
         className="space-y-6 flex flex-col"
       >
         <input type="hidden" name="form-name" value="dort-na-prani-v2" />
@@ -53,7 +66,7 @@ const CustomCakeForm = () => {
           </div>
           <div className="flex flex-col gap-1">
             <label className="text-xs uppercase tracking-widest text-[#92782a]">Datum vyzvednutí</label>
-            <input type="date" name="Datum_Vyzvednuti" min={minDate} onChange={handleDateChange} className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" required />
+            <PickupDateInput name="Datum_Vyzvednuti" min={minDate} onChange={handleDateChange} className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" required />
           </div>
         </div>
 

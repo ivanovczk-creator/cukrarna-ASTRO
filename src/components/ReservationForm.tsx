@@ -1,4 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import PickupDateInput from './PickupDateInput';
+import { BLOCKED_DATE_MESSAGE, isBlockedDate } from '../lib/blockedDates';
+import PaymentMethodSelector from './PaymentMethodSelector';
+import {
+  ONLINE_PAYMENTS_ENABLED,
+  cartTotal,
+  generateOrderId,
+  type PaymentMethod,
+} from '../lib/payments/config';
+import { startOnlinePayment } from '../lib/payments/client';
 
 const ReservationForm = () => {
   const [cart, setCart] = useState<{name: string, price: string, quantity: number, img: string}[]>([]);
@@ -7,6 +17,8 @@ const ReservationForm = () => {
   
   const [selectedStore, setSelectedStore] = useState('Petřvald');
   const [minDate, setMinDate] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cash');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     // Výpočet minimálního data (2 dny dopředu)
@@ -58,8 +70,14 @@ const ReservationForm = () => {
     const form = e.currentTarget;
     const formData = new FormData(form);
     
+    const rawDate = formData.get('Datum');
+    if (typeof rawDate === 'string' && isBlockedDate(rawDate)) {
+      alert(BLOCKED_DATE_MESSAGE);
+      return;
+    }
+
     // Validace otevírací doby
-    const dateVal = new Date(formData.get('Datum') as string);
+    const dateVal = new Date(rawDate as string);
     const day = dateVal.getDay();
     const isClosed = (selectedStore === 'Petřvald' && day === 1) || 
                      (selectedStore === 'Píšť' && (day === 0 || day === 6)) || 
@@ -81,22 +99,52 @@ const ReservationForm = () => {
         : `${basicInfo}\nOdkaz: ${window.location.origin}${item.img}`;
     }).join('\n\n---\n\n');
     
+    // Platba + strojově čitelná data pro automatizace (Make.com → POHODA)
+    const orderId = generateOrderId();
+    const wantsOnline = paymentMethod === 'online' && onlineAvailable;
+    const items = cart.map(({ name, price, quantity }) => ({ name, price, quantity }));
+    formData.set('Zpusob-Platby', wantsOnline ? 'online' : 'cash');
+    formData.append('Cislo-Objednavky', orderId);
+    formData.append('Celkem-Kc', total !== null ? String(total) : '');
+    formData.append('Produkty-JSON', JSON.stringify(items));
     formData.append('Produkty-Seznam', list);
-    
+
+    setIsSubmitting(true);
     try {
-      await fetch("/", {
+      const res = await fetch("/", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams(formData as any).toString(),
       });
+      if (!res.ok) throw new Error(`Server vrátil ${res.status}`);
       localStorage.removeItem('blahutovi_cart');
+
+      if (wantsOnline) {
+        try {
+          const redirect = await startOnlinePayment({
+            orderId,
+            email: String(formData.get('Email') || ''),
+            name: String(formData.get('Jmeno') || ''),
+            phone: String(formData.get('Telefon') || ''),
+            items,
+          });
+          window.location.href = redirect;
+          return;
+        } catch (payErr) {
+          console.error(payErr);
+          alert("Objednávku jsme přijali, ale online platbu se nepodařilo zahájit. Ozveme se vám, nebo zaplatíte při převzetí.");
+        }
+      }
       window.location.href = "/dekujeme";
     } catch (err) {
       alert("Chyba při odesílání: " + err);
+      setIsSubmitting(false);
     }
   };
 
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+  const total = cartTotal(cart);
+  const onlineAvailable = ONLINE_PAYMENTS_ENABLED && total !== null && total > 0;
 
   return (
     <div className="relative">
@@ -172,19 +220,25 @@ const ReservationForm = () => {
                       <option>Karviná</option>
                       <option>Ostrava (Zábřeh)</option>
                     </select>
-                    <input 
-                      type="date" 
-                      name="Datum" 
+                    <PickupDateInput
+                      name="Datum"
                       min={minDate}
-                      required 
-                      className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none font-bold" 
+                      required
+                      className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none font-bold"
                     />
                 </div>
                 
                 <textarea name="Poznamka" placeholder="Poznámka k objednávce (nepovinné)" className="w-full p-3 bg-slate-50 rounded-xl text-sm outline-none h-20 resize-none border border-transparent focus:border-[#d4af37] font-bold"></textarea>
 
-                <button type="submit" className="w-full bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] hover:text-[#0a192f] transition-all shadow-lg active:scale-95 cursor-pointer uppercase tracking-widest text-[10px]">
-                  Odeslat rezervaci
+                <PaymentMethodSelector
+                  value={onlineAvailable ? paymentMethod : 'cash'}
+                  onChange={setPaymentMethod}
+                  onlineAvailable={onlineAvailable}
+                  total={total}
+                />
+
+                <button type="submit" disabled={isSubmitting} className="w-full disabled:opacity-60 bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] hover:text-[#0a192f] transition-all shadow-lg active:scale-95 cursor-pointer uppercase tracking-widest text-[10px]">
+                  {isSubmitting ? 'Odesílám…' : (paymentMethod === 'online' && onlineAvailable ? 'Objednat a zaplatit' : 'Odeslat rezervaci')}
                 </button>
               </div>
             </form>

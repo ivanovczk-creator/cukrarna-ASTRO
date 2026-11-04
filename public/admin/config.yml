@@ -71,3 +71,43 @@ collections:
               - { label: "Cena", name: "cena", widget: "string", hint: "Např. 45 Kč", required: false }
               - { label: "Obrázek", name: "foto", widget: "image", required: false, media_folder: "public/img/zapichy", public_folder: "/img/zapichy" }
               - { label: "Kategorie", name: "kategorie", widget: "hidden", default: "zapichy" }
+
+          - label: "Studená kuchyně (chlebíčky a kanapky)"
+            name: "coldKitchen"
+            widget: "list"
+            summary: "Studená kuchyně: {{title}}"
+            fields:
+              - { label: "ID (Např. sk1, sk2...)", name: "id", widget: "string", required: false }
+              - { label: "Pořadí (číslo)", name: "weight", widget: "number", default: 100, value_type: "int", required: false }
+              - { label: "Název", name: "title", widget: "string", required: false }
+              - { label: "Cena", name: "cena", widget: "string", hint: "Např. 35 Kč", required: false }
+              - { label: "Popis", name: "popis", widget: "string", required: false }
+              - { label: "Obrázek", name: "foto", widget: "image", required: false, media_folder: "public/img/studena-kuchyne", public_folder: "/img/studena-kuchyne" }
+              - { label: "Kategorie", name: "kategorie", widget: "hidden", default: "studena-kuchyne" }
+
+  - name: "blocked_dates"
+    label: "Blokovaná data"
+    delete: false
+    editor:
+      preview: false
+    files:
+      - name: "blocked_dates"
+        label: "Blokovaná data"
+        file: "src/data/blocked-dates.json"
+        format: "json"
+        fields:
+          - label: "Vyprodané termíny"
+            name: "dates"
+            widget: "list"
+            required: false
+            summary: "{{date}}"
+            hint: "Přidejte konkrétní dny, kdy máme plno. Zákazník si je ve formuláři nebude moci vybrat."
+            fields:
+              - label: "Datum"
+                name: "date"
+                widget: "datetime"
+                date_format: "YYYY-MM-DD"
+                time_format: false
+                format: "YYYY-MM-DD"
+                picker_utc: true
+                required: true

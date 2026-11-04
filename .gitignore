@@ -1,0 +1,26 @@
+# build výstup
+dist/
+
+# Astro cache a generované typy
+.astro/
+
+# závislosti
+node_modules/
+
+# logy
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# prostředí
+.env
+.env.*
+!.env.example
+
+# Netlify
+.netlify/
+
+# OS / editor
+.DS_Store
+Thumbs.db

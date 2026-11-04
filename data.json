@@ -1351,5 +1351,34 @@
       "foto": "/img/zapichy/zapich-happy-birthday.webp",
       "cena": "100 Kč"
     }
+  ],
+  "coldKitchen": [
+    {
+      "weight": 1,
+      "kategorie": "studena-kuchyne",
+      "id": "sk1",
+      "title": "Šunkový chlebíček",
+      "cena": "35 Kč",
+      "popis": "Pečivo, šunka, pomazánkové máslo, vejce, zelenina",
+      "foto": "/img/studena-kuchyne/sunkovy-chlebicek.webp"
+    },
+    {
+      "weight": 2,
+      "kategorie": "studena-kuchyne",
+      "id": "sk2",
+      "title": "Sýrový chlebíček",
+      "cena": "32 Kč",
+      "popis": "Pečivo, eidam, pomazánkové máslo, zelenina",
+      "foto": "/img/studena-kuchyne/syrovy-chlebicek.webp"
+    },
+    {
+      "weight": 3,
+      "kategorie": "studena-kuchyne",
+      "id": "sk3",
+      "title": "Kanapky mix",
+      "cena": "320 Kč",
+      "popis": "Mix 10 kanapek – šunka, sýr, vejce, zelenina",
+      "foto": "/img/studena-kuchyne/kanapky-mix.webp"
+    }
   ]
 }

@@ -1,0 +1,14 @@
+{
+  "orderId": "BL-20261104-7K3F",
+  "name": "Jana Nováková",
+  "email": "jana.novakova@example.cz",
+  "phone": "+420777123456",
+  "store": "Petřvald",
+  "pickupDate": "2026-11-07",
+  "note": "Prosím nakrájet na menší kousky",
+  "paymentMethod": "online",
+  "lines": [
+    { "name": "Šunkový chlebíček", "quantity": 10, "unitPrice": 35 },
+    { "name": "Kanapky mix", "quantity": 1, "unitPrice": 320 }
+  ]
+}

@@ -93,6 +93,23 @@ const {
 	<body class="pb-16 md:pb-0">
 		<slot />
 
+		<!-- Statická deklarace formuláře pro Netlify Forms: React formulář (ReservationForm) se vykresluje
+		     až v prohlížeči, takže ho Netlify při buildu jinak nenajde a nezaregistruje jeho pole. -->
+		<form name="objednavka" method="POST" data-netlify="true" hidden aria-hidden="true">
+			<input type="hidden" name="form-name" value="objednavka" />
+			<input type="text" name="Jmeno" />
+			<input type="email" name="Email" />
+			<input type="tel" name="Telefon" />
+			<input type="text" name="Prodejna" />
+			<input type="text" name="Datum" />
+			<textarea name="Poznamka"></textarea>
+			<input type="text" name="Zpusob-Platby" />
+			<input type="text" name="Cislo-Objednavky" />
+			<input type="text" name="Celkem-Kc" />
+			<textarea name="Produkty-JSON"></textarea>
+			<textarea name="Produkty-Seznam"></textarea>
+		</form>
+
 		<div class="fixed bottom-6 right-6 z-[9999] md:hidden">
 			<input type="checkbox" id="call-menu-toggle" class="hidden peer">
 			<label for="call-menu-toggle" class="flex items-center justify-center w-16 h-16 bg-[#d4af37] text-white rounded-full shadow-2xl cursor-pointer peer-checked:rotate-45 transition-transform" aria-label="Zobrazit telefonní čísla">
