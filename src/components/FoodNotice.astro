@@ -1,13 +1,18 @@
 ---
 // Krátké upozornění pod nabídkou potravin: rychlá zkáza, skladování, alergeny.
+// subtle = decentní poznámka pod výpisem produktů (bez rámečku), jinak výrazný žlutý box.
 import { LEGAL_PAGES, PERISHABLE_NOTICE } from '../lib/legal';
 interface Props {
 	class?: string;
+	subtle?: boolean;
 }
-const { class: className = '' } = Astro.props;
+const { class: className = '', subtle = false } = Astro.props;
+const baseClass = subtle
+	? 'max-w-3xl mx-auto border-t border-slate-200 pt-6 text-xs text-slate-600 font-bold leading-relaxed text-center'
+	: 'max-w-3xl mx-auto bg-amber-50 border border-amber-200 rounded-2xl p-5 text-sm text-slate-800 font-bold leading-relaxed';
 ---
 
-<aside class={`max-w-3xl mx-auto bg-amber-50 border border-amber-200 rounded-2xl p-5 text-sm text-slate-800 font-bold leading-relaxed ${className}`}>
+<aside class={`${baseClass} ${className}`}>
 	<p>
 		<span aria-hidden="true">❄️</span> {PERISHABLE_NOTICE}
 	</p>
