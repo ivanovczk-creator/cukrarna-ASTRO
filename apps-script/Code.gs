@@ -11,20 +11,23 @@
  * Jednotná pole formulářů: Jmeno, Email, Telefon, Prodejna, Datum, Poznamka (+ Firma, ICO, Lokalita u B2B,
  * Typ-Pozadavku, položky / cena / odkazy). Skript zná i starší názvy (Datum_Vyzvednuti, Zprava, firma, …).
  *
- * Odpověď je vždy JSON { ok: true|false, ... } – to vyhodnocuje pohoda-webhook.mjs.
+ * Po úspěšné interní notifikaci (NOTIFY_EMAIL) se zákazníkovi s platným e-mailem pošle potvrzení
+ * (ne u testu, ne u duplicit; selhání potvrzení běh neshodí). Odpověď je vždy JSON { ok: true|false, ... } – to vyhodnocuje pohoda-webhook.mjs.
  */
 
 const CONFIG = {
   NOTIFY_EMAIL: 'objednavky@cukrarstviblahutovi.cz',
-  XML_FOLDER_ID: 'DOPLNIT_ID_SLOZKY',
+  XML_FOLDER_ID: '16X6rwavpSbq27msnCi81ZjtPwSZPxzmp',
   ICO: '76208371',
   RATE_VAT: 'low',
   SENDER_NAME: 'Web – Cukrářství Blahutovi',
+  PHONE: '+420 602 323 788',
+  ADDRESS: 'Opavská 218/101, 747 18 Píšť',
 };
 
 /** Typy formulářů (klíč = form_name z Netlify). */
 const FORM_TYPES = {
-  'objednavka': { key: 'objednavka', label: 'Objednávka z košíku', accent: '#b45309', xml: true },
+  'objednavka': { key: 'objednavka', label: 'Objednávka', accent: '#b45309', xml: true },
   'tisk-na-papir': { key: 'tisk', label: 'Jedlý tisk – fondánový list', accent: '#2563eb', xml: false },
   'dort-na-prani-v2': { key: 'dort-na-prani', label: 'Dort na přání – poptávka', accent: '#db2777', xml: false },
   'b2b-poptavka': { key: 'b2b', label: 'Poptávka pro firmy', accent: '#059669', xml: false },
@@ -126,7 +129,8 @@ function handleOrder_(req) {
     throw mailErr;
   }
 
-  return { orderId: req.orderId };
+  // zákaznické potvrzení až po úspěšné interní notifikaci; jeho selhání běh neshodí
+  return { orderId: req.orderId, confirmation: sendCustomerConfirmation_(req) };
 }
 
 /** Ostatní formuláře: přehledný e-mail. Idempotence přes ID odeslání (nebo otisk těla). */
@@ -143,7 +147,8 @@ function handleRequest_(req, parsed) {
   sendRequestEmail_(req, null);
   cache.put(key, '1', 21600); // 6 h = maximum CacheService
 
-  return { orderId: req.orderId || undefined };
+  // zákaznické potvrzení až po úspěšné interní notifikaci; jeho selhání běh neshodí
+  return { orderId: req.orderId || undefined, confirmation: sendCustomerConfirmation_(req) };
 }
 
 function digest_(text) {
@@ -341,12 +346,8 @@ function normalizeRequest_(parsed) {
     categoriesField.split(',').forEach(function (c) { if (c.trim()) seen[c.trim()] = true; });
   }
   if (type.key === 'objednavka') {
+    // název typu zůstává vždy jednotně „Objednávka“; kategorie slouží jen jako štítky v e-mailu
     req.categories = Object.keys(seen).filter(function (c) { return c !== 'tisk'; });
-    if (req.categories.length) {
-      req.type = Object.assign({}, type, {
-        label: 'Objednávka – ' + req.categories.map(function (c) { return categoryLabel_(c).toLowerCase(); }).join(', '),
-      });
-    }
   }
 
   // odkazy na soubory / obrázky
@@ -727,6 +728,232 @@ function buildEmailText_(r, xmlInfo) {
     r.tech.forEach(function (row) { lines.push(row[0] + ': ' + row[1]); });
   }
   return lines.join('\n');
+}
+
+// ---------------------------------------------------------------------------------------------
+// Potvrzovací e-mail zákazníkovi
+// ---------------------------------------------------------------------------------------------
+
+/**
+ * Odešle zákazníkovi potvrzení. Volá se až po úspěšné interní notifikaci a jen u reálně zpracovaných
+ * požadavků (test i duplicity končí dřív). Nikdy nevyhazuje výjimku.
+ * Vrací 'sent' | 'skipped' (chybí / neplatný e-mail) | 'failed'.
+ */
+function sendCustomerConfirmation_(r) {
+  if (!isEmail_(r.email)) {
+    return 'skipped';
+  }
+
+  try {
+    const isB2b = r.type.key === 'b2b';
+    const content = isB2b ? buildB2bConfirmation_(r) : buildStandardConfirmation_(r);
+
+    MailApp.sendEmail({
+      to: r.email,
+      subject: content.subject,
+      body: content.text,
+      htmlBody: content.html,
+      name: CONFIG.SENDER_NAME,
+      replyTo: CONFIG.NOTIFY_EMAIL,
+    });
+    return 'sent';
+  } catch (err) {
+    console.error('Potvrzení zákazníkovi se nepodařilo odeslat: ' + (err && err.stack ? err.stack : err));
+    return 'failed';
+  }
+}
+
+/** Texty podle typu požadavku (předmět, nadpis, úvod). */
+function confirmationTexts_(r) {
+  const brand = 'Cukrářství Blahutovi';
+  switch (r.type.key) {
+    case 'objednavka':
+      return {
+        subject: 'Potvrzení objednávky' + (r.orderId ? ' č. ' + r.orderId : '') + ' – ' + brand,
+        title: 'Děkujeme za vaši objednávku',
+        intro: 'Vaši objednávku jsme v pořádku přijali a začínáme ji zpracovávat. Níže najdete její shrnutí.',
+        noteLabel: 'Vaše poznámka',
+      };
+    case 'tisk':
+      return {
+        subject: 'Potvrzení objednávky jedlého tisku – ' + brand,
+        title: 'Děkujeme za objednávku jedlého tisku',
+        intro: 'Vaši objednávku tisku na fondánový list jsme přijali. Níže najdete její shrnutí.',
+        noteLabel: 'Vaše poznámka',
+      };
+    case 'dort-na-prani':
+      return {
+        subject: 'Potvrzení přijetí poptávky – dort na přání – ' + brand,
+        title: 'Děkujeme za vaši poptávku',
+        intro: 'Vaši poptávku na dort na přání jsme přijali. Přání si projdeme a ozveme se vám s dalším postupem.',
+        noteLabel: 'Vaše přání',
+      };
+    default:
+      return {
+        subject: 'Potvrzení přijetí požadavku – ' + brand,
+        title: 'Děkujeme za váš požadavek',
+        intro: 'Váš požadavek jsme přijali. Níže najdete shrnutí zadaných údajů.',
+        noteLabel: 'Vaše poznámka',
+      };
+  }
+}
+
+/** Klíčové údaje pro zákazníka jako { label, text, hi }. */
+function confirmFacts_(r) {
+  const facts = [];
+  if (r.orderId) facts.push({ label: 'Číslo objednávky', text: r.orderId });
+  if (r.store) facts.push({ label: 'Prodejna', text: r.store });
+  if (r.location) facts.push({ label: 'Lokalita', text: r.location });
+  if (r.date) facts.push({ label: 'Termín vyzvednutí', text: formatDate_(r.date), hi: 'date' });
+  if (r.paymentLabel) facts.push({ label: 'Způsob platby', text: r.paymentLabel });
+  if (r.total) facts.push({ label: 'Cena celkem', text: money_(r.total), hi: 'price' });
+  if (r.quantity) facts.push({ label: 'Počet kusů', text: r.quantity + '\u00a0ks' });
+  if (r.baseType) facts.push({ label: 'Podklad', text: r.baseType });
+  return facts;
+}
+
+/** Údaje z B2B poptávky jako [popisek, hodnota]. */
+function b2bRows_(r) {
+  const rows = [];
+  if (r.company) rows.push(['Firma', r.company]);
+  if (r.name && r.name !== r.company && r.name !== 'Zákazník') {
+    rows.push([r.company ? 'Kontaktní osoba' : 'Jméno', r.name]);
+  }
+  if (r.ico) rows.push(['IČO', r.ico]);
+  if (r.location) rows.push(['Lokalita', r.location]);
+  if (r.phone) rows.push(['Telefon', r.phone]);
+  if (r.email) rows.push(['E-mail', r.email]);
+  if (r.date) rows.push(['Požadovaný termín', formatDate_(r.date)]);
+  if (r.note) rows.push(['Zpráva / poznámka', r.note]);
+  return rows;
+}
+
+/** Společný rámec zákaznického e-mailu (hlavička, obsah, kontakt, patička). */
+function confirmationShell_(title, bodyRows) {
+  const font = "font-family:'Segoe UI',Roboto,Arial,Helvetica,sans-serif;";
+  const header =
+    '<tr><td style="background:#0a192f;padding:26px 28px 22px 28px;">' +
+    '<div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#d4af37;margin-bottom:12px;">Cukrářství Blahutovi</div>' +
+    '<div style="font-size:26px;line-height:1.25;font-weight:700;color:#ffffff;">' + esc_(title) + '</div>' +
+    '</td></tr>' +
+    '<tr><td style="height:4px;line-height:4px;font-size:0;background:#d4af37;">&nbsp;</td></tr>';
+
+  const footer =
+    '<tr><td style="padding:16px 28px 22px 28px;background:#f8fafc;border-top:1px solid #e2e8f0;font-size:12px;line-height:1.6;color:#64748b;">' +
+    '<strong style="color:#475569;">Cukrářství Blahutovi</strong> · Ivo Blahut · ' + esc_(CONFIG.ADDRESS) + ' · IČO ' + esc_(CONFIG.ICO) + '<br>' +
+    'Tel. <a href="tel:' + esc_(CONFIG.PHONE.replace(/\s+/g, '')) + '" style="color:#475569;">' + esc_(CONFIG.PHONE) + '</a> · ' +
+    '<a href="mailto:' + esc_(CONFIG.NOTIFY_EMAIL) + '" style="color:#475569;">' + esc_(CONFIG.NOTIFY_EMAIL) + '</a><br>' +
+    '<span style="color:#94a3b8;">Tento e-mail vznikl automaticky po odeslání formuláře na webu cukrarstviblahutovi.cz.</span>' +
+    '</td></tr>';
+
+  return (
+    '<div style="margin:0;padding:24px 12px;background:#e2e8f0;' + font + 'color:#0f172a;">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;margin:0 auto;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #cbd5e1;">' +
+    header + bodyRows.join('') + footer +
+    '</table></div>'
+  );
+}
+
+function confirmParagraph_(text) {
+  return '<tr><td style="padding:18px 28px 6px 28px;font-size:15px;line-height:1.6;color:#0f172a;">' + text + '</td></tr>';
+}
+
+function confirmBlock_(inner) {
+  return '<tr><td style="padding:6px 28px 18px 28px;">' + inner + '</td></tr>';
+}
+
+/** Potvrzení pro ostatní typy: košík, tisk, dort na přání i obecné formuláře. */
+function buildStandardConfirmation_(r) {
+  const t = confirmationTexts_(r);
+  const facts = confirmFacts_(r);
+  const hasItemsTable = r.lines.length > 0 && r.type.key !== 'tisk';
+  const hello = r.name && r.name !== 'Zákazník' ? 'Dobrý den, ' + r.name + ',' : 'Dobrý den,';
+  const contactHtml =
+    'V případě dotazů nebo změny termínu můžete jednoduše odpovědět na tento e-mail ' +
+    'nebo zavolat na prodejnu, případně na telefon <strong>' + esc_(CONFIG.PHONE) + '</strong>.';
+  const contactText =
+    'V případě dotazů nebo změny termínu můžete jednoduše odpovědět na tento e-mail nebo zavolat na prodejnu, případně na telefon ' +
+    CONFIG.PHONE + '.';
+
+  // HTML
+  const rows = [];
+  rows.push(confirmParagraph_(esc_(hello) + '<br>' + esc_(t.intro)));
+  if (facts.length) {
+    rows.push('<tr><td style="padding:10px 20px 4px 20px;">' + factsTable_(facts.map(function (f) {
+      return { label: f.label, html: esc_(f.text), hi: f.hi };
+    })) + '</td></tr>');
+  }
+  if (hasItemsTable) {
+    rows.push(confirmBlock_(sectionTitle_('Přehled položek') + linesTable_(r)));
+  } else if (r.itemsText) {
+    rows.push(confirmBlock_(sectionTitle_('Přehled položek') +
+      '<div style="font-size:14px;white-space:pre-wrap;">' + esc_(r.itemsText) + '</div>'));
+  }
+  if (r.note) {
+    rows.push(confirmBlock_(
+      sectionTitle_(t.noteLabel) +
+      '<div style="background:#f8fafc;border-left:4px solid #d4af37;border-radius:4px;padding:14px 16px;font-size:15px;line-height:1.55;white-space:pre-wrap;">' + esc_(r.note) + '</div>'
+    ));
+  }
+  rows.push(confirmBlock_(
+    '<div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.55;color:#78350f;">' +
+    contactHtml + '</div>'
+  ));
+  rows.push(confirmParagraph_('Děkujeme a těšíme se na vás.<br><strong>Cukrářství Blahutovi</strong>'));
+  rows.push('<tr><td style="height:12px;line-height:12px;font-size:0;">&nbsp;</td></tr>');
+
+  // prostý text
+  const text = [hello, t.intro, ''];
+  facts.forEach(function (f) { text.push(f.label + ': ' + f.text); });
+  if (r.lines.length && r.type.key !== 'tisk') {
+    text.push('', 'Přehled položek:');
+    r.lines.forEach(function (l) {
+      text.push('- ' + l.quantity + 'x ' + l.name + (l.lineTotal ? ' – ' + money_(l.lineTotal) : ''));
+    });
+  } else if (r.itemsText) {
+    text.push('', 'Přehled položek:', r.itemsText);
+  }
+  if (r.note) text.push('', t.noteLabel + ':', r.note);
+  text.push('', contactText, '', 'Děkujeme a těšíme se na vás.', 'Cukrářství Blahutovi');
+  text.push(CONFIG.ADDRESS + ' · IČO ' + CONFIG.ICO + ' · ' + CONFIG.NOTIFY_EMAIL);
+
+  return { subject: t.subject, html: confirmationShell_(t.title, rows), text: text.join('\n') };
+}
+
+/** Potvrzení pro B2B poptávku: profesionální tón a výpis zadaných údajů. */
+function buildB2bConfirmation_(r) {
+  const subject = 'Děkujeme za váš zájem o spolupráci – Cukrářství Blahutovi';
+  const title = 'Děkujeme za váš zájem o spolupráci';
+  const p1 = 'děkujeme vám za zájem o spolupráci s Cukrářstvím Blahutovi. Váš zájem nás velmi těší.';
+  const p2 = 'Vaši poptávku jsme přijali a co nejdříve se vám ozveme s dalšími informacemi – ' +
+    'rádi vás přivítáme mezi našimi novými odběrateli.';
+  const dataRows = b2bRows_(r);
+  const contactText =
+    'Pokud byste cokoli chtěli doplnit nebo upřesnit, stačí odpovědět na tento e-mail ' +
+    'nebo nám zavolat na telefon ' + CONFIG.PHONE + '.';
+
+  const rows = [];
+  rows.push(confirmParagraph_('Dobrý den,<br>' + esc_(p1) + '<br><br>' + esc_(p2)));
+  if (dataRows.length) {
+    rows.push(confirmBlock_(sectionTitle_('Údaje z vaší poptávky') + kvTable_(dataRows, false)));
+  }
+  rows.push(confirmBlock_(
+    '<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.55;color:#166534;">' +
+    esc_(contactText) + '</div>'
+  ));
+  rows.push(confirmParagraph_('S pozdravem<br><strong>Cukrářství Blahutovi</strong>'));
+  rows.push('<tr><td style="height:12px;line-height:12px;font-size:0;">&nbsp;</td></tr>');
+
+  const text = ['Dobrý den,', p1, '', p2, ''];
+  if (dataRows.length) {
+    text.push('Údaje z vaší poptávky:');
+    dataRows.forEach(function (row) { text.push('- ' + row[0] + ': ' + row[1]); });
+    text.push('');
+  }
+  text.push(contactText, '', 'S pozdravem', 'Cukrářství Blahutovi');
+  text.push(CONFIG.ADDRESS + ' · IČO ' + CONFIG.ICO + ' · ' + CONFIG.NOTIFY_EMAIL);
+
+  return { subject: subject, html: confirmationShell_(title, rows), text: text.join('\n') };
 }
 
 function sendRequestEmail_(r, xmlInfo) {
