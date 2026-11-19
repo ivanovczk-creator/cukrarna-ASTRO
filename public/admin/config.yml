@@ -96,18 +96,9 @@ collections:
         file: "src/data/blocked-dates.json"
         format: "json"
         fields:
-          - label: "Vyprodané termíny"
+          # Vlastní widget (public/admin/blocked-calendar.js) – ukládá stejný formát jako dřív:
+          # dates: [ { date: "YYYY-MM-DD" }, ... ]
+          - label: "Kalendář plné kapacity dortů (označené dny zablokují objednání dortů z katalogu i dortů na přání; zákusky a ostatní sortiment zůstávají dostupné)"
             name: "dates"
-            widget: "list"
+            widget: "blocked-calendar"
             required: false
-            summary: "{{date}}"
-            hint: "Přidejte konkrétní dny, kdy máme plno. Zákazník si je ve formuláři nebude moci vybrat."
-            fields:
-              - label: "Datum"
-                name: "date"
-                widget: "datetime"
-                date_format: "YYYY-MM-DD"
-                time_format: false
-                format: "YYYY-MM-DD"
-                picker_utc: true
-                required: true

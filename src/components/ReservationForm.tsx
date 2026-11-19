@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PickupDateInput from './PickupDateInput';
-import { BLOCKED_DATE_MESSAGE, isBlockedDate } from '../lib/blockedDates';
+import { getPickupDateError, getPickupHint } from '../lib/pickupRules';
 import PaymentMethodSelector from './PaymentMethodSelector';
 import {
   ONLINE_PAYMENTS_ENABLED,
@@ -14,12 +14,13 @@ import LegalNotices from './LegalNotices';
 import { BINDING_ORDER_LABEL } from '../lib/legal';
 
 const ReservationForm = () => {
-  const [cart, setCart] = useState<{name: string, price: string, quantity: number, img: string}[]>([]);
+  const [cart, setCart] = useState<{name: string, price: string, quantity: number, img: string, category?: string}[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [justAdded, setJustAdded] = useState(false);
   
   const [selectedStore, setSelectedStore] = useState('Petřvald');
   const [minDate, setMinDate] = useState('');
+  const [pickupDate, setPickupDate] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cash');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -40,7 +41,7 @@ const ReservationForm = () => {
     }
 
     const handleAddToCart = (e: any) => {
-      const { name, price, img, quantity } = e.detail;
+      const { name, price, img, quantity, category } = e.detail;
       const q = parseInt(quantity) || 1;
       
       setCart(prev => {
@@ -49,7 +50,7 @@ const ReservationForm = () => {
         if (existing) {
           newCart = prev.map(item => item.name === name ? {...item, quantity: item.quantity + q} : item);
         } else {
-          newCart = [...prev, { name, price, quantity: q, img }];
+          newCart = [...prev, { name, price, quantity: q, img, category }];
         }
         localStorage.setItem('blahutovi_cart', JSON.stringify(newCart));
         return newCart;
@@ -73,22 +74,9 @@ const ReservationForm = () => {
     const form = e.currentTarget;
     const formData = new FormData(form);
     
-    const rawDate = formData.get('Datum');
-    if (typeof rawDate === 'string' && isBlockedDate(rawDate)) {
-      alert(BLOCKED_DATE_MESSAGE);
-      return;
-    }
-
-    // Validace otevírací doby
-    const dateVal = new Date(rawDate as string);
-    const day = dateVal.getDay();
-    const isClosed = (selectedStore === 'Petřvald' && day === 1) || 
-                     (selectedStore === 'Píšť' && (day === 0 || day === 6)) || 
-                     (selectedStore === 'Karviná' && day === 0) || 
-                     (selectedStore === 'Ostrava (Zábřeh)' && day === 0);
-
-    if (isClosed) {
-      alert(`Vámi vybraná prodejna (${selectedStore}) má v tento den zavřeno. Prosím vyberte jiné datum.`);
+    // Validace data: výdejní dny prodejny + (jen u košíku s dortem) dny s plnou kapacitou dortů
+    const dateProblem = getPickupDateError(String(formData.get('Datum') ?? ''), selectedStore, includesCake);
+    if (dateProblem) {
       return;
     }
 
@@ -144,6 +132,11 @@ const ReservationForm = () => {
       setIsSubmitting(false);
     }
   };
+
+  // Obsahuje košík dort? (starší položky v localStorage bez kategorie poznáme podle cesty k fotce)
+  const includesCake = cart.some(item => item.category === 'dorty' || (!item.category && item.img.includes('/img/dorty/')));
+  const dateError = getPickupDateError(pickupDate, selectedStore, includesCake);
+  const dateHint = getPickupHint(selectedStore, includesCake);
 
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
   const total = cartTotal(cart);
@@ -226,6 +219,10 @@ const ReservationForm = () => {
                     <PickupDateInput
                       name="Datum"
                       min={minDate}
+                      value={pickupDate}
+                      onChange={(e) => setPickupDate(e.target.value)}
+                      error={dateError}
+                      hint={dateHint}
                       required
                       className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none font-bold"
                     />
@@ -244,7 +241,7 @@ const ReservationForm = () => {
 
                 <ConsentCheckbox id="cart-consent" compact />
 
-                <button type="submit" disabled={isSubmitting} className="w-full disabled:opacity-60 bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] hover:text-[#0a192f] transition-all shadow-lg active:scale-95 cursor-pointer uppercase tracking-widest text-[10px]">
+                <button type="submit" disabled={isSubmitting || !!dateError} className="w-full disabled:opacity-60 disabled:cursor-not-allowed bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] hover:text-[#0a192f] transition-all shadow-lg active:scale-95 cursor-pointer uppercase tracking-widest text-[10px]">
                   {isSubmitting ? 'Odesílám…' : BINDING_ORDER_LABEL}
                 </button>
               </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PickupDateInput from './PickupDateInput';
-import { BLOCKED_DATE_MESSAGE, isBlockedDate } from '../lib/blockedDates';
+import { getPickupDateError, getPickupHint } from '../lib/pickupRules';
 import { MAX_FILE_BYTES, uploadPrintFiles, validateSelection } from '../lib/printUpload';
 import ConsentCheckbox from './ConsentCheckbox';
 import LegalNotices from './LegalNotices';
@@ -14,29 +14,16 @@ const getInitialMinDate = () => {
 
 const CustomCakeForm = () => {
   const [selectedShop, setSelectedShop] = useState('ostrava');
+  const [pickupDate, setPickupDate] = useState('');
   const [minDate] = useState(getInitialMinDate()); // Stačí nastavit jednou při startu
   const [photo, setPhoto] = useState<File | null>(null);
   const [photoError, setPhotoError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const shopClosingDays: Record<string, number[]> = {
-    ostrava: [0], karvina: [0], petrvald: [1], pist: [0, 6] 
-  };
-
-  const shopNames: Record<string, string> = {
-    ostrava: 'v Ostravě', karvina: 'v Karviné', petrvald: 'v Petřvaldě', pist: 'v Píšti'
-  };
-
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.value) return;
-
-    const date = new Date(e.target.value);
-    if (shopClosingDays[selectedShop].includes(date.getDay())) {
-      alert(`Omlouváme se, ale v tento den má naše prodejna ${shopNames[selectedShop]} zavřeno.`);
-      e.target.value = '';
-    }
-  };
+  // Dort na přání je vždy dort → platí výdejní dny prodejny i dny s plnou kapacitou dortů
+  const dateError = getPickupDateError(pickupDate, selectedShop, true);
+  const dateHint = getPickupHint(selectedShop, true);
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
@@ -53,11 +40,7 @@ const CustomCakeForm = () => {
     const formData = new FormData(e.currentTarget);
     setSubmitError(null);
 
-    const rawDate = formData.get('Datum_Vyzvednuti');
-    if (typeof rawDate === 'string' && isBlockedDate(rawDate)) {
-      alert(BLOCKED_DATE_MESSAGE);
-      return;
-    }
+    if (dateError) return;
 
     setIsSubmitting(true);
     try {
@@ -106,7 +89,7 @@ const CustomCakeForm = () => {
           </div>
           <div className="flex flex-col gap-1">
             <label className="text-xs uppercase tracking-widest text-[#735c1e]">Datum vyzvednutí</label>
-            <PickupDateInput name="Datum_Vyzvednuti" min={minDate} onChange={handleDateChange} className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" required />
+            <PickupDateInput name="Datum_Vyzvednuti" min={minDate} value={pickupDate} onChange={(e) => setPickupDate(e.target.value)} error={dateError} hint={dateHint} className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" required />
           </div>
         </div>
 
@@ -129,7 +112,7 @@ const CustomCakeForm = () => {
         <ConsentCheckbox id="cake-consent" />
 
         {submitError && <p role="alert" className="text-sm font-bold text-red-600 text-center">{submitError}</p>}
-        <button type="submit" disabled={isSubmitting || !!photoError} className="w-full disabled:opacity-60 disabled:cursor-not-allowed bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all uppercase tracking-widest active:scale-[0.98]">
+        <button type="submit" disabled={isSubmitting || !!photoError || !!dateError} className="w-full disabled:opacity-60 disabled:cursor-not-allowed bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all uppercase tracking-widest active:scale-[0.98]">
           {isSubmitting ? 'Odesílám…' : 'Odeslat poptávku'}
         </button>
       </form>

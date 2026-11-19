@@ -130,7 +130,7 @@ function getImage(path: string, images: Record<string, any>) {
 											data-cake-name={cake.title}
 											data-cake-price={cake.cena}
 											data-cake-img={cake.foto}
-											onclick="window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: this.getAttribute('data-cake-name'), price: this.getAttribute('data-cake-price'), img: this.getAttribute('data-cake-img'), quantity: 1 } }))"
+											onclick="window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: this.getAttribute('data-cake-name'), price: this.getAttribute('data-cake-price'), img: this.getAttribute('data-cake-img'), quantity: 1, category: 'dorty' } }))"
 											class="bg-[#0a192f] text-white w-12 h-12 rounded-2xl hover:bg-[#d4af37] transition-all duration-300 flex items-center justify-center shadow-lg active:scale-90"
 											title="Přidat do objednávky"
 										>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PickupDateInput from './PickupDateInput';
 import ConsentCheckbox from './ConsentCheckbox';
 import LegalNotices from './LegalNotices';
-import { BLOCKED_DATE_MESSAGE, isBlockedDate } from '../lib/blockedDates';
+import { getPickupDateError, getPickupHint } from '../lib/pickupRules';
 import { MAX_FILES, MAX_FILE_BYTES, uploadPrintFiles, validateSelection } from '../lib/printUpload';
 import { BINDING_ORDER_LABEL } from '../lib/legal';
 import { formatCzk } from '../lib/payments/config';
@@ -24,6 +24,12 @@ const EdiblePrintForm = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [base, setBase] = useState<string>('');
   const [qty, setQty] = useState<number>(1);
+  const [store, setStore] = useState('');
+  const [pickupDate, setPickupDate] = useState('');
+
+  // Jedlý tisk není dort → platí jen výdejní dny vybrané prodejny (bez kalendáře plné kapacity dortů)
+  const dateError = getPickupDateError(pickupDate, store, false);
+  const dateHint = getPickupHint(store, false);
 
   const unitPrice = PRINT_BASES.find((b) => b.value === base)?.price ?? null;
   const qtyValid = Number.isInteger(qty) && qty >= 1 && qty <= MAX_QTY;
@@ -37,11 +43,7 @@ const EdiblePrintForm = () => {
     const formData = new FormData(form);
     setSubmitError(null);
 
-    const rawDate = formData.get('Datum');
-    if (typeof rawDate === 'string' && isBlockedDate(rawDate)) {
-      alert(BLOCKED_DATE_MESSAGE);
-      return;
-    }
+    if (dateError) return;
 
     if (total === null) {
       setSubmitError('Vyberte typ podkladu a počet kusů (1–' + MAX_QTY + ').');
@@ -124,7 +126,7 @@ const EdiblePrintForm = () => {
           
           <div>
             <label htmlFor="edible-store" className={labelClass}>Místo vyzvednutí</label>
-            <select id="edible-store" name="Prodejna" required className={fieldClass}>
+            <select id="edible-store" name="Prodejna" required value={store} onChange={(e) => setStore(e.target.value)} className={fieldClass}>
               <option value="">Vyberte prodejnu...</option>
               <option value="Petřvald">Petřvald</option>
               <option value="Píšť">Píšť</option>
@@ -135,7 +137,7 @@ const EdiblePrintForm = () => {
 
           <div>
             <label htmlFor="edible-date" className={labelClass}>Datum vyzvednutí</label>
-            <PickupDateInput id="edible-date" name="Datum" required className={fieldClass} />
+            <PickupDateInput id="edible-date" name="Datum" required value={pickupDate} onChange={(e) => setPickupDate(e.target.value)} error={dateError} hint={dateHint} className={fieldClass} />
           </div>
         </div>
 
@@ -220,7 +222,7 @@ const EdiblePrintForm = () => {
           <LegalNotices variant="print" />
           <ConsentCheckbox id="edible-consent" />
           {submitError && <p role="alert" className="text-sm font-bold text-red-600 text-center">{submitError}</p>}
-          <button type="submit" disabled={isSubmitting || !!fileError} className="w-full disabled:opacity-60 disabled:cursor-not-allowed bg-[#0a192f] text-white py-5 rounded-2xl font-bold hover:bg-[#d4af37] hover:text-[#0a192f] transition-all shadow-lg text-lg uppercase tracking-widest cursor-pointer">
+          <button type="submit" disabled={isSubmitting || !!fileError || !!dateError} className="w-full disabled:opacity-60 disabled:cursor-not-allowed bg-[#0a192f] text-white py-5 rounded-2xl font-bold hover:bg-[#d4af37] hover:text-[#0a192f] transition-all shadow-lg text-lg uppercase tracking-widest cursor-pointer">
             {isSubmitting ? 'Nahrávám soubory a odesílám…' : BINDING_ORDER_LABEL}
           </button>
         </div>
