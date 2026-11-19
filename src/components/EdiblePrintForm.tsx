@@ -209,7 +209,7 @@ const EdiblePrintForm = () => {
           </div>
           <div className="text-center sm:text-right" aria-live="polite">
             <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500">Celková cena</p>
-            <p className="text-2xl font-black text-[#92782a]">{total !== null ? formatCzk(total) : '—'}</p>
+            <p className="text-2xl font-black text-[#735c1e]">{total !== null ? formatCzk(total) : '—'}</p>
             {total !== null && (
               <p className="text-[11px] text-slate-500 font-bold">{qty} × {formatCzk(unitPrice as number)}</p>
             )}

@@ -96,7 +96,7 @@ const CustomCakeForm = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1">
-            <label className="text-xs uppercase tracking-widest text-[#92782a]">Místo vyzvednutí</label>
+            <label className="text-xs uppercase tracking-widest text-[#735c1e]">Místo vyzvednutí</label>
             <select name="Prodejna" value={selectedShop} onChange={(e) => setSelectedShop(e.target.value)} className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" required>
               <option value="ostrava">Ostrava - Zábřeh</option>
               <option value="karvina">Karviná - Ráj</option>
@@ -105,7 +105,7 @@ const CustomCakeForm = () => {
             </select>
           </div>
           <div className="flex flex-col gap-1">
-            <label className="text-xs uppercase tracking-widest text-[#92782a]">Datum vyzvednutí</label>
+            <label className="text-xs uppercase tracking-widest text-[#735c1e]">Datum vyzvednutí</label>
             <PickupDateInput name="Datum_Vyzvednuti" min={minDate} onChange={handleDateChange} className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" required />
           </div>
         </div>
@@ -119,7 +119,7 @@ const CustomCakeForm = () => {
         <textarea name="Zprava" placeholder="Popište vaši představu..." required className="w-full p-3 h-32 bg-slate-50 rounded-xl border border-slate-200 outline-none resize-none"></textarea>
         
         <div className="p-6 bg-orange-50 border-2 border-dashed border-[#b38f2d]/30 rounded-2xl">
-          <label htmlFor="cake-photo" className="block text-xs font-bold text-[#92782a] uppercase mb-3 text-center">Inspirační obrázek (nepovinné)</label>
+          <label htmlFor="cake-photo" className="block text-xs font-bold text-[#735c1e] uppercase mb-3 text-center">Inspirační obrázek (nepovinné)</label>
           <input id="cake-photo" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.heic,.heif" onChange={handlePhotoChange} className="text-[10px] w-full" />
           <p className="mt-2 text-[10px] text-slate-500 text-center">Jedna fotka (JPG, PNG, WEBP, HEIC), max. {MAX_FILE_BYTES / 1024 / 1024} MB</p>
           {photoError && <p role="alert" className="mt-2 text-xs font-bold text-red-600 text-center">{photoError}</p>}

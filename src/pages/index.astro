@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Lightbox from '../components/Lightbox.astro';
 import productsData from '../../data.json';
 import { Image } from 'astro:assets';
 
@@ -54,7 +55,7 @@ const cakeCategories = [
 								)}
 								<div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
 							</div>
-							<span class="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-600 group-hover:text-[#92782a] text-center transition-colors leading-tight font-serif italic">{cat.name}</span>
+							<span class="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-600 group-hover:text-[#735c1e] text-center transition-colors leading-tight font-serif italic">{cat.name}</span>
 						</a>
 					)
 				})}
@@ -96,7 +97,7 @@ const cakeCategories = [
 							<div class="p-6 flex-grow flex flex-col justify-between">
 								<h3 class="text-lg font-bold mb-1 leading-tight text-[#0a192f] font-serif italic">{dessert.title}</h3>
 								<div class="space-y-4">
-									<p class="text-[#92782a] font-black text-xl">{dessert.cena}</p>
+									<p class="text-[#735c1e] font-black text-xl">{dessert.cena}</p>
 									<div class="flex flex-col items-center gap-2">
 										<button id={`init-btn-${dessertId}`} onclick={`document.getElementById('init-btn-${dessertId}').classList.add('hidden'); document.getElementById('counter-${dessertId}').classList.remove('hidden'); document.getElementById('counter-${dessertId}').classList.add('flex');`} class="w-full bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all cursor-pointer uppercase tracking-widest text-[10px]">Přidat</button>
 										<div id={`counter-${dessertId}`} class="hidden w-full items-center justify-between bg-slate-100 rounded-xl overflow-hidden border border-slate-200">
@@ -154,6 +155,7 @@ const cakeCategories = [
 				</a>
 			</div>
 		</section>
+		<Lightbox />
 	</main>
 </Layout>
 

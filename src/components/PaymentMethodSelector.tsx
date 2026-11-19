@@ -55,7 +55,7 @@ const PaymentMethodSelector = ({ value, onChange, onlineAvailable, total }: Prop
       </div>
 
       {total !== null && (
-        <p className="text-right text-xs font-black text-[#92782a]">Celkem: {formatCzk(total)}</p>
+        <p className="text-right text-xs font-black text-[#735c1e]">Celkem: {formatCzk(total)}</p>
       )}
     </fieldset>
   );

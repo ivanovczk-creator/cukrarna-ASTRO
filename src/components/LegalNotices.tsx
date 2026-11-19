@@ -12,11 +12,11 @@ interface Props {
   variant: 'cart' | 'print' | 'custom';
 }
 
-const linkClass = 'underline text-[#92782a] hover:text-[#0a192f]';
+const linkClass = 'underline text-[#735c1e] hover:text-[#0a192f]';
 
 const AllergenList = () => (
   <details className="mt-2">
-    <summary className="cursor-pointer font-bold underline text-[#92782a] hover:text-[#0a192f]">
+    <summary className="cursor-pointer font-bold underline text-[#735c1e] hover:text-[#0a192f]">
       Alergeny (1–14)
     </summary>
     <ol className="mt-2 space-y-0.5 list-none p-0 m-0">

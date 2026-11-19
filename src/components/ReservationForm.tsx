@@ -190,7 +190,7 @@ const ReservationForm = () => {
                     <img src={item.img} alt="" className="w-10 h-10 object-cover rounded-lg" loading="lazy" />
                     <div className="flex-grow">
                       <p className="font-bold text-xs leading-tight">{item.name}</p>
-                      <p className="text-[10px] text-[#92782a] font-black">{item.quantity}x {item.price}</p>
+                      <p className="text-[10px] text-[#735c1e] font-black">{item.quantity}x {item.price}</p>
                     </div>
                     <button 
                       type="button" 

@@ -1,0 +1,19 @@
+---
+// Galerie produktů (GLightbox) – vkládá se jen na stránky s odkazy třídy `.glightbox`.
+// Knihovna se bundluje z npm (žádné načítání z CDN), takže na ostatních stránkách se nenačítá vůbec.
+---
+
+<script>
+	import GLightbox from 'glightbox';
+	import 'glightbox/dist/css/glightbox.min.css';
+
+	let instance: { destroy: () => void } | null = null;
+
+	function init() {
+		instance?.destroy();
+		instance = GLightbox({ selector: '.glightbox' });
+	}
+
+	init();
+	document.addEventListener('astro:page-load', init);
+</script>

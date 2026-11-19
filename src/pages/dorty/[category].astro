@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Lightbox from '../../components/Lightbox.astro';
 import FoodNotice from '../../components/FoodNotice.astro';
 import productsData from '../../../data.json';
 import { Image } from 'astro:assets';
@@ -124,7 +125,7 @@ function getImage(path: string, images: Record<string, any>) {
 									<h3 class="text-xl font-bold text-[#0a192f] mb-2 leading-tight font-serif italic">{cake.title}</h3>
 									<p class="text-slate-500 text-[10px] uppercase tracking-[0.2em] font-bold mb-6">{cake.porce}</p>
 									<div class="mt-auto flex justify-between items-center pt-6 border-t border-slate-50">
-										<span class="text-[#92782a] font-black text-2xl">{cake.cena}</span>
+										<span class="text-[#735c1e] font-black text-2xl">{cake.cena}</span>
 										<button 
 											data-cake-name={cake.title}
 											data-cake-price={cake.cena}
@@ -152,6 +153,7 @@ function getImage(path: string, images: Record<string, any>) {
 				</div>
 			)}
 		</div>
+		<Lightbox />
 	</main>
 </Layout>
 
