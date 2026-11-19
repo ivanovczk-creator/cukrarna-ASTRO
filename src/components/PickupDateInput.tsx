@@ -28,7 +28,7 @@ const PickupDateInput = ({ error, hint, className = '', ...props }: PickupDateIn
         {...props}
         className={`${className}${error ? ' !border-red-500 ring-2 ring-red-200' : ''}`}
         aria-invalid={error ? true : undefined}
-        aria-describedby={error || hint ? messageId : undefined}
+        aria-describedby={error || hint ? messageId : props['aria-describedby']}
       />
       {error ? (
         <p id={messageId} role="alert" className="mt-2 text-xs font-bold text-red-600 leading-snug">{error}</p>

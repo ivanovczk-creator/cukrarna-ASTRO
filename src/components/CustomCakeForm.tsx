@@ -1,29 +1,27 @@
 import React, { useState } from 'react';
 import PickupDateInput from './PickupDateInput';
-import { getPickupDateError, getPickupHint } from '../lib/pickupRules';
+import { getEarliestPickup, getLeadDays, getPickupDateError, getPickupHint } from '../lib/pickupRules';
+import { useToday } from '../lib/useToday';
 import { MAX_FILE_BYTES, uploadPrintFiles, validateSelection } from '../lib/printUpload';
 import ConsentCheckbox from './ConsentCheckbox';
 import LegalNotices from './LegalNotices';
 
-// Výpočet minimálního data mimo hlavní render (šetří výkon)
-const getInitialMinDate = () => {
-  const dt = new Date();
-  dt.setDate(dt.getDate() + 7);
-  return dt.toISOString().split('T')[0];
-};
-
 const CustomCakeForm = () => {
   const [selectedShop, setSelectedShop] = useState('Ostrava (Zábřeh)');
   const [pickupDate, setPickupDate] = useState('');
-  const [minDate] = useState(getInitialMinDate()); // Stačí nastavit jednou při startu
   const [photo, setPhoto] = useState<File | null>(null);
   const [photoError, setPhotoError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   // Dort na přání je vždy dort → platí výdejní dny prodejny i dny s plnou kapacitou dortů
-  const dateError = getPickupDateError(pickupDate, selectedShop, true);
-  const dateHint = getPickupHint(selectedShop, true);
+  // Lhůta u dortu na přání zůstává 7 dní; nejdřív se spočítá nejbližší datum, pak se vyřadí blokované dny
+  const today = useToday();
+  const earliest = today
+    ? getEarliestPickup({ store: selectedShop, includesCake: true, leadDays: getLeadDays([], { customCake: true }), today })
+    : undefined;
+  const dateError = getPickupDateError(pickupDate, selectedShop, true, earliest);
+  const dateHint = getPickupHint(selectedShop, true, earliest);
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
@@ -90,9 +88,10 @@ const CustomCakeForm = () => {
           </div>
           <div className="flex flex-col gap-1">
             <label className="text-xs uppercase tracking-widest text-[#735c1e]">Datum vyzvednutí</label>
-            <PickupDateInput name="Datum" min={minDate} value={pickupDate} onChange={(e) => setPickupDate(e.target.value)} error={dateError} hint={dateHint} className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" required />
+            <PickupDateInput name="Datum" min={earliest?.date} value={pickupDate} onChange={(e) => setPickupDate(e.target.value)} error={dateError} aria-describedby="cake-date-hint" className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" required />
           </div>
         </div>
+        {dateHint && <p id="cake-date-hint" className="-mt-3 text-xs text-slate-500 leading-snug">{dateHint}</p>}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input type="text" name="Jmeno" placeholder="Vaše jméno" required className="p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" />

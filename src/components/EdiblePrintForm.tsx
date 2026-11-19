@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import PickupDateInput from './PickupDateInput';
 import ConsentCheckbox from './ConsentCheckbox';
 import LegalNotices from './LegalNotices';
-import { getPickupDateError, getPickupHint } from '../lib/pickupRules';
+import { getEarliestPickup, getLeadDays, getPickupDateError, getPickupHint } from '../lib/pickupRules';
+import { useToday } from '../lib/useToday';
 import { MAX_FILES, MAX_FILE_BYTES, uploadPrintFiles, validateSelection } from '../lib/printUpload';
 import { BINDING_ORDER_LABEL } from '../lib/legal';
 import { formatCzk } from '../lib/payments/config';
@@ -24,8 +25,15 @@ const EdiblePrintForm = () => {
   const [pickupDate, setPickupDate] = useState('');
 
   // Jedlý tisk není dort → platí jen výdejní dny vybrané prodejny (bez kalendáře plné kapacity dortů)
-  const dateError = getPickupDateError(pickupDate, store, false);
-  const dateHint = getPickupHint(store, false);
+  // Tisk je obvykle hotový do druhého dne (termín se počítá od následujícího dne), předává se ale jen
+  // jen v dny určené interním pravidlem (PRINT_PICKUP_DAYS); potom se vyřadí blokované dny (zavřeno, svátky)
+  const printOptions = { print: true } as const;
+  const today = useToday();
+  const earliest = today
+    ? getEarliestPickup({ store, includesCake: false, leadDays: getLeadDays([], printOptions), today, print: true })
+    : undefined;
+  const dateError = getPickupDateError(pickupDate, store, false, earliest, printOptions);
+  const dateHint = getPickupHint(store, false, earliest, printOptions);
 
   const unitPrice = PRINT_BASE.price;
   const qtyValid = Number.isInteger(qty) && qty >= 1 && qty <= MAX_QTY;
@@ -134,7 +142,7 @@ const EdiblePrintForm = () => {
 
           <div>
             <label htmlFor="edible-date" className={labelClass}>Datum vyzvednutí</label>
-            <PickupDateInput id="edible-date" name="Datum" required value={pickupDate} onChange={(e) => setPickupDate(e.target.value)} error={dateError} hint={dateHint} className={fieldClass} />
+            <PickupDateInput id="edible-date" name="Datum" required min={earliest?.date} value={pickupDate} onChange={(e) => setPickupDate(e.target.value)} error={dateError} hint={dateHint} className={fieldClass} />
           </div>
         </div>
 

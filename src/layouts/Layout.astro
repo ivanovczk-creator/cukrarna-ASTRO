@@ -50,6 +50,19 @@ const {
 
 		<ViewTransitions />
 
+		<!-- Fronta pro „Do košíku“: ostrov s košíkem se hydratuje až ve volné chvíli (client:idle), takže kliknutí,
+		     které přijde dřív, si tady zapamatujeme; košík (ReservationForm.tsx) ji po hydrataci zpracuje. -->
+		<script is:inline>
+			window.__cartQueue = window.__cartQueue || [];
+			window.__cartShells = window.__cartShells || 0;
+			if (!window.__cartQueueBound) {
+				window.__cartQueueBound = true;
+				window.addEventListener('add-to-cart', function (e) {
+					if (!window.__cartShells) window.__cartQueue.push(e.detail);
+				});
+			}
+		</script>
+
 		<!--
 			GDPR: Google Fonts byly odstraněny (nikde se nepoužívaly a přenášely IP adresu návštěvníka do Googlu).
 			Google Analytics se načítá až po souhlasu v cookies liště (viz components/CookieBanner.astro).
