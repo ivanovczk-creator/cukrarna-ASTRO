@@ -1,27 +1,30 @@
 /**
- * POST /.netlify/functions/create-payment
- * Založí platbu u Comgate (API v1.0) a vrátí URL platební brány.
+ * POST /api/create-payment
+ * Zaregistruje objednávku jako „čeká na platbu“ a založí platbu v Comgate (REST API v2.0).
  *
  * Body (JSON): { orderId, email, name, phone?, items: [{ name, quantity }] }
- * Odpověď:     { redirect: "https://payments.comgate.cz/client/instructions/index?id=..." }
+ * Odpověď:     { redirect: "https://pay1.comgate.cz/...", transId }
  *
- * ENV (Netlify → Environment variables):
- *   COMGATE_MERCHANT   ID e-shopu z Comgate Klientského portálu
- *   COMGATE_SECRET     heslo pro API (Připojení obchodů → konkrétní propojení)
- *   COMGATE_TEST       "true" = testovací platby (výchozí true, dokud nenastavíte "false")
+ * Částka se vždy přepočítá na serveru z data.json (cena z prohlížeče se nepoužije), v haléřích, měna CZK.
+ * Platba při převzetí tuto funkci nevolá – web ji volá jen při volbě „Online“.
+ *
+ * Potřebné ENV: COMGATE_MERCHANT_ID (524485), COMGATE_SECRET, COMGATE_TEST – viz netlify/lib/comgate.mjs.
  */
 import { priceItems } from '../lib/catalog.mjs';
+import { ORDER_ID_RE, createPayment, getConfig, isConfigured } from '../lib/comgate.mjs';
+import { readPayment, settlePayment, writePayment } from '../lib/payment-flow.mjs';
 
-const COMGATE_CREATE_URL = 'https://payments.comgate.cz/v1.0/create';
 const json = (body, status = 200) =>
-  new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
+  new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
+  });
 
 export default async (req) => {
   if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
 
-  const merchant = process.env.COMGATE_MERCHANT;
-  const secret = process.env.COMGATE_SECRET;
-  if (!merchant || !secret) return json({ error: 'Online platby nejsou nakonfigurovány' }, 503);
+  const cfg = getConfig();
+  if (!isConfigured(cfg)) return json({ error: 'Online platby nejsou nakonfigurovány' }, 503);
 
   let body;
   try {
@@ -31,7 +34,7 @@ export default async (req) => {
   }
 
   const { orderId, email, name, items } = body ?? {};
-  if (!/^BL-\d{8}-[A-Z0-9]{4}$/.test(orderId ?? '')) return json({ error: 'Neplatné číslo objednávky' }, 400);
+  if (!ORDER_ID_RE.test(orderId ?? '')) return json({ error: 'Neplatné číslo objednávky' }, 400);
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email ?? '')) return json({ error: 'Neplatný e-mail' }, 400);
 
   let priced;
@@ -40,40 +43,55 @@ export default async (req) => {
   } catch (e) {
     return json({ error: e.message }, 400);
   }
+  const amount = Math.round(priced.total * 100); // haléře
+  if (amount < 100 || amount > 100000000) return json({ error: 'Částka je mimo povolený rozsah online platby' }, 400);
 
-  const params = new URLSearchParams({
-    merchant,
-    secret,
-    test: process.env.COMGATE_TEST === 'false' ? 'false' : 'true',
-    price: String(Math.round(priced.total * 100)), // Comgate chce haléře
+  // 1) evidence: objednávka čeká na platbu
+  const now = new Date().toISOString();
+  let record = await readPayment(orderId);
+  if (record?.status === 'PAID') return json({ error: 'Objednávka je již zaplacena' }, 409);
+  if (record && record.amount !== amount) return json({ error: 'Částka objednávky se liší od založené platby' }, 409);
+
+  record = {
+    orderId,
+    status: record?.status === 'AUTHORIZED' ? 'AUTHORIZED' : 'PENDING',
+    amount,
     curr: 'CZK',
-    label: `Objednavka ${orderId}`.slice(0, 16),
-    refId: orderId,
-    method: 'ALL',
-    email,
-    fullName: String(name ?? '').slice(0, 100),
-    country: 'CZ',
-    lang: 'cs',
-    prepareOnly: 'true', // vrátí redirect URL místo přímého přesměrování
-  });
+    test: cfg.test,
+    transIds: record?.transIds ?? [],
+    createdAt: record?.createdAt ?? now,
+    updatedAt: now,
+    syncedStatus: null,
+  };
+  await writePayment(record);
 
-  let res;
+  // 2) založení platby v Comgate
+  let created;
   try {
-    res = await fetch(COMGATE_CREATE_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: params,
-    });
+    created = await createPayment(cfg, { orderId, amount, email, name });
   } catch (e) {
-    console.error('[create-payment] Comgate nedostupný', e);
-    return json({ error: 'Platební brána je nedostupná' }, 502);
-  }
-
-  const result = Object.fromEntries(new URLSearchParams(await res.text()));
-  if (result.code !== '0' || !result.redirect) {
-    console.error('[create-payment] Comgate chyba', result.code, result.message);
+    console.error('[create-payment]', orderId, e.message);
+    if (record.transIds.length === 0) {
+      // objednávku je potřeba v Pohodě označit, že online platba nezačala (best-effort)
+      await settlePayment(cfg, record, 'CANCELLED').catch(() => {});
+    }
     return json({ error: 'Platbu se nepodařilo založit' }, 502);
   }
 
-  return json({ redirect: result.redirect, transId: result.transId });
+  record = {
+    ...record,
+    transIds: [...record.transIds, created.transId],
+    transId: created.transId,
+    redirect: created.redirect,
+    updatedAt: new Date().toISOString(),
+  };
+  await writePayment(record);
+
+  console.log('[create-payment] založeno', JSON.stringify({ orderId, transId: created.transId, amount, test: cfg.test }));
+  return json({ redirect: created.redirect, transId: created.transId });
+};
+
+export const config = {
+  path: '/api/create-payment',
+  rateLimit: { windowLimit: 20, windowSize: 60, aggregateBy: ['ip', 'domain'] },
 };

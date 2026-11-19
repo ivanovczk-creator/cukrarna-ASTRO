@@ -9,13 +9,27 @@ Košík (ReservationForm.tsx)
   │
   │  2) jen při volbě "Online":
   ▼
-netlify/functions/create-payment.mjs  ──▶ Comgate /v1.0/create ──▶ přesměrování zákazníka na bránu
-                                                                      │
-                          /dekujeme?platba=zaplaceno|zrusena|cekajici ◀┘  (návratová stránka pro zákazníka)
+POST /api/create-payment  (netlify/functions/create-payment.mjs)
+  │  objednávku zapíše jako PENDING (Netlify Blobs, store "payments"), částku přepočítá na serveru
+  ▼
+Comgate REST v2.0: POST /v2.0/payment.json ──▶ redirect zákazníka na platební bránu
+                                                   │
+        ┌──────────────────────────────────────────┴──────────────────────┐
+        │ push na pozadí (server → server)                                 │ návrat zákazníka
+        ▼                                                                  ▼
+POST /api/comgate-notify                                    /dekujeme?platba=…&refId=…
+  ověří merchant + secret, stav/částku/měnu                   stránka se zeptá GET /api/payment-status
+  znovu načte z Comgate API (GET status)                      (parametry v URL nejsou důkaz zaplacení)
+  │  PAID / CANCELLED
+  ▼
+pohoda-webhook ──▶ Apps Script { action: "payment-update" }
+                   → XML objednávky: poznámka „Platba: ZAPLACENO online…“ + značka [ZAPLACENO ONLINE] v textu
+                   → interní e-mail na NOTIFY_EMAIL
 ```
 
-Napojení na Make.com bylo odstraněno (funkce `submission-created` a `comgate-callback`, knihovna `make.mjs`).
-Platební brána už proto neposílá push notifikace do tohoto projektu – stav plateb sledujte v Comgate Klientském portálu.
+Platba při převzetí tuto větev nepoužívá (žádné volání Comgate, žádné přesměrování).
+Pokud propsání do objednávky selže (např. XML objednávky ještě neexistuje), `comgate-notify` vrátí 5xx a Comgate notifikaci zopakuje.
+Napojení na Make.com bylo odstraněno.
 Ceny se **vždy přepočítají na serveru** z `data.json` (`netlify/lib/catalog.mjs`); cena z prohlížeče se k platbě nepoužije.
 Položky v košíku se proto musí jmenovat stejně jako `title` v `data.json` a mít cenu ve tvaru `"35 Kč"`.
 
@@ -27,9 +41,11 @@ Po změně proměnných spusťte nový deploy (`PUBLIC_*` se vkládá při build
 | Proměnná | Povinná | Kde se používá | Odkud hodnotu vzít / poznámka |
 |---|---|---|---|
 | `PUBLIC_ONLINE_PAYMENTS` | ano pro online platby | web (build) | `true` zapne volbu „Online kartou“. **Viditelná v prohlížeči** – nedávat sem tajné údaje. |
-| `COMGATE_MERCHANT` | ano pro online platby | `create-payment` | ID e-shopu z Comgate Klientského portálu (Připojení obchodů). |
-| `COMGATE_SECRET` | ano pro online platby | `create-payment` | Heslo pro API u stejného propojení obchodu. **Tajné.** |
-| `COMGATE_TEST` | ne (výchozí `true`) | `create-payment` | `false` až po schválení ostrého provozu Comgatem. |
+| `COMGATE_MERCHANT_ID` | ne (výchozí `524485`) | `create-payment`, `comgate-notify`, `payment-status` | ID obchodu z Comgate Klientského portálu. Starší název `COMGATE_MERCHANT` se stále čte. |
+| `COMGATE_SECRET` | ano pro online platby | stejné funkce | Heslo pro komunikaci na pozadí u propojení 524485. **Tajné** – jen scope Functions, nikdy `PUBLIC_*`. |
+| `COMGATE_TEST` | ne (výchozí `true`) | stejné funkce | `false` až po schválení ostrého provozu Comgatem. |
+| `SITE_URL` | ne | stejné funkce | Veřejná adresa webu pro návratové URL, výchozí `https://cukrarstviblahutovi.cz`. |
+| `WEBHOOK_TOKEN` | ano (už nastaveno) | `pohoda-webhook` | Stejný token jako vlastnost skriptu v Apps Scriptu; používá se i pro propsání platby do objednávky. |
 | `POHODA_ICO` | ano pro POHODU | generátor XML (`netlify/lib/pohoda.mjs`) | IČO účetní jednotky. Bez něj se použije zástupné `00000000`. |
 | `POHODA_RATE_VAT` | ne (výchozí `low`) | generátor XML | `none` / `low` / `high` / `third` – ověřte s účetní. |
 | `POHODA_MSERVER_URL` | jen při přímém odeslání | `integrations/pohoda/send-to-pohoda.mjs` | Adresa mServeru, např. `http://host:444/xml`. Musí být dostupný zvenčí (VPN / reverzní proxy). |
@@ -42,13 +58,17 @@ Poznámky:
 - Výchozí stav bez jakékoli proměnné: web funguje, objednávky se ukládají v Netlify Forms, online platba je vypnutá.
 ## 1. Zapnutí online plateb (Comgate)
 
-1. V Comgate Klientském portálu vytvořte propojení obchodu, zapište **ID e-shopu** a **heslo pro API**.
-2. V Netlify nastavte proměnné z `.env.example` (`COMGATE_MERCHANT`, `COMGATE_SECRET`, `COMGATE_TEST=true`).
-3. V propojení obchodu v Comgate nastavte URL:
-   - zaplaceno: `https://cukrarstviblahutovi.cz/dekujeme?platba=zaplaceno&refId=${refId}`
-   - zrušeno / chyba: `https://cukrarstviblahutovi.cz/dekujeme?platba=zrusena&refId=${refId}`
-4. Nastavte `PUBLIC_ONLINE_PAYMENTS=true` a přebuildujte web (proměnná se vkládá při buildu).
-5. Vyzkoušejte v testovacím režimu, až potom `COMGATE_TEST=false` (vyžaduje schválení ze strany Comgate).
+1. V Comgate Klientském portálu otevřete propojení obchodu **524485** a zapište **heslo pro API** (secret).
+2. V Netlify nastavte proměnné z `.env.example` (`COMGATE_MERCHANT_ID=524485`, `COMGATE_SECRET`, `COMGATE_TEST=true`).
+3. V detailu propojení 524485 nastavte URL (adresy se vždy shodují s těmi, které web posílá u každé platby):
+   - URL pro předání výsledku platby (push): `https://cukrarstviblahutovi.cz/api/comgate-notify`
+   - zaplaceno: `https://cukrarstviblahutovi.cz/dekujeme?refId=${refId}&platba=zaplaceno`
+   - zrušeno / chyba: `https://cukrarstviblahutovi.cz/dekujeme?refId=${refId}&platba=zrusena`
+   - čekající: `https://cukrarstviblahutovi.cz/dekujeme?refId=${refId}&platba=cekajici`
+   - **IP adresy** (omezení přístupu) nechte prázdné – funkce na Netlify nemají pevnou odchozí IP.
+4. Nasaďte nový `apps-script/Code.gs` (Implementovat → Nová verze), aby uměl `payment-update`.
+5. Nastavte `PUBLIC_ONLINE_PAYMENTS=true` a přebuildujte web (proměnná se vkládá při buildu).
+6. Vyzkoušejte v testovacím režimu, až potom `COMGATE_TEST=false` (vyžaduje schválení ze strany Comgate).
 
 Dokud je `PUBLIC_ONLINE_PAYMENTS` vypnutá, formulář nabízí jen platbu při převzetí.
 

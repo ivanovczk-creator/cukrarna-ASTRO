@@ -38,6 +38,8 @@ export function xmlEscape(value) {
  * @property {string} [pickupDate]         YYYY-MM-DD
  * @property {string} [note]
  * @property {'cash'|'online'} paymentMethod
+ * @property {'PAID'|'PENDING'|'CANCELLED'} [paymentStatus]   stav online platby (výchozí PENDING = čeká na úhradu)
+ * @property {string} [transId]            ID transakce Comgate (u zaplacené online platby)
  * @property {{name:string, quantity:number, unitPrice:number}[]} lines   jednotkové ceny VČETNĚ DPH
  */
 
@@ -46,8 +48,18 @@ export function buildPohodaOrderXml(order, opts = {}) {
   const ico = opts.ico ?? process.env.POHODA_ICO ?? '00000000';
   const rateVAT = opts.rateVAT ?? process.env.POHODA_RATE_VAT ?? 'low';
   const created = (opts.createdAt ?? new Date()).toISOString().slice(0, 10);
-  const pay = order.paymentMethod === 'online' ? 'Online kartou (Comgate)' : 'Při převzetí';
-  const headerText = `Web objednávka ${order.orderId} – ${order.store || 'prodejna neuvedena'}`;
+  const online = order.paymentMethod === 'online';
+  const payStatus = order.paymentStatus ?? 'PENDING';
+  // shodné formulace jako v apps-script/Code.gs (paymentNote_ / paymentMarker_)
+  const pay = !online
+    ? 'Při převzetí'
+    : payStatus === 'PAID'
+      ? `ZAPLACENO online kartou (Comgate)${order.transId ? ', transakce ' + order.transId : ''}`
+      : payStatus === 'CANCELLED'
+        ? 'Online platba (Comgate) NEDOKONČENA / zrušena – neuhrazeno, k úhradě při převzetí'
+        : 'Online kartou (Comgate) – ČEKÁ NA ÚHRADU';
+  const marker = !online ? '' : payStatus === 'PAID' ? ' [ZAPLACENO ONLINE]' : payStatus === 'CANCELLED' ? ' [ONLINE PLATBA ZRUŠENA]' : ' [ONLINE – ČEKÁ NA ÚHRADU]';
+  const headerText = `Web objednávka ${order.orderId} – ${order.store || 'prodejna neuvedena'}${marker}`;
   const note = [`Platba: ${pay}`, order.note].filter(Boolean).join(' | ');
 
   const items = order.lines

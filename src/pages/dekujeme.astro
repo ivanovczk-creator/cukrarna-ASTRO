@@ -8,7 +8,7 @@ import { COMPANY } from '../lib/legal';
 			<h1 id="thanks-title" class="text-4xl md:text-6xl font-serif text-[#0a192f] mb-6 italic font-bold">
 				Děkujeme za zprávu!
 			</h1>
-			<p id="thanks-text" class="text-lg md:text-xl text-slate-700 mb-6 leading-relaxed font-bold">
+			<p id="thanks-text" role="status" aria-live="polite" class="text-lg md:text-xl text-slate-700 mb-6 leading-relaxed font-bold">
 				Vaši poptávku jsme v pořádku přijali. Co nejdříve se na ni podíváme a ozveme se vám zpět, abychom doladili detaily.
 			</p>
 			<p id="thanks-ref" class="hidden mb-6 text-sm font-bold text-slate-500"></p>
@@ -24,39 +24,88 @@ import { COMPANY } from '../lib/legal';
 
 <script>
 	// Návrat z platební brány Comgate: ?platba=zaplaceno|zrusena|cekajici&refId=BL-...
-	function showPaymentResult() {
-		const params = new URLSearchParams(location.search);
-		const status = params.get('platba');
-		if (!status) return;
+	// Parametry v adrese si může zákazník změnit, proto se skutečný stav platby vždy ověřuje na serveru
+	// (/api/payment-status ← push notifikace z Comgate). Úspěch se zobrazí jen při potvrzení serverem.
+	type Status = 'PAID' | 'PENDING' | 'CANCELLED' | 'UNKNOWN';
 
-		const messages: Record<string, { title: string; text: string }> = {
-			zaplaceno: {
-				title: 'Platba proběhla úspěšně',
-				text: 'Děkujeme, vaši platbu jsme přijali a objednávku zpracováváme. Potvrzení objednávky vám pošleme e-mailem.',
-			},
-			zrusena: {
-				title: 'Platba nebyla dokončena',
-				text: 'Platba byla zrušena nebo se nezdařila. Objednávku jsme přijali – můžete zaplatit při převzetí na prodejně, nebo nás kontaktujte a platbu zopakujeme.',
-			},
-			cekajici: {
-				title: 'Platba čeká na potvrzení',
-				text: 'Platbu zatím banka nepotvrdila. Jakmile ji obdržíme, dáme vám vědět e-mailem.',
-			},
-		};
-		const message = messages[status];
-		if (!message) return;
+	const MESSAGES: Record<'PAID' | 'PENDING' | 'CANCELLED' | 'CHECKING' | 'UNVERIFIED', { title: string; text: string }> = {
+		PAID: {
+			title: 'Platba proběhla úspěšně',
+			text: 'Děkujeme, vaši platbu kartou jsme přijali a objednávku zpracováváme. Potvrzení objednávky vám pošleme e-mailem. Zboží si vyzvednete v objednaném termínu na vybrané prodejně.',
+		},
+		PENDING: {
+			title: 'Platba čeká na potvrzení',
+			text: 'Platbu zatím banka nepotvrdila. Objednávku jsme přijali – jakmile platbu obdržíme, dáme vám vědět e-mailem.',
+		},
+		CANCELLED: {
+			title: 'Platba nebyla dokončena',
+			text: 'Platba byla zrušena nebo se nezdařila, objednávku jsme ale přijali. Ozveme se vám ohledně platby, případně můžete zaplatit při převzetí na prodejně, nebo nás kontaktujte a platbu zopakujeme.',
+		},
+		CHECKING: {
+			title: 'Ověřujeme stav platby…',
+			text: 'Chvilku strpení, zjišťujeme výsledek platby u platební brány.',
+		},
+		UNVERIFIED: {
+			title: 'Stav platby se nepodařilo ověřit',
+			text: 'Objednávku jsme přijali. Pokud platba z vašeho účtu odešla, objednávku zpracujeme a potvrdíme e-mailem. V případě pochybností nás prosím kontaktujte.',
+		},
+	};
 
+	function render(kind: keyof typeof MESSAGES) {
+		const message = MESSAGES[kind];
 		const title = document.getElementById('thanks-title');
 		const text = document.getElementById('thanks-text');
-		const ref = document.getElementById('thanks-ref');
 		if (title) title.textContent = message.title;
 		if (text) text.textContent = message.text;
+	}
 
-		const refId = params.get('refId');
-		if (ref && refId && /^BL-\d{8}-[A-Z0-9]{4}$/.test(refId)) {
+	async function fetchStatus(refId: string): Promise<Status> {
+		try {
+			const res = await fetch(`/api/payment-status?refId=${encodeURIComponent(refId)}`, { cache: 'no-store' });
+			if (!res.ok) return 'UNKNOWN';
+			const data = await res.json();
+			return ['PAID', 'PENDING', 'CANCELLED'].includes(data?.status) ? data.status : 'UNKNOWN';
+		} catch {
+			return 'UNKNOWN';
+		}
+	}
+
+	const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+	async function showPaymentResult() {
+		const params = new URLSearchParams(location.search);
+		const hint = params.get('platba');
+		if (!hint) return;
+
+		const refId = params.get('refId') ?? '';
+		const validRef = /^BL-\d{8}-[A-Z0-9]{4}$/.test(refId);
+
+		const ref = document.getElementById('thanks-ref');
+		if (ref && validRef) {
 			ref.textContent = `Číslo objednávky: ${refId}`;
 			ref.classList.remove('hidden');
 		}
+
+		if (!validRef) {
+			render(hint === 'zrusena' ? 'CANCELLED' : 'UNVERIFIED');
+			return;
+		}
+
+		render('CHECKING');
+		// Comgate vrací zákazníka až po předání výsledku na pozadí; kdyby push o chvilku zaostal, zkusíme to pár vteřin znovu
+		const attempts = hint === 'zaplaceno' ? 5 : 2;
+		let status: Status = 'UNKNOWN';
+		for (let i = 0; i < attempts; i += 1) {
+			status = await fetchStatus(refId);
+			if (status === 'PAID' || status === 'CANCELLED') break;
+			if (i < attempts - 1) await sleep(2500);
+		}
+
+		if (status === 'PAID') render('PAID');
+		else if (status === 'CANCELLED') render('CANCELLED');
+		else if (status === 'PENDING') render('PENDING');
+		else if (hint === 'zrusena') render('CANCELLED');
+		else render('UNVERIFIED');
 	}
 	document.addEventListener('astro:page-load', showPaymentResult);
 </script>

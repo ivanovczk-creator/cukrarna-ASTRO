@@ -5,7 +5,7 @@
  * (Netlify → Site settings → Environment variables). Dokud je vypnutá,
  * objednávkový formulář nabízí jen platbu při převzetí a chová se jako dřív.
  *
- * Tajné údaje (COMGATE_MERCHANT, COMGATE_SECRET…) jsou jen v Netlify Functions,
+ * Tajné údaje (COMGATE_SECRET) a nastavení obchodu (COMGATE_MERCHANT_ID…) jsou jen v Netlify Functions,
  * nikdy se nedostanou do prohlížeče. Viz integrations/README.md.
  */
 
@@ -14,7 +14,12 @@ export type PaymentMethod = 'cash' | 'online';
 export const ONLINE_PAYMENTS_ENABLED: boolean =
   import.meta.env.PUBLIC_ONLINE_PAYMENTS === 'true';
 
-export const CREATE_PAYMENT_ENDPOINT = '/.netlify/functions/create-payment';
+export const CREATE_PAYMENT_ENDPOINT = '/api/create-payment';
+
+/** Stav platby pro stránku /dekujeme (odpověď neobsahuje osobní údaje). */
+export const PAYMENT_STATUS_ENDPOINT = '/api/payment-status';
+
+export type PaymentStatus = 'PAID' | 'PENDING' | 'CANCELLED' | 'UNKNOWN';
 
 export const PAYMENT_METHODS: { id: PaymentMethod; label: string; hint: string }[] = [
   { id: 'cash', label: 'Při převzetí', hint: 'Hotově nebo kartou na prodejně' },

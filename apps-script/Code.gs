@@ -13,12 +13,14 @@
  *
  * Po úspěšné interní notifikaci (NOTIFY_EMAIL) se zákazníkovi s platným e-mailem pošle potvrzení
  * (ne u testu, ne u duplicit; selhání potvrzení běh neshodí, jen pošle upozornění na NOTIFY_EMAIL).
+ * Online platba (Comgate): netlify/functions/comgate-notify.mjs posílá { action: 'payment-update', orderId, status, transId, amount }
+ * → handlePaymentUpdate_ přepíše v XML objednávky poznámku „Platba: …“ a značku v textu ([ZAPLACENO ONLINE]) a pošle interní e-mail.
  * Odpověď je vždy JSON { ok: true|false, version, confirmation: sent|skipped|failed, ... } – vyhodnocuje ji pohoda-webhook.mjs.
  * Test z editoru: funkce testConfirmation (bez podtržítka, jinak by nešla spustit).
  */
 
 /** Verze kódu – po nasazení ji uvidíte v odpovědi na GET adresy /exec (kontrola, že běží správná verze). */
-const VERSION = '2026-11-19-confirm-diag';
+const VERSION = '2026-11-19-comgate-payment';
 
 const CONFIG = {
   NOTIFY_EMAIL: 'objednavky@cukrarstviblahutovi.cz',
@@ -91,6 +93,11 @@ function doPost(e) {
       return json_({ ok: true, test: true, version: VERSION, note: 'nic nezapsáno ani neodesláno' });
     }
 
+    // výsledek online platby z Comgate (posílá netlify/functions/comgate-notify.mjs přes pohoda-webhook)
+    if (parsed.src && parsed.src.action === 'payment-update') {
+      return json_(Object.assign({ ok: true, version: VERSION, handledForm: 'payment-update' }, handlePaymentUpdate_(parsed.src)));
+    }
+
     const req = normalizeRequest_(parsed);
     const result = req.type.xml ? handleOrder_(req) : handleRequest_(req, parsed);
 
@@ -139,6 +146,89 @@ function handleOrder_(req) {
 
   // zákaznické potvrzení až po úspěšné interní notifikaci; jeho selhání běh neshodí
   return Object.assign({ orderId: req.orderId }, confirmationResult_(sendCustomerConfirmation_(req)));
+}
+
+// ---------------------------------------------------------------------------------------------
+// Online platba (Comgate)
+// ---------------------------------------------------------------------------------------------
+
+/** Text pro poznámku objednávky (Pohoda → Poznámka) podle stavu online platby. */
+function paymentNote_(status, p) {
+  p = p || {};
+  if (status === 'PAID') {
+    return 'ZAPLACENO online kartou (Comgate)' +
+      (p.transId ? ', transakce ' + p.transId : '') +
+      (p.amount ? ', ' + (Number(p.amount) / 100) + ' Kč' : '') +
+      (p.test ? ' [TESTOVACÍ PLATBA]' : '');
+  }
+  if (status === 'CANCELLED') {
+    return 'Online platba (Comgate) NEDOKONČENA / zrušena – neuhrazeno, k úhradě při převzetí';
+  }
+  return 'Online kartou (Comgate) – ČEKÁ NA ÚHRADU';
+}
+
+/** Krátká značka v textu objednávky (v Pohodě je vidět ve výpisu objednávek). */
+function paymentMarker_(status) {
+  if (status === 'PAID') return '[ZAPLACENO ONLINE]';
+  if (status === 'CANCELLED') return '[ONLINE PLATBA ZRUŠENA]';
+  return '[ONLINE – ČEKÁ NA ÚHRADU]';
+}
+
+/**
+ * Propíše výsledek online platby do XML objednávky na Disku (přepíše poznámku a značku v textu)
+ * a pošle interní e-mail. Idempotentní: opakované volání s týmž stavem nic neduplikuje (e-mail se pošle jednou).
+ * Když XML objednávky ještě neexistuje (platba dorazila dřív než objednávka), vrací chybu – netlify funkce
+ * i Comgate pak notifikaci zopakují.
+ */
+function handlePaymentUpdate_(p) {
+  const orderId = String(p.orderId || '');
+  const status = String(p.status || '').toUpperCase();
+  if (!/^BL-\d{8}-[A-Z0-9]{4}$/.test(orderId)) throw new Error('Neplatné číslo objednávky');
+  if (status !== 'PAID' && status !== 'CANCELLED') throw new Error('Nepodporovaný stav platby: ' + status);
+
+  const folder = DriveApp.getFolderById(CONFIG.XML_FOLDER_ID);
+  const files = folder.getFilesByName(orderId + '.xml');
+  if (!files.hasNext()) throw new Error('order-not-found: XML objednávky ' + orderId + ' zatím neexistuje');
+
+  const file = files.next();
+  let xml = file.getBlob().getDataAsString('UTF-8');
+  const note = paymentNote_(status, p);
+  const marker = paymentMarker_(status);
+
+  // poznámka: „Platba: … | poznámka zákazníka“ → vyměníme jen část o platbě
+  xml = xml.replace(/<ord:note>Platba: [^<|]*?(?= \| |<\/ord:note>)/, function () {
+    return '<ord:note>Platba: ' + x_(note);
+  });
+  // text objednávky: přidáme / vyměníme značku stavu platby
+  xml = xml.replace(/(<ord:text>[^<]*?)( \[(?:ONLINE|ZAPLACENO)[^\]<]*\])?(<\/ord:text>)/, function (m, head, oldMarker, tail) {
+    return head + ' ' + x_(marker) + tail;
+  });
+  file.setContent(xml);
+
+  const cache = CacheService.getScriptCache();
+  const key = 'pay:' + orderId + ':' + status;
+  let emailed = false;
+  if (!cache.get(key)) {
+    const paid = status === 'PAID';
+    MailApp.sendEmail({
+      to: CONFIG.NOTIFY_EMAIL,
+      subject: (paid ? 'Online platba ZAPLACENA – ' : 'Online platba NEDOKONČENA – ') + orderId,
+      body: [
+        paid ? 'Zákazník zaplatil objednávku online kartou přes Comgate.' : 'Online platba objednávky nebyla dokončena (zrušena / nezdařila se).',
+        '',
+        'Objednávka: ' + orderId,
+        'Stav: ' + note,
+        paid ? '' : 'Objednávka zůstává v systému – domluvte se se zákazníkem na úhradě (např. při převzetí).',
+        'XML objednávky na Disku (' + orderId + '.xml) bylo aktualizováno: poznámka „Platba: …“ a značka v textu objednávky.',
+        'Pokud už byla objednávka naimportována do Pohody před úhradou, upravte poznámku ručně.',
+      ].join('\n'),
+      name: CONFIG.SENDER_NAME,
+    });
+    cache.put(key, '1', 21600);
+    emailed = true;
+  }
+
+  return { orderId: orderId, payment: status, xmlUpdated: true, emailed: emailed };
 }
 
 /** Ostatní formuláře: přehledný e-mail. Idempotence přes ID odeslání (nebo otisk těla). */
@@ -498,7 +588,10 @@ function buildPohodaXml_(o) {
   }).join('');
 
   const dateIssued = Utilities.formatDate(new Date(), 'Europe/Prague', 'yyyy-MM-dd');
-  const payLabel = o.paymentLabel || 'Při převzetí';
+  // online platba: v okamžiku objednávky ještě neuhrazeno – po zaplacení přepíše stav handlePaymentUpdate_
+  const online = o.paymentMethod === 'online';
+  const payLabel = online ? paymentNote_('PENDING') : (o.paymentLabel || 'Při převzetí');
+  const headerText = 'Web objednávka ' + o.orderId + ' – ' + o.store + (online ? ' ' + paymentMarker_('PENDING') : '');
 
   return (
     '<?xml version="1.0" encoding="UTF-8"?>\n' +
@@ -509,7 +602,7 @@ function buildPohodaXml_(o) {
     '<ord:numberOrder>' + x_(o.orderId) + '</ord:numberOrder>' +
     '<ord:date>' + dateIssued + '</ord:date>' +
     (o.date ? '<ord:dateDelivery>' + x_(o.date) + '</ord:dateDelivery>' : '') +
-    '<ord:text>' + x_('Web objednávka ' + o.orderId + ' – ' + o.store) + '</ord:text>' +
+    '<ord:text>' + x_(headerText) + '</ord:text>' +
     '<ord:partnerIdentity><typ:address>' +
     '<typ:name>' + x_(o.name) + '</typ:name>' +
     (o.email ? '<typ:email>' + x_(o.email) + '</typ:email>' : '') +
