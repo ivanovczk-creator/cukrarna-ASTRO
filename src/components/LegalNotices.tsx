@@ -67,7 +67,7 @@ const LegalNotices = ({ variant }: Props) => {
           . Platba proběhne při převzetí na zvolené prodejně.
         </p>
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
-          <p>Jedlý papír a fondánový list mohou obsahovat alergeny (např. lepek, sóju, mléko, vejce).</p>
+          <p>Fondánový list může obsahovat alergeny (např. lepek, sóju, mléko, vejce).</p>
           <AllergenList />
         </div>
       </div>

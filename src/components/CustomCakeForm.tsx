@@ -13,7 +13,7 @@ const getInitialMinDate = () => {
 };
 
 const CustomCakeForm = () => {
-  const [selectedShop, setSelectedShop] = useState('ostrava');
+  const [selectedShop, setSelectedShop] = useState('Ostrava (Zábřeh)');
   const [pickupDate, setPickupDate] = useState('');
   const [minDate] = useState(getInitialMinDate()); // Stačí nastavit jednou při startu
   const [photo, setPhoto] = useState<File | null>(null);
@@ -74,6 +74,7 @@ const CustomCakeForm = () => {
         className="space-y-6 flex flex-col"
       >
         <input type="hidden" name="form-name" value="dort-na-prani-v2" />
+        <input type="hidden" name="Typ-Pozadavku" value="Dort na přání" />
         {/* naplní se při odeslání veřejným odkazem na nahraný obrázek (viz handleSubmit) */}
         <input type="hidden" name="Foto-Odkaz" defaultValue="" />
         
@@ -81,15 +82,15 @@ const CustomCakeForm = () => {
           <div className="flex flex-col gap-1">
             <label className="text-xs uppercase tracking-widest text-[#735c1e]">Místo vyzvednutí</label>
             <select name="Prodejna" value={selectedShop} onChange={(e) => setSelectedShop(e.target.value)} className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" required>
-              <option value="ostrava">Ostrava - Zábřeh</option>
-              <option value="karvina">Karviná - Ráj</option>
-              <option value="petrvald">Petřvald</option>
-              <option value="pist">Píšť - Sídlo firmy</option>
+              <option value="Ostrava (Zábřeh)">Ostrava - Zábřeh</option>
+              <option value="Karviná">Karviná - Ráj</option>
+              <option value="Petřvald">Petřvald</option>
+              <option value="Píšť">Píšť - Sídlo firmy</option>
             </select>
           </div>
           <div className="flex flex-col gap-1">
             <label className="text-xs uppercase tracking-widest text-[#735c1e]">Datum vyzvednutí</label>
-            <PickupDateInput name="Datum_Vyzvednuti" min={minDate} value={pickupDate} onChange={(e) => setPickupDate(e.target.value)} error={dateError} hint={dateHint} className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" required />
+            <PickupDateInput name="Datum" min={minDate} value={pickupDate} onChange={(e) => setPickupDate(e.target.value)} error={dateError} hint={dateHint} className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" required />
           </div>
         </div>
 
@@ -99,7 +100,7 @@ const CustomCakeForm = () => {
         </div>
         
         <input type="tel" name="Telefon" placeholder="Telefon" required className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" />
-        <textarea name="Zprava" placeholder="Popište vaši představu..." required className="w-full p-3 h-32 bg-slate-50 rounded-xl border border-slate-200 outline-none resize-none"></textarea>
+        <textarea name="Poznamka" placeholder="Popište vaši představu..." required className="w-full p-3 h-32 bg-slate-50 rounded-xl border border-slate-200 outline-none resize-none"></textarea>
         
         <div className="p-6 bg-orange-50 border-2 border-dashed border-[#b38f2d]/30 rounded-2xl">
           <label htmlFor="cake-photo" className="block text-xs font-bold text-[#735c1e] uppercase mb-3 text-center">Inspirační obrázek (nepovinné)</label>

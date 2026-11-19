@@ -13,8 +13,22 @@ import ConsentCheckbox from './ConsentCheckbox';
 import LegalNotices from './LegalNotices';
 import { BINDING_ORDER_LABEL } from '../lib/legal';
 
+type CartItem = { name: string; price: string; quantity: number; img: string; category?: string };
+
+// Kategorie položky (dorty / zakusky / zapichy / studena-kuchyne); starší položky v localStorage
+// bez kategorie poznáme podle cesty k fotce.
+const itemCategory = (item: CartItem): string => {
+  if (item.category) return item.category;
+  const img = item.img || '';
+  if (img.includes('/img/dorty/')) return 'dorty';
+  if (img.includes('/zakusky/')) return 'zakusky';
+  if (img.includes('/zapichy/')) return 'zapichy';
+  if (img.includes('/studena-kuchyne/')) return 'studena-kuchyne';
+  return 'ostatni';
+};
+
 const ReservationForm = () => {
-  const [cart, setCart] = useState<{name: string, price: string, quantity: number, img: string, category?: string}[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [justAdded, setJustAdded] = useState(false);
   
@@ -83,7 +97,7 @@ const ReservationForm = () => {
     // Úprava seznamu pro e-mail: U zákusků i zápichů vynecháme odkaz na fotku
     const list = cart.map(item => {
       const basicInfo = `${item.quantity}x ${item.name} (${item.price})`;
-      const isSimpleItem = item.img.includes('/zakusky/') || item.img.includes('/zapichy/');
+      const isSimpleItem = itemCategory(item) !== 'dorty';
       
       return isSimpleItem 
         ? basicInfo 
@@ -97,7 +111,11 @@ const ReservationForm = () => {
     formData.set('Zpusob-Platby', wantsOnline ? 'online' : 'cash');
     formData.append('Cislo-Objednavky', orderId);
     formData.append('Celkem-Kc', total !== null ? String(total) : '');
-    formData.append('Produkty-JSON', JSON.stringify(items));
+    // jednotná struktura pro zpracování (Apps Script): kategorie u každé položky + souhrn kategorií
+    const categories = cart.map(itemCategory);
+    formData.append('Typ-Pozadavku', 'Objednávka z košíku');
+    formData.append('Kategorie-Objednavky', Array.from(new Set(categories)).join(','));
+    formData.append('Produkty-JSON', JSON.stringify(cart.map(({ name, price, quantity }, i) => ({ name, price, quantity, category: categories[i] }))));
     formData.append('Produkty-Seznam', list);
 
     setIsSubmitting(true);
@@ -134,7 +152,7 @@ const ReservationForm = () => {
   };
 
   // Obsahuje košík dort? (starší položky v localStorage bez kategorie poznáme podle cesty k fotce)
-  const includesCake = cart.some(item => item.category === 'dorty' || (!item.category && item.img.includes('/img/dorty/')));
+  const includesCake = cart.some(item => itemCategory(item) === 'dorty');
   const dateError = getPickupDateError(pickupDate, selectedStore, includesCake);
   const dateHint = getPickupHint(selectedStore, includesCake);
 

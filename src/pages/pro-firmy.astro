@@ -84,30 +84,31 @@ const districts = [
 						class="space-y-5"
 					>
 						<input type="hidden" name="form-name" value="b2b-poptavka" />
+						<input type="hidden" name="Typ-Pozadavku" value="Poptávka pro firmy" />
 
 						<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 							<div>
 								<label id="label-firma" class="block text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-2 ml-2">Název firmy</label>
-								<input type="text" name="firma" aria-labelledby="label-firma" placeholder="Moje firma s.r.o." required class="w-full p-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-[#d4af37] outline-none font-bold" />
+								<input type="text" name="Firma" aria-labelledby="label-firma" placeholder="Moje firma s.r.o." required class="w-full p-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-[#d4af37] outline-none font-bold" />
 							</div>
 							<div>
 								<label id="label-ico" class="block text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-2 ml-2">IČO</label>
-								<input type="text" name="ico" aria-labelledby="label-ico" placeholder="12345678" class="w-full p-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-[#d4af37] outline-none font-bold" />
+								<input type="text" name="ICO" aria-labelledby="label-ico" placeholder="12345678" class="w-full p-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-[#d4af37] outline-none font-bold" />
 							</div>
 						</div>
 						<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 							<div>
 								<label id="label-email" class="block text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-2 ml-2">E-mail</label>
-								<input type="email" name="email" aria-labelledby="label-email" placeholder="vas@email.cz" required class="w-full p-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-[#d4af37] outline-none font-bold" />
+								<input type="email" name="Email" aria-labelledby="label-email" placeholder="vas@email.cz" required class="w-full p-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-[#d4af37] outline-none font-bold" />
 							</div>
 							<div>
 								<label id="label-tel" class="block text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-2 ml-2">Telefon</label>
-								<input type="tel" name="telefon" aria-labelledby="label-tel" placeholder="+420 123 456 789" required class="w-full p-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-[#d4af37] outline-none font-bold" />
+								<input type="tel" name="Telefon" aria-labelledby="label-tel" placeholder="+420 123 456 789" required class="w-full p-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-[#d4af37] outline-none font-bold" />
 							</div>
 						</div>
 						<div>
 							<label id="label-lokalita" class="block text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-2 ml-2">Lokalita závozu</label>
-							<select name="lokalita" aria-labelledby="label-lokalita" required class="w-full p-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-[#d4af37] outline-none font-bold text-slate-700">
+							<select name="Lokalita" aria-labelledby="label-lokalita" required class="w-full p-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-[#d4af37] outline-none font-bold text-slate-700">
 								<option value="">Vyberte město</option>
 								{districts.map(city => <option value={city}>{city}</option>)}
 								<option value="jine">Jiná lokalita</option>
@@ -115,7 +116,7 @@ const districts = [
 						</div>
 						<div>
 							<label id="label-msg" class="block text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-2 ml-2">Zpráva / Poptávané množství</label>
-							<textarea name="zprava" aria-labelledby="label-msg" placeholder="Mám zájem o pravidelný odběr..." rows="4" class="w-full p-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-[#d4af37] outline-none font-bold"></textarea>
+							<textarea name="Poznamka" aria-labelledby="label-msg" placeholder="Mám zájem o pravidelný odběr..." rows="4" class="w-full p-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-[#d4af37] outline-none font-bold"></textarea>
 						</div>
 						
 						<label for="b2b-consent" class="flex items-start gap-3 cursor-pointer text-sm text-slate-700 font-bold leading-snug">

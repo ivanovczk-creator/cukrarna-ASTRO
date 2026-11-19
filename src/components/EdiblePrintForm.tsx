@@ -7,11 +7,8 @@ import { MAX_FILES, MAX_FILE_BYTES, uploadPrintFiles, validateSelection } from '
 import { BINDING_ORDER_LABEL } from '../lib/legal';
 import { formatCzk } from '../lib/payments/config';
 
-// Podklady pro jedlý tisk a jejich cena za 1 list A4 (Kč, konečná cena).
-const PRINT_BASES = [
-  { value: 'Jedlý papír A4', price: 160 },
-  { value: 'Fondánový list A4', price: 160 },
-] as const;
+// Podklad pro jedlý tisk a jeho cena za 1 list A4 (Kč, konečná cena). Tiskneme jen na fondánový list.
+const PRINT_BASE = { value: 'Fondánový list A4', price: 160 } as const;
 const MAX_QTY = 50;
 
 const fieldClass = 'w-full p-4 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]';
@@ -22,7 +19,6 @@ const EdiblePrintForm = () => {
   const [fileError, setFileError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [base, setBase] = useState<string>('');
   const [qty, setQty] = useState<number>(1);
   const [store, setStore] = useState('');
   const [pickupDate, setPickupDate] = useState('');
@@ -31,9 +27,9 @@ const EdiblePrintForm = () => {
   const dateError = getPickupDateError(pickupDate, store, false);
   const dateHint = getPickupHint(store, false);
 
-  const unitPrice = PRINT_BASES.find((b) => b.value === base)?.price ?? null;
+  const unitPrice = PRINT_BASE.price;
   const qtyValid = Number.isInteger(qty) && qty >= 1 && qty <= MAX_QTY;
-  const total = unitPrice !== null && qtyValid ? unitPrice * qty : null;
+  const total = qtyValid ? unitPrice * qty : null;
 
   // Soubory se nenahrávají přes Netlify Forms (jejich odkazy v e-mailu jsou za přihlášením),
   // ale přes vlastní funkci /api/upload-print → do formuláře jdou jen veřejné odkazy ke stažení.
@@ -46,7 +42,7 @@ const EdiblePrintForm = () => {
     if (dateError) return;
 
     if (total === null) {
-      setSubmitError('Vyberte typ podkladu a počet kusů (1–' + MAX_QTY + ').');
+      setSubmitError('Zadejte počet kusů (1–' + MAX_QTY + ').');
       return;
     }
 
@@ -87,12 +83,12 @@ const EdiblePrintForm = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-16 bg-[#f8fafc] rounded-[3rem] border border-slate-200 shadow-xl text-[#0a192f]">
       <div className="text-center mb-10">
-        <h2 className="text-4xl font-serif mb-4 italic">Tisk na jedlý papír</h2>
+        <h2 className="text-4xl font-serif mb-4 italic">Tisk na fondánový list</h2>
         <p className="text-slate-600 max-w-2xl mx-auto">
-          Nahrajte své obrázky a my je vytiskneme na jedlý papír nebo fondánový list A4.
+          Nahrajte své obrázky a my je vytiskneme na fondánový list A4.
         </p>
         <div className="mt-4 inline-block bg-[#d4af37] text-[#0a192f] px-6 py-2 rounded-full font-bold shadow-sm">
-          Cena: {formatCzk(PRINT_BASES[0].price)} / list A4
+          Cena: {formatCzk(PRINT_BASE.price)} / list A4
         </div>
       </div>
 
@@ -107,6 +103,7 @@ const EdiblePrintForm = () => {
         {/* naplní se při odeslání veřejnými odkazy na nahrané soubory (viz handleSubmit) */}
         <input type="hidden" name="Tisk-Odkazy" defaultValue="" />
         <input type="hidden" name="Celkem-Kc" value={total ?? ''} readOnly />
+        <input type="hidden" name="Typ-Pozadavku" value="Jedlý tisk – fondánový list" readOnly />
         
         <div className="space-y-4">
           <div>
@@ -178,20 +175,11 @@ const EdiblePrintForm = () => {
 
         <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-4 items-end bg-white border border-slate-200 rounded-2xl p-5">
           <div className="sm:col-span-1">
-            <label htmlFor="edible-base" className={labelClass}>Typ podkladu</label>
-            <select
-              id="edible-base"
-              name="Typ-Podkladu"
-              required
-              value={base}
-              onChange={(e) => setBase(e.target.value)}
-              className={fieldClass}
-            >
-              <option value="">Vyberte podklad...</option>
-              {PRINT_BASES.map((b) => (
-                <option key={b.value} value={b.value}>{b.value} – {formatCzk(b.price)} / ks</option>
-              ))}
-            </select>
+            <span id="edible-base-label" className={labelClass}>Typ podkladu</span>
+            <input type="hidden" name="Typ-Podkladu" value={PRINT_BASE.value} readOnly />
+            <p id="edible-base" aria-labelledby="edible-base-label" className={`${fieldClass} font-bold`}>
+              {PRINT_BASE.value} – {formatCzk(PRINT_BASE.price)} / ks
+            </p>
           </div>
           <div>
             <label htmlFor="edible-qty" className={labelClass}>Počet kusů (listů A4)</label>
@@ -213,7 +201,7 @@ const EdiblePrintForm = () => {
             <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500">Celková cena</p>
             <p className="text-2xl font-black text-[#735c1e]">{total !== null ? formatCzk(total) : '—'}</p>
             {total !== null && (
-              <p className="text-[11px] text-slate-500 font-bold">{qty} × {formatCzk(unitPrice as number)}</p>
+              <p className="text-[11px] text-slate-500 font-bold">{qty} × {formatCzk(unitPrice)}</p>
             )}
           </div>
         </div>
