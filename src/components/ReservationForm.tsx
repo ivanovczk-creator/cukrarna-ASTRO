@@ -9,6 +9,9 @@ import {
   type PaymentMethod,
 } from '../lib/payments/config';
 import { startOnlinePayment } from '../lib/payments/client';
+import ConsentCheckbox from './ConsentCheckbox';
+import LegalNotices from './LegalNotices';
+import { BINDING_ORDER_LABEL } from '../lib/legal';
 
 const ReservationForm = () => {
   const [cart, setCart] = useState<{name: string, price: string, quantity: number, img: string}[]>([]);
@@ -99,7 +102,7 @@ const ReservationForm = () => {
         : `${basicInfo}\nOdkaz: ${window.location.origin}${item.img}`;
     }).join('\n\n---\n\n');
     
-    // Platba + strojově čitelná data pro automatizace (Make.com → POHODA)
+    // Platba + strojově čitelná data pro zpracování objednávek (Google Workspace / Apps Script)
     const orderId = generateOrderId();
     const wantsOnline = paymentMethod === 'online' && onlineAvailable;
     const items = cart.map(({ name, price, quantity }) => ({ name, price, quantity }));
@@ -164,7 +167,7 @@ const ReservationForm = () => {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-4 w-80 md:w-96 bg-white rounded-[2rem] shadow-2xl p-6 md:p-8 border border-slate-100 text-[#0a192f] z-[100]">
+        <div className="absolute right-0 mt-4 w-80 md:w-96 max-h-[80vh] overflow-y-auto bg-white rounded-[2rem] shadow-2xl p-6 md:p-8 border border-slate-100 text-[#0a192f] z-[100]">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-xl font-bold font-serif italic">Vaše objednávka</h3>
             <button 
@@ -237,8 +240,12 @@ const ReservationForm = () => {
                   total={total}
                 />
 
+                <LegalNotices variant="cart" />
+
+                <ConsentCheckbox id="cart-consent" compact />
+
                 <button type="submit" disabled={isSubmitting} className="w-full disabled:opacity-60 bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] hover:text-[#0a192f] transition-all shadow-lg active:scale-95 cursor-pointer uppercase tracking-widest text-[10px]">
-                  {isSubmitting ? 'Odesílám…' : (paymentMethod === 'online' && onlineAvailable ? 'Objednat a zaplatit' : 'Odeslat rezervaci')}
+                  {isSubmitting ? 'Odesílám…' : BINDING_ORDER_LABEL}
                 </button>
               </div>
             </form>

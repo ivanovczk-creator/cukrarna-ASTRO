@@ -306,7 +306,7 @@
     {
       "id": 27,
       "title": "Jurský park",
-      "cena": "1800",
+      "cena": "1800 Kč",
       "porce": "12 porcí",
       "foto": "/img/dorty/27.webp",
       "kategorie": "dorty",
@@ -691,8 +691,8 @@
       "kategorie": "dorty",
       "id": 62,
       "title": "Dort lyže a šipky",
-      "cena": "3500",
-      "porce": "20",
+      "cena": "3500 Kč",
+      "porce": "20 porcí",
       "foto": "/img/dorty/tématický-dort.webp",
       "category_list": [
         "narozeninove"
@@ -703,8 +703,8 @@
       "kategorie": "dorty",
       "id": 62,
       "title": "Dort s ovocem",
-      "cena": "2000",
-      "porce": "12",
+      "cena": "2000 Kč",
+      "porce": "12 porcí",
       "foto": "/img/dorty/ovocný-dort.webp",
       "category_list": [
         "narozeninove",
@@ -716,9 +716,9 @@
       "kategorie": "dorty",
       "id": 64,
       "title": "Dort louka les",
-      "cena": "2000",
+      "cena": "2000 Kč",
       "foto": "/img/dorty/narozeninový-dort.webp",
-      "porce": "12",
+      "porce": "12 porcí",
       "category_list": [
         "narozeninove",
         "detske"
@@ -1281,7 +1281,7 @@
     },
     {
       "id": "z4",
-      "title": "Zápich Happy Birthday",
+      "title": "Zápich Happy Birthday – zlatý s motýly",
       "cena": "100 Kč",
       "foto": "/img/zapichy/zapich-na-dort-happy-birthday.webp",
       "kategorie": "zapichy",
@@ -1309,7 +1309,7 @@
       "id": "z7",
       "title": "Rocky",
       "foto": "/img/zapichy/zapich-na-dort-rocky.webp",
-      "cena": "130"
+      "cena": "130 Kč"
     },
     {
       "weight": 8,
@@ -1347,7 +1347,7 @@
       "weight": 12,
       "kategorie": "zapichy",
       "id": "z12",
-      "title": "Happy Birthday",
+      "title": "Zápich Happy Birthday – červený",
       "foto": "/img/zapichy/zapich-happy-birthday.webp",
       "cena": "100 Kč"
     }

@@ -3,7 +3,6 @@
  *
  * Výstup lze:
  *  - poslat do POHODA mServeru (viz integrations/pohoda/send-to-pohoda.mjs),
- *  - nebo předat v Make.com modulu HTTP (pole `pohodaXml` v payloadu webhooku),
  *  - nebo uložit jako .xml a naimportovat ručně (Soubor → Datová komunikace → XML import).
  *
  * VZOROVÁ IMPLEMENTACE: před ostrým provozem ji ověřte na testovací účetní jednotce

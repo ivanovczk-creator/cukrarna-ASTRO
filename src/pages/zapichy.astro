@@ -1,7 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import productsData from '../../data.json';
-import ReservationForm from '../components/ReservationForm.tsx';
 import { Image } from 'astro:assets';
 
 // Načtení obrázků ze složky /public/img/zapichy/
@@ -23,34 +22,6 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 	title="Zápichy na dorty na zakázku | Cukrářství Blahutovi" 
 	description="Prohlédněte si naši nabídku zápichů na dorty. Akrylové i dřevěné zápichy pro vaše narozeninové a svatební dorty. Výdej v našich prodejnách Ostrava, Karviná a Petřvald."
 >
-	<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
-		<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative font-bold">
-			<a href="/" class="group no-underline">
-				<strong class="text-xl md:text-2xl font-serif text-[#d4af37] group-hover:text-white transition-colors">Cukrářství Blahutovi</strong>
-			</a>
-
-			<nav id="nav-menu" class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-white/90">
-				<a href="/dorty" class="hover:text-[#d4af37] py-2">Dorty</a>
-				<a href="/zakusky" class="hover:text-[#d4af37] py-2">Zákusky</a>
-				<a href="/studena-kuchyne" class="hover:text-[#d4af37] py-2">Studená kuchyně</a>
-				<a href="/zapichy" class="text-[#d4af37] py-2 font-bold underline underline-offset-8">Zápichy</a>
-				<a href="/jedly-tisk" class="hover:text-[#d4af37] py-2">Jedlý tisk</a>
-				<a href="/dort-na-prani" class="hover:text-[#d4af37] py-2">Dort na přání</a>
-				<a href="/prodejny" class="hover:text-[#d4af37] py-2">Prodejny</a>
-				<a href="/pro-firmy" class="hover:text-[#d4af37] py-2">Pro firmy</a>
-			</nav>
-
-			<div class="flex items-center gap-4">
-				<ReservationForm client:load />
-				<button id="menu-toggle" aria-label="Otevřít hlavní menu" class="lg:hidden text-[#d4af37] p-2 outline-none cursor-pointer">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-					</svg>
-				</button>
-			</div>
-		</div>
-	</header>
-
 	<main class="py-16 px-4 bg-slate-50 min-h-screen">
 		<div class="max-w-7xl mx-auto">
 			<div class="text-center mb-16">
@@ -60,6 +31,12 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 				</p>
 			</div>
 			
+			<aside class="max-w-3xl mx-auto mb-10 bg-white border border-slate-200 rounded-2xl p-5 text-sm text-slate-700 font-bold leading-relaxed">
+				Zápichy v této nabídce jsou standardní (nepersonalizované) zboží – od smlouvy lze odstoupit do 14 dnů od převzetí.
+				Zápichy zhotovené na míru podle vašeho přání jsou z odstoupení vyloučeny. Podrobnosti v
+				<a href="/obchodni-podminky#odstoupeni" class="underline text-[#92782a] hover:text-[#0a192f]">obchodních podmínkách</a>.
+			</aside>
+
 			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
 				{toppers.map((topper, index) => {
 					const fotoUrl = topper.foto || "";
@@ -122,37 +99,5 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 			</div>
 		</div>
 	</main>
-
-	<footer class="bg-[#0a192f] py-16 text-center text-white/70 text-[10px] border-t border-[#d4af37]/10 font-bold font-serif uppercase tracking-widest">
-		<div class="max-w-7xl mx-auto px-4 font-bold">
-			<p class="mb-2 italic text-[#d4af37] text-sm font-serif font-bold normal-case">Cukrářství Blahutovi</p>
-			<p>© {new Date().getFullYear()} — Všechna práva vyhrazena</p>
-		</div>
-	</footer>
 </Layout>
 
-<script is:inline>
-	function setupMenu() {
-		const btn = document.getElementById('menu-toggle');
-		const nav = document.getElementById('nav-menu');
-		if (btn && nav) {
-			btn.onclick = (e) => {
-				e.preventDefault();
-				nav.classList.toggle('hidden');
-				nav.classList.toggle('flex');
-				nav.classList.toggle('flex-col');
-				nav.classList.toggle('absolute');
-				nav.classList.toggle('top-20');
-				nav.classList.toggle('left-0');
-				nav.classList.toggle('w-full');
-				nav.classList.toggle('bg-[#0a192f]');
-				nav.classList.toggle('p-6');
-				nav.classList.toggle('z-50');
-				nav.classList.toggle('border-b');
-				nav.classList.toggle('border-[#d4af37]');
-			};
-		}
-	}
-	setupMenu();
-	document.addEventListener('astro:page-load', setupMenu);
-</script>

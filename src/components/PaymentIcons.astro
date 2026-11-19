@@ -1,0 +1,56 @@
+---
+// Ikony podporovaných platebních metod (zjednodušené vektorové značky).
+// Pro ostrý provoz doporučujeme nahradit oficiálními logy z brand materiálů Comgate / Visa / Mastercard / Apple / Google.
+interface Props {
+	class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<ul style="list-style:none;margin:0;padding:0" class={`flex flex-wrap items-center justify-center gap-3 ${className}`} aria-label="Podporované platební metody">
+	<li style="margin:0">
+		<svg role="img" aria-label="Visa" viewBox="0 0 64 40" class="h-9 w-auto rounded-md bg-white" xmlns="http://www.w3.org/2000/svg">
+			<title>Visa</title>
+			<rect width="64" height="40" rx="5" fill="#fff" />
+			<text x="32" y="27" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="900" font-style="italic" fill="#1a1f71" letter-spacing="1">VISA</text>
+		</svg>
+	</li>
+	<li style="margin:0">
+		<svg role="img" aria-label="Mastercard" viewBox="0 0 64 40" class="h-9 w-auto rounded-md bg-white" xmlns="http://www.w3.org/2000/svg">
+			<title>Mastercard</title>
+			<rect width="64" height="40" rx="5" fill="#fff" />
+			<circle cx="26" cy="20" r="11" fill="#eb001b" />
+			<circle cx="38" cy="20" r="11" fill="#f79e1b" />
+			<path d="M32 11.2a11 11 0 0 1 0 17.6 11 11 0 0 1 0-17.6z" fill="#ff5f00" />
+		</svg>
+	</li>
+	<li style="margin:0">
+		<svg role="img" aria-label="Apple Pay" viewBox="0 0 64 40" class="h-9 w-auto rounded-md bg-white" xmlns="http://www.w3.org/2000/svg">
+			<title>Apple Pay</title>
+			<rect width="64" height="40" rx="5" fill="#fff" />
+			<rect x="0.5" y="0.5" width="63" height="39" rx="4.5" fill="none" stroke="#d1d5db" />
+			<circle cx="17" cy="22.500" r="5.500" fill="#000" />
+			<circle cx="22.500" cy="22.500" r="5.500" fill="#000" />
+			<path d="M19.800 14.500c.2-2.200 1.800-3.800 3.800-4 .1 2.200-1.500 3.900-3.800 4z" fill="#000" />
+			<text x="42" y="26" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#000">Pay</text>
+		</svg>
+	</li>
+	<li style="margin:0">
+		<svg role="img" aria-label="Google Pay" viewBox="0 0 64 40" class="h-9 w-auto rounded-md bg-white" xmlns="http://www.w3.org/2000/svg">
+			<title>Google Pay</title>
+			<rect width="64" height="40" rx="5" fill="#fff" />
+			<rect x="0.5" y="0.5" width="63" height="39" rx="4.5" fill="none" stroke="#d1d5db" />
+			<text x="9" y="25.500" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">
+				<tspan fill="#4285f4">G</tspan><tspan fill="#5f6368" font-size="13"> Pay</tspan>
+			</text>
+		</svg>
+	</li>
+	<li style="margin:0">
+		<svg role="img" aria-label="Comgate" viewBox="0 0 84 40" class="h-9 w-auto rounded-md bg-white" xmlns="http://www.w3.org/2000/svg">
+			<title>Comgate – platební brána</title>
+			<rect width="84" height="40" rx="5" fill="#fff" />
+			<circle cx="17" cy="20" r="8" fill="none" stroke="#e2001a" stroke-width="3.500" />
+			<text x="30" y="25" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1f2937">comgate</text>
+		</svg>
+	</li>
+</ul>

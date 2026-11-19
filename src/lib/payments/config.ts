@@ -17,8 +17,8 @@ export const ONLINE_PAYMENTS_ENABLED: boolean =
 export const CREATE_PAYMENT_ENDPOINT = '/.netlify/functions/create-payment';
 
 export const PAYMENT_METHODS: { id: PaymentMethod; label: string; hint: string }[] = [
-  { id: 'cash', label: 'Při převzetí', hint: 'Zaplatíte na prodejně' },
-  { id: 'online', label: 'Online kartou', hint: 'Bezpečná platba přes Comgate' },
+  { id: 'cash', label: 'Při převzetí', hint: 'Hotově nebo kartou na prodejně' },
+  { id: 'online', label: 'Online', hint: 'Karta, Apple Pay, Google Pay, banka – přes Comgate' },
 ];
 
 export interface CartLine {

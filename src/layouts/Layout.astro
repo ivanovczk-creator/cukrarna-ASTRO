@@ -1,5 +1,8 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CookieBanner from '../components/CookieBanner.astro';
 
 interface Props {
 	title?: string;
@@ -23,7 +26,7 @@ const {
 		
 		<meta property="fb:app_id" content="1422427109539340" />
 		<meta property="og:type" content="website" />
-		<meta property="og:url" content="https://cukrarstviblahutovi.cz/" />
+		<meta property="og:url" content={canonicalURL.href} />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
 		<meta property="og:image" content="https://cukrarstviblahutovi.cz/img/dorty/51.webp" />
@@ -47,34 +50,10 @@ const {
 
 		<ViewTransitions />
 
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		
-		<link 
-			rel="stylesheet" 
-			href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;600;700&display=swap&font-display=swap" 
-			media="print" 
-			onload="this.media='all'"
-		>
-
-		<script is:inline>
-			// Optimalizace: Analytika se spustí s prodlevou, aby nebrzdila první vykreslení (LCP)
-			window.addEventListener('load', () => {
-				setTimeout(() => {
-					const script = document.createElement('script');
-					script.src = "https://www.googletagmanager.com/gtag/js?id=G-5JPLYYKGGN";
-					script.async = true;
-					document.head.appendChild(script);
-					
-					script.onload = () => {
-						window.dataLayer = window.dataLayer || [];
-						function gtag(){dataLayer.push(arguments);}
-						gtag('js', new Date());
-						gtag('config', 'G-5JPLYYKGGN');
-					};
-				}, 2500); // 2.5 vteřiny klidu pro prohlížeč
-			});
-		</script>
+		<!--
+			GDPR: Google Fonts byly odstraněny (nikde se nepoužívaly a přenášely IP adresu návštěvníka do Googlu).
+			Google Analytics se načítá až po souhlasu v cookies liště (viz components/CookieBanner.astro).
+		-->
 
 		<style is:inline>
 			:root { --navy: #0a192f; --gold: #d4af37; }
@@ -91,7 +70,12 @@ const {
 		</style>
 	</head>
 	<body class="pb-16 md:pb-0">
+		<Header />
+
 		<slot />
+
+		<Footer />
+		<CookieBanner />
 
 		<!-- Statická deklarace formuláře pro Netlify Forms: React formulář (ReservationForm) se vykresluje
 		     až v prohlížeči, takže ho Netlify při buildu jinak nenajde a nezaregistruje jeho pole. -->
@@ -108,6 +92,7 @@ const {
 			<input type="text" name="Celkem-Kc" />
 			<textarea name="Produkty-JSON"></textarea>
 			<textarea name="Produkty-Seznam"></textarea>
+			<input type="text" name="Souhlas-VOP-GDPR" />
 		</form>
 
 		<div class="fixed bottom-6 right-6 z-[9999] md:hidden">

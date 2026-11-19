@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import PickupDateInput from './PickupDateInput';
 import { BLOCKED_DATE_MESSAGE, isBlockedDate } from '../lib/blockedDates';
 import { MAX_FILE_BYTES, uploadPrintFiles, validateSelection } from '../lib/printUpload';
+import ConsentCheckbox from './ConsentCheckbox';
+import LegalNotices from './LegalNotices';
 
 // Výpočet minimálního data mimo hlavní render (šetří výkon)
 const getInitialMinDate = () => {
@@ -122,6 +124,9 @@ const CustomCakeForm = () => {
           <p className="mt-2 text-[10px] text-slate-500 text-center">Jedna fotka (JPG, PNG, WEBP, HEIC), max. {MAX_FILE_BYTES / 1024 / 1024} MB</p>
           {photoError && <p role="alert" className="mt-2 text-xs font-bold text-red-600 text-center">{photoError}</p>}
         </div>
+
+        <LegalNotices variant="custom" />
+        <ConsentCheckbox id="cake-consent" />
 
         {submitError && <p role="alert" className="text-sm font-bold text-red-600 text-center">{submitError}</p>}
         <button type="submit" disabled={isSubmitting || !!photoError} className="w-full disabled:opacity-60 disabled:cursor-not-allowed bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all uppercase tracking-widest active:scale-[0.98]">

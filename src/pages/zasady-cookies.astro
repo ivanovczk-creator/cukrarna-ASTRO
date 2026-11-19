@@ -1,0 +1,81 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { COMPANY, LEGAL_PAGES } from '../lib/legal';
+---
+
+<LegalLayout
+	title="Zásady cookies"
+	heading="Zásady používání souborů cookies"
+	description="Jaké cookies a místní úložiště prohlížeče používáme na webu Cukrářství Blahutovi a jak můžete svůj souhlas změnit."
+	intro="Co jsou cookies, k čemu je používáme a jak můžete svou volbu kdykoli změnit."
+>
+	<h2 id="co-jsou">1. Co jsou cookies</h2>
+	<p>
+		Cookies jsou malé textové soubory, které se ukládají do vašeho zařízení při návštěvě webu. Web může využívat také podobné technologie, například místní úložiště
+		prohlížeče (localStorage). Správcem údajů je {COMPANY.tradeName}, IČO {COMPANY.ico}, {COMPANY.address} (více v
+		<a href={LEGAL_PAGES.privacy}>Zásadách ochrany osobních údajů</a>).
+	</p>
+
+	<h2 id="kategorie">2. Co používáme</h2>
+	<table>
+		<thead>
+			<tr><th scope="col">Název / služba</th><th scope="col">Účel</th><th scope="col">Typ</th><th scope="col">Doba uložení</th></tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>blahutovi_cart</code> (localStorage)</td>
+				<td>Zapamatování obsahu nákupního košíku mezi stránkami.</td>
+				<td>Nezbytné</td>
+				<td>Do odeslání objednávky nebo smazání dat prohlížeče</td>
+			</tr>
+			<tr>
+				<td><code>blahutovi_cookie_consent</code> (localStorage)</td>
+				<td>Uložení vaší volby v cookies liště.</td>
+				<td>Nezbytné</td>
+				<td>Do změny volby nebo smazání dat prohlížeče</td>
+			</tr>
+			<tr>
+				<td>Google Analytics (<code>_ga</code>, <code>_ga_*</code>)</td>
+				<td>Anonymizovaná statistika návštěvnosti (počty návštěv, oblíbené stránky) – pomáhá nám web zlepšovat. Poskytovatel: Google Ireland Limited.</td>
+				<td>Analytické (jen se souhlasem)</td>
+				<td>Až 2 roky</td>
+			</tr>
+		</tbody>
+	</table>
+	<p>
+		<strong>Nezbytné</strong> cookies a úložiště jsou technicky nutné pro fungování webu a objednávek, souhlas k nim nepotřebujeme.
+		<strong>Analytické</strong> cookies nastavíme <strong>pouze po vašem souhlasu</strong>. Do té doby se skript Google Analytics vůbec nenačítá.
+		Reklamní ani marketingové cookies nepoužíváme.
+	</p>
+
+	<h2 id="nastaveni">3. Jak souhlas udělit, odmítnout nebo změnit</h2>
+	<p>
+		Při první návštěvě se zobrazí lišta s volbami „Přijmout vše“, „Odmítnout vše“ a „Nastavení“. Své rozhodnutí můžete kdykoli změnit:
+	</p>
+	<p>
+		<button type="button" data-open-cookie-settings class="inline-block bg-[#0a192f] text-[#d4af37] px-6 py-3 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#d4af37] hover:text-[#0a192f] transition-all cursor-pointer">Nastavení cookies</button>
+	</p>
+	<p>
+		Stejné tlačítko najdete v patičce každé stránky. Souhlas můžete odvolat stejně snadno, jako jste jej udělili; odvoláním není dotčena zákonnost zpracování před jeho odvoláním.
+		Odmítnutí analytických cookies neovlivní funkčnost webu ani možnost objednat.
+	</p>
+	<p>
+		Cookies a data webu můžete také spravovat nebo smazat v nastavení svého prohlížeče.
+	</p>
+
+	<h2 id="treti-strany">4. Služby třetích stran</h2>
+	<ul>
+		<li>
+			<strong>Comgate, a.s.</strong> – při online platbě jste přesměrováni na stránku platební brány, která má vlastní zásady (včetně technických cookies nutných pro platbu).
+		</li>
+		<li>
+			<strong>Odkazy na Facebook a Google Mapy</strong> – po kliknutí se otevře služba třetí strany, na kterou se vztahují její vlastní zásady.
+		</li>
+		<li><strong>jsDelivr (CDN)</strong> – technické načtení skriptu pro zvětšování fotografií; nepoužívá cookies, přenáší však IP adresu.</li>
+	</ul>
+
+	<h2 id="kontakt">5. Kontakt</h2>
+	<p>
+		S dotazy ke cookies se obracejte na <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>.
+	</p>
+</LegalLayout>

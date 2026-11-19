@@ -1,0 +1,129 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { COMGATE, COMPANY, LEGAL_PAGES } from '../lib/legal';
+---
+
+<LegalLayout
+	title="Ochrana osobních údajů"
+	heading="Zásady zpracování osobních údajů"
+	description="Informace o zpracování osobních údajů dle GDPR – správce Ivo Blahut, Cukrářství Blahutovi: účely, příjemci, doba uchování a vaše práva."
+	intro="Informace o tom, jaké osobní údaje zpracováváme, proč, komu je předáváme a jaká máte práva (nařízení (EU) 2016/679 – GDPR)."
+>
+	<h2 id="spravce">1. Správce osobních údajů</h2>
+	<table>
+		<tbody>
+			<tr><th scope="row">Správce</th><td>{COMPANY.tradeName}</td></tr>
+			<tr><th scope="row">IČO</th><td>{COMPANY.ico} ({COMPANY.legalForm})</td></tr>
+			<tr><th scope="row">Sídlo</th><td>{COMPANY.address}</td></tr>
+			<tr><th scope="row">E-mail</th><td><a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></td></tr>
+			<tr><th scope="row">Telefon</th><td><a href={`tel:${COMPANY.phone.replace(/\s/g, '')}`}>{COMPANY.phone}</a></td></tr>
+		</tbody>
+	</table>
+	<p>Správce nejmenoval pověřence pro ochranu osobních údajů, protože mu tato povinnost nevzniká. Ve věcech ochrany osobních údajů nás můžete kontaktovat výše uvedeným e-mailem.</p>
+
+	<h2 id="rozsah">2. Jaké údaje zpracováváme</h2>
+	<ul>
+		<li><strong>Identifikační a kontaktní údaje:</strong> jméno a příjmení, e-mail, telefon (u firem též název a IČO).</li>
+		<li><strong>Údaje o objednávce:</strong> objednané zboží, množství, cena, zvolená prodejna a datum vyzvednutí, způsob platby, poznámka k objednávce, popis přání (např. nápis na dortu).</li>
+		<li><strong>Nahrané soubory:</strong> fotografie, grafika či PDF nahrané k jedlému tisku nebo jako inspirace k dortu na přání (mohou obsahovat zobrazení osob).</li>
+		<li><strong>Údaje o platbě:</strong> stav platby a identifikátor transakce, které nám předá poskytovatel platební brány. Čísla platebních karet ani přihlašovací údaje do bankovnictví <strong>nezpracováváme a nevidíme</strong> – zadáváte je přímo u poskytovatele platební brány.</li>
+		<li><strong>Technické údaje:</strong> IP adresa a provozní záznamy serveru (logy) nutné pro provoz a zabezpečení webu.</li>
+		<li><strong>Údaje z cookies:</strong> pouze pokud udělíte souhlas s analytickými cookies (viz <a href={LEGAL_PAGES.cookies}>Zásady cookies</a>).</li>
+	</ul>
+
+	<h2 id="ucely">3. Účely, právní základy a doba uchování</h2>
+	<table>
+		<thead>
+			<tr><th scope="col">Účel</th><th scope="col">Právní základ (čl. 6 GDPR)</th><th scope="col">Doba uchování</th></tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Vyřízení objednávky, komunikace k objednávce, příprava a předání zboží, zpracování online platby</td>
+				<td>Plnění smlouvy nebo jednání před jejím uzavřením (čl. 6 odst. 1 písm. b)</td>
+				<td>Po dobu trvání smluvního vztahu a vyřízení objednávky</td>
+			</tr>
+			<tr>
+				<td>Účetnictví a daňové povinnosti (vedení účetních a daňových dokladů)</td>
+				<td>Splnění právní povinnosti (čl. 6 odst. 1 písm. c) – zákon o účetnictví, zákony o daních</td>
+				<td>Po dobu stanovenou právními předpisy, zpravidla 5 až 10 let</td>
+			</tr>
+			<tr>
+				<td>Reklamace, ochrana právních nároků a jejich vymáhání</td>
+				<td>Oprávněný zájem správce (čl. 6 odst. 1 písm. f)</td>
+				<td>Po dobu promlčecí lhůty (obvykle 3 roky od vyřízení)</td>
+			</tr>
+			<tr>
+				<td>Nahrané soubory k jedlému tisku / inspirační fotografie</td>
+				<td>Plnění smlouvy (čl. 6 odst. 1 písm. b)</td>
+				<td>Nejdéle 90 dnů od nahrání, poté jsou automaticky smazány</td>
+			</tr>
+			<tr>
+				<td>Zodpovězení nezávazné poptávky (dort na přání, B2B spolupráce)</td>
+				<td>Opatření přijatá před uzavřením smlouvy na žádost subjektu údajů (čl. 6 odst. 1 písm. b)</td>
+				<td>Po dobu jednání, nejdéle 1 rok od posledního kontaktu</td>
+			</tr>
+			<tr>
+				<td>Zajištění bezpečnosti a provozu webu</td>
+				<td>Oprávněný zájem správce (čl. 6 odst. 1 písm. f)</td>
+				<td>Dle nastavení poskytovatele hostingu, zpravidla do několika týdnů</td>
+			</tr>
+			<tr>
+				<td>Analytika návštěvnosti webu (Google Analytics)</td>
+				<td>Souhlas (čl. 6 odst. 1 písm. a) – udělený v cookies liště</td>
+				<td>Do odvolání souhlasu, nejdéle po dobu platnosti cookies (viz Zásady cookies)</td>
+			</tr>
+		</tbody>
+	</table>
+	<p>
+		Poskytnutí údajů potřebných k vyřízení objednávky (jméno, e-mail, telefon, údaje o objednávce) je smluvním požadavkem – bez nich nelze objednávku vyřídit.
+		Údaje nepoužíváme k automatizovanému rozhodování ani k profilování a nezasíláme obchodní sdělení bez vašeho souhlasu.
+	</p>
+
+	<h2 id="prijemci">4. Komu údaje předáváme (příjemci a zpracovatelé)</h2>
+	<p>Osobní údaje předáváme jen v rozsahu nezbytném pro naplnění výše uvedených účelů:</p>
+	<ul>
+		<li>
+			<strong>{COMGATE.name}</strong> ({COMGATE.address}) – poskytovatel platební brány, který zajišťuje online platby kartou a bankovním převodem. Pro zpracování plateb
+			zpracovává platební údaje jako samostatný správce dle vlastních zásad (<a href="https://www.comgate.cz" target="_blank" rel="noopener noreferrer">www.comgate.cz</a>).
+		</li>
+		<li><strong>Poskytovatel hostingu a webových formulářů</strong> (Netlify, Inc.) – provoz webu, příjem objednávek a poptávek, ukládání nahraných souborů.</li>
+		<li><strong>Google Ireland Limited (Google Workspace)</strong> – zpracování a evidence přijatých objednávek (e-mail, tabulky, skripty Google Apps Script).</li>
+		<li><strong>Účetní software POHODA (STORMWARE s.r.o.) a externí účetní</strong>, pokud jsou využíváni – vedení účetnictví a daňová evidence.</li>
+		<li><strong>Poskytovatel CDN</strong> (jsDelivr) – načtení skriptu pro zvětšování fotografií; při načtení stránky se přenáší IP adresa návštěvníka.</li>
+		<li><strong>Google Ireland Limited (Google Analytics)</strong> – analytika návštěvnosti, pouze pokud udělíte souhlas s analytickými cookies.</li>
+		<li>Orgány veřejné moci, pokud nám to ukládá právní předpis (např. správce daně, Česká obchodní inspekce).</li>
+	</ul>
+	<p>
+		Někteří příjemci mohou osobní údaje zpracovávat mimo Evropský hospodářský prostor (zejména USA). K takovému předání dochází jen na základě rozhodnutí Evropské komise o odpovídající
+		ochraně (EU–US Data Privacy Framework) nebo za použití standardních smluvních doložek podle čl. 46 GDPR. Kopii záruk lze získat na výše uvedeném e-mailu.
+	</p>
+
+	<h2 id="prava">5. Vaše práva</h2>
+	<p>Podle GDPR máte právo:</p>
+	<ul>
+		<li>na <strong>přístup</strong> k osobním údajům a na kopii zpracovávaných údajů (čl. 15);</li>
+		<li>na <strong>opravu</strong> nepřesných nebo doplnění neúplných údajů (čl. 16);</li>
+		<li>na <strong>výmaz</strong> údajů, pokud pominul důvod zpracování a nebrání tomu zákonná povinnost uchování (čl. 17);</li>
+		<li>na <strong>omezení zpracování</strong> (čl. 18);</li>
+		<li>na <strong>přenositelnost</strong> údajů zpracovávaných na základě smlouvy nebo souhlasu (čl. 20);</li>
+		<li>vznést <strong>námitku</strong> proti zpracování založenému na oprávněném zájmu (čl. 21);</li>
+		<li><strong>kdykoli odvolat souhlas</strong> (např. s analytickými cookies) – odvoláním není dotčena zákonnost zpracování před jeho odvoláním; souhlas s cookies změníte v patičce webu v „Nastavení cookies“;</li>
+		<li>podat <strong>stížnost</strong> u dozorového úřadu: Úřad pro ochranu osobních údajů, Pplk. Sochora 27, 170 00 Praha 7, <a href="https://www.uoou.gov.cz" target="_blank" rel="noopener noreferrer">www.uoou.gov.cz</a>.</li>
+	</ul>
+	<p>Svá práva můžete uplatnit e-mailem na <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a> nebo písemně na adrese sídla. Na žádost odpovíme do jednoho měsíce.</p>
+
+	<h2 id="zabezpeceni">6. Zabezpečení</h2>
+	<p>
+		Osobní údaje chráníme přiměřenými technickými a organizačními opatřeními (šifrovaný přenos HTTPS, omezený přístup k objednávkám, náhodné nehádatelné odkazy na nahrané soubory,
+		automatické mazání souborů). Platební údaje jsou zpracovávány výhradně v zabezpečeném prostředí platební brány.
+	</p>
+
+	<h2 id="cookies">7. Cookies a podobné technologie</h2>
+	<p>
+		Informace o cookies a o místním úložišti prohlížeče (localStorage), včetně možnosti jejich nastavení, najdete v dokumentu
+		<a href={LEGAL_PAGES.cookies}>Zásady používání souborů cookies</a>.
+	</p>
+
+	<h2 id="zmeny">8. Změny těchto zásad</h2>
+	<p>Tyto zásady můžeme aktualizovat. Aktuální znění je vždy zveřejněno na této stránce; datum účinnosti najdete na jejím konci.</p>
+</LegalLayout>

@@ -1,0 +1,85 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import PaymentIcons from '../components/PaymentIcons.astro';
+import { COMGATE, COMPANY, LEGAL_PAGES } from '../lib/legal';
+---
+
+<LegalLayout
+	title="Platební metody"
+	heading="Platební metody"
+	description="Jak můžete zaplatit v Cukrářství Blahutovi: online kartou (Visa, Mastercard, Apple Pay, Google Pay), online bankovním převodem přes Comgate nebo při převzetí na prodejně."
+	intro="Informace o způsobech platby, platební bráně Comgate a kontaktech pro dotazy a reklamace plateb."
+>
+	<div class="not-prose mb-8 flex justify-center">
+		<PaymentIcons />
+	</div>
+
+	<h2 id="metody">1. Způsoby platby</h2>
+	<p>Všechny ceny jsou uvedeny a účtovány v českých korunách (CZK). Při objednávce si můžete vybrat některý z následujících způsobů platby:</p>
+
+	<h3>1.1 Online platba kartou</h3>
+	<p>
+		Platba probíhá na zabezpečené stránce platební brány. Přijímáme platební karty <strong>Visa</strong> a <strong>Mastercard</strong> a platby přes
+		<strong>Apple Pay</strong> a <strong>Google Pay</strong>. Údaje o kartě zadáváte pouze v prostředí platební brány – my je nevidíme ani neukládáme.
+		Platba je zabezpečena ověřením držitele karty (3-D Secure), kde to vydavatel karty vyžaduje.
+	</p>
+
+	<h3>1.2 Online bankovní převod (platební tlačítka bank)</h3>
+	<p>
+		Platbu lze provést také online bankovním převodem přes platební tlačítko své banky. Po výběru banky budete přesměrováni do internetového bankovnictví, kde platbu potvrdíte.
+		Částka a údaje pro platbu jsou předvyplněny.
+	</p>
+
+	<h3>1.3 Platba při převzetí na prodejně</h3>
+	<p>
+		Objednávku můžete zaplatit až při osobním převzetí na zvolené prodejně, a to <strong>hotově nebo platební kartou</strong>. Zboží se vydává výhradně osobním odběrem;
+		za dodání se neúčtují žádné poplatky.
+	</p>
+
+	<div class="legal-box">
+		<p>
+			<strong>Upozornění:</strong> platební brána Comgate je aktuálně v testovacím / aktivačním režimu. Dokud není online platba plně spuštěna,
+			je v nákupním košíku volba „Online“ označena jako „Brzy dostupné“ a objednávky lze hradit při převzetí na prodejně. Po aktivaci se volba online platby
+			v košíku zpřístupní.
+		</p>
+	</div>
+
+	<div class="legal-box">
+		<p>
+			Dostupné způsoby platby se zobrazují v nákupním košíku před odesláním objednávky. Online platba je dostupná u objednávek, jejichž celková cena je při odeslání známa.
+			Objednávka se odesílá tlačítkem <strong>„Objednávka zavazující k platbě“</strong>.
+		</p>
+	</div>
+
+	<h2 id="comgate">2. Poskytovatel platební brány</h2>
+	<p>
+		<strong>Poskytovatelem platební brány je společnost Comgate, a.s. (<a href={COMGATE.gatewayUrl} target="_blank" rel="noopener noreferrer">{COMGATE.gatewayUrl}</a>).</strong>
+	</p>
+	<p>
+		Platební brána zajišťuje bezpečný přenos platebních údajů a zpracování platby. Provozovatel e-shopu ({COMPANY.tradeName}) k číslům platebních karet ani
+		k přihlašovacím údajům do internetového bankovnictví nemá přístup.
+	</p>
+
+	<h3>Kontakty na poskytovatele platební brány (dotazy a reklamace plateb)</h3>
+	<table>
+		<tbody>
+			<tr><th scope="row">Společnost</th><td>{COMGATE.name}</td></tr>
+			<tr><th scope="row">Adresa</th><td>{COMGATE.address}</td></tr>
+			<tr><th scope="row">E-mail</th><td><a href={`mailto:${COMGATE.email}`}>{COMGATE.email}</a></td></tr>
+			<tr><th scope="row">Telefon</th><td><a href={`tel:${COMGATE.phone.replace(/\s/g, '')}`}>{COMGATE.phone}</a></td></tr>
+		</tbody>
+	</table>
+
+	<h2 id="problemy">3. Dotazy, vrácení a reklamace plateb</h2>
+	<ul>
+		<li>K objednávce, zboží a vrácení peněz za zboží (např. po odstoupení od smlouvy nebo oprávněné reklamaci) se obracejte na prodávajícího: <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>, tel. {COMPANY.phone}.</li>
+		<li>K technickým potížím s platbou (nepodařená nebo duplicitně strhnutá platba, nedokončená transakce) se můžete obrátit na podporu platební brány výše.</li>
+		<li>Vrácení peněz provádíme stejným způsobem, jakým byla platba přijata, nedohodneme-li se na jiném způsobu. Lhůty pro vrácení najdete v <a href={`${LEGAL_PAGES.terms}#odstoupeni`}>obchodních podmínkách</a>.</li>
+		<li>Podmínky nákupu, doručení (osobní odběr), odstoupení od smlouvy a reklamace jsou uvedeny ve <a href={LEGAL_PAGES.terms}>Všeobecných obchodních podmínkách a Reklamačním řádu</a>. Zpracování osobních údajů popisují <a href={LEGAL_PAGES.privacy}>Zásady ochrany osobních údajů</a>.</li>
+	</ul>
+
+	<h2 id="prodavajici">4. Provozovatel e-shopu</h2>
+	<p>
+		{COMPANY.tradeName}, IČO: {COMPANY.ico}, {COMPANY.address}, e-mail: <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>, tel.: {COMPANY.phone}.
+	</p>
+</LegalLayout>

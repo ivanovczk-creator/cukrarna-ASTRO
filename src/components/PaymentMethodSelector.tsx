@@ -12,7 +12,7 @@ interface Props {
 /**
  * Výběr způsobu platby v objednávkovém formuláři.
  * Radio inputy mají name="Zpusob-Platby", takže hodnota odchází spolu s formulářem
- * (Netlify Forms → submission-created funkce → Make.com / POHODA).
+ * (Netlify Forms → zpracování objednávek přes Google Workspace / Apps Script).
  */
 const PaymentMethodSelector = ({ value, onChange, onlineAvailable, total }: Props) => {
   return (

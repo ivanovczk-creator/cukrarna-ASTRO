@@ -15,8 +15,7 @@
  *   POHODA_USER / POHODA_PASSWORD   přihlašovací údaje mServeru (Základní → Uživatelé)
  *   POHODA_CHECK_DUPLICITY  "false" vypne kontrolu duplicity (výchozí zapnuto – stejné číslo objednávky se nenaimportuje 2×)
  *
- * Stejný formát objednávky vznikne ve funkci netlify/functions/submission-created.mjs
- * (pole `order` v payloadu pro Make.com).
+ * Formát objednávky viz integrations/pohoda/sample-order.json.
  */
 import { readFile, writeFile } from 'node:fs/promises';
 import { buildPohodaOrderXml } from '../../netlify/lib/pohoda.mjs';

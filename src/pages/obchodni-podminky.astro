@@ -1,0 +1,363 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import {
+	ALLERGENS,
+	ALLERGEN_CROSS_CONTAMINATION,
+	BINDING_ORDER_LABEL,
+	COI,
+	COMGATE,
+	COMPANY,
+	LEGAL_PAGES,
+	PERISHABLE_NOTICE,
+	STORES,
+} from '../lib/legal';
+---
+
+<LegalLayout
+	title="Obchodní podmínky a reklamační řád"
+	heading="Všeobecné obchodní podmínky a Reklamační řád"
+	description="Všeobecné obchodní podmínky, odstoupení od smlouvy, reklamační řád a informace o alergenech – Ivo Blahut, Cukrářství Blahutovi, IČO 76208371."
+	intro="Podmínky nákupu čerstvých zákusků, dortů, chlebíčků, zápichů a jedlého tisku v Cukrářství Blahutovi."
+>
+	<nav class="legal-toc" aria-label="Obsah">
+		<strong>Obsah</strong>
+		<ol>
+			<li><a href="#prodavajici">Identifikace prodávajícího</a></li>
+			<li><a href="#uvodni">Úvodní ustanovení</a></li>
+			<li><a href="#sortiment">Sortiment, ceny a informace o zboží</a></li>
+			<li><a href="#alergeny">Alergeny</a></li>
+			<li><a href="#skladovani">Skladování a spotřeba</a></li>
+			<li><a href="#smlouva">Uzavření smlouvy</a></li>
+			<li><a href="#dodani">Dodací podmínky (osobní odběr)</a></li>
+			<li><a href="#platba">Platební podmínky</a></li>
+			<li><a href="#odstoupeni">Odstoupení od smlouvy</a></li>
+			<li><a href="#reklamace">Reklamační řád (práva z vadného plnění)</a></li>
+			<li><a href="#spory">Mimosoudní řešení spotřebitelských sporů</a></li>
+			<li><a href="#jedly-tisk">Zvláštní ustanovení k jedlému tisku</a></li>
+			<li><a href="#osobni-udaje">Ochrana osobních údajů</a></li>
+			<li><a href="#zaverecna">Závěrečná ustanovení</a></li>
+			<li><a href="#formular">Vzorový formulář pro odstoupení od smlouvy</a></li>
+		</ol>
+	</nav>
+
+	<h2 id="prodavajici">1. Identifikace prodávajícího</h2>
+	<table>
+		<tbody>
+			<tr><th scope="row">Obchodní jméno</th><td>{COMPANY.tradeName}</td></tr>
+			<tr><th scope="row">Prodávající</th><td>{COMPANY.person}, {COMPANY.legalForm}</td></tr>
+			<tr><th scope="row">IČO</th><td>{COMPANY.ico}</td></tr>
+			<tr><th scope="row">Daň z přidané hodnoty</th><td>{COMPANY.vatStatus}{COMPANY.dic ? `, DIČ: ${COMPANY.dic}` : ''}</td></tr>
+			<tr><th scope="row">Sídlo a provozovna výroby</th><td>{COMPANY.address}</td></tr>
+			<tr><th scope="row">Telefon</th><td><a href={`tel:${COMPANY.phone.replace(/\s/g, '')}`}>{COMPANY.phone}</a></td></tr>
+			<tr><th scope="row">E-mail pro objednávky a reklamace</th><td><a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></td></tr>
+			<tr><th scope="row">Internetová adresa</th><td><a href={COMPANY.web}>{COMPANY.web}</a></td></tr>
+		</tbody>
+	</table>
+	<p>
+		Orgánem dohledu je Česká obchodní inspekce, Štěpánská 567/15, 120 00 Praha 2, <a href={COI.url} target="_blank" rel="noopener noreferrer">{COI.web}</a>.
+		Dále jen „<strong>prodávající</strong>“.
+	</p>
+	<h3>Výdejní prodejny (místa osobního odběru)</h3>
+	<ul>
+		{STORES.map((store) => (
+			<li>
+				<strong>{store.name}</strong>: {store.address}, tel. <a href={`tel:${store.phone.replace(/\s/g, '')}`}>{store.phone}</a>
+			</li>
+		))}
+	</ul>
+	<p>
+		Otevírací doby jednotlivých prodejen jsou uvedeny na stránce <a href="/prodejny">Prodejny</a>. Ve formulářích lze jako místo vyzvednutí zvolit také provozovnu výroby v sídle prodávajícího
+		(Píšť) – výdej zde probíhá v rozsahu uvedeném na stránce Prodejny, případně po dohodě.
+	</p>
+
+	<h2 id="uvodni">2. Úvodní ustanovení</h2>
+	<ol>
+		<li>
+			Tyto všeobecné obchodní podmínky a reklamační řád (dále jen „<strong>VOP</strong>“) upravují v souladu s ustanovením § 1751 zákona č. 89/2012 Sb., občanský zákoník
+			(dále jen „<strong>OZ</strong>“), vzájemná práva a povinnosti prodávajícího a kupujícího při nákupu zboží prostřednictvím webu <a href={COMPANY.web}>cukrarstviblahutovi.cz</a>
+			(dále jen „<strong>web</strong>“). Související právní vztahy se řídí také zákonem č. 634/1992 Sb., o ochraně spotřebitele (dále jen „<strong>ZOS</strong>“).
+		</li>
+		<li>
+			<strong>Spotřebitelem</strong> je každý člověk, který mimo rámec své podnikatelské činnosti nebo mimo rámec samostatného výkonu svého povolání uzavírá s prodávajícím smlouvu
+			nebo s ním jinak jedná (§ 419 OZ). <strong>Kupujícím, který je podnikatelem</strong>, je ten, kdo zboží objednává v souvislosti se svou podnikatelskou činností;
+			ustanovení těchto VOP, která chrání výslovně spotřebitele (zejména o odstoupení od smlouvy a mimosoudním řešení sporů), se na něj nevztahují.
+		</li>
+		<li>Smlouvy se uzavírají v českém jazyce. Znění VOP platné v době odeslání objednávky je součástí kupní smlouvy.</li>
+		<li>Odchylná ujednání v kupní smlouvě mají přednost před těmito VOP.</li>
+	</ol>
+
+	<h2 id="sortiment">3. Sortiment, ceny a informace o zboží</h2>
+	<ol>
+		<li>
+			Prodávající nabízí zejména: <strong>čerstvé zákusky</strong>, <strong>dorty</strong> z nabídky i <strong>dorty na přání</strong> (zakázková výroba),
+			<strong>chlebíčky a kanapky</strong> (studená kuchyně), <strong>zápichy na dorty</strong> a <strong>jedlý tisk</strong> (potisk jedlého papíru nebo fondánového listu).
+		</li>
+		<li>
+			Všechny ceny na webu jsou uvedeny v českých korunách (Kč) a jsou konečné, včetně DPH a všech dalších daní a poplatků. Za dodání zboží se neúčtuje žádné poštovné ani doprava, protože zboží
+			se vydává výhradně osobně (viz článek 7). Prodávající je plátcem DPH.
+		</li>
+		<li>
+			Fotografie zboží mají informativní charakter. U ručně zdobených výrobků (dorty, zákusky) se může konečný vzhled mírně lišit od vyobrazení, aniž by šlo o vadu.
+		</li>
+		<li>
+			U dortů na přání a jiného zakázkového zboží je cena stanovena individuálně a sdělena v potvrzení objednávky, které předchází uzavření smlouvy (viz článek 6 odst. 5).
+		</li>
+		<li>
+			Zápichy na dorty jsou v nabídce prodávány jako standardní (nepersonalizované) zboží. Zápichy zhotovené na míru podle přání kupujícího jsou zakázkovým zbožím
+			(viz článek 9).
+		</li>
+	</ol>
+
+	<h2 id="alergeny">4. Alergeny</h2>
+	<p>
+		V souladu s nařízením (EU) č. 1169/2011 o poskytování informací o potravinách spotřebitelům a vyhláškou č. 417/2016 Sb. informujeme, že naše výrobky mohou obsahovat
+		následující látky vyvolávající alergie nebo nesnášenlivost (číslování dle přílohy II nařízení):
+	</p>
+	<table>
+		<thead><tr><th scope="col">Č.</th><th scope="col">Alergen</th></tr></thead>
+		<tbody>
+			{ALLERGENS.map((a) => (
+				<tr>
+					<td>{a.n}</td>
+					<td><strong>{a.name}</strong>{a.note ? ` (${a.note})` : ''}</td>
+				</tr>
+			))}
+		</tbody>
+	</table>
+	<div class="legal-box">
+		<p>{ALLERGEN_CROSS_CONTAMINATION}</p>
+		<p>
+			Přehled alergenů u jednotlivých výrobků poskytujeme na vyžádání na všech prodejnách, telefonicky a e-mailem před uzavřením smlouvy i při převzetí zboží.
+			U dortů na přání a jiného zakázkového zboží prosíme, abyste nám alergie a dietní omezení sdělili již v objednávce.
+		</p>
+	</div>
+
+	<h2 id="skladovani">5. Skladování a spotřeba</h2>
+	<div class="legal-box">
+		<p><strong>{PERISHABLE_NOTICE}</strong></p>
+	</div>
+	<ul>
+		<li>Zboží po převzetí neprodleně uložte do chladu (nejvýše 8 °C) a nevystavujte jej teplu ani přímému slunci.</li>
+		<li>Za dodržení podmínek skladování po převzetí odpovídá kupující. Vady způsobené nesprávným skladováním nebo manipulací po převzetí nejsou vadou zboží.</li>
+		<li>Zboží s krémovou, šlehačkovou nebo jinou rychle se kazící náplní, jakož i obložené chlebíčky a kanapky, doporučujeme spotřebovat bezprostředně po převzetí.</li>
+	</ul>
+
+	<h2 id="smlouva">6. Uzavření smlouvy</h2>
+	<ol>
+		<li>
+			Objednávku lze učinit přes nákupní košík na webu, objednávkové formuláře (jedlý tisk, B2B poptávka), poptávkový formulář „Dort na přání“, e-mailem nebo telefonicky.
+			Náklady na prostředky komunikace na dálku (internet, telefon) si hradí kupující sám; nepřesahují základní sazbu.
+		</li>
+		<li>
+			Objednávka obsahuje údaje o objednávaném zboží a jeho množství, místě a dni vyzvednutí, způsobu platby, kontaktní údaje kupujícího a celkovou cenu.
+			Před odesláním může kupující obsah objednávky zkontrolovat a opravit (např. odebráním položek z košíku, úpravou údajů ve formuláři).
+		</li>
+		<li>
+			Tlačítko, kterým se objednávka odesílá, je označeno slovy <strong>„{BINDING_ORDER_LABEL}“</strong> (§ 1826 odst. 2 OZ). Jeho stisknutím kupující potvrzuje,
+			že se seznámil s těmito VOP, že s nimi souhlasí a že je mu znám závazek zaplatit cenu zboží.
+		</li>
+		<li>
+			Odeslání objednávky je návrhem na uzavření kupní smlouvy. Prodávající potvrdí přijetí objednávky e-mailem nebo telefonicky. <strong>Smlouva je uzavřena okamžikem,
+			kdy je kupujícímu doručeno potvrzení objednávky prodávajícím.</strong> Prodávající může objednávku odmítnout, zejména při vyčerpání výrobní kapacity, nedostupnosti
+			požadovaného termínu nebo zřejmé chybě v ceně či popisu zboží.
+		</li>
+		<li>
+			<strong>Dort na přání</strong> (poptávkový formulář) je nezávaznou poptávkou. Prodávající kupujícímu sdělí navrženou podobu dortu, cenu a termín. Smlouva je uzavřena
+			až potvrzením objednávky ze strany kupujícího a následným potvrzením ze strany prodávajícího (e-mailem nebo telefonicky).
+		</li>
+		<li>
+			Nejbližší možný termín vyzvednutí je u zboží z nabídky zpravidla za 2 dny od objednání, u dortů na přání zpravidla za 7 dní; jedlý tisk bývá připraven obvykle do 24–48 hodin.
+			Termíny, které jsou na webu označeny jako nedostupné, nelze zvolit.
+		</li>
+		<li>
+			Prodávající uchovává objednávky a doklady k nim v souladu s právními předpisy (viz <a href={LEGAL_PAGES.privacy}>Zásady ochrany osobních údajů</a>).
+			Kupující může o kopii objednávky požádat e-mailem na {COMPANY.email}.
+		</li>
+	</ol>
+
+	<h2 id="dodani">7. Dodací podmínky (osobní odběr)</h2>
+	<ol>
+		<li>
+			Zboží se <strong>nedodává poštou ani kurýrem</strong>. Vydává se výhradně osobním odběrem na prodejně zvolené v objednávce, v objednaném termínu (dni) a v čase
+			upřesněném v potvrzení objednávky, v rámci otevírací doby dané prodejny.
+		</li>
+		<li>
+			Kupující je povinen zboží převzít v dohodnutém termínu. Vzhledem k tomu, že zboží podléhá rychlé zkáze nebo je vyrobeno na zakázku, nelze nepřevzaté zboží zpravidla
+			dále použít; prodávající je v takovém případě oprávněn požadovat zaplacení kupní ceny a náhradu prokazatelně vzniklé škody.
+		</li>
+		<li>
+			Kupující je povinen zboží při převzetí prohlédnout a případné zjevné vady (např. poškození, záměna zboží, nesprávný nápis na dortu) vytknout ihned. Nebezpečí škody na zboží
+			přechází na kupujícího okamžikem převzetí.
+		</li>
+	</ol>
+
+	<h2 id="platba">8. Platební podmínky</h2>
+	<ol>
+		<li>
+			Kupní cenu lze uhradit:
+			<ul>
+				<li><strong>při převzetí na prodejně</strong> – hotově nebo platební kartou;</li>
+				<li><strong>online přes platební bránu Comgate</strong> – platební kartou (Visa, Mastercard, Apple Pay, Google Pay) nebo online bankovním převodem (platební tlačítka bank).</li>
+			</ul>
+			Dostupné způsoby platby jsou před odesláním objednávky zobrazeny v nákupním košíku. Podrobnosti jsou na stránce <a href={LEGAL_PAGES.payments}>Platební metody</a>.
+		</li>
+		<li>
+			Při volbě online platby je kupní cena splatná ihned po odeslání objednávky. Neuhradí-li kupující cenu v přiměřené lhůtě, může prodávající objednávku zrušit.
+		</li>
+		<li>
+			Poskytovatelem platební brány je společnost {COMGATE.name} (<a href={COMGATE.gatewayUrl} target="_blank" rel="noopener noreferrer">{COMGATE.gatewayUrl}</a>).
+			Prodávající nemá přístup k číslu platební karty ani k přihlašovacím údajům do internetového bankovnictví kupujícího.
+		</li>
+		<li>Platby se provádějí výhradně v českých korunách (CZK). Prodávající vystaví kupujícímu doklad o zaplacení v souladu s právními předpisy.</li>
+		<li>
+			Peněžní prostředky, které je prodávající povinen kupujícímu vrátit (např. při odstoupení od smlouvy nebo oprávněné reklamaci), vrací stejným způsobem, jakým je přijal,
+			pokud kupující výslovně neurčí jinak.
+		</li>
+	</ol>
+
+	<h2 id="odstoupeni">9. Odstoupení od smlouvy</h2>
+	<h3>9.1 Právo spotřebitele odstoupit od smlouvy uzavřené na dálku</h3>
+	<p>
+		Spotřebitel má podle § 1829 odst. 1 OZ právo od smlouvy uzavřené na dálku odstoupit bez udání důvodu <strong>ve lhůtě 14 dnů ode dne převzetí zboží</strong>.
+		Odstoupení musí být odesláno prodávajícímu před uplynutím lhůty, a to e-mailem na {COMPANY.email} nebo písemně na adresu {COMPANY.address}. Lze využít vzorový formulář
+		na konci těchto VOP (nejde o povinnost).
+	</p>
+
+	<h3>9.2 Zákonné výjimky – kdy odstoupit nelze (§ 1837 OZ)</h3>
+	<div class="legal-box">
+		<p>
+			<strong>Kupující (spotřebitel) nemůže odstoupit od smlouvy ve lhůtě 14 dnů</strong> (§ 1837 OZ):
+		</p>
+		<ul>
+			<li>
+				u <strong>zboží podléhajícího rychlé zkáze</strong> – čerstvé zákusky, dorty, chlebíčky a kanapky (§ 1837 písm. e) OZ);
+			</li>
+			<li>
+				u <strong>zboží upraveného podle přání spotřebitele nebo pro jeho osobu</strong> – zakázkové dorty (dort na přání), jedlý tisk z vlastní fotografie či grafiky
+				a zápichy zhotovené na míru (§ 1837 písm. d) OZ).
+			</li>
+		</ul>
+		<p>
+			O těchto výjimkách je kupující informován před odesláním objednávky v nákupním košíku a v objednávkových formulářích. Tím nejsou dotčena práva z vadného plnění (článek 10).
+		</p>
+	</div>
+
+	<h3>9.3 Nepersonalizované zápichy – standardní odstoupení do 14 dnů</h3>
+	<ol>
+		<li>
+			U <strong>nepersonalizovaných zápichů</strong> na dorty z nabídky na webu má spotřebitel právo odstoupit od smlouvy ve lhůtě 14 dnů od převzetí způsobem uvedeným v čl. 9.1.
+		</li>
+		<li>
+			Spotřebitel je povinen zboží vrátit nebo předat prodávajícímu nepoškozené, bez zbytečného odkladu, nejpozději do 14 dnů od odstoupení – osobně na kterékoli prodejně nebo
+			poštou na adresu {COMPANY.address}. Přímé náklady spojené s vrácením zboží nese spotřebitel (§ 1833 OZ).
+		</li>
+		<li>
+			Prodávající vrátí spotřebiteli všechny přijaté peněžní prostředky do 14 dnů od odstoupení, a to nejdříve po vrácení zboží nebo prokázání jeho odeslání (§ 1832 OZ).
+			Spotřebitel odpovídá za snížení hodnoty zboží vzniklé nakládáním s ním jiným způsobem, než který je nutný k seznámení s povahou a vlastnostmi zboží.
+		</li>
+	</ol>
+
+	<h3>9.4 Odstoupení ze strany prodávajícího</h3>
+	<p>
+		Prodávající může od smlouvy odstoupit zejména pokud zboží nebo zvolený termín již nejsou dostupné, nebo pokud byla cena uvedena zjevně chybně. Případnou již zaplacenou cenu
+		prodávající neprodleně vrátí.
+	</p>
+
+	<h2 id="reklamace">10. Reklamační řád (práva z vadného plnění)</h2>
+	<ol>
+		<li>
+			Prodávající odpovídá kupujícímu, že zboží při převzetí nemá vady. Zejména odpovídá, že zboží odpovídá popisu a objednávce, je vhodné k účelu, ke kterému se obvykle
+			používá, a je ve správném množství a jakosti (§ 2161 a násl. OZ).
+		</li>
+		<li>
+			<strong>Čerstvé potraviny (zákusky, dorty, chlebíčky, kanapky)</strong> podléhají rychlé zkáze. Vady těchto výrobků (např. nesprávný druh, množství, viditelné poškození,
+			cizí předmět, zjevné zkažení) je kupující povinen vytknout <strong>bez zbytečného odkladu, nejlépe ihned při převzetí na prodejně</strong>; u vad zjištěných až později
+			je třeba reklamaci uplatnit neprodleně po jejich zjištění a nejpozději před uplynutím doby spotřeby výrobku. U potravin se práva z vadného plnění řídí jejich dobou
+			spotřeby; zákonná práva spotřebitele tím nejsou dotčena.
+		</li>
+		<li>
+			Reklamaci lze uplatnit <strong>osobně na kterékoli prodejně</strong> uvedené v článku 1, <strong>e-mailem</strong> na {COMPANY.email} nebo telefonicky na {COMPANY.phone}.
+			Pro rychlé vyřízení prosíme o sdělení čísla objednávky nebo potvrzení objednávky, popisu vady a (je-li to možné) o fotografii vadného zboží. Zboží, které je předmětem reklamace,
+			prosíme uchovat v chladu a dle možností předložit.
+		</li>
+		<li>
+			Z vadného plnění má kupující práva dle § 2106 a násl. OZ: právo na odstranění vady dodáním nového zboží nebo opravou (bez zbytečného odkladu a bez nákladů pro kupujícího),
+			na přiměřenou slevu z ceny, případně na odstoupení od smlouvy, jde-li o vadu podstatnou, nebo pokud prodávající vadu neodstranil včas či ji odmítl odstranit.
+		</li>
+		<li>
+			Prodávající o reklamaci rozhodne ihned, ve složitých případech do 3 pracovních dnů. <strong>Reklamace včetně odstranění vady bude vyřízena bez zbytečného odkladu,
+			nejpozději do 30 dnů ode dne uplatnění</strong>, nedohodnou-li se strany na delší lhůtě. Prodávající kupujícímu vystaví písemné potvrzení (též e-mailem) o tom, kdy právo
+			uplatnil, co je obsahem reklamace a jaký způsob vyřízení požaduje, a po vyřízení písemně sdělí její výsledek.
+		</li>
+		<li>Náklady účelně vynaložené v souvislosti s oprávněnou reklamací hradí prodávající.</li>
+		<li>
+			Za vadu nelze považovat zejména: poškození nebo zkažení zboží po převzetí způsobené nesprávným skladováním (nedodržení teploty do 8 °C), manipulací či dopravou
+			zajištěnou kupujícím, spotřebu po uplynutí doby spotřeby, drobné odchylky ručně zdobených výrobků od vyobrazení, ani přítomnost alergenů uvedených v článku 4.
+		</li>
+		<li>
+			Prodávající je oprávněn a povinen vyřizovat reklamace i prostřednictvím výše uvedených kontaktů. Kontakt pro uplatnění reklamace:
+			<address>{COMPANY.tradeName}, {COMPANY.address}, <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>, tel. {COMPANY.phone}</address>
+		</li>
+	</ol>
+
+	<h2 id="spory">11. Mimosoudní řešení spotřebitelských sporů</h2>
+	<ol>
+		<li>
+			Spotřebitel se může se stížností nebo s návrhem na nápravu nejprve obrátit na prodávajícího na {COMPANY.email}. Prodávající stížnost vyřídí do 30 dnů.
+		</li>
+		<li>
+			Pokud prodávající stížnost zamítne nebo na ni neodpoví do 30 dnů, má spotřebitel právo podat návrh na mimosoudní řešení spotřebitelského sporu u subjektu mimosoudního
+			řešení spotřebitelských sporů (§ 20d ZOS). Tímto subjektem je <strong>{COI.name}</strong>, Štěpánská 567/15, 120 00 Praha 2, internetová adresa:
+			<a href={COI.url} target="_blank" rel="noopener noreferrer">{COI.web}</a>.
+		</li>
+		<li>Právo obrátit se se sporem na věcně a místně příslušný soud tím není dotčeno.</li>
+	</ol>
+
+	<h2 id="jedly-tisk">12. Zvláštní ustanovení k jedlému tisku</h2>
+	<ol>
+		<li>
+			Kupující odpovídá za to, že je oprávněn podklady (fotografie, grafiku, loga) nahrané do objednávky použít a nechat vytisknout, a že jejich použitím neporušuje práva třetích osob
+			(autorská práva, ochranné známky, osobnostní práva a ochranu osobních údajů).
+		</li>
+		<li>
+			Prodávající může tisk odmítnout, pokud je obsah podkladu protiprávní, urážlivý nebo jeho tisk by porušoval práva třetích osob.
+		</li>
+		<li>
+			Kvalita tisku závisí na kvalitě dodaného podkladu (rozlišení, ostrost). Barevné odstíny na jedlém podkladu se mohou mírně lišit od zobrazení na obrazovce; nejde o vadu.
+		</li>
+		<li>
+			Jedlý tisk je zbožím upraveným podle přání spotřebitele, od smlouvy proto nelze odstoupit (§ 1837 písm. d) OZ, viz článek 9.2).
+		</li>
+		<li>
+			Nahrané soubory prodávající použije výhradně k vyřízení objednávky a po uplynutí lhůty uvedené v <a href={LEGAL_PAGES.privacy}>Zásadách ochrany osobních údajů</a> je smaže.
+		</li>
+	</ol>
+
+	<h2 id="osobni-udaje">13. Ochrana osobních údajů</h2>
+	<p>
+		Informace o zpracování osobních údajů podle nařízení (EU) 2016/679 (GDPR) jsou uvedeny v dokumentu
+		<a href={LEGAL_PAGES.privacy}>Zásady ochrany osobních údajů</a>. Informace o cookies jsou v dokumentu <a href={LEGAL_PAGES.cookies}>Zásady používání souborů cookies</a>.
+	</p>
+
+	<h2 id="zaverecna">14. Závěrečná ustanovení</h2>
+	<ol>
+		<li>Smluvní vztahy se řídí právním řádem České republiky. Spotřebitel, který má obvyklé bydliště v jiném státě EU, si zachovává ochranu poskytovanou mu kogentními ustanoveními právního řádu tohoto státu.</li>
+		<li>Je-li některé ustanovení těchto VOP neplatné nebo neúčinné, nedotýká se to platnosti ostatních ustanovení.</li>
+		<li>Prodávající je oprávněn VOP měnit. Na již uzavřené smlouvy se použije znění VOP účinné v době jejich uzavření.</li>
+		<li>Kontakt na prodávajícího: {COMPANY.address}, {COMPANY.email}, tel. {COMPANY.phone}.</li>
+	</ol>
+
+	<h2 id="formular">Vzorový formulář pro odstoupení od smlouvy</h2>
+	<p><em>(vyplňte a zašlete pouze v případě, že chcete odstoupit od smlouvy – týká se pouze zboží, u něhož právo na odstoupení náleží; viz článek 9)</em></p>
+	<div class="legal-box">
+		<p><strong>Adresát:</strong> {COMPANY.tradeName}, {COMPANY.address}, e-mail: {COMPANY.email}</p>
+		<p>Oznamuji, že tímto odstupuji od smlouvy o nákupu tohoto zboží: ……………………………………………………</p>
+		<p>Datum objednání / datum převzetí zboží: ……………………………………………………</p>
+		<p>Číslo objednávky (je-li známo): ……………………………………………………</p>
+		<p>Jméno a příjmení spotřebitele: ……………………………………………………</p>
+		<p>Adresa spotřebitele: ……………………………………………………</p>
+		<p>Číslo účtu pro vrácení peněz (pokud nebylo placeno kartou/online): ……………………………………………………</p>
+		<p>Podpis spotřebitele (pouze pokud je formulář zasílán v listinné podobě): ……………………………………………………</p>
+		<p>Datum: ……………………………………………………</p>
+	</div>
+</LegalLayout>

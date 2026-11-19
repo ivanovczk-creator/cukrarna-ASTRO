@@ -1,0 +1,53 @@
+---
+// Jednotná horní navigace pro všechny stránky webu (jediný zdroj odkazů: src/lib/legal.ts → NAV_LINKS).
+import ReservationForm from './ReservationForm.tsx';
+import { NAV_LINKS } from '../lib/legal';
+
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
+---
+
+<header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
+	<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative font-bold">
+		<a href="/" class="group no-underline">
+			<strong class="text-xl md:text-2xl font-serif text-[#d4af37] group-hover:text-white transition-colors">Cukrářství Blahutovi</strong>
+		</a>
+
+		<nav id="nav-menu" aria-label="Hlavní menu" class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-white/90">
+			{NAV_LINKS.map((link) => (
+				<a
+					href={link.href}
+					class={isActive(link.href) ? 'text-[#d4af37] py-2 font-bold underline underline-offset-8' : 'hover:text-[#d4af37] py-2'}
+					aria-current={isActive(link.href) ? 'page' : undefined}
+				>
+					{link.label}
+				</a>
+			))}
+		</nav>
+
+		<div class="flex items-center gap-4">
+			<ReservationForm client:load />
+			<button id="menu-toggle" aria-label="Otevřít hlavní menu" aria-controls="nav-menu" class="lg:hidden text-[#d4af37] p-2 outline-none cursor-pointer">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+				</svg>
+			</button>
+		</div>
+	</div>
+</header>
+
+<script>
+	function setupMenu() {
+		const btn = document.getElementById('menu-toggle');
+		const nav = document.getElementById('nav-menu');
+		if (!btn || !nav) return;
+		btn.onclick = (e) => {
+			e.preventDefault();
+			[
+				'hidden', 'flex', 'flex-col', 'absolute', 'top-20', 'left-0', 'w-full',
+				'bg-[#0a192f]', 'p-6', 'z-50', 'border-b', 'border-[#d4af37]',
+			].forEach((cls) => nav.classList.toggle(cls));
+		};
+	}
+	document.addEventListener('astro:page-load', setupMenu);
+</script>
