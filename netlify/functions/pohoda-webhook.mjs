@@ -232,7 +232,7 @@ export default async (req) => {
         });
       }
 
-      return jsonResponse({
+      const result = {
         ok: true,
         upstreamStatus: res.status,
         redirects,
@@ -241,8 +241,30 @@ export default async (req) => {
         duplicate: parsed.duplicate,
         handledForm: parsed.handledForm,
         test: parsed.test,
+        version: parsed.version,
+        confirmation: parsed.confirmation,
+        confirmationReason: parsed.confirmationReason,
         responsePreview: preview.slice(0, PREVIEW_CHARS),
+      };
+
+      // Stav potvrzení zákazníkovi je vidět v logu funkce (Netlify → Functions → pohoda-webhook).
+      const logLine = JSON.stringify({
+        handledForm: result.handledForm,
+        orderId: result.orderId,
+        duplicate: result.duplicate,
+        confirmation: result.confirmation,
+        confirmationReason: result.confirmationReason,
+        version: result.version,
       });
+      if (result.confirmation === 'failed') {
+        console.error('pohoda-webhook: potvrzení zákazníkovi SELHALO', logLine);
+      } else if (result.confirmation === 'skipped') {
+        console.warn('pohoda-webhook: potvrzení zákazníkovi přeskočeno', logLine);
+      } else {
+        console.log('pohoda-webhook ok', logLine);
+      }
+
+      return jsonResponse(result);
     }
   } catch (err) {
     const isTimeout = err?.name === 'TimeoutError' || err?.name === 'AbortError';

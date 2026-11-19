@@ -12,15 +12,22 @@
  * Typ-Pozadavku, položky / cena / odkazy). Skript zná i starší názvy (Datum_Vyzvednuti, Zprava, firma, …).
  *
  * Po úspěšné interní notifikaci (NOTIFY_EMAIL) se zákazníkovi s platným e-mailem pošle potvrzení
- * (ne u testu, ne u duplicit; selhání potvrzení běh neshodí). Odpověď je vždy JSON { ok: true|false, ... } – to vyhodnocuje pohoda-webhook.mjs.
+ * (ne u testu, ne u duplicit; selhání potvrzení běh neshodí, jen pošle upozornění na NOTIFY_EMAIL).
+ * Odpověď je vždy JSON { ok: true|false, version, confirmation: sent|skipped|failed, ... } – vyhodnocuje ji pohoda-webhook.mjs.
+ * Test z editoru: funkce testConfirmation (bez podtržítka, jinak by nešla spustit).
  */
+
+/** Verze kódu – po nasazení ji uvidíte v odpovědi na GET adresy /exec (kontrola, že běží správná verze). */
+const VERSION = '2026-11-19-confirm-diag';
 
 const CONFIG = {
   NOTIFY_EMAIL: 'objednavky@cukrarstviblahutovi.cz',
   XML_FOLDER_ID: '16X6rwavpSbq27msnCi81ZjtPwSZPxzmp',
   ICO: '76208371',
   RATE_VAT: 'low',
-  SENDER_NAME: 'Web – Cukrářství Blahutovi',
+  SENDER_NAME: 'Web – Cukrářství Blahutovi', // interní notifikace
+  CUSTOMER_SENDER_NAME: 'Cukrářství Blahutovi', // potvrzení zákazníkům
+  TEST_EMAIL: '', // příjemce pro testConfirmation(); prázdné = NOTIFY_EMAIL
   PHONE: '+420 602 323 788',
   ADDRESS: 'Opavská 218/101, 747 18 Píšť',
 };
@@ -66,7 +73,7 @@ function json_(obj) {
 }
 
 function doGet() {
-  return json_({ ok: true, service: 'Cukrarstvi_Objednavky_Pohoda' });
+  return json_({ ok: true, service: 'Cukrarstvi_Objednavky_Pohoda', version: VERSION });
 }
 
 function doPost(e) {
@@ -81,7 +88,7 @@ function doPost(e) {
 
     const parsed = parsePayload_(e);
     if (parsed.test) {
-      return json_({ ok: true, test: true, note: 'nic nezapsáno ani neodesláno' });
+      return json_({ ok: true, test: true, version: VERSION, note: 'nic nezapsáno ani neodesláno' });
     }
 
     const req = normalizeRequest_(parsed);
@@ -89,6 +96,7 @@ function doPost(e) {
 
     return json_(Object.assign({
       ok: true,
+      version: VERSION,
       handledForm: req.formName || '(neznámý)',
       type: req.type.key,
       submissionId: req.submissionId || undefined,
@@ -130,7 +138,7 @@ function handleOrder_(req) {
   }
 
   // zákaznické potvrzení až po úspěšné interní notifikaci; jeho selhání běh neshodí
-  return { orderId: req.orderId, confirmation: sendCustomerConfirmation_(req) };
+  return Object.assign({ orderId: req.orderId }, confirmationResult_(sendCustomerConfirmation_(req)));
 }
 
 /** Ostatní formuláře: přehledný e-mail. Idempotence přes ID odeslání (nebo otisk těla). */
@@ -148,7 +156,7 @@ function handleRequest_(req, parsed) {
   cache.put(key, '1', 21600); // 6 h = maximum CacheService
 
   // zákaznické potvrzení až po úspěšné interní notifikaci; jeho selhání běh neshodí
-  return { orderId: req.orderId || undefined, confirmation: sendCustomerConfirmation_(req) };
+  return Object.assign({ orderId: req.orderId || undefined }, confirmationResult_(sendCustomerConfirmation_(req)));
 }
 
 function digest_(text) {
@@ -281,7 +289,8 @@ function normalizeRequest_(parsed) {
     name: name || company || pick_(d, ['name'], used) || 'Zákazník',
     company: company,
     ico: pick_(d, ['ICO', 'ico', 'IC'], used),
-    email: pick_(d, ['Email', 'email'], used),
+    // e-mail: pole formuláře, jinak fallback na e-mail z nejvyšší úrovně payloadu (Netlify ho posílá i tam)
+    email: pick_(d, ['Email', 'email'], used) || String((parsed.src && parsed.src.email) || '').trim(),
     phone: pick_(d, ['Telefon', 'telefon'], used),
     store: STORE_ALIASES[rawStore.toLowerCase()] || rawStore,
     location: location === 'jine' ? 'Jiná lokalita' : location,
@@ -443,8 +452,31 @@ function formatDateTime_(value) {
   }
 }
 
+/**
+ * Přísná kontrola e-mailu: jen ASCII (MailApp adresy s diakritikou odmítá), žádná koncová tečka,
+ * žádné dvojité tečky, doména s tečkou a koncovkou alespoň 2 písmena.
+ */
 function isEmail_(s) {
-  return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(s || ''));
+  const v = String(s || '');
+  if (!v || v.length > 254 || v !== v.trim()) return false;
+  const parts = v.split('@');
+  if (parts.length !== 2) return false;
+  const local = parts[0];
+  const domain = parts[1];
+  if (!local || local.length > 64 || /^\.|\.$|\.\./.test(local)) return false;
+  if (!/^[A-Za-z0-9.!#$%&'*+\/=?^_`{|}~-]+$/.test(local)) return false;
+  if (domain.length > 253 || /^\.|\.$|\.\./.test(domain)) return false;
+  return /^[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/.test(domain) &&
+    !/(^|\.)-|-(\.|$)/.test(domain);
+}
+
+/** Zamaskovaná adresa pro logy: j***@seznam.cz */
+function maskEmail_(s) {
+  const v = String(s || '');
+  const at = v.indexOf('@');
+  if (!v) return '(prázdné)';
+  if (at < 1) return v.slice(0, 2) + '***';
+  return v.charAt(0) + '***' + v.slice(at);
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -737,30 +769,146 @@ function buildEmailText_(r, xmlInfo) {
 /**
  * Odešle zákazníkovi potvrzení. Volá se až po úspěšné interní notifikaci a jen u reálně zpracovaných
  * požadavků (test i duplicity končí dřív). Nikdy nevyhazuje výjimku.
- * Vrací 'sent' | 'skipped' (chybí / neplatný e-mail) | 'failed'.
+ * Vrací { status: 'sent' | 'skipped' | 'failed', reason } a vždy zapíše rozhodnutí do logu (Spuštění).
  */
 function sendCustomerConfirmation_(r) {
-  if (!isEmail_(r.email)) {
-    return 'skipped';
+  const started = Date.now();
+  let status = 'sent';
+  let reason = '';
+
+  if (!r.email) {
+    status = 'skipped';
+    reason = 'zákazník nevyplnil e-mail';
+  } else if (!isEmail_(r.email)) {
+    status = 'skipped';
+    reason = 'neplatný e-mail (kontrola isEmail_)';
+  } else {
+    try {
+      const isB2b = r.type.key === 'b2b';
+      const content = isB2b ? buildB2bConfirmation_(r) : buildStandardConfirmation_(r);
+
+      MailApp.sendEmail({
+        to: r.email,
+        subject: content.subject,
+        body: content.text,
+        htmlBody: content.html,
+        name: CONFIG.CUSTOMER_SENDER_NAME,
+        replyTo: CONFIG.NOTIFY_EMAIL,
+      });
+    } catch (err) {
+      status = 'failed';
+      reason = String(err && err.message ? err.message : err);
+      console.error('Potvrzení zákazníkovi se nepodařilo odeslat: ' + (err && err.stack ? err.stack : err));
+    }
   }
 
+  let quota = 'n/a';
   try {
-    const isB2b = r.type.key === 'b2b';
-    const content = isB2b ? buildB2bConfirmation_(r) : buildStandardConfirmation_(r);
+    quota = MailApp.getRemainingDailyQuota();
+  } catch (quotaErr) {
+    quota = 'chyba: ' + quotaErr;
+  }
+
+  console.log('Potvrzení zákazníkovi: ' + JSON.stringify({
+    status: status,
+    reason: reason || undefined,
+    to: maskEmail_(r.email),
+    form: r.formName || '(neznámý)',
+    type: r.type.key,
+    orderId: r.orderId || undefined,
+    ms: Date.now() - started,
+    remainingQuota: quota,
+    version: VERSION,
+  }));
+
+  if (status === 'failed') {
+    notifyConfirmationFailure_(r, reason);
+  }
+
+  return { status: status, reason: reason };
+}
+
+/** Pole pro JSON odpověď: confirmation = sent | skipped | failed, confirmationReason = důvod (pokud je). */
+function confirmationResult_(res) {
+  return { confirmation: res.status, confirmationReason: res.reason || undefined };
+}
+
+/** Krátké upozornění na NOTIFY_EMAIL, že potvrzení zákazníkovi selhalo (aby se dalo poslat ručně). */
+function notifyConfirmationFailure_(r, reason) {
+  try {
+    const lines = [
+      'Potvrzovací e-mail se nepodařilo odeslat. Objednávka / požadavek byl zpracován, jen zákazník nedostal potvrzení.',
+      '',
+      'Zákazník: ' + r.name,
+      'E-mail zákazníka: ' + r.email,
+      'Typ: ' + r.type.label,
+    ];
+    if (r.orderId) lines.push('Číslo objednávky: ' + r.orderId);
+    lines.push('Důvod chyby: ' + reason, '', 'Prosím odpovězte zákazníkovi ručně. Podrobnosti jsou v Apps Script → Spuštění.');
 
     MailApp.sendEmail({
-      to: r.email,
-      subject: content.subject,
-      body: content.text,
-      htmlBody: content.html,
+      to: CONFIG.NOTIFY_EMAIL,
+      subject: 'POZOR: potvrzení zákazníkovi se neodeslalo – ' + r.name + (r.orderId ? ' ' + r.orderId : ''),
+      body: lines.join('\n'),
       name: CONFIG.SENDER_NAME,
-      replyTo: CONFIG.NOTIFY_EMAIL,
     });
-    return 'sent';
   } catch (err) {
-    console.error('Potvrzení zákazníkovi se nepodařilo odeslat: ' + (err && err.stack ? err.stack : err));
-    return 'failed';
+    console.error('Upozornění na selhání potvrzení se nepodařilo odeslat: ' + err);
   }
+}
+
+/**
+ * Test z editoru Apps Script (vyberte funkci „testConfirmation“ a dejte Spustit).
+ * Název je záměrně bez podtržítka na konci – funkce končící „_“ jsou v editoru soukromé a nejdou spustit.
+ * Odešle ukázková potvrzení (košík + B2B) na CONFIG.TEST_EMAIL (jinak NOTIFY_EMAIL) a vypíše do protokolu
+ * efektivního uživatele (odesílatele) a zbývající denní kvótu.
+ */
+function testConfirmation() {
+  const to = CONFIG.TEST_EMAIL || CONFIG.NOTIFY_EMAIL;
+
+  let activeUser = '';
+  try { activeUser = Session.getActiveUser().getEmail(); } catch (e1) { activeUser = 'nedostupné'; }
+  console.log('Efektivní uživatel (odesílatel): ' + Session.getEffectiveUser().getEmail());
+  console.log('Aktivní uživatel: ' + (activeUser || '(prázdné)'));
+  console.log('Zbývající denní kvóta e-mailů: ' + MailApp.getRemainingDailyQuota());
+  console.log('Verze: ' + VERSION + ' | příjemce testu: ' + maskEmail_(to));
+
+  const samples = [
+    {
+      form_name: 'objednavka',
+      id: 'test-objednavka',
+      data: {
+        Jmeno: 'Test Zákazník', Email: to, Telefon: '602 000 000', Prodejna: 'Píšť',
+        Datum: Utilities.formatDate(new Date(Date.now() + 7 * 86400000), 'Europe/Prague', 'yyyy-MM-dd'),
+        'Cislo-Objednavky': 'TEST-0001', 'Zpusob-Platby': 'Při převzetí', 'Celkem-Kc': '540',
+        'Produkty-JSON': JSON.stringify([
+          { name: 'Větrník', price: 70, quantity: 3, category: 'zakusky' },
+          { name: 'Punčový řez', price: 65, quantity: 2, category: 'zakusky' },
+          { name: 'Zápich – ukázka', price: 100, quantity: 2, category: 'zapichy' },
+        ]),
+        Poznamka: 'Testovací potvrzení z funkce testConfirmation – ignorujte.',
+      },
+    },
+    {
+      form_name: 'b2b-poptavka',
+      id: 'test-b2b',
+      data: {
+        Firma: 'Testovací firma s.r.o.', ICO: '12345678', Email: to, Telefon: '602 000 000',
+        Lokalita: 'Ostrava', Poznamka: 'Testovací potvrzení z funkce testConfirmation – ignorujte.',
+      },
+    },
+  ];
+
+  const results = samples.map(function (sample) {
+    const req = normalizeRequest_({
+      raw: '', src: sample, data: sample.data, formName: sample.form_name, submissionId: sample.id,
+    });
+    const res = sendCustomerConfirmation_(req);
+    return sample.form_name + ' → ' + res.status + (res.reason ? ' (' + res.reason + ')' : '');
+  });
+
+  console.log('Výsledek testu: ' + results.join(' | '));
+  return results;
 }
 
 /** Texty podle typu požadavku (předmět, nadpis, úvod). */
