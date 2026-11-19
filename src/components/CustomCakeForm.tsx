@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import PickupDateInput from './PickupDateInput';
 import { getEarliestPickup, getLeadDays, getPickupDateError, getPickupHint } from '../lib/pickupRules';
 import { useToday } from '../lib/useToday';
-import { MAX_FILE_BYTES, uploadPrintFiles, validateSelection } from '../lib/printUpload';
+import { MAX_FILE_BYTES, validateSelection } from '../lib/printLimits';
 import ConsentCheckbox from './ConsentCheckbox';
 import LegalNotices from './LegalNotices';
+
+// Nahrávání (zmenšení obrázku + upload) se stahuje až při výběru fotky / odeslání, ne při prvním vykreslení
+const loadUploader = () => import('../lib/printUpload');
 
 const CustomCakeForm = () => {
   const [selectedShop, setSelectedShop] = useState('Ostrava (Zábřeh)');
@@ -27,6 +30,7 @@ const CustomCakeForm = () => {
     const file = e.target.files?.[0] ?? null;
     const problem = file ? validateSelection([file]) : null;
     setPhoto(file);
+    if (file) void loadUploader(); // předstažení, ať odeslání nečeká
     setPhotoError(problem);
     e.target.setCustomValidity(problem ?? '');
   };
@@ -43,6 +47,7 @@ const CustomCakeForm = () => {
     setIsSubmitting(true);
     try {
       if (photo) {
+        const { uploadPrintFiles } = await loadUploader();
         const [link] = await uploadPrintFiles([photo]);
         formData.set('Foto-Odkaz', link);
       }
@@ -78,8 +83,8 @@ const CustomCakeForm = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1">
-            <label className="text-xs uppercase tracking-widest text-[#735c1e]">Místo vyzvednutí</label>
-            <select name="Prodejna" value={selectedShop} onChange={(e) => setSelectedShop(e.target.value)} className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" required>
+            <label htmlFor="cake-shop" className="text-xs uppercase tracking-widest text-[#735c1e]">Místo vyzvednutí</label>
+            <select id="cake-shop" name="Prodejna" value={selectedShop} onChange={(e) => setSelectedShop(e.target.value)} className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" required>
               <option value="Ostrava (Zábřeh)">Ostrava - Zábřeh</option>
               <option value="Karviná">Karviná - Ráj</option>
               <option value="Petřvald">Petřvald</option>
@@ -87,19 +92,23 @@ const CustomCakeForm = () => {
             </select>
           </div>
           <div className="flex flex-col gap-1">
-            <label className="text-xs uppercase tracking-widest text-[#735c1e]">Datum vyzvednutí</label>
-            <PickupDateInput name="Datum" min={earliest?.date} value={pickupDate} onChange={(e) => setPickupDate(e.target.value)} error={dateError} aria-describedby="cake-date-hint" className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" required />
+            <label htmlFor="cake-date" className="text-xs uppercase tracking-widest text-[#735c1e]">Datum vyzvednutí</label>
+            <PickupDateInput id="cake-date" name="Datum" min={earliest?.date} value={pickupDate} onChange={(e) => setPickupDate(e.target.value)} error={dateError} aria-describedby="cake-date-hint" className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" required />
           </div>
         </div>
         {dateHint && <p id="cake-date-hint" className="-mt-3 text-xs text-slate-500 leading-snug">{dateHint}</p>}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input type="text" name="Jmeno" placeholder="Vaše jméno" required className="p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" />
-          <input type="email" name="Email" placeholder="Váš e-mail" required className="p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" />
+          <label htmlFor="cake-name" className="sr-only">Vaše jméno</label>
+          <input id="cake-name" type="text" name="Jmeno" autoComplete="name" placeholder="Vaše jméno" required className="p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" />
+          <label htmlFor="cake-email" className="sr-only">Váš e-mail</label>
+          <input id="cake-email" type="email" name="Email" autoComplete="email" placeholder="Váš e-mail" required className="p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" />
         </div>
         
-        <input type="tel" name="Telefon" placeholder="Telefon" required className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" />
-        <textarea name="Poznamka" placeholder="Popište vaši představu..." required className="w-full p-3 h-32 bg-slate-50 rounded-xl border border-slate-200 outline-none resize-none"></textarea>
+        <label htmlFor="cake-phone" className="sr-only">Telefon</label>
+        <input id="cake-phone" type="tel" name="Telefon" autoComplete="tel" placeholder="Telefon" required className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" />
+        <label htmlFor="cake-note" className="sr-only">Popis vašeho dortu</label>
+        <textarea id="cake-note" name="Poznamka" placeholder="Popište vaši představu..." required className="w-full p-3 h-32 bg-slate-50 rounded-xl border border-slate-200 outline-none resize-none"></textarea>
         
         <div className="p-6 bg-orange-50 border-2 border-dashed border-[#b38f2d]/30 rounded-2xl">
           <label htmlFor="cake-photo" className="block text-xs font-bold text-[#735c1e] uppercase mb-3 text-center">Inspirační obrázek (nepovinné)</label>

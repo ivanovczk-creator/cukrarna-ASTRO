@@ -43,7 +43,8 @@ import CustomCakeForm from '../components/CustomCakeForm.tsx';
 					<p class="text-slate-500 text-center mb-8 text-sm font-bold uppercase tracking-widest"> Zadejte detaily vaší objednávky
 					</p>
 					
-					<CustomCakeForm client:load />
+					<!-- Formulář je předrenderovaný v HTML; React, právní texty a pravidla termínů se stahují až těsně před zobrazením (client:visible) -->
+					<CustomCakeForm client:visible={{ rootMargin: '300px' }} />
 				</div>
 			</div>
 		</section>

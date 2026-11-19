@@ -1,38 +1,16 @@
 /**
- * Klientská logika nahrávání souborů k jedlému tisku.
- * Pravidla musí odpovídat netlify/lib/print-files.mjs (server je ověřuje znovu).
+ * Klientská logika nahrávání souborů (jedlý tisk, inspirační obrázek dortu na přání).
+ * Těžší část (zmenšení obrázku, upload) – formuláře ji načítají dynamicky až při výběru souboru / odeslání.
+ * Limity a kontrola výběru jsou v printLimits.ts (server je ověřuje znovu).
  */
+import { MAX_FILE_BYTES, SHRINKABLE, getExtension, mb } from './printLimits';
+
+export { ALLOWED_EXTENSIONS, MAX_FILES, MAX_FILE_BYTES, getExtension, validateSelection } from './printLimits';
 
 export const UPLOAD_ENDPOINT = '/api/upload-print';
-export const MAX_FILE_BYTES = 5 * 1024 * 1024;
-export const MAX_FILES = 5;
-export const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'heic', 'heif', 'pdf'];
 
 // A4 při 300 dpi = 3508 px na delší straně
 const MAX_IMAGE_SIDE = 3508;
-const SHRINKABLE = ['jpg', 'jpeg', 'png', 'webp'];
-
-export const getExtension = (name: string): string => /\.([a-z0-9]+)$/i.exec(name)?.[1].toLowerCase() ?? '';
-
-const mb = (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1).replace('.', ',')} MB`;
-
-/** Vrátí českou chybovou hlášku, nebo null když je výběr v pořádku. */
-export function validateSelection(files: File[]): string | null {
-  if (files.length === 0) return 'Vyberte alespoň jeden soubor.';
-  if (files.length > MAX_FILES) return `Maximálně ${MAX_FILES} souborů najednou.`;
-
-  for (const file of files) {
-    if (!ALLOWED_EXTENSIONS.includes(getExtension(file.name))) {
-      return `Soubor „${file.name}“ má nepodporovaný typ. Povolené: JPG, PNG, WEBP, HEIC, PDF.`;
-    }
-    if (file.size === 0) return `Soubor „${file.name}“ je prázdný.`;
-    const canShrink = SHRINKABLE.includes(getExtension(file.name));
-    if (file.size > MAX_FILE_BYTES && !canShrink) {
-      return `Soubor „${file.name}“ má ${mb(file.size)} (limit ${mb(MAX_FILE_BYTES)}). Pošlete ho prosím e-mailem.`;
-    }
-  }
-  return null;
-}
 
 /** Příliš velký rastrový obrázek zmenší na A4 @300 dpi (JPEG); ostatní vrátí beze změny. */
 async function prepareFile(file: File): Promise<File> {

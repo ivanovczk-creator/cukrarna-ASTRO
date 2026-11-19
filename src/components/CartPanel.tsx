@@ -152,15 +152,17 @@ const CartPanel = ({ cart, removeItem }: Props) => {
       </div>
 
       <div className="space-y-3 pt-4 border-t border-slate-100">
-        <input type="text" name="Jmeno" placeholder="Jméno a příjmení" required className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none font-bold" />
+        <input id="cart-name" type="text" name="Jmeno" autoComplete="name" aria-label="Jméno a příjmení" placeholder="Jméno a příjmení" required className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none font-bold" />
         <div className="grid grid-cols-2 gap-2">
-          <input type="email" name="Email" placeholder="E-mail" required className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none font-bold" />
-          <input type="tel" name="Telefon" placeholder="Telefon" required className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none font-bold" />
+          <input id="cart-email" type="email" name="Email" autoComplete="email" aria-label="E-mail" placeholder="E-mail" required className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none font-bold" />
+          <input id="cart-phone" type="tel" name="Telefon" autoComplete="tel" aria-label="Telefon" placeholder="Telefon" required className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none font-bold" />
         </div>
 
         <div className="grid grid-cols-2 gap-2">
           <select
+            id="cart-store"
             name="Prodejna"
+            aria-label="Místo vyzvednutí (prodejna)"
             value={selectedStore}
             onChange={(e) => setSelectedStore(e.target.value)}
             className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-[#d4af37] outline-none font-bold"
@@ -171,7 +173,9 @@ const CartPanel = ({ cart, removeItem }: Props) => {
             <option>Ostrava (Zábřeh)</option>
           </select>
           <PickupDateInput
+            id="cart-date"
             name="Datum"
+            aria-label="Datum vyzvednutí"
             min={earliest.date}
             value={pickupDate}
             onChange={(e) => setPickupDate(e.target.value)}
@@ -186,7 +190,7 @@ const CartPanel = ({ cart, removeItem }: Props) => {
           <p id="cart-date-hint" className="text-[10px] font-bold text-slate-500 leading-snug">{dateHint}</p>
         )}
 
-        <textarea name="Poznamka" placeholder="Poznámka k objednávce (nepovinné)" className="w-full p-3 bg-slate-50 rounded-xl text-sm outline-none h-20 resize-none border border-transparent focus:border-[#d4af37] font-bold"></textarea>
+        <textarea id="cart-note" name="Poznamka" aria-label="Poznámka k objednávce (nepovinné)" placeholder="Poznámka k objednávce (nepovinné)" className="w-full p-3 bg-slate-50 rounded-xl text-sm outline-none h-20 resize-none border border-transparent focus:border-[#d4af37] font-bold"></textarea>
 
         <PaymentMethodSelector
           value={onlineAvailable ? paymentMethod : 'cash'}
