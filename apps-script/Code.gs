@@ -15,12 +15,12 @@
  * (ne u testu, ne u duplicit; selhání potvrzení běh neshodí, jen pošle upozornění na NOTIFY_EMAIL).
  * Online platba (Comgate): netlify/functions/comgate-notify.mjs posílá { action: 'payment-update', orderId, status, transId, amount }
  * → handlePaymentUpdate_ přepíše v XML objednávky poznámku „Platba: …“ a značku v textu ([ZAPLACENO ONLINE]) a pošle interní e-mail.
- * Odpověď je vždy JSON { ok: true|false, version, confirmation: sent|skipped|failed, ... } – vyhodnocuje ji pohoda-webhook.mjs.
+ * Odpověď je vždy JSON { ok: true|false, version, confirmation: sent|skipped|failed|delegated, ... } – vyhodnocuje ji pohoda-webhook.mjs.
  * Test z editoru: funkce testConfirmation (bez podtržítka, jinak by nešla spustit).
  */
 
 /** Verze kódu – po nasazení ji uvidíte v odpovědi na GET adresy /exec (kontrola, že běží správná verze). */
-const VERSION = '2026-11-20-plain-confirm';
+const VERSION = '2026-11-20-external-mail';
 
 const CONFIG = {
   NOTIFY_EMAIL: 'objednavky@cukrarstviblahutovi.cz',
@@ -81,6 +81,13 @@ function doGet() {
   return json_({ ok: true, service: 'Cukrarstvi_Objednavky_Pohoda', version: VERSION });
 }
 
+/**
+ * true = potvrzení zákazníkovi tento skript NEPOŠLE, jen ho sestaví a vrátí v odpovědi (confirmationMail);
+ * odešle ho netlify funkce přes externí službu (Resend). Zapíná se parametrem ?mail=external, který
+ * pohoda-webhook přidá, když má v Netlify nastavené RESEND_API_KEY. Bez něj posílá potvrzení tento skript sám.
+ */
+let EXTERNAL_MAIL_ = false;
+
 function doPost(e) {
   const lock = LockService.getScriptLock();
   try {
@@ -90,6 +97,7 @@ function doPost(e) {
     if (expectedToken && (e.parameter || {}).token !== expectedToken) {
       return json_({ ok: false, error: 'unauthorized' });
     }
+    EXTERNAL_MAIL_ = (e.parameter || {}).mail === 'external';
 
     const parsed = parsePayload_(e);
     if (parsed.test) {
@@ -99,6 +107,11 @@ function doPost(e) {
     // výsledek online platby z Comgate (posílá netlify/functions/comgate-notify.mjs přes pohoda-webhook)
     if (parsed.src && parsed.src.action === 'payment-update') {
       return json_(Object.assign({ ok: true, version: VERSION, handledForm: 'payment-update' }, handlePaymentUpdate_(parsed.src)));
+    }
+
+    // netlify funkce nedokázala odeslat potvrzení přes externí službu → upozorníme obchod (interní e-mail)
+    if (parsed.src && parsed.src.action === 'confirmation-failed') {
+      return json_(Object.assign({ ok: true, version: VERSION, handledForm: 'confirmation-failed' }, handleConfirmationFailed_(parsed.src)));
     }
 
     const req = normalizeRequest_(parsed);
@@ -888,6 +901,7 @@ function sendCustomerConfirmation_(r) {
   const started = Date.now();
   let status = 'sent';
   let reason = '';
+  let mail = null;
 
   if (!r.email) {
     status = 'skipped';
@@ -900,15 +914,32 @@ function sendCustomerConfirmation_(r) {
       const isB2b = r.type.key === 'b2b';
       const content = isB2b ? buildB2bConfirmation_(r) : buildStandardConfirmation_(r);
 
-      const options = {
-        to: r.email,
-        subject: content.subject,
-        body: content.text,
-        name: CONFIG.CUSTOMER_SENDER_NAME,
-        replyTo: CONFIG.NOTIFY_EMAIL,
-      };
-      if (CONFIG.CUSTOMER_EMAIL_FORMAT === 'html') options.htmlBody = content.html;
-      MailApp.sendEmail(options);
+      if (EXTERNAL_MAIL_) {
+        // odešle netlify funkce přes externí službu; tady jen předáme hotový obsah (HTML + prostý text)
+        status = 'delegated';
+        mail = {
+          to: r.email,
+          subject: content.subject,
+          text: content.text,
+          html: content.html,
+          fromName: CONFIG.CUSTOMER_SENDER_NAME,
+          replyTo: CONFIG.NOTIFY_EMAIL,
+          // jen pro upozornění obchodu, kdyby odeslání selhalo
+          customerName: r.name,
+          typeLabel: r.type.label,
+          orderId: r.orderId || '',
+        };
+      } else {
+        const options = {
+          to: r.email,
+          subject: content.subject,
+          body: content.text,
+          name: CONFIG.CUSTOMER_SENDER_NAME,
+          replyTo: CONFIG.NOTIFY_EMAIL,
+        };
+        if (CONFIG.CUSTOMER_EMAIL_FORMAT === 'html') options.htmlBody = content.html;
+        MailApp.sendEmail(options);
+      }
     } catch (err) {
       status = 'failed';
       reason = String(err && err.message ? err.message : err);
@@ -939,12 +970,31 @@ function sendCustomerConfirmation_(r) {
     notifyConfirmationFailure_(r, reason);
   }
 
-  return { status: status, reason: reason };
+  return { status: status, reason: reason, mail: mail };
 }
 
-/** Pole pro JSON odpověď: confirmation = sent | skipped | failed, confirmationReason = důvod (pokud je). */
+/**
+ * Pole pro JSON odpověď: confirmation = sent | skipped | failed | delegated, confirmationReason = důvod (pokud je),
+ * confirmationMail = hotová zpráva k odeslání přes externí službu (jen při status 'delegated').
+ */
 function confirmationResult_(res) {
-  return { confirmation: res.status, confirmationReason: res.reason || undefined };
+  return {
+    confirmation: res.status,
+    confirmationReason: res.reason || undefined,
+    confirmationMail: res.mail || undefined,
+  };
+}
+
+/** Netlify funkce hlásí, že potvrzení přes externí službu selhalo → upozornění na NOTIFY_EMAIL. */
+function handleConfirmationFailed_(src) {
+  const cut = function (v, n) { return String(v == null ? '' : v).slice(0, n); };
+  notifyConfirmationFailure_({
+    name: cut(src.name, 120) || '(neznámý)',
+    email: cut(src.email, 200),
+    type: { label: cut(src.type, 60) || 'objednávka' },
+    orderId: cut(src.orderId, 40),
+  }, cut(src.reason, 300) || 'neuvedeno');
+  return { alerted: true };
 }
 
 /** Krátké upozornění na NOTIFY_EMAIL, že potvrzení zákazníkovi selhalo (aby se dalo poslat ručně). */

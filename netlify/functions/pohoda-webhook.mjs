@@ -2,6 +2,8 @@
  * POST /.netlify/functions/pohoda-webhook
  * Přeposílá webhook z Netlify Forms do Google Apps Scriptu (Cukrarstvi_Objednavky_Pohoda).
  */
+import { isExternalMailEnabled, sendCustomerMail } from '../lib/mailer.mjs';
+
 const APPS_SCRIPT_URL =
   'https://script.google.com/macros/s/AKfycbwbbUYAH_qt6DVzzH35d4WLWFyCCyyNuLGiVZnm73UaKUT_Si1L28NfEkbv_b0DISvJ/exec';
 
@@ -71,7 +73,8 @@ function toPreview(rawText, limit = LOG_CHARS) {
 
 async function readResponseSafe(res) {
   try {
-    const raw = (await res.text()).slice(0, 20000);
+    // odpověď nese i hotové HTML potvrzení (confirmationMail) → limit musí být větší než pro náhled
+    const raw = (await res.text()).slice(0, 300000);
     return {
       text: raw,
       preview: toPreview(raw, LOG_CHARS),
@@ -95,6 +98,45 @@ function isAllowedRedirect(targetUrl) {
   }
 }
 
+const ALERT_TIMEOUT_MS = 3000;
+
+/**
+ * Odešle hotové potvrzení (z Apps Scriptu) přes Resend. Nikdy nevyhazuje výjimku – objednávka je už uložená.
+ * Při selhání pošle obchodu upozornění (interní e-mail přes Apps Script, ten na vlastní doménu projde).
+ * @returns {{ confirmation: 'sent' | 'failed', reason?: string }}
+ */
+async function deliverConfirmation(parsed, requestUrl) {
+  const mail = parsed.confirmationMail;
+  if (!mail || !mail.to || !mail.subject || !mail.text) {
+    return { confirmation: 'failed', reason: 'Apps Script nevrátil obsah potvrzení' };
+  }
+
+  const sent = await sendCustomerMail(mail, {
+    idempotencyKey: mail.orderId ? `confirm-${mail.orderId}` : undefined,
+  });
+  if (sent.ok) return { confirmation: 'sent' };
+
+  try {
+    const origin = new URL(requestUrl).origin;
+    await fetch(`${origin}/.netlify/functions/pohoda-webhook`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'confirmation-failed',
+        name: mail.customerName,
+        email: mail.to,
+        type: mail.typeLabel,
+        orderId: mail.orderId,
+        reason: sent.error,
+      }),
+      signal: AbortSignal.timeout(ALERT_TIMEOUT_MS),
+    });
+  } catch (err) {
+    console.error('pohoda-webhook: upozornění na selhání potvrzení se nepodařilo odeslat', String(err?.message ?? err));
+  }
+  return { confirmation: 'failed', reason: sent.error };
+}
+
 export default async (req) => {
   if (req.method !== 'POST') {
     return jsonResponse({ ok: false, error: 'Method Not Allowed' }, 405);
@@ -110,6 +152,9 @@ export default async (req) => {
     if (process.env.WEBHOOK_TOKEN) {
       firstUrl.searchParams.set('token', process.env.WEBHOOK_TOKEN);
     }
+    // s Resendem posílá potvrzení zákazníkovi tato funkce; Apps Script ho jen sestaví a vrátí
+    const externalMail = isExternalMailEnabled();
+    if (externalMail) firstUrl.searchParams.set('mail', 'external');
 
     let currentUrl = firstUrl.href;
     let currentMethod = 'POST';
@@ -232,6 +277,15 @@ export default async (req) => {
         });
       }
 
+      // Potvrzení zákazníkovi přes externí službu (Apps Script ho vrátil jako 'delegated')
+      let confirmation = parsed.confirmation;
+      let confirmationReason = parsed.confirmationReason;
+      if (confirmation === 'delegated') {
+        const outcome = await deliverConfirmation(parsed, req.url);
+        confirmation = outcome.confirmation;
+        confirmationReason = outcome.reason;
+      }
+
       const result = {
         ok: true,
         upstreamStatus: res.status,
@@ -242,8 +296,8 @@ export default async (req) => {
         handledForm: parsed.handledForm,
         test: parsed.test,
         version: parsed.version,
-        confirmation: parsed.confirmation,
-        confirmationReason: parsed.confirmationReason,
+        confirmation,
+        confirmationReason,
         responsePreview: preview.slice(0, PREVIEW_CHARS),
       };
 

@@ -46,6 +46,8 @@ Po změně proměnných spusťte nový deploy (`PUBLIC_*` se vkládá při build
 | `COMGATE_TEST` | ne (výchozí `true`) | stejné funkce | `false` až po schválení ostrého provozu Comgatem. |
 | `SITE_URL` | ne | stejné funkce | Veřejná adresa webu pro návratové URL, výchozí `https://cukrarstviblahutovi.cz`. |
 | `WEBHOOK_TOKEN` | ano (už nastaveno) | `pohoda-webhook` | Stejný token jako vlastnost skriptu v Apps Scriptu; používá se i pro propsání platby do objednávky. |
+| `RESEND_API_KEY` | doporučeno | `pohoda-webhook` | API klíč z resend.com (po ověření domény). Zapne odesílání potvrzení zákazníkům přes Resend místo Google (ten má novou doménu dočasně zablokovanou, chyba 69585). Bez něj posílá potvrzení Apps Script. **Tajné** – jen scope Functions. |
+| `MAIL_FROM` | ne (výchozí `objednavky@cukrarstviblahutovi.cz`) | `pohoda-webhook` | Adresa odesílatele; musí být na doméně ověřené v Resendu. |
 | `POHODA_ICO` | ano pro POHODU | generátor XML (`netlify/lib/pohoda.mjs`) | IČO účetní jednotky. Bez něj se použije zástupné `00000000`. |
 | `POHODA_RATE_VAT` | ne (výchozí `low`) | generátor XML | `none` / `low` / `high` / `third` – ověřte s účetní. |
 | `POHODA_MSERVER_URL` | jen při přímém odeslání | `integrations/pohoda/send-to-pohoda.mjs` | Adresa mServeru, např. `http://host:444/xml`. Musí být dostupný zvenčí (VPN / reverzní proxy). |
