@@ -20,7 +20,7 @@
  */
 
 /** Verze kódu – po nasazení ji uvidíte v odpovědi na GET adresy /exec (kontrola, že běží správná verze). */
-const VERSION = '2026-11-19-comgate-payment';
+const VERSION = '2026-11-20-plain-confirm';
 
 const CONFIG = {
   NOTIFY_EMAIL: 'objednavky@cukrarstviblahutovi.cz',
@@ -29,7 +29,10 @@ const CONFIG = {
   RATE_VAT: 'low',
   SENDER_NAME: 'Web – Cukrářství Blahutovi', // interní notifikace
   CUSTOMER_SENDER_NAME: 'Cukrářství Blahutovi', // potvrzení zákazníkům
-  TEST_EMAIL: '', // příjemce pro testConfirmation(); prázdné = NOTIFY_EMAIL
+  // Podoba potvrzení zákazníkovi: 'text' = jen prostý text (nejméně spustí odchozí spam filtr Google),
+  // 'html' = barevná HTML šablona + prostý text jako alternativa. Při chybě „Message rejected“ nechte 'text'.
+  CUSTOMER_EMAIL_FORMAT: 'text',
+  TEST_EMAIL: 'ivanovczk@gmail.com', // příjemce pro testConfirmation() a testDeliverability(); testDeliverability vyžaduje EXTERNÍ adresu
   PHONE: '+420 602 323 788',
   ADDRESS: 'Opavská 218/101, 747 18 Píšť',
 };
@@ -506,6 +509,23 @@ function esc_(v) {
     .replace(/'/g, '&#39;');
 }
 
+/**
+ * Do e-mailu zákazníkovi se vrací text, který zadal sám zákazník (jméno, poznámka, seznam položek).
+ * Odkazy v něm odstraníme – odchozí spam filtr Google je u automatických e-mailů s cizími URL podezřívavý.
+ */
+function defang_(v) {
+  return String(v == null ? '' : v).replace(/(?:https?:\/\/|www\.)\S+/gi, '[odkaz odstraněn]');
+}
+
+function defangForCustomer_(r) {
+  return Object.assign({}, r, {
+    name: defang_(r.name),
+    company: defang_(r.company),
+    note: defang_(r.note),
+    itemsText: defang_(r.itemsText),
+  });
+}
+
 /** Escape pro XML (stejný jako dřív). */
 function x_(v) {
   return String(v == null ? '' : v)
@@ -880,14 +900,15 @@ function sendCustomerConfirmation_(r) {
       const isB2b = r.type.key === 'b2b';
       const content = isB2b ? buildB2bConfirmation_(r) : buildStandardConfirmation_(r);
 
-      MailApp.sendEmail({
+      const options = {
         to: r.email,
         subject: content.subject,
         body: content.text,
-        htmlBody: content.html,
         name: CONFIG.CUSTOMER_SENDER_NAME,
         replyTo: CONFIG.NOTIFY_EMAIL,
-      });
+      };
+      if (CONFIG.CUSTOMER_EMAIL_FORMAT === 'html') options.htmlBody = content.html;
+      MailApp.sendEmail(options);
     } catch (err) {
       status = 'failed';
       reason = String(err && err.message ? err.message : err);
@@ -1004,6 +1025,69 @@ function testConfirmation() {
   return results;
 }
 
+/**
+ * Diagnostika chyby „Message rejected“ (Gmail → Email Log Search): pošle na EXTERNÍ adresu (CONFIG.TEST_EMAIL,
+ * např. váš soukromý Gmail) tři zprávy od nejjednodušší po nejbohatší a vždy mezi nimi počká 20 s:
+ *   A) jedna věta prostého textu            → když selže i A, je omezení na úrovni účtu / domény (ne obsah)
+ *   B) skutečné potvrzení jako prostý text   → když projde A, ale selže B, vadí obsah (slova, údaje)
+ *   C) skutečné potvrzení jako bohaté HTML   → když projde B, ale selže C, vadí HTML šablona
+ * Výsledek každé zprávy pak zkontrolujte v Admin konzoli → Reporting → Email Log Search (příjemce = testovací adresa).
+ * Spouští se z editoru (Spustit → testDeliverability).
+ */
+function testDeliverability() {
+  const FALLBACK_EXTERNAL = 'ivanovczk@gmail.com';
+  const domainOf = function (a) { return String(a).toLowerCase().split('@')[1]; };
+  let to = CONFIG.TEST_EMAIL;
+  // Prázdná, neplatná nebo vlastní (interní) adresa → použij externí náhradní, ať se odchozí filtr skutečně uplatní.
+  if (!to || !isEmail_(to) || domainOf(to) === domainOf(CONFIG.NOTIFY_EMAIL)) {
+    to = FALLBACK_EXTERNAL;
+  }
+
+  console.log('Odesílatel: ' + Session.getEffectiveUser().getEmail() + ' | příjemce: ' + maskEmail_(to) +
+    ' | kvóta: ' + MailApp.getRemainingDailyQuota() + ' | verze: ' + VERSION);
+
+  const sample = normalizeRequest_({
+    raw: '', src: {}, formName: 'objednavka', submissionId: 'test-deliverability',
+    data: {
+      'form-name': 'objednavka',
+      Jmeno: 'Test Zákazník', Email: to, Telefon: '602 000 000', Prodejna: 'Píšť',
+      Datum: Utilities.formatDate(new Date(Date.now() + 7 * 86400000), 'Europe/Prague', 'yyyy-MM-dd'),
+      'Cislo-Objednavky': 'TEST-0002', 'Zpusob-Platby': 'cash', 'Celkem-Kc': '540',
+      'Produkty-JSON': JSON.stringify([
+        { name: 'Větrník', price: 70, quantity: 3, category: 'zakusky' },
+        { name: 'Punčový řez', price: 65, quantity: 2, category: 'zakusky' },
+      ]),
+      Poznamka: 'Testovací zpráva z testDeliverability – ignorujte.',
+    },
+  });
+  const content = buildStandardConfirmation_(sample);
+
+  const variants = [
+    { id: 'A', note: 'jedna věta prostého textu', send: function () {
+      MailApp.sendEmail({ to: to, subject: '[test A/3] Cukrářství Blahutovi – kontrola doručení', body: 'Dobrý den, toto je zkušební zpráva z objednávkového systému. Prosím ignorujte ji.', name: CONFIG.CUSTOMER_SENDER_NAME });
+    } },
+    { id: 'B', note: 'potvrzení – prostý text', send: function () {
+      MailApp.sendEmail({ to: to, subject: '[test B/3] ' + content.subject, body: content.text, name: CONFIG.CUSTOMER_SENDER_NAME, replyTo: CONFIG.NOTIFY_EMAIL });
+    } },
+    { id: 'C', note: 'potvrzení – bohaté HTML', send: function () {
+      MailApp.sendEmail({ to: to, subject: '[test C/3] ' + content.subject, body: content.text, htmlBody: content.html, name: CONFIG.CUSTOMER_SENDER_NAME, replyTo: CONFIG.NOTIFY_EMAIL });
+    } },
+  ];
+
+  const results = [];
+  variants.forEach(function (v, i) {
+    try {
+      v.send();
+      results.push(v.id + ' (' + v.note + '): odesláno');
+    } catch (err) {
+      results.push(v.id + ' (' + v.note + '): CHYBA ' + err);
+    }
+    if (i < variants.length - 1) Utilities.sleep(20000);
+  });
+  console.log('Výsledek: ' + results.join(' | ') + ' → nyní zkontrolujte Email Log Search (které z A/B/C bylo „Message rejected“).');
+  return results;
+}
+
 /** Texty podle typu požadavku (předmět, nadpis, úvod). */
 function confirmationTexts_(r) {
   const brand = 'Cukrářství Blahutovi';
@@ -1104,7 +1188,8 @@ function confirmBlock_(inner) {
 }
 
 /** Potvrzení pro ostatní typy: košík, tisk, dort na přání i obecné formuláře. */
-function buildStandardConfirmation_(r) {
+function buildStandardConfirmation_(req) {
+  const r = defangForCustomer_(req);
   const t = confirmationTexts_(r);
   const facts = confirmFacts_(r);
   const hasItemsTable = r.lines.length > 0 && r.type.key !== 'tisk';
@@ -1162,7 +1247,8 @@ function buildStandardConfirmation_(r) {
 }
 
 /** Potvrzení pro B2B poptávku: profesionální tón a výpis zadaných údajů. */
-function buildB2bConfirmation_(r) {
+function buildB2bConfirmation_(req) {
+  const r = defangForCustomer_(req);
   const subject = 'Děkujeme za váš zájem o spolupráci – Cukrářství Blahutovi';
   const title = 'Děkujeme za váš zájem o spolupráci';
   const p1 = 'děkujeme vám za zájem o spolupráci s Cukrářstvím Blahutovi. Váš zájem nás velmi těší.';
