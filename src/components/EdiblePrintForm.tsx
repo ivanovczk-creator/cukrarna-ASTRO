@@ -72,7 +72,7 @@ const EdiblePrintForm = () => {
         body: new URLSearchParams(formData as any).toString(),
       });
       if (!res.ok) throw new Error(`Server vrátil ${res.status}`);
-      window.location.href = '/dekujeme';
+      window.location.href = '/dekujeme/';
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : 'Odeslání se nezdařilo.');
       setIsSubmitting(false);

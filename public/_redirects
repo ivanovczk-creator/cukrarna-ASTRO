@@ -1,11 +1,13 @@
-# Staré adresy presmerujeme na nové (SEO zlato)
-/nabidka-zakusku/      /zakusky      301
-/nabidka-zakusku       /zakusky      301
-/kontakt/              /prodejny     301
-/kontakt               /prodejny     301
-/oteviraci-doba/       /prodejny     301
-/oteviraci-doba        /prodejny     301
-/cukrovi/              /             301
-/cukrovi               /             301
-/dorty/detske/         /dorty        301
-/dorty/detske          /dorty        301
+# Staré adresy přesměrujeme na nové (301), rovnou na kanonický tvar s koncovým lomítkem.
+# Verze bez lomítka u existujících stránek (/dorty/nahe -> /dorty/nahe/) Netlify přesměruje 301 samo
+# (stránky jsou v dist/<cesta>/index.html) – explicitní pravidla "/x /x/" by u Netlify vedla ke smyčce.
+/nabidka-zakusku/      /zakusky/      301
+/nabidka-zakusku       /zakusky/      301
+/kontakt/              /prodejny/     301
+/kontakt               /prodejny/     301
+/oteviraci-doba/       /prodejny/     301
+/oteviraci-doba        /prodejny/     301
+/cukrovi/              /              301
+/cukrovi               /              301
+
+# POZOR: /dorty/detske/ je plnohodnotná kategorie (je v menu i v sitemap.xml) – nesmí se přesměrovávat na /dorty/.

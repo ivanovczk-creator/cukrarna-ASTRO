@@ -117,7 +117,7 @@ const CartPanel = ({ cart, removeItem }: Props) => {
           alert("Objednávku jsme přijali, ale online platbu se nepodařilo zahájit. Ozveme se vám, nebo zaplatíte při převzetí.");
         }
       }
-      window.location.href = "/dekujeme";
+      window.location.href = "/dekujeme/";
     } catch (err) {
       alert("Chyba při odesílání: " + err);
       setIsSubmitting(false);

@@ -44,7 +44,7 @@ const authHeader = (cfg) => `Basic ${Buffer.from(`${cfg.merchant}:${cfg.secret}`
 
 /** Návratové URL zákazníka (Comgate za ${id} a ${refId} doplní transakci a číslo objednávky). */
 export function buildReturnUrls(cfg) {
-  const base = `${cfg.siteUrl}/dekujeme?refId=\${refId}&platba=`;
+  const base = `${cfg.siteUrl}/dekujeme/?refId=\${refId}&platba=`;
   return {
     url_paid: `${base}zaplaceno`,
     url_cancelled: `${base}zrusena`,

@@ -39,7 +39,7 @@ const cakeCategories = [
 				{cakeCategories.map((cat) => {
 					const imageSrc = getImage(cat.img, cakeImages);
 					return (
-						<a href={`/dorty/${cat.id}`} class="group flex flex-col items-center gap-4 no-underline text-navy-900">
+						<a href={`/dorty/${cat.id}/`} class="group flex flex-col items-center gap-4 no-underline text-navy-900">
 							<div class="w-full aspect-square rounded-full overflow-hidden border-2 border-slate-100 group-hover:border-[#d4af37] transition-all duration-500 shadow-md relative">
 								{imageSrc ? (
 									<Image 

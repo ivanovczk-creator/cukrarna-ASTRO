@@ -58,21 +58,21 @@ export const COI = {
 } as const;
 
 export const LEGAL_PAGES = {
-  terms: '/obchodni-podminky',
-  privacy: '/ochrana-osobnich-udaju',
-  payments: '/platebni-metody',
-  cookies: '/zasady-cookies',
+  terms: '/obchodni-podminky/',
+  privacy: '/ochrana-osobnich-udaju/',
+  payments: '/platebni-metody/',
+  cookies: '/zasady-cookies/',
 } as const;
 
 export const NAV_LINKS = [
-  { href: '/dorty', label: 'Dorty' },
-  { href: '/zakusky', label: 'Zákusky' },
-  { href: '/studena-kuchyne', label: 'Studená kuchyně' },
-  { href: '/zapichy', label: 'Zápichy' },
-  { href: '/jedly-tisk', label: 'Jedlý tisk' },
-  { href: '/dort-na-prani', label: 'Dort na přání' },
-  { href: '/prodejny', label: 'Prodejny' },
-  { href: '/pro-firmy', label: 'Pro firmy' },
+  { href: '/dorty/', label: 'Dorty' },
+  { href: '/zakusky/', label: 'Zákusky' },
+  { href: '/studena-kuchyne/', label: 'Studená kuchyně' },
+  { href: '/zapichy/', label: 'Zápichy' },
+  { href: '/jedly-tisk/', label: 'Jedlý tisk' },
+  { href: '/dort-na-prani/', label: 'Dort na přání' },
+  { href: '/prodejny/', label: 'Prodejny' },
+  { href: '/pro-firmy/', label: 'Pro firmy' },
 ] as const;
 
 /** Povinné alergeny dle přílohy II nařízení (EU) č. 1169/2011 (1–14). */

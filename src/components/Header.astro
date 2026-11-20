@@ -4,7 +4,10 @@ import ReservationForm from './ReservationForm.tsx';
 import { NAV_LINKS } from '../lib/legal';
 
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
-const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
+const isActive = (href: string) => {
+	const base = href.replace(/\/+$/, '') || '/';
+	return path === base || path.startsWith(`${base}/`);
+};
 ---
 
 <header class="bg-[#0a192f] text-white sticky top-0 z-50 border-b-2 border-[#d4af37]">
