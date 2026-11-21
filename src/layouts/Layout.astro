@@ -17,7 +17,7 @@ interface Props {
 }
 
 const {
-	title = 'Cukrářství Blahutovi | Domácí dorty a zákusky Ostrava a okolí',
+	title = 'Cukrářství Blahutovi | Dorty a zákusky Ostrava a okolí',
 	description = 'Poctivé domácí dorty na zakázku, čerstvé zákusky a mini zákusky z rodinného cukrářství. Navštivte nás v Ostravě, Karviné a Petřvaldě. Tradice od roku 1991.',
 	keywords = 'cukrářství, dorty na zakázku, domácí zákusky, mini zákusky, jedlý tisk, Ostrava, Karviná, Petřvald, Píšť',
 	noindex = false,
@@ -42,17 +42,22 @@ const canonicalURL = new URL(canonicalPathname, SITE_ORIGIN);
 		<meta property="og:url" content={canonicalURL.href} />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
-		<meta property="og:image" content="https://cukrarstviblahutovi.cz/img/dorty/51.webp" />
-		<meta property="og:image:secure_url" content="https://cukrarstviblahutovi.cz/img/dorty/51.webp" />
-		<meta property="og:image:type" content="image/webp" />
+		<meta property="og:image" content="https://cukrarstviblahutovi.cz/og-image.jpg" />
+		<meta property="og:image:secure_url" content="https://cukrarstviblahutovi.cz/og-image.jpg" />
+		<meta property="og:image:type" content="image/jpeg" />
 		<meta property="og:image:width" content="1200" />
 		<meta property="og:image:height" content="630" />
 		<meta property="og:image:alt" content="Svatební dort od Cukrářství Blahutovi" />
 		<meta property="og:locale" content="cs_CZ" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content="https://cukrarstviblahutovi.cz/og-image.jpg" />
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		
 		<link rel="icon" type="image/png" href="/favicon.png" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 		
 		<meta name="generator" content={Astro.generator} />
 		<meta name="facebook-domain-verification" content="jruzshk2iiwkpbv8w7j4nkjkcan570" />
