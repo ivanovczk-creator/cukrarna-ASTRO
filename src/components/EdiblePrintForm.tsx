@@ -162,13 +162,13 @@ const EdiblePrintForm = () => {
               <div className="text-sm text-slate-500">
                 {files.length > 0 ? (
                   <div className="text-[#0a192f] font-medium">
-                    <p className="text-xs text-slate-400 mb-1 font-bold">Vybrané soubory:</p>
+                    <p className="text-xs text-slate-600 mb-1 font-bold">Vybrané soubory:</p>
                     {files.map((file, i) => <div key={i}>{file.name}</div>)}
                   </div>
                 ) : (
                   <div>
                     <p className="font-bold text-slate-700">Klikněte pro výběr obrázků nebo PDF</p>
-                    <p className="text-[10px] text-slate-400 mt-1">Podporuje JPG, PNG, HEIC (iPhone), WEBP i PDF · max. {MAX_FILES} souborů, každý do {MAX_FILE_BYTES / 1024 / 1024} MB</p>
+                    <p className="text-[10px] text-slate-600 mt-1">Podporuje JPG, PNG, HEIC (iPhone), WEBP i PDF · max. {MAX_FILES} souborů, každý do {MAX_FILE_BYTES / 1024 / 1024} MB</p>
                   </div>
                 )}
               </div>
