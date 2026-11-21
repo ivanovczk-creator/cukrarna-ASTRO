@@ -16,11 +16,16 @@
  * Online platba (Comgate): netlify/functions/comgate-notify.mjs posílá { action: 'payment-update', orderId, status, transId, amount }
  * → handlePaymentUpdate_ přepíše v XML objednávky poznámku „Platba: …“ a značku v textu ([ZAPLACENO ONLINE]) a pošle interní e-mail.
  * Odpověď je vždy JSON { ok: true|false, version, confirmation: sent|skipped|failed|delegated, ... } – vyhodnocuje ji pohoda-webhook.mjs.
+ * Kopie objednávky z košíku pro prodejnu: podle pole Prodejna (místo vyzvednutí) se na adresu prodejny z CONFIG.STORE_EMAILS
+ * pošle samostatný e-mail s údaji objednávky (bez XML přílohy a bez technických údajů). Ostatní prodejny ji nedostanou.
+ * Totéž platí pro jedlý tisk (tisk) a dort na přání (dort-na-prani) – viz CONFIG.STORE_COPY_TYPES.
+ * Po zaplacení online (Comgate) dostane stejná prodejna krátkou aktualizaci „ZAPLACENO ONLINE“ (jednou na objednávku).
+ * Test z editoru: funkce testStoreCopy a testStorePaymentNotice.
  * Test z editoru: funkce testConfirmation (bez podtržítka, jinak by nešla spustit).
  */
 
 /** Verze kódu – po nasazení ji uvidíte v odpovědi na GET adresy /exec (kontrola, že běží správná verze). */
-const VERSION = '2026-11-20-external-mail';
+const VERSION = '2026-11-21-store-copy-v2';
 
 const CONFIG = {
   NOTIFY_EMAIL: 'objednavky@cukrarstviblahutovi.cz',
@@ -35,6 +40,16 @@ const CONFIG = {
   TEST_EMAIL: 'ivanovczk@gmail.com', // příjemce pro testConfirmation() a testDeliverability(); testDeliverability vyžaduje EXTERNÍ adresu
   PHONE: '+420 602 323 788',
   ADDRESS: 'Opavská 218/101, 747 18 Píšť',
+  // Kopie objednávky pro prodejnu podle zvoleného místa vyzvednutí (pole Prodejna).
+  // Klíč = první slovo názvu prodejny bez diakritiky malými písmeny („Ostrava“ i „Ostrava (Zábřeh)“ → ostrava).
+  // Píšť (výrobna) kopii nedostává.
+  STORE_EMAILS: {
+    petrvald: 'blahutovi.petrvald@cukrarstviblahutovi.cz',
+    karvina: 'blahutovi.karvina@cukrarstviblahutovi.cz',
+    ostrava: 'blahutovi.ostrava@cukrarstviblahutovi.cz',
+  },
+  // Pro které typy formulářů (FORM_TYPES[].key) se kopie prodejně posílá.
+  STORE_COPY_TYPES: ['objednavka', 'tisk', 'dort-na-prani'],
 };
 
 /** Typy formulářů (klíč = form_name z Netlify). */
@@ -244,7 +259,12 @@ function handlePaymentUpdate_(p) {
     emailed = true;
   }
 
-  return { orderId: orderId, payment: status, xmlUpdated: true, emailed: emailed };
+  // prodejna, u které si zákazník objednávku vyzvedne, se dozví, že je zaplaceno kartou (jen PAID, jen jednou)
+  const storeNotice = status === 'PAID'
+    ? sendStorePaymentNotice_(file, xml, p)
+    : { status: 'skipped', reason: 'stav ' + status };
+
+  return { orderId: orderId, payment: status, xmlUpdated: true, emailed: emailed, storeNotice: storeNotice.status };
 }
 
 /** Ostatní formuláře: přehledný e-mail. Idempotence přes ID odeslání (nebo otisk těla). */
@@ -1350,4 +1370,245 @@ function sendRequestEmail_(r, xmlInfo) {
   }
 
   MailApp.sendEmail(options);
+
+  // kopie pro prodejnu až po interním e-mailu; její selhání zpracování objednávky neshodí
+  sendStoreCopy_(r);
+}
+
+// ---------------------------------------------------------------------------------------------
+// Kopie objednávky pro prodejnu
+// ---------------------------------------------------------------------------------------------
+
+/** Klíč prodejny pro CONFIG.STORE_EMAILS: „Ostrava (Zábřeh)“ → ostrava, „Petřvald“ → petrvald, „Karviná“ → karvina. */
+function storeKey_(store) {
+  const plain = String(store || '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase().replace(/[^a-z]+/g, ' ').trim();
+  return plain.split(' ')[0] || '';
+}
+
+/**
+ * Pošle kopii objednávky na e-mail prodejny, kterou zákazník zvolil jako místo vyzvednutí.
+ * Nikdy nevyhazuje výjimku. Vrací { status: 'sent' | 'skipped' | 'failed', reason, to } a zapíše výsledek do logu.
+ * @param {Object} r normalizovaný požadavek
+ * @param {string=} overrideTo jen pro test: pošle se sem místo na adresu prodejny
+ */
+function sendStoreCopy_(r, overrideTo) {
+  const result = function (status, reason, to) {
+    console.log('Kopie pro prodejnu: ' + status + (reason ? ' (' + reason + ')' : '') +
+      ' | objednávka: ' + (r.orderId || '-') + ' | prodejna: ' + (r.store || '(prázdná)') + (to ? ' | ' + maskEmail_(to) : ''));
+    return { status: status, reason: reason || '', to: to || '' };
+  };
+
+  try {
+    if (CONFIG.STORE_COPY_TYPES.indexOf(r.type.key) === -1) return result('skipped', 'typ formuláře ' + r.type.key);
+
+    const to = overrideTo || CONFIG.STORE_EMAILS[storeKey_(r.store)];
+    if (!to) return result('skipped', 'prodejna nemá e-mail pro kopii');
+
+    // bez technických údajů (IP, user agent, …) a bez XML přílohy – prodejna dostane jen údaje objednávky
+    const copy = Object.assign({}, r, { tech: [] });
+    const intro = 'Kopie: ' + r.type.label + ' – prodejna ' + (r.store || '') + '. Zákazník si ji vyzvedne u vás. ' +
+      'Požadavek zpracovává centrála, tento e-mail je pro informaci a přípravu.';
+
+    const options = {
+      to: to,
+      subject: 'Kopie pro prodejnu ' + (r.store || '') + ': ' + buildSubject_(r),
+      body: intro + '\n\n' + buildEmailText_(copy, null),
+      htmlBody:
+        '<div style="max-width:680px;margin:0 auto 10px auto;padding:12px 16px;background:#fffbeb;border:1px solid #fde68a;' +
+        "border-radius:8px;font-family:'Segoe UI',Roboto,Arial,Helvetica,sans-serif;font-size:14px;color:#92400e;\">" +
+        esc_(intro) + '</div>' + buildEmailHtml_(copy, null),
+      name: CONFIG.SENDER_NAME,
+    };
+    if (isEmail_(r.email)) options.replyTo = r.email;
+
+    MailApp.sendEmail(options);
+    return result('sent', '', to);
+  } catch (err) {
+    console.error('Kopie pro prodejnu SELHALA: ' + (err && err.stack ? err.stack : err));
+    return result('failed', String(err && err.message ? err.message : err));
+  }
+}
+
+/** Značka v popisu XML souboru na Disku: upozornění o zaplacení už prodejna dostala (ochrana proti duplicitě i po 6 h). */
+const STORE_PAID_MARK = 'STORE_PAID_NOTIFIED';
+
+function unx_(v) {
+  return String(v == null ? '' : v)
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, '&');
+}
+
+/** Z XML objednávky (buildPohodaXml_) vyčte prodejnu, zákazníka, termín a položky. */
+function parseOrderFromXml_(xml) {
+  const tag = function (name, scope) {
+    const m = new RegExp('<' + name + '>([^<]*)</' + name + '>').exec(scope);
+    return m ? unx_(m[1]) : '';
+  };
+  const parts = String(xml).split('<ord:orderDetail>');
+  const header = parts[0];
+  const detail = parts[1] || '';
+
+  // hlavička: „Web objednávka BL-… – Karviná [ZAPLACENO ONLINE]“
+  const headText = tag('ord:text', header);
+  const sm = /^Web objednávka \S+ – (.*?)(?: \[[^\]]*\])?$/.exec(headText);
+
+  const lines = [];
+  const itemRe = /<ord:orderItem>([\s\S]*?)<\/ord:orderItem>/g;
+  let m;
+  while ((m = itemRe.exec(detail)) !== null) {
+    const quantity = Number(tag('ord:quantity', m[1])) || 0;
+    const unitPrice = Number(tag('typ:unitPrice', m[1])) || 0;
+    lines.push({ name: tag('ord:text', m[1]), quantity: quantity, lineTotal: quantity * unitPrice });
+  }
+
+  return {
+    orderId: tag('ord:numberOrder', header),
+    store: sm ? sm[1].trim() : '',
+    name: tag('typ:name', header),
+    phone: tag('typ:mobilPhone', header),
+    email: tag('typ:email', header),
+    date: tag('ord:dateDelivery', header),
+    lines: lines,
+    total: lines.reduce(function (sum, l) { return sum + l.lineTotal; }, 0),
+  };
+}
+
+/**
+ * Po zaplacení online pošle prodejně z objednávky krátkou aktualizaci „ZAPLACENO ONLINE“ (při výdeji se neinkasuje).
+ * Nikdy nevyhazuje výjimku. Duplicitu hlídá cache (6 h) i značka v popisu XML souboru (trvale).
+ * @param {GoogleAppsScript.Drive.File|null} file XML objednávky (null jen v testu)
+ * @param {string} xml aktuální obsah XML
+ * @param {Object} p údaje o platbě { orderId, amount (v haléřích), transId, test }
+ * @param {string=} overrideTo jen pro test: pošle se sem a duplicita se nehlídá
+ */
+function sendStorePaymentNotice_(file, xml, p, overrideTo) {
+  const orderId = String(p.orderId || '');
+  const result = function (status, reason, to) {
+    console.log('Upozornění prodejně o platbě: ' + status + (reason ? ' (' + reason + ')' : '') +
+      ' | objednávka: ' + orderId + (to ? ' | ' + maskEmail_(to) : ''));
+    return { status: status, reason: reason || '', to: to || '' };
+  };
+
+  try {
+    if (!overrideTo && p.test) return result('skipped', 'testovací platba');
+
+    const order = parseOrderFromXml_(xml);
+    const to = overrideTo || CONFIG.STORE_EMAILS[storeKey_(order.store)];
+    if (!to) return result('skipped', 'prodejna "' + order.store + '" nemá e-mail pro kopii');
+
+    const cache = CacheService.getScriptCache();
+    const key = 'paystore:' + orderId;
+    if (!overrideTo) {
+      const marked = file && String(file.getDescription() || '').indexOf(STORE_PAID_MARK) !== -1;
+      if (marked || cache.get(key)) return result('skipped', 'duplicate', to);
+    }
+
+    const total = p.amount ? Number(p.amount) / 100 : order.total;
+    const headline = 'ZAPLACENO ONLINE kartou – při převzetí se nic neinkasuje.';
+    const facts = [['Objednávka', orderId], ['Zákazník', order.name], ['Telefon', order.phone],
+      ['Vyzvednutí', order.date ? formatDate_(order.date) + ' · ' + order.store : order.store],
+      ['Cena celkem', total ? money_(total) : '']].filter(function (row) { return row[1]; });
+
+    const text = [headline, ''];
+    facts.forEach(function (row) { text.push(row[0] + ': ' + row[1]); });
+    if (order.lines.length) {
+      text.push('', 'Položky:');
+      order.lines.forEach(function (l) { text.push('- ' + l.quantity + 'x ' + l.name); });
+    }
+
+    const html =
+      "<div style=\"max-width:680px;margin:0 auto;font-family:'Segoe UI',Roboto,Arial,Helvetica,sans-serif;font-size:15px;color:#0f172a;\">" +
+      '<div style="padding:14px 18px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;color:#166534;font-weight:700;">' + esc_(headline) + '</div>' +
+      '<div style="margin-top:12px;">' + kvTable_(facts, false) + '</div>' +
+      (order.lines.length
+        ? '<div style="margin-top:12px;"><strong>Položky</strong><ul style="margin:6px 0 0 18px;padding:0;">' +
+          order.lines.map(function (l) { return '<li>' + esc_(l.quantity + 'x ' + l.name) + '</li>'; }).join('') + '</ul></div>'
+        : '') +
+      '</div>';
+
+    MailApp.sendEmail({
+      to: to,
+      subject: 'ZAPLACENO ONLINE – Objednávka ' + orderId + (order.store ? ' – ' + order.store : ''),
+      body: text.join('\n'),
+      htmlBody: html,
+      name: CONFIG.SENDER_NAME,
+    });
+
+    if (!overrideTo) {
+      cache.put(key, '1', 21600);
+      if (file) file.setDescription((String(file.getDescription() || '') + ' ' + STORE_PAID_MARK).trim());
+    }
+    return result('sent', '', to);
+  } catch (err) {
+    console.error('Upozornění prodejně o platbě SELHALO: ' + (err && err.stack ? err.stack : err));
+    try {
+      MailApp.sendEmail({
+        to: CONFIG.NOTIFY_EMAIL,
+        subject: 'Upozornění prodejně o zaplacení se nepodařilo odeslat – ' + orderId,
+        body: 'Objednávka ' + orderId + ' je zaplacená online, ale upozornění prodejně se nepodařilo odeslat (' +
+          String(err && err.message ? err.message : err) + '). Dejte prodejně vědět ručně.',
+        name: CONFIG.SENDER_NAME,
+      });
+    } catch (e2) { /* už nic neděláme */ }
+    return result('failed', String(err && err.message ? err.message : err));
+  }
+}
+
+/**
+ * Test z editoru Apps Script (vyberte funkci „testStorePaymentNotice“ a dejte Spustit).
+ * Pošle ukázkové upozornění „ZAPLACENO ONLINE“ pro prodejnu Karviná na CONFIG.TEST_EMAIL.
+ */
+function testStorePaymentNotice() {
+  const to = CONFIG.TEST_EMAIL || CONFIG.NOTIFY_EMAIL;
+  const sample = {
+    form_name: 'objednavka',
+    id: 'test-store-paid',
+    data: {
+      Jmeno: 'Test Zákazník', Email: to, Telefon: '602 000 000', Prodejna: 'Karviná',
+      Datum: Utilities.formatDate(new Date(Date.now() + 7 * 86400000), 'Europe/Prague', 'yyyy-MM-dd'),
+      'Cislo-Objednavky': 'TEST-0003', 'Zpusob-Platby': 'online', 'Celkem-Kc': '410',
+      'Produkty-JSON': JSON.stringify([
+        { name: 'Větrník', price: 70, quantity: 3, category: 'zakusky' },
+        { name: 'Punčový řez', price: 100, quantity: 2, category: 'zakusky' },
+      ]),
+    },
+  };
+  const req = normalizeRequest_({ raw: '', src: sample, data: sample.data, formName: sample.form_name, submissionId: sample.id });
+  const xml = buildPohodaXml_(req);
+  const res = sendStorePaymentNotice_(null, xml, { orderId: 'TEST-0003', amount: 41000 }, to);
+  console.log('Výsledek testu: ' + res.status + (res.reason ? ' (' + res.reason + ')' : ''));
+  return res;
+}
+
+/**
+ * Test z editoru Apps Script (vyberte funkci „testStoreCopy“ a dejte Spustit).
+ * Pošle ukázkovou kopii objednávky pro prodejnu Karviná na CONFIG.TEST_EMAIL (ne na skutečnou prodejnu)
+ * a vypíše do protokolu, na jaké adresy by se kopie posílala pro jednotlivé názvy prodejen.
+ */
+function testStoreCopy() {
+  const to = CONFIG.TEST_EMAIL || CONFIG.NOTIFY_EMAIL;
+  ['Petřvald', 'Karviná', 'Ostrava', 'Ostrava (Zábřeh)', 'Píšť'].forEach(function (name) {
+    console.log(name + ' → ' + (CONFIG.STORE_EMAILS[storeKey_(name)] || '(bez kopie)'));
+  });
+
+  const sample = {
+    form_name: 'objednavka',
+    id: 'test-store-copy',
+    data: {
+      Jmeno: 'Test Zákazník', Email: to, Telefon: '602 000 000', Prodejna: 'Karviná',
+      Datum: Utilities.formatDate(new Date(Date.now() + 7 * 86400000), 'Europe/Prague', 'yyyy-MM-dd'),
+      'Cislo-Objednavky': 'TEST-0002', 'Zpusob-Platby': 'cash', 'Celkem-Kc': '540',
+      'Produkty-JSON': JSON.stringify([
+        { name: 'Větrník', price: 70, quantity: 3, category: 'zakusky' },
+        { name: 'Punčový řez', price: 65, quantity: 2, category: 'zakusky' },
+        { name: 'Zápich – ukázka', price: 100, quantity: 2, category: 'zapichy' },
+      ]),
+      Poznamka: 'Test kopie pro prodejnu z funkce testStoreCopy – ignorujte.',
+    },
+  };
+  const req = normalizeRequest_({ raw: '', src: sample, data: sample.data, formName: sample.form_name, submissionId: sample.id });
+  const res = sendStoreCopy_(req, to);
+  console.log('Výsledek testu: ' + res.status + (res.reason ? ' (' + res.reason + ')' : ''));
+  return res;
 }
