@@ -3,6 +3,8 @@ import Layout from '../layouts/Layout.astro';
 import Lightbox from '../components/Lightbox.astro';
 import productsData from '../../data.json';
 import { Image } from 'astro:assets';
+import JsonLd from '../components/JsonLd.astro';
+import { RETAIL_SHOPS, graph, shopNode } from '../lib/seo';
 
 const cakeImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/dorty/*.{jpeg,jpg,png,webp,JPG,JPEG}', { eager: true });
 const dessertImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/zakusky/*.{jpeg,jpg,png,webp,JPG,JPEG}', { eager: true });
@@ -169,5 +171,6 @@ const cakeCategories = [
 		</section>
 		<Lightbox />
 	</main>
+	<JsonLd data={graph(...RETAIL_SHOPS.map(shopNode))} />
 </Layout>
 

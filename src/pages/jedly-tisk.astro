@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import EdiblePrintForm from '../components/EdiblePrintForm.tsx';
+import FaqSection from '../components/FaqSection.astro';
+import { PRINT_FAQ } from '../data/faq';
 ---
 
 <Layout 
@@ -57,6 +59,7 @@ import EdiblePrintForm from '../components/EdiblePrintForm.tsx';
 				</div>
 			</div>
 		</section>
+		<div class="max-w-7xl mx-auto px-4 pb-16"><FaqSection items={PRINT_FAQ} title="Časté dotazy k jedlému tisku" /></div>
 	</main>
 </Layout>
 

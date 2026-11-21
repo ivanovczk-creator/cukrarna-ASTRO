@@ -3,6 +3,8 @@ import Layout from '../layouts/Layout.astro';
 import Lightbox from '../components/Lightbox.astro';
 import productsData from '../../data.json';
 import { Image } from 'astro:assets';
+import SeoText from '../components/SeoText.astro';
+import { ZAPICHY_TEXT } from '../data/pageTexts';
 
 // Načtení obrázků ze složky /public/img/zapichy/
 const topperImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/zapichy/*.{jpeg,jpg,png,webp,JPG,JPEG}', { eager: true });
@@ -26,7 +28,7 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 	<main class="py-16 px-4 bg-slate-50 min-h-screen">
 		<div class="max-w-7xl mx-auto">
 			<div class="text-center mb-16">
-				<h2 class="text-4xl md:text-5xl font-serif mb-6 italic text-navy-900 font-bold">Zápichy na dorty</h2>
+				<h1 class="text-4xl md:text-5xl font-serif mb-6 italic text-navy-900 font-bold">Zápichy na dorty</h1>
 				<p class="text-slate-600 max-w-2xl mx-auto text-lg font-bold">
 					Doplňte svůj dort o originální zápich na přání. Vyberte si z naší nabídky a vyzvedněte si ho společně s vaší objednávkou na vybrané prodejně.
 				</p>
@@ -73,7 +75,7 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 							</a>
 						</div>
 						<div class="p-6 flex-grow flex flex-col justify-between">
-							<h3 class="text-lg font-bold mb-1 leading-tight text-navy-900 font-serif italic">{topper.title}</h3>
+							<h2 class="text-lg font-bold mb-1 leading-tight text-navy-900 font-serif italic">{topper.title}</h2>
 							<div class="space-y-4">
 								<p class="text-[#735c1e] font-black text-xl">{topper.cena}</p>
 								
@@ -100,6 +102,7 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 			</aside>
 		</div>
 		<Lightbox />
+		<div class="max-w-7xl mx-auto mt-16 px-4"><SeoText title={ZAPICHY_TEXT.title} paragraphs={ZAPICHY_TEXT.paragraphs} points={ZAPICHY_TEXT.points} /></div>
 	</main>
 </Layout>
 

@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /api/
 
+# Popis webu pro AI asistenty a vyhledávače: https://cukrarstviblahutovi.cz/llms.txt
 Sitemap: https://cukrarstviblahutovi.cz/sitemap-index.xml

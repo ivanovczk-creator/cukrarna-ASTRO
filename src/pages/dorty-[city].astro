@@ -1,0 +1,105 @@
+---
+// Stránky poboček: /dorty-ostrava/, /dorty-karvina/, /dorty-petrvald/, /dorty-pist/
+import Layout from '../layouts/Layout.astro';
+import JsonLd from '../components/JsonLd.astro';
+import FaqSection from '../components/FaqSection.astro';
+import SeoText from '../components/SeoText.astro';
+import { CAKE_CATEGORIES } from '../data/dortyCategories';
+import { CITY_PAGES } from '../data/cityPages';
+import { CAKE_FAQ, shopFaq } from '../data/faq';
+import {
+	SHOPS,
+	breadcrumbNode,
+	graph,
+	shopAddress,
+	shopNode,
+	shopPath,
+	telHref,
+} from '../lib/seo';
+
+export function getStaticPaths() {
+	return SHOPS.map((shop) => ({
+		params: { city: shop.slug },
+		props: { shop },
+	}));
+}
+
+const { shop } = Astro.props;
+const page = CITY_PAGES[shop.id];
+const address = shopAddress(shop);
+
+const faqItems = [
+	...shopFaq({
+		city: shop.city,
+		inCity: page.inCity,
+		address,
+		hours: shop.hours,
+		pickupLabel: shop.pickupLabel,
+		isHeadquarters: shop.isHeadquarters,
+	}),
+	...CAKE_FAQ.slice(0, 3),
+];
+
+const breadcrumbs = [
+	{ name: 'Domů', path: '/' },
+	{ name: 'Prodejny', path: '/prodejny/' },
+	{ name: page.h1, path: shopPath(shop) },
+];
+---
+
+<Layout title={page.title} description={page.description}>
+	<main class="py-16 px-4 bg-slate-50 min-h-screen">
+		<div class="max-w-7xl mx-auto font-bold text-navy-900">
+			<nav class="text-xs uppercase tracking-widest text-slate-400 mb-6 font-bold" aria-label="Drobečková navigace">
+				<a href="/" class="hover:text-[#d4af37]">Domů</a> / <a href="/prodejny/" class="hover:text-[#d4af37]">Prodejny</a> / <span class="text-slate-600 font-bold">{shop.city}</span>
+			</nav>
+
+			<div class="mb-12 border-l-4 border-[#d4af37] pl-6 py-2 max-w-4xl">
+				<h1 class="text-4xl md:text-5xl font-serif mb-4 text-[#0a192f] italic font-bold">{page.h1}</h1>
+				<p class="text-slate-700 text-lg leading-relaxed font-bold">{page.intro}</p>
+			</div>
+
+			<section class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm p-8 md:p-12 max-w-4xl mb-12" aria-labelledby="shop-info-title">
+				<h2 id="shop-info-title" class="text-2xl md:text-3xl font-serif italic text-[#0a192f] mb-6 font-bold">{shop.isHeadquarters ? 'Sídlo a výrobna' : 'Prodejna'} – adresa a otevírací doba</h2>
+				<address class="not-italic space-y-4 text-slate-700 text-base">
+					<p><span class="text-[#d4af37]" aria-hidden="true">📍</span> {address}</p>
+					<p><span class="text-[#d4af37]" aria-hidden="true">📞</span> <a href={telHref(shop.phone)} class="underline text-[#735c1e] hover:text-[#0a192f]">{shop.phone}</a></p>
+					<div>
+						<p class="font-bold mb-1"><span class="text-[#d4af37]" aria-hidden="true">🕒</span> Otevírací doba</p>
+						<ul class="list-none p-0 m-0 space-y-1 font-normal">
+							{shop.hours.map((line) => <li>{line}</li>)}
+						</ul>
+					</div>
+					<p class="font-normal">Výdej online objednávek: {shop.pickupLabel}.</p>
+				</address>
+				<a href={shop.mapUrl} target="_blank" rel="noopener noreferrer" class="inline-block mt-6 bg-[#0a192f] text-[#d4af37] px-8 py-3 rounded-2xl hover:bg-[#d4af37] hover:text-[#0a192f] transition-all uppercase text-[10px] font-bold tracking-widest shadow-md">
+					Naplánovat trasu v mapách
+				</a>
+			</section>
+
+			<SeoText title={page.sectionTitle} paragraphs={page.paragraphs} points={page.points} class="mb-12" />
+
+			<section class="mb-12 max-w-4xl" aria-labelledby="shop-categories-title">
+				<h2 id="shop-categories-title" class="text-xl font-serif italic text-[#0a192f] mb-4 font-bold">Co si u nás můžete objednat</h2>
+				<ul class="flex flex-wrap gap-3 list-none p-0 m-0">
+					{CAKE_CATEGORIES.map((cat) => (
+						<li>
+							<a href={`/dorty/${cat.id}/`} class="inline-block bg-white border border-slate-200 rounded-full px-5 py-2 text-xs uppercase tracking-widest text-[#0a192f] hover:border-[#d4af37] hover:text-[#735c1e] transition-colors font-bold no-underline">{cat.h1}</a>
+						</li>
+					))}
+				</ul>
+				<p class="mt-6 text-sm text-slate-600 font-normal">
+					Prohlédněte si také <a href="/zakusky/" class="underline text-[#735c1e] hover:text-[#0a192f]">denní nabídku zákusků</a>,
+					<a href="/studena-kuchyne/" class="underline text-[#735c1e] hover:text-[#0a192f]">studenou kuchyni</a>,
+					<a href="/jedly-tisk/" class="underline text-[#735c1e] hover:text-[#0a192f]">jedlý tisk</a>
+					nebo <a href="/dort-na-prani/" class="underline text-[#735c1e] hover:text-[#0a192f]">dort na přání</a>.
+					Ostatní pobočky najdete na stránce <a href="/prodejny/" class="underline text-[#735c1e] hover:text-[#0a192f]">Prodejny</a>.
+				</p>
+			</section>
+
+			<FaqSection items={faqItems} title={`Časté dotazy – ${page.inCity}`} />
+		</div>
+	</main>
+
+	<JsonLd data={graph(...(shop.isHeadquarters ? [] : [shopNode(shop)]), breadcrumbNode(breadcrumbs))} />
+</Layout>

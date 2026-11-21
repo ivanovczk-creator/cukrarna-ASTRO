@@ -4,6 +4,8 @@ import Lightbox from '../components/Lightbox.astro';
 import FoodNotice from '../components/FoodNotice.astro';
 import productsData from '../../data.json';
 import { Image } from 'astro:assets';
+import SeoText from '../components/SeoText.astro';
+import { STUDENA_KUCHYNE_TEXT } from '../data/pageTexts';
 
 // Lokální obrázky ze složky /public/img/studena-kuchyne/ (externí URL se vykreslí přímo)
 const coldKitchenImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/studena-kuchyne/*.{jpeg,jpg,png,webp,JPG,JPEG}', { eager: true });
@@ -111,6 +113,7 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 			<FoodNotice subtle class="mt-16" />
 		</div>
 		<Lightbox />
+		<div class="max-w-7xl mx-auto mt-16 px-4"><SeoText title={STUDENA_KUCHYNE_TEXT.title} paragraphs={STUDENA_KUCHYNE_TEXT.paragraphs} points={STUDENA_KUCHYNE_TEXT.points} /></div>
 	</main>
 </Layout>
 

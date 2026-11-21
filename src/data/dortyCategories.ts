@@ -115,7 +115,7 @@ export const CAKE_CATEGORIES: CakeCategory[] = [
     title: 'Narozeninové dorty na zakázku Karviná a Ostrava | Cukrářství Blahutovi',
     h1: 'Narozeninové dorty na zakázku',
     description:
-      'Hledáte poctivý narozeninový dort v Karviné nebo Ostravě? Pečeme moderní i klasické dorty na přání. Vyzvednutí na prodejnách Karviná-Ráj a Ostrava-Zábřeh.',
+      'Hledáte poctivý narozeninový dort v Karviné nebo Ostravě? Pečeme moderní i klasické dorty na přání. Vyzvednutí na prodejnách Karviná a Ostrava-Zábřeh.',
     sectionTitle: 'Narozeninový dort podle vašeho přání',
     body: [
       'Narozeninové dorty připravujeme z poctivých surovin – másla, smetany, čerstvého ovoce a kvalitní čokolády. Vybrat si můžete z hotových vzorů, nebo nám pošlete vlastní nápad či fotografii a dort společně doladíme.',

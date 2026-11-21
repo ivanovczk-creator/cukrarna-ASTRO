@@ -3,6 +3,8 @@ import { ViewTransitions } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CookieBanner from '../components/CookieBanner.astro';
+import JsonLd from '../components/JsonLd.astro';
+import { graph, organizationNode, websiteNode } from '../lib/seo';
 
 interface Props {
 	title?: string;
@@ -59,6 +61,7 @@ const canonicalURL = new URL(canonicalPathname, SITE_ORIGIN);
 		<meta name="description" content={description} />
 		<link rel="canonical" href={canonicalURL.href} />
 		{noindex && <meta name="robots" content="noindex, nofollow" />}
+		<JsonLd data={graph(organizationNode(), websiteNode())} />
 
 		<ViewTransitions />
 

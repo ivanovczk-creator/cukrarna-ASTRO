@@ -21,6 +21,25 @@ export const COMPANY = {
   web: 'https://cukrarstviblahutovi.cz',
 } as const;
 
+/**
+ * Veřejné profily firmy (Facebook, Instagram, Google Business Profile, Firmy.cz, Mapy.cz).
+ * Vyplněné odkazy se automaticky použijí v patičce a ve strukturovaných datech (schema.org `sameAs`).
+ * Prázdný řetězec / prázdné pole = profil se nezobrazí.
+ */
+export const SOCIAL_LINKS = {
+  facebook: 'https://www.facebook.com/CukrarstviBlahutovi',
+  instagram: 'https://www.instagram.com/cukrarstvi_blahutovi/',
+  firmy: '',
+  mapy: '',
+  /** Google Business Profile – odkaz na profil každé prodejny (id odpovídá STORES / SHOPS). */
+  googleBusinessProfile: {
+    ostrava: '',
+    karvina: '',
+    petrvald: '',
+    pist: '',
+  } as Record<string, string>,
+};
+
 export const STORES = [
   {
     id: 'ostrava',
@@ -31,7 +50,7 @@ export const STORES = [
   {
     id: 'karvina',
     name: 'Cukrárna Karviná',
-    address: 'tř. Těreškovové 2233/28, 734 01 Karviná-Ráj',
+    address: 'tř. Těreškovové 2233/28, 734 01 Karviná',
     phone: '+420 778 157 867',
   },
   {

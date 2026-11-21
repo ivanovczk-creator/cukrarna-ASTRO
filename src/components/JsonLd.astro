@@ -1,0 +1,10 @@
+---
+// Vloží strukturovaná data (schema.org JSON-LD). `<` se escapuje, aby text v datech nemohl uzavřít <script>.
+interface Props {
+	data: object;
+}
+const { data } = Astro.props;
+const json = JSON.stringify(data).replace(/</g, '\\u003c');
+---
+
+<script type="application/ld+json" set:html={json} is:inline></script>

@@ -5,6 +5,10 @@ import FoodNotice from '../../components/FoodNotice.astro';
 import productsData from '../../../data.json';
 import { Image } from 'astro:assets';
 import { CAKE_CATEGORIES } from '../../data/dortyCategories';
+import { CAKE_FAQ } from '../../data/faq';
+import FaqSection from '../../components/FaqSection.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import { breadcrumbNode, graph } from '../../lib/seo';
 
 export async function getStaticPaths() {
   return CAKE_CATEGORIES.map((cat) => ({
@@ -15,6 +19,12 @@ export async function getStaticPaths() {
 
 const { category } = Astro.params;
 const { info } = Astro.props;
+
+const breadcrumbs = [
+  { name: 'Domů', path: '/' },
+  { name: 'Dorty', path: '/dorty/' },
+  { name: info.h1, path: `/dorty/${category}/` },
+];
 
 const filteredCakes = productsData.cakes.filter(cake => 
   cake.category_list && cake.category_list.includes(category)
@@ -141,8 +151,12 @@ function getImage(path: string, images: Record<string, any>) {
 					nebo <a href="/studena-kuchyne/" class="underline text-[#735c1e] hover:text-[#0a192f]">studenou kuchyni</a>.
 				</p>
 			</nav>
+
+			<FaqSection items={CAKE_FAQ} class="mt-12" />
 		</div>
 		<Lightbox />
 	</main>
+
+	<JsonLd data={graph(breadcrumbNode(breadcrumbs))} />
 </Layout>
 

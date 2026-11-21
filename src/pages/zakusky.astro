@@ -4,6 +4,8 @@ import Lightbox from '../components/Lightbox.astro';
 import FoodNotice from '../components/FoodNotice.astro';
 import productsData from '../../data.json';
 import { Image } from 'astro:assets';
+import SeoText from '../components/SeoText.astro';
+import { ZAKUSKY_TEXT } from '../data/pageTexts';
 
 const dessertImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/zakusky/*.{jpeg,jpg,png,webp,JPG,JPEG}', { eager: true });
 const desserts = (productsData?.desserts || []).sort((a, b) => (a.weight ?? 999) - (b.weight ?? 999));
@@ -26,7 +28,7 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 	<main class="py-16 px-4 bg-slate-50 min-h-screen">
 		<div class="max-w-7xl mx-auto">
 			<div class="text-center mb-16">
-				<h2 class="text-4xl md:text-5xl font-serif mb-6 italic text-navy-900 font-bold">Denní nabídka čerstvých zákusků</h2>
+				<h1 class="text-4xl md:text-5xl font-serif mb-6 italic text-navy-900 font-bold">Denní nabídka čerstvých zákusků</h1>
 				<p class="text-slate-600 max-w-2xl mx-auto text-lg font-bold"> Všechny naše zákusky připravujeme každý den z poctivých surovin. Objednejte si je online a vyzvedněte na vybrané prodejně.
 				</p>
 			</div>
@@ -74,7 +76,7 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 							</a>
 						</div>
 						<div class="p-6 flex-grow flex flex-col justify-between">
-							<h3 class="text-lg font-bold mb-1 leading-tight text-navy-900 font-serif italic">{dessert.title}</h3>
+							<h2 class="text-lg font-bold mb-1 leading-tight text-navy-900 font-serif italic">{dessert.title}</h2>
 							<div class="space-y-4">
 								<p class="text-[#735c1e] font-black text-xl">{dessert.cena}</p>
 								
@@ -97,6 +99,7 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 			<FoodNotice subtle class="mt-16" />
 		</div>
 		<Lightbox />
+		<div class="max-w-7xl mx-auto mt-16 px-4"><SeoText title={ZAKUSKY_TEXT.title} paragraphs={ZAKUSKY_TEXT.paragraphs} points={ZAKUSKY_TEXT.points} /></div>
 	</main>
 </Layout>
 

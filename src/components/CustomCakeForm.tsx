@@ -86,7 +86,7 @@ const CustomCakeForm = () => {
             <label htmlFor="cake-shop" className="text-xs uppercase tracking-widest text-[#735c1e]">Místo vyzvednutí</label>
             <select id="cake-shop" name="Prodejna" value={selectedShop} onChange={(e) => setSelectedShop(e.target.value)} className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" required>
               <option value="Ostrava (Zábřeh)">Ostrava - Zábřeh</option>
-              <option value="Karviná">Karviná - Ráj</option>
+              <option value="Karviná">Karviná</option>
               <option value="Petřvald">Petřvald</option>
               <option value="Píšť">Píšť - Sídlo firmy</option>
             </select>

@@ -1,6 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
+import SeoText from '../components/SeoText.astro';
+import FaqSection from '../components/FaqSection.astro';
+import { DORTY_TEXT } from '../data/pageTexts';
+import { CAKE_FAQ } from '../data/faq';
 
 const cakeImages = import.meta.glob<{ default: ImageMetadata }>('/public/img/dorty/*.{jpeg,jpg,png,webp,JPG,JPEG}', { eager: true });
 
@@ -64,6 +68,7 @@ const cakeCategories = [
 				})}
 			</div>
 		</section>
+		<div class="max-w-7xl mx-auto px-4 mt-16 space-y-12"><SeoText title={DORTY_TEXT.title} paragraphs={DORTY_TEXT.paragraphs} points={DORTY_TEXT.points} /><FaqSection items={CAKE_FAQ} /></div>
 	</main>
 </Layout>
 
