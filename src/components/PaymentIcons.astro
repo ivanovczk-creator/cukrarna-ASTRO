@@ -10,14 +10,12 @@ const { class: className = '' } = Astro.props;
 <ul style="list-style:none;margin:0;padding:0" class={`flex flex-wrap items-center justify-center gap-3 ${className}`} aria-label="Podporované platební metody">
 	<li style="margin:0">
 		<svg role="img" aria-label="Visa" viewBox="0 0 64 40" class="h-9 w-auto rounded-md bg-white" xmlns="http://www.w3.org/2000/svg">
-			<title>Visa</title>
 			<rect width="64" height="40" rx="5" fill="#fff" />
 			<text x="32" y="27" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="900" font-style="italic" fill="#1a1f71" letter-spacing="1">VISA</text>
 		</svg>
 	</li>
 	<li style="margin:0">
 		<svg role="img" aria-label="Mastercard" viewBox="0 0 64 40" class="h-9 w-auto rounded-md bg-white" xmlns="http://www.w3.org/2000/svg">
-			<title>Mastercard</title>
 			<rect width="64" height="40" rx="5" fill="#fff" />
 			<circle cx="26" cy="20" r="11" fill="#eb001b" />
 			<circle cx="38" cy="20" r="11" fill="#f79e1b" />
@@ -26,7 +24,6 @@ const { class: className = '' } = Astro.props;
 	</li>
 	<li style="margin:0">
 		<svg role="img" aria-label="Apple Pay" viewBox="0 0 64 40" class="h-9 w-auto rounded-md bg-white" xmlns="http://www.w3.org/2000/svg">
-			<title>Apple Pay</title>
 			<rect width="64" height="40" rx="5" fill="#fff" />
 			<rect x="0.5" y="0.5" width="63" height="39" rx="4.5" fill="none" stroke="#d1d5db" />
 			<circle cx="17" cy="22.500" r="5.500" fill="#000" />
@@ -37,7 +34,6 @@ const { class: className = '' } = Astro.props;
 	</li>
 	<li style="margin:0">
 		<svg role="img" aria-label="Google Pay" viewBox="0 0 64 40" class="h-9 w-auto rounded-md bg-white" xmlns="http://www.w3.org/2000/svg">
-			<title>Google Pay</title>
 			<rect width="64" height="40" rx="5" fill="#fff" />
 			<rect x="0.5" y="0.5" width="63" height="39" rx="4.5" fill="none" stroke="#d1d5db" />
 			<text x="9" y="25.500" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">
@@ -46,8 +42,7 @@ const { class: className = '' } = Astro.props;
 		</svg>
 	</li>
 	<li style="margin:0">
-		<svg role="img" aria-label="Comgate" viewBox="0 0 84 40" class="h-9 w-auto rounded-md bg-white" xmlns="http://www.w3.org/2000/svg">
-			<title>Comgate – platební brána</title>
+		<svg role="img" aria-label="Comgate – platební brána" viewBox="0 0 84 40" class="h-9 w-auto rounded-md bg-white" xmlns="http://www.w3.org/2000/svg">
 			<rect width="84" height="40" rx="5" fill="#fff" />
 			<circle cx="17" cy="20" r="8" fill="none" stroke="#e2001a" stroke-width="3.500" />
 			<text x="30" y="25" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1f2937">comgate</text>
