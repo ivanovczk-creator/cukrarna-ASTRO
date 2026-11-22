@@ -85,13 +85,13 @@ import { LEGAL_PAGES } from '../lib/legal';
 		w.gtag = function () {
 			w.dataLayer.push(arguments);
 		};
+		// js + config hned (jako ve standardním kódu Google), ještě před stažením gtag.js: události odeslané hned
+		// po načtení stránky (např. purchase na /dekujeme/) se tak zařadí až za konfiguraci a nezahodí se.
+		w.gtag('js', new Date());
+		w.gtag('config', GA_ID, { anonymize_ip: true });
 		const script = document.createElement('script');
 		script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
 		script.async = true;
-		script.onload = () => {
-			w.gtag('js', new Date());
-			w.gtag('config', GA_ID, { anonymize_ip: true });
-		};
 		document.head.appendChild(script);
 	}
 
