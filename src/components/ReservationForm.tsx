@@ -1,5 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import type { CartItem } from './CartPanel';
+import { trackAddToCart } from '../lib/analytics';
 
 /**
  * Tlačítko košíku (ikona + počet položek) a správa obsahu košíku.
@@ -33,6 +34,7 @@ const ReservationForm = () => {
     const addItem = (detail: any) => {
       const { name, price, img, quantity, category } = detail;
       const q = parseInt(quantity) || 1;
+      trackAddToCart({ name, price, quantity: q, category });
 
       setCart(prev => {
         const existing = prev.find(item => item.name === name);

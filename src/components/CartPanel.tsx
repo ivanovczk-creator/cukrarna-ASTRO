@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { rememberOrder, trackBeginCheckout } from '../lib/analytics';
 import PickupDateInput from './PickupDateInput';
 import { getEarliestPickup, getLeadDays, getPickupDateError, getPickupHint } from '../lib/pickupRules';
 import PaymentMethodSelector from './PaymentMethodSelector';
@@ -43,6 +44,12 @@ const CartPanel = ({ cart, removeItem }: Props) => {
   const [pickupDate, setPickupDate] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cash');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // GA4: zákazník otevřel košík s objednávkovým formulářem (panel se montuje až při otevření)
+  useEffect(() => {
+    trackBeginCheckout(cart.map((item) => ({ name: item.name, price: item.price, quantity: item.quantity, category: itemCategory(item) })));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Obsahuje košík dort? (starší položky v localStorage bez kategorie poznáme podle cesty k fotce)
   const includesCake = cart.some(item => itemCategory(item) === 'dorty');
@@ -100,6 +107,13 @@ const CartPanel = ({ cart, removeItem }: Props) => {
       });
       if (!res.ok) throw new Error(`Server vrátil ${res.status}`);
       localStorage.removeItem('blahutovi_cart');
+      // GA4: událost purchase se pošle na stránce /dekujeme/ (u online platby až po potvrzení zaplacení)
+      rememberOrder({
+        orderId,
+        value: total ?? 0,
+        payment: wantsOnline ? 'online' : 'cash',
+        items: cart.map((item, i) => ({ name: item.name, price: item.price, quantity: item.quantity, category: categories[i] })),
+      });
 
       if (wantsOnline) {
         try {

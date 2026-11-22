@@ -26,6 +26,8 @@ import { COMPANY } from '../lib/legal';
 	// Návrat z platební brány Comgate: ?platba=zaplaceno|zrusena|cekajici&refId=BL-...
 	// Parametry v adrese si může zákazník změnit, proto se skutečný stav platby vždy ověřuje na serveru
 	// (/api/payment-status ← push notifikace z Comgate). Úspěch se zobrazí jen při potvrzení serverem.
+	import { takeOrder, trackPurchase, type PendingOrder } from '../lib/analytics';
+
 	type Status = 'PAID' | 'PENDING' | 'CANCELLED' | 'UNKNOWN';
 
 	const MESSAGES: Record<'PAID' | 'PENDING' | 'CANCELLED' | 'CHECKING' | 'UNVERIFIED', { title: string; text: string }> = {
@@ -72,10 +74,22 @@ import { COMPANY } from '../lib/legal';
 
 	const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+	// GA4: událost purchase (objednávku si pamatuje CartPanel v sessionStorage; čte se jen jednou, takže se při
+	// obnovení stránky nepočítá dvakrát). Platba při převzetí = hned, online platba = až po potvrzení zaplacení serverem.
+	function trackOrderPurchase(order: PendingOrder | null, status?: Status) {
+		if (!order) return;
+		if (order.payment === 'cash' || status === 'PAID') trackPurchase(order);
+	}
+
 	async function showPaymentResult() {
 		const params = new URLSearchParams(location.search);
 		const hint = params.get('platba');
-		if (!hint) return;
+		const order = takeOrder();
+		if (!hint) {
+			// bez parametrů platby = objednávka s platbou při převzetí (i online platba, kterou se nepodařilo zahájit)
+			trackOrderPurchase(order && { ...order, payment: 'cash' });
+			return;
+		}
 
 		const refId = params.get('refId') ?? '';
 		const validRef = /^BL-\d{8}-[A-Z0-9]{4}$/.test(refId);
@@ -100,6 +114,8 @@ import { COMPANY } from '../lib/legal';
 			if (status === 'PAID' || status === 'CANCELLED') break;
 			if (i < attempts - 1) await sleep(2500);
 		}
+
+		if (order && order.orderId === refId) trackOrderPurchase(order, status);
 
 		if (status === 'PAID') render('PAID');
 		else if (status === 'CANCELLED') render('CANCELLED');
