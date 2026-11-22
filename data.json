@@ -731,6 +731,8 @@
       "title": "Likérová špička",
       "cena": "50 Kč",
       "foto": "/img/zakusky/01.webp",
+      "sklad_kod": "501",
+      "sklad_id": "181",
       "kategorie": "zakusky",
       "popis": "Čerstvý zákusek z naší výroby.",
       "weight": 20
@@ -740,6 +742,8 @@
       "title": "Nugátový dortík",
       "cena": "55 Kč",
       "foto": "/img/zakusky/03.webp",
+      "sklad_kod": "565",
+      "sklad_id": "316",
       "kategorie": "zakusky",
       "weight": 10
     },
@@ -748,6 +752,8 @@
       "title": "Panna cotta",
       "cena": "60 Kč",
       "foto": "/img/zakusky/04.webp",
+      "sklad_kod": "569",
+      "sklad_id": "290",
       "kategorie": "zakusky",
       "weight": 2
     },
@@ -756,6 +762,8 @@
       "title": "Metro",
       "cena": "50 Kč",
       "foto": "/img/zakusky/05.webp",
+      "sklad_kod": "549",
+      "sklad_id": "229",
       "kategorie": "zakusky",
       "weight": 30
     },
@@ -764,6 +772,8 @@
       "title": "Dortička",
       "cena": "50 Kč",
       "foto": "/img/zakusky/06.webp",
+      "sklad_kod": "546",
+      "sklad_id": "226",
       "kategorie": "zakusky",
       "weight": 60
     },
@@ -772,6 +782,8 @@
       "title": "Čokoládová kostka",
       "cena": "45 Kč",
       "foto": "/img/zakusky/07.webp",
+      "sklad_kod": "504",
+      "sklad_id": "184",
       "kategorie": "zakusky",
       "weight": 28
     },
@@ -780,6 +792,8 @@
       "title": "Indián",
       "cena": "45 Kč",
       "foto": "/img/zakusky/08.webp",
+      "sklad_kod": "502",
+      "sklad_id": "182",
       "kategorie": "zakusky",
       "weight": 14
     },
@@ -788,6 +802,8 @@
       "title": "Pistáciový větrník mascarpone",
       "cena": "55 Kč",
       "foto": "/img/zakusky/09.webp",
+      "sklad_kod": "587",
+      "sklad_id": "264",
       "kategorie": "zakusky",
       "weight": 4
     },
@@ -796,6 +812,8 @@
       "title": "Pistáciová koule",
       "cena": "50 Kč",
       "foto": "/img/zakusky/10.webp",
+      "sklad_kod": "548",
+      "sklad_id": "228",
       "kategorie": "zakusky",
       "weight": 33
     },
@@ -804,6 +822,8 @@
       "title": "Višňová tartaletka",
       "cena": "55 Kč",
       "foto": "/img/zakusky/11.webp",
+      "sklad_kod": "576",
+      "sklad_id": "270",
       "kategorie": "zakusky",
       "weight": 5
     },
@@ -812,6 +832,8 @@
       "title": "Karamelová tartaletka",
       "cena": "55 Kč",
       "foto": "/img/zakusky/tartaletka-karamel.webp",
+      "sklad_kod": "573",
+      "sklad_id": "272",
       "kategorie": "zakusky"
     },
     {
@@ -819,6 +841,8 @@
       "title": "Craqulin",
       "cena": "65 Kč",
       "foto": "/img/zakusky/14.webp",
+      "sklad_kod": "571",
+      "sklad_id": "309",
       "kategorie": "zakusky",
       "weight": 2
     },
@@ -827,6 +851,8 @@
       "title": "Tiramisu",
       "cena": "65 Kč",
       "foto": "",
+      "sklad_kod": "605",
+      "sklad_id": "308",
       "kategorie": "zakusky"
     },
     {
@@ -834,6 +860,8 @@
       "title": "Jádrový rohlíček",
       "cena": "45 Kč",
       "foto": "/img/zakusky/16.webp",
+      "sklad_kod": "503",
+      "sklad_id": "183",
       "kategorie": "zakusky",
       "weight": 44
     },
@@ -842,6 +870,8 @@
       "title": "Dort Rafaelo",
       "cena": "65 Kč",
       "foto": "/img/zakusky/18.webp",
+      "sklad_kod": "568",
+      "sklad_id": "265",
       "kategorie": "zakusky",
       "weight": 9
     },
@@ -850,13 +880,8 @@
       "title": "Višňový řez",
       "cena": "50 Kč",
       "foto": "/img/zakusky/20.webp",
-      "kategorie": "zakusky"
-    },
-    {
-      "id": "d21",
-      "title": "Jahodový řez",
-      "cena": "50 Kč",
-      "foto": "/img/zakusky/21.webp",
+      "sklad_kod": "527",
+      "sklad_id": "207",
       "kategorie": "zakusky"
     },
     {
@@ -864,6 +889,8 @@
       "title": "Malinový řez",
       "cena": "55 Kč",
       "foto": "/img/zakusky/22.webp",
+      "sklad_kod": "528",
+      "sklad_id": "208",
       "kategorie": "zakusky",
       "weight": 22
     },
@@ -872,6 +899,8 @@
       "title": "Mandarinkový řez",
       "cena": "50 Kč",
       "foto": "/img/zakusky/23.webp",
+      "sklad_kod": "523",
+      "sklad_id": "203",
       "kategorie": "zakusky"
     },
     {
@@ -879,6 +908,8 @@
       "title": "Čoko-malina",
       "cena": "55 Kč",
       "foto": "/img/zakusky/coko-malina.webp",
+      "sklad_kod": "508",
+      "sklad_id": "188",
       "kategorie": "zakusky",
       "weight": -1
     },
@@ -887,6 +918,8 @@
       "title": "Jablečný řez",
       "cena": "50 Kč",
       "foto": "/img/zakusky/26.webp",
+      "sklad_kod": "522",
+      "sklad_id": "202",
       "kategorie": "zakusky"
     },
     {
@@ -894,13 +927,8 @@
       "title": "Punčový",
       "cena": "50 Kč",
       "foto": "/img/zakusky/27.webp",
-      "kategorie": "zakusky"
-    },
-    {
-      "id": "d29",
-      "title": "Kokosová lahůdka mini",
-      "cena": "30 Kč",
-      "foto": "/img/zakusky/29.webp",
+      "sklad_kod": "520",
+      "sklad_id": "200",
       "kategorie": "zakusky"
     },
     {
@@ -908,6 +936,8 @@
       "title": "Mecháček s mascarpone",
       "cena": "70 Kč",
       "foto": "/img/zakusky/30.webp",
+      "sklad_kod": "583",
+      "sklad_id": "300",
       "kategorie": "zakusky",
       "weight": 2
     },
@@ -916,6 +946,8 @@
       "title": "Ovocný košíček",
       "cena": "50 Kč",
       "foto": "/img/zakusky/31.webp",
+      "sklad_kod": "552",
+      "sklad_id": "232",
       "kategorie": "zakusky"
     },
     {
@@ -923,6 +955,8 @@
       "title": "Ovocná miska",
       "cena": "55 Kč",
       "foto": "/img/zakusky/ovocna-miska.webp",
+      "sklad_kod": "554",
+      "sklad_id": "234",
       "kategorie": "zakusky",
       "weight": 2
     },
@@ -931,6 +965,8 @@
       "title": "Šodo se šlehačkou",
       "cena": "55 Kč",
       "foto": "/img/zakusky/33.webp",
+      "sklad_kod": "563",
+      "sklad_id": "242",
       "kategorie": "zakusky",
       "weight": 8
     },
@@ -939,6 +975,8 @@
       "title": "Ovocný mix",
       "cena": "50 Kč",
       "foto": "/img/zakusky/34.webp",
+      "sklad_kod": "553",
+      "sklad_id": "233",
       "kategorie": "zakusky"
     },
     {
@@ -946,6 +984,8 @@
       "title": "Pařížská trubička",
       "cena": "40 Kč",
       "foto": "/img/zakusky/35.webp",
+      "sklad_kod": "514",
+      "sklad_id": "194",
       "kategorie": "zakusky"
     },
     {
@@ -953,6 +993,8 @@
       "title": "Marcipánová roláda - vanilka",
       "cena": "45 Kč",
       "foto": "/img/zakusky/36.webp",
+      "sklad_kod": "535",
+      "sklad_id": "215",
       "kategorie": "zakusky"
     },
     {
@@ -960,6 +1002,8 @@
       "title": "Pařížská bomba",
       "cena": "55 Kč",
       "foto": "/img/zakusky/37.webp",
+      "sklad_kod": "513",
+      "sklad_id": "193",
       "kategorie": "zakusky"
     },
     {
@@ -967,6 +1011,8 @@
       "title": "Toffi",
       "cena": "55 Kč",
       "foto": "/img/zakusky/40.webp",
+      "sklad_kod": "529",
+      "sklad_id": "209",
       "kategorie": "zakusky"
     },
     {
@@ -974,6 +1020,8 @@
       "title": "Pařížský dort",
       "cena": "55 Kč",
       "foto": "/img/zakusky/41.webp",
+      "sklad_kod": "510",
+      "sklad_id": "11",
       "kategorie": "zakusky"
     },
     {
@@ -981,6 +1029,8 @@
       "title": "Briketka",
       "cena": "45 Kč",
       "foto": "/img/zakusky/43.webp",
+      "sklad_kod": "544",
+      "sklad_id": "224",
       "kategorie": "zakusky"
     },
     {
@@ -988,6 +1038,8 @@
       "title": "Laskonka",
       "cena": "45 Kč",
       "foto": "/img/zakusky/44.webp",
+      "sklad_kod": "542",
+      "sklad_id": "222",
       "kategorie": "zakusky"
     },
     {
@@ -995,6 +1047,8 @@
       "title": "Linecké třené tyčinky",
       "cena": "35 Kč",
       "foto": "/img/zakusky/45.webp",
+      "sklad_kod": "560",
+      "sklad_id": "240",
       "kategorie": "zakusky"
     },
     {
@@ -1002,6 +1056,8 @@
       "title": "Linecké kolečko s marmeládou  ",
       "cena": "35 Kč",
       "foto": "/img/zakusky/46.webp",
+      "sklad_kod": "559",
+      "sklad_id": "239",
       "kategorie": "zakusky",
       "weight": 30
     },
@@ -1010,6 +1066,8 @@
       "title": "Věneček se šlehačkou",
       "cena": "45 Kč",
       "foto": "/img/zakusky/48.webp",
+      "sklad_kod": "557",
+      "sklad_id": "237",
       "kategorie": "zakusky"
     },
     {
@@ -1017,6 +1075,8 @@
       "title": "Věneček s fondánem",
       "cena": "40 Kč",
       "foto": "/img/zakusky/49.webp",
+      "sklad_kod": "556",
+      "sklad_id": "236",
       "kategorie": "zakusky",
       "weight": 11
     },
@@ -1025,6 +1085,8 @@
       "title": "Banánek",
       "cena": "45 Kč",
       "foto": "/img/zakusky/50.webp",
+      "sklad_kod": "558",
+      "sklad_id": "238",
       "kategorie": "zakusky"
     },
     {
@@ -1032,6 +1094,8 @@
       "title": "Čoko-višeň",
       "cena": "60 Kč",
       "foto": "/img/zakusky/51.webp",
+      "sklad_kod": "582",
+      "sklad_id": "333",
       "kategorie": "zakusky",
       "weight": 1
     },
@@ -1040,6 +1104,8 @@
       "title": "Citrónový řez s ovocem ",
       "cena": "55 Kč",
       "foto": "/img/zakusky/52.webp",
+      "sklad_kod": "524",
+      "sklad_id": "204",
       "kategorie": "zakusky"
     },
     {
@@ -1047,6 +1113,8 @@
       "title": "Lanýžový dort     ",
       "cena": "50 Kč",
       "foto": "/img/zakusky/53.webp",
+      "sklad_kod": "511",
+      "sklad_id": "12",
       "kategorie": "zakusky"
     },
     {
@@ -1054,6 +1122,8 @@
       "title": "Sophia řez",
       "cena": "50 Kč",
       "foto": "/img/zakusky/54.webp",
+      "sklad_kod": "592",
+      "sklad_id": "329",
       "kategorie": "zakusky"
     },
     {
@@ -1061,6 +1131,8 @@
       "title": "Větrník karamelový",
       "cena": "60 Kč",
       "foto": "/img/zakusky/55.webp",
+      "sklad_kod": "555",
+      "sklad_id": "235",
       "kategorie": "zakusky",
       "weight": 5
     },
@@ -1069,6 +1141,8 @@
       "title": "Roláda delux",
       "cena": "120 Kč",
       "foto": "/img/zakusky/59.webp",
+      "sklad_kod": "609",
+      "sklad_id": "387",
       "kategorie": "zakusky"
     },
     {
@@ -1076,6 +1150,7 @@
       "title": "Pop cake",
       "cena": "45 Kč",
       "foto": "/img/zakusky/61.webp",
+      "sklad_kod": "997",
       "kategorie": "zakusky"
     },
     {
@@ -1083,6 +1158,8 @@
       "title": "Karamelový mascarpone",
       "cena": "60 Kč",
       "foto": "/img/zakusky/64.webp",
+      "sklad_kod": "570",
+      "sklad_id": "295",
       "kategorie": "zakusky",
       "weight": 20
     },
@@ -1091,6 +1168,8 @@
       "title": "Čokoládový dort",
       "cena": "75 Kč",
       "foto": "/img/zakusky/65.webp",
+      "sklad_kod": "656",
+      "sklad_id": "500",
       "kategorie": "zakusky"
     },
     {
@@ -1098,6 +1177,8 @@
       "title": "Borůvkový žez",
       "cena": "50 Kč",
       "foto": "/img/zakusky/66.webp",
+      "sklad_kod": "590",
+      "sklad_id": "206",
       "kategorie": "zakusky"
     },
     {
@@ -1105,10 +1186,14 @@
       "title": "Kávový řez",
       "cena": "45 Kč",
       "foto": "/img/zakusky/71.webp",
+      "sklad_kod": "587",
+      "sklad_id": "185",
       "kategorie": "zakusky"
     },
     {
       "weight": 100,
+      "sklad_kod": "519",
+      "sklad_id": "199",
       "kategorie": "zakusky",
       "id": "",
       "cena": "50 Kč",
@@ -1117,6 +1202,8 @@
     },
     {
       "weight": 55,
+      "sklad_kod": "541",
+      "sklad_id": "221",
       "kategorie": "zakusky",
       "title": "Kokosová lahůdka",
       "cena": "50 Kč",
@@ -1124,12 +1211,16 @@
     },
     {
       "weight": 100,
+      "sklad_kod": "579",
+      "sklad_id": "288",
       "kategorie": "zakusky",
       "title": "Cupcake",
       "cena": "50 Kč"
     },
     {
       "weight": 100,
+      "sklad_kod": "580",
+      "sklad_id": "305",
       "kategorie": "zakusky",
       "id": "",
       "cena": "55 Kč",
@@ -1137,6 +1228,8 @@
     },
     {
       "weight": 100,
+      "sklad_kod": "581",
+      "sklad_id": "311",
       "kategorie": "zakusky",
       "title": "Černý rybíz",
       "cena": "50 Kč",
@@ -1144,6 +1237,8 @@
     },
     {
       "weight": 100,
+      "sklad_kod": "584",
+      "sklad_id": "328",
       "kategorie": "zakusky",
       "title": "Red Velvet",
       "cena": "70 Kč",
@@ -1151,6 +1246,8 @@
     },
     {
       "weight": 7,
+      "sklad_kod": "585",
+      "sklad_id": "276",
       "kategorie": "zakusky",
       "title": "Pavlova ",
       "cena": "70 Kč",
@@ -1158,6 +1255,8 @@
     },
     {
       "weight": 100,
+      "sklad_kod": "586",
+      "sklad_id": "231",
       "kategorie": "zakusky",
       "title": "Pistáciový dortík",
       "cena": "70 Kš",
@@ -1165,6 +1264,8 @@
     },
     {
       "weight": 11,
+      "sklad_kod": "588",
+      "sklad_id": "327",
       "kategorie": "zakusky",
       "title": "Větrník malinový mascarpone",
       "cena": "50 Kč",
@@ -1172,6 +1273,8 @@
     },
     {
       "weight": 100,
+      "sklad_kod": "589",
+      "sklad_id": "301",
       "kategorie": "zakusky",
       "title": "Větrník slaný karamel",
       "cena": "45Kč",
@@ -1179,6 +1282,8 @@
     },
     {
       "weight": 100,
+      "sklad_kod": "590",
+      "sklad_id": "201",
       "kategorie": "zakusky",
       "title": "Sachr dort",
       "cena": "65 Kč",
@@ -1186,13 +1291,17 @@
     },
     {
       "weight": 100,
+      "sklad_kod": "593",
+      "sklad_id": "219",
       "kategorie": "zakusky",
-      "title": "Jahodový dortík",
+      "title": "Miska jahodová",
       "cena": "65 Kč",
       "foto": "/img/zakusky/jahodovy-dortik-v-misce.webp"
     },
     {
       "weight": 100,
+      "sklad_kod": "601",
+      "sklad_id": "299",
       "kategorie": "zakusky",
       "title": "Špička v kelímku",
       "cena": "65 Kč",
@@ -1200,6 +1309,8 @@
     },
     {
       "weight": 100,
+      "sklad_kod": "602",
+      "sklad_id": "523",
       "kategorie": "zakusky",
       "title": "Šodo čokoládové",
       "cena": "60 Kč",
@@ -1207,6 +1318,8 @@
     },
     {
       "weight": 50,
+      "sklad_kod": "604",
+      "sklad_id": "293",
       "kategorie": "zakusky",
       "title": "Brownies koule",
       "cena": "45 Kč",
@@ -1214,6 +1327,8 @@
     },
     {
       "weight": 100,
+      "sklad_kod": "658",
+      "sklad_id": "502",
       "kategorie": "zakusky",
       "title": "Malinový dort mascarpone",
       "cena": "75 Kč",
@@ -1228,12 +1343,16 @@
     },
     {
       "weight": 100,
+      "sklad_kod": "657",
+      "sklad_id": "501",
       "kategorie": "zakusky",
       "title": "Jahodový dort mascarpone",
       "cena": "75 Kč"
     },
     {
       "weight": 100,
+      "sklad_kod": "575",
+      "sklad_id": "310",
       "kategorie": "zakusky",
       "title": "Tartaletka čokoládová",
       "cena": "55 Kč",
@@ -1241,6 +1360,8 @@
     },
     {
       "weight": 9,
+      "sklad_kod": "659",
+      "sklad_id": "557",
       "kategorie": "zakusky",
       "title": "Mrkvový dort",
       "cena": "75 Kč",
@@ -1248,6 +1369,8 @@
     },
     {
       "weight": 1,
+      "sklad_kod": "609",
+      "sklad_id": "577",
       "kategorie": "zakusky",
       "title": "Tartaletka pistácie-malina",
       "cena": "60 Kč",

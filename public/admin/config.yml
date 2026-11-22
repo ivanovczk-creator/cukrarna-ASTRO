@@ -58,6 +58,8 @@ collections:
               - { label: "Cena", name: "cena", widget: "string", hint: "Např. 45 Kč", required: false }
               - { label: "Obrázek", name: "foto", widget: "image", required: false, media_folder: "public/img/zakusky", public_folder: "/img/zakusky" }
               - { label: "Popis", name: "popis", widget: "string", required: false }
+              - { label: "Sklad: kód karty (Pohoda)", name: "sklad_kod", widget: "string", hint: "Kód skladové karty v Pohodě (může být sdílený více kartami).", required: false }
+              - { label: "Sklad: ID karty (Pohoda)", name: "sklad_id", widget: "string", hint: "Jedinečné ID skladové karty (stk:id). Slouží k přesnému spárování.", required: false }
               - { label: "Kategorie", name: "kategorie", widget: "hidden", default: "zakusky" }
 
           - label: "Zápichy"
