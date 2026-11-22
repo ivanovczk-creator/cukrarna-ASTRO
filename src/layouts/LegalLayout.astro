@@ -15,9 +15,9 @@ const { title, heading, description, intro, updated = '19. 11. 2026' } = Astro.p
 
 <Layout title={`${title} | Cukrářství Blahutovi`} description={description}>
 	<main class="bg-zinc-50 min-h-screen">
-		<section class="py-16 md:py-20 px-4 bg-zinc-900 text-white text-center">
+		<section class="py-16 md:py-20 px-4 bg-gold-50 text-zinc-900 text-center border-b border-gold-500/40">
 			<div class="max-w-4xl mx-auto">
-				<h1 class="text-3xl md:text-5xl font-serif mb-4 italic text-gold-500 font-bold">{heading}</h1>
+				<h1 class="text-3xl md:text-5xl font-serif mb-4 italic text-zinc-900 font-bold">{heading}</h1>
 				{intro && <p class="text-lg opacity-90 leading-relaxed font-bold">{intro}</p>}
 			</div>
 		</section>

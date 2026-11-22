@@ -10,17 +10,17 @@ const isActive = (href: string) => {
 };
 ---
 
-<header class="bg-zinc-900 text-white sticky top-0 z-50 border-b-2 border-gold-500">
+<header class="bg-gold-500 text-zinc-900 sticky top-0 z-50 border-b border-zinc-900/15 shadow-sm">
 	<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative font-bold">
 		<a href="/" class="group no-underline">
-			<strong class="text-xl md:text-2xl font-serif text-gold-500 group-hover:text-white transition-colors">Cukrářství Blahutovi</strong>
+			<strong class="text-xl md:text-2xl font-serif text-zinc-900 group-hover:text-zinc-700 transition-colors">Cukrářství Blahutovi</strong>
 		</a>
 
-		<nav id="nav-menu" aria-label="Hlavní menu" class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-white/90">
+		<nav id="nav-menu" aria-label="Hlavní menu" class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-zinc-900">
 			{NAV_LINKS.map((link) => (
 				<a
 					href={link.href}
-					class={isActive(link.href) ? 'text-gold-500 py-2 font-bold underline underline-offset-8' : 'hover:text-gold-500 py-2'}
+					class={isActive(link.href) ? 'text-zinc-900 py-2 font-extrabold underline decoration-2 underline-offset-8' : 'py-2 hover:underline hover:decoration-2 hover:decoration-zinc-900/50 hover:underline-offset-8'}
 					aria-current={isActive(link.href) ? 'page' : undefined}
 				>
 					{link.label}
@@ -30,7 +30,7 @@ const isActive = (href: string) => {
 
 		<div class="flex items-center gap-4">
 			<ReservationForm client:idle />
-			<button id="menu-toggle" aria-label="Otevřít hlavní menu" aria-controls="nav-menu" class="lg:hidden text-gold-500 p-2 outline-none cursor-pointer">
+			<button id="menu-toggle" aria-label="Otevřít hlavní menu" aria-controls="nav-menu" class="lg:hidden text-zinc-900 p-2 outline-none cursor-pointer">
 				<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
 				</svg>
@@ -48,7 +48,7 @@ const isActive = (href: string) => {
 			e.preventDefault();
 			[
 				'hidden', 'flex', 'flex-col', 'absolute', 'top-20', 'left-0', 'w-full',
-				'bg-zinc-900', 'p-6', 'z-50', 'border-b', 'border-gold-500',
+				'bg-gold-500', 'p-6', 'z-50', 'border-b', 'border-zinc-900/15', 'shadow-lg',
 			].forEach((cls) => nav.classList.toggle(cls));
 		};
 	}

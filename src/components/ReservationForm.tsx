@@ -83,13 +83,13 @@ const ReservationForm = () => {
         onFocus={loadCartPanel}
         onTouchStart={loadCartPanel}
         aria-label={`Nákupní košík, počet položek: ${totalItems}`}
-        className={`p-2 text-gold-500 transition-all cursor-pointer outline-none hover:opacity-80 ${justAdded ? 'scale-125' : 'scale-100'}`}
+        className={`p-2 text-zinc-900 transition-all cursor-pointer outline-none hover:text-zinc-700 ${justAdded ? 'scale-125' : 'scale-100'}`}
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
         </svg>
         {totalItems > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold border-2 border-zinc-900">
+          <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold border-2 border-gold-500">
             {totalItems}
           </span>
         )}
