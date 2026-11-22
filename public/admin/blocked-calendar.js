@@ -46,8 +46,8 @@
   }
 
   var navBtn = {
-    padding: '6px 12px', border: '1px solid #cbd5e1', borderRadius: '6px', background: '#fff',
-    cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: '#0f172a'
+    padding: '6px 12px', border: '1px solid #d4d4d8', borderRadius: '6px', background: '#fff',
+    cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: '#18181b'
   };
 
   var BlockedCalendarControl = createClass({
@@ -89,7 +89,7 @@
       WEEKDAYS.forEach(function (w, i) {
         cells.push(h('div', {
           key: 'w' + i,
-          style: { textAlign: 'center', fontSize: '11px', fontWeight: 700, color: i > 4 ? '#94a3b8' : '#64748b', padding: '4px 0' }
+          style: { textAlign: 'center', fontSize: '11px', fontWeight: 700, color: i > 4 ? '#a1a1aa' : '#71717a', padding: '4px 0' }
         }, w));
       });
       for (var i = 0; i < lead; i++) cells.push(h('div', { key: 'e' + i }));
@@ -107,18 +107,18 @@
           'aria-label': formatCz(key) + (isBlocked ? ' – plná kapacita dortů' : ''),
           onClick: function () { self.toggle(key); },
           style: {
-            height: '36px', border: isToday ? '2px solid #0f172a' : '1px solid ' + (isBlocked ? RED : '#e2e8f0'),
+            height: '36px', border: isToday ? '2px solid #18181b' : '1px solid ' + (isBlocked ? RED : '#e4e4e7'),
             borderRadius: '6px', cursor: 'pointer', fontSize: '13px',
             fontWeight: isBlocked ? 700 : 500,
             background: isBlocked ? RED : '#fff',
-            color: isBlocked ? '#fff' : (isPast ? '#cbd5e1' : '#0f172a')
+            color: isBlocked ? '#fff' : (isPast ? '#d4d4d8' : '#18181b')
           }
         }, String(d)));
       };
       for (var d = 1; d <= count; d++) _loop(d);
 
       return h('div', { key: year + '-' + month, style: { flex: '1 1 260px', minWidth: '260px', maxWidth: '340px' } },
-        h('div', { style: { textAlign: 'center', fontWeight: 700, fontSize: '15px', marginBottom: '6px', color: '#0f172a' } },
+        h('div', { style: { textAlign: 'center', fontWeight: 700, fontSize: '15px', marginBottom: '6px', color: '#18181b' } },
           MONTHS[month] + ' ' + year),
         h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '3px' } }, cells)
       );
@@ -153,7 +153,7 @@
           h('button', { type: 'button', onClick: function () { self.shift(-1); }, style: navBtn, 'aria-label': 'Předchozí měsíc' }, '‹ Předchozí'),
           h('button', { type: 'button', onClick: function () { self.goToday(); }, style: navBtn }, 'Dnes'),
           h('button', { type: 'button', onClick: function () { self.shift(1); }, style: navBtn, 'aria-label': 'Následující měsíc' }, 'Další ›'),
-          h('span', { style: { marginLeft: 'auto', fontSize: '12px', color: '#64748b', display: 'inline-flex', alignItems: 'center', gap: '6px' } },
+          h('span', { style: { marginLeft: 'auto', fontSize: '12px', color: '#71717a', display: 'inline-flex', alignItems: 'center', gap: '6px' } },
             h('span', { style: { display: 'inline-block', width: '12px', height: '12px', background: RED, borderRadius: '3px' } }),
             'plná kapacita dortů')
         ),
@@ -162,11 +162,11 @@
           this.renderMonth(next.getFullYear(), next.getMonth(), selected, today)
         ),
         h('div', { style: { marginTop: '14px' } },
-          h('div', { style: { fontSize: '12px', fontWeight: 700, color: '#475569', marginBottom: '6px' } },
+          h('div', { style: { fontSize: '12px', fontWeight: 700, color: '#52525b', marginBottom: '6px' } },
             'Zablokované dny: ' + selected.length),
           selected.length
             ? h('div', { style: { display: 'flex', flexWrap: 'wrap', gap: '6px' } }, chips)
-            : h('div', { style: { fontSize: '12px', color: '#94a3b8' } }, 'Zatím není zablokován žádný den.'),
+            : h('div', { style: { fontSize: '12px', color: '#a1a1aa' } }, 'Zatím není zablokován žádný den.'),
           pastCount > 0
             ? h('button', {
                 type: 'button', onClick: function () { self.removePast(); },

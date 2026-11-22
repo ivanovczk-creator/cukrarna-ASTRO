@@ -11,13 +11,13 @@ import { LEGAL_PAGES } from '../lib/legal';
 	aria-labelledby="cookie-banner-title"
 	class="hidden fixed inset-x-0 bottom-0 z-[10000] p-3 md:p-6"
 >
-	<div class="max-w-4xl mx-auto bg-[#0a192f] text-white rounded-3xl shadow-2xl border border-[#d4af37]/60 p-5 md:p-7 max-h-[90vh] overflow-y-auto">
-		<h2 id="cookie-banner-title" class="text-lg md:text-xl font-serif italic font-bold text-[#d4af37] mb-2">Cookies na našem webu</h2>
+	<div class="max-w-4xl mx-auto bg-zinc-900 text-white rounded-3xl shadow-2xl border border-gold-500/60 p-5 md:p-7 max-h-[90vh] overflow-y-auto">
+		<h2 id="cookie-banner-title" class="text-lg md:text-xl font-serif italic font-bold text-gold-500 mb-2">Cookies na našem webu</h2>
 		<p class="text-sm leading-relaxed text-white/90">
 			Nezbytné cookies a úložiště prohlížeče potřebujeme pro fungování košíku a objednávek. S vaším souhlasem používáme také
 			analytické cookies (Google Analytics), které nám pomáhají web zlepšovat. Souhlas můžete kdykoli změnit v patičce webu
-			(„Nastavení cookies“). Více v <a href={LEGAL_PAGES.cookies} class="underline text-[#d4af37] hover:text-white">Zásadách cookies</a>
-			a <a href={LEGAL_PAGES.privacy} class="underline text-[#d4af37] hover:text-white">Zásadách ochrany osobních údajů</a>.
+			(„Nastavení cookies“). Více v <a href={LEGAL_PAGES.cookies} class="underline text-gold-500 hover:text-white">Zásadách cookies</a>
+			a <a href={LEGAL_PAGES.privacy} class="underline text-gold-500 hover:text-white">Zásadách ochrany osobních údajů</a>.
 		</p>
 
 		<div id="cookie-settings-panel" class="hidden mt-5 space-y-3 text-sm">
@@ -26,22 +26,22 @@ import { LEGAL_PAGES } from '../lib/legal';
 					<p class="font-bold">Nezbytné</p>
 					<p class="text-white/80 text-xs mt-1">Obsah košíku, volba cookies, bezpečnost a fungování objednávek. Nelze vypnout.</p>
 				</div>
-				<span class="shrink-0 text-xs font-bold text-[#d4af37] uppercase tracking-widest mt-1">Vždy zapnuto</span>
+				<span class="shrink-0 text-xs font-bold text-gold-500 uppercase tracking-widest mt-1">Vždy zapnuto</span>
 			</div>
 			<label class="flex items-start justify-between gap-4 bg-white/5 rounded-2xl p-4 cursor-pointer">
 				<span class="block">
 					<span class="block font-bold">Analytické</span>
 					<span class="block text-white/80 text-xs mt-1">Google Analytics – anonymizovaná statistika návštěvnosti webu (Google Ireland Limited).</span>
 				</span>
-				<input id="cookie-analytics" type="checkbox" class="mt-1 h-5 w-5 shrink-0 accent-[#d4af37] cursor-pointer" />
+				<input id="cookie-analytics" type="checkbox" class="mt-1 h-5 w-5 shrink-0 accent-gold-500 cursor-pointer" />
 			</label>
 		</div>
 
 		<div class="mt-5 flex flex-col sm:flex-row flex-wrap gap-3 sm:justify-end">
-			<button type="button" data-cookie-action="settings" id="cookie-settings-btn" aria-expanded="false" aria-controls="cookie-settings-panel" class="px-5 py-3 rounded-full border border-white/40 text-xs font-bold uppercase tracking-widest hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer">Nastavení</button>
-			<button type="button" data-cookie-action="save" id="cookie-save-btn" class="hidden px-5 py-3 rounded-full border border-[#d4af37] text-[#d4af37] text-xs font-bold uppercase tracking-widest hover:bg-[#d4af37] hover:text-[#0a192f] transition-colors cursor-pointer">Uložit výběr</button>
-			<button type="button" data-cookie-action="reject" class="px-5 py-3 rounded-full bg-white text-[#0a192f] text-xs font-bold uppercase tracking-widest hover:bg-slate-200 transition-colors cursor-pointer">Odmítnout vše</button>
-			<button type="button" data-cookie-action="accept" class="px-5 py-3 rounded-full bg-[#d4af37] text-[#0a192f] text-xs font-bold uppercase tracking-widest hover:bg-white transition-colors cursor-pointer">Přijmout vše</button>
+			<button type="button" data-cookie-action="settings" id="cookie-settings-btn" aria-expanded="false" aria-controls="cookie-settings-panel" class="px-5 py-3 rounded-full border border-white/40 text-xs font-bold uppercase tracking-widest hover:border-gold-500 hover:text-gold-500 transition-colors cursor-pointer">Nastavení</button>
+			<button type="button" data-cookie-action="save" id="cookie-save-btn" class="hidden px-5 py-3 rounded-full border border-gold-500 text-gold-500 text-xs font-bold uppercase tracking-widest hover:bg-gold-500 hover:text-zinc-900 transition-colors cursor-pointer">Uložit výběr</button>
+			<button type="button" data-cookie-action="reject" class="px-5 py-3 rounded-full bg-white text-zinc-900 text-xs font-bold uppercase tracking-widest hover:bg-zinc-200 transition-colors cursor-pointer">Odmítnout vše</button>
+			<button type="button" data-cookie-action="accept" class="px-5 py-3 rounded-full bg-gold-500 text-zinc-900 text-xs font-bold uppercase tracking-widest hover:bg-white transition-colors cursor-pointer">Přijmout vše</button>
 		</div>
 	</div>
 </div>

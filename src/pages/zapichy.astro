@@ -25,11 +25,11 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 	title="Zápichy na dorty na zakázku | Cukrářství Blahutovi" 
 	description="Prohlédněte si naši nabídku zápichů na dorty. Akrylové i dřevěné zápichy pro vaše narozeninové a svatební dorty. Výdej v našich prodejnách Ostrava, Karviná a Petřvald."
 >
-	<main class="py-16 px-4 bg-slate-50 min-h-screen">
+	<main class="py-16 px-4 bg-zinc-50 min-h-screen">
 		<div class="max-w-7xl mx-auto">
 			<div class="text-center mb-16">
-				<h1 class="text-4xl md:text-5xl font-serif mb-6 italic text-navy-900 font-bold">Zápichy na dorty</h1>
-				<p class="text-slate-600 max-w-2xl mx-auto text-lg font-bold">
+				<h1 class="text-4xl md:text-5xl font-serif mb-6 italic text-zinc-900 font-bold">Zápichy na dorty</h1>
+				<p class="text-zinc-600 max-w-2xl mx-auto text-lg font-bold">
 					Doplňte svůj dort o originální zápich na přání. Vyberte si z naší nabídky a vyzvedněte si ho společně s vaší objednávkou na vybrané prodejně.
 				</p>
 			</div>
@@ -41,8 +41,8 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 					const topperId = (topper.title || 'zapich').replace(/\s+/g, '-').toLowerCase();
 
 					return (
-					<div class="group bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col hover:shadow-2xl transition-all duration-500 font-bold text-navy-900">
-						<div class="h-56 overflow-hidden relative bg-slate-50 font-bold">
+					<div class="group bg-white rounded-[2rem] shadow-lg border border-zinc-100 overflow-hidden flex flex-col hover:shadow-2xl transition-all duration-500 font-bold text-zinc-900">
+						<div class="h-56 overflow-hidden relative bg-zinc-50 font-bold">
 							{imageSrc ? (
 								<a href={fotoUrl} class="glightbox cursor-zoom-in block h-full" aria-label={`Zvětšit obrázek ${topper.title}`}>
 									<Image 
@@ -59,14 +59,14 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 									<div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500"></div>
 								</a>
 							) : (
-								<div class="flex items-center justify-center h-full text-xs text-slate-600 italic font-bold">Foto připravujeme</div>
+								<div class="flex items-center justify-center h-full text-xs text-zinc-600 italic font-bold">Foto připravujeme</div>
 							)}
 
 							<a 
 								href={fbShareLink} 
 								target="_blank" 
 								rel="noopener noreferrer"
-								class="absolute top-4 right-4 bg-white/90 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[#1877F2] hover:text-white text-[#1877F2] z-10"
+								class="absolute top-4 right-4 bg-white/90 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-zinc-900 hover:text-white text-zinc-700 z-10"
 								title="Sdílet tento zápich na Facebooku"
 							>
 								<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -75,18 +75,18 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 							</a>
 						</div>
 						<div class="p-6 flex-grow flex flex-col justify-between">
-							<h2 class="text-lg font-bold mb-1 leading-tight text-navy-900 font-serif italic">{topper.title}</h2>
+							<h2 class="text-lg font-bold mb-1 leading-tight text-zinc-900 font-serif italic">{topper.title}</h2>
 							<div class="space-y-4">
-								<p class="text-[#735c1e] font-black text-xl">{topper.cena}</p>
+								<p class="text-gold-700 font-black text-xl">{topper.cena}</p>
 								
 								<div class="flex flex-col items-center gap-2">
-									<button id={`init-btn-${topperId}`} onclick={`document.getElementById('init-btn-${topperId}').classList.add('hidden'); document.getElementById('counter-${topperId}').classList.remove('hidden'); document.getElementById('counter-${topperId}').classList.add('flex');`} class="w-full bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all cursor-pointer uppercase tracking-widest text-[10px]">Přidat</button>
+									<button id={`init-btn-${topperId}`} onclick={`document.getElementById('init-btn-${topperId}').classList.add('hidden'); document.getElementById('counter-${topperId}').classList.remove('hidden'); document.getElementById('counter-${topperId}').classList.add('flex');`} class="w-full bg-gold-500 text-zinc-900 py-3 rounded-xl font-bold hover:bg-zinc-900 hover:text-white transition-all cursor-pointer uppercase tracking-widest text-[10px]">Přidat</button>
 									
-									<div id={`counter-${topperId}`} class="hidden w-full items-center justify-between bg-slate-100 rounded-xl overflow-hidden border border-slate-200">
-										<button onclick={`const input = document.getElementById('qty-${topperId}'); if(parseInt(input.value) > 1) { input.value = parseInt(input.value) - 1; } else { document.getElementById('counter-${topperId}').classList.add('hidden'); document.getElementById('counter-${topperId}').classList.remove('flex'); document.getElementById('init-btn-${topperId}').classList.remove('hidden'); }`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer" aria-label="Snížit množství">−</button>
+									<div id={`counter-${topperId}`} class="hidden w-full items-center justify-between bg-zinc-100 rounded-xl overflow-hidden border border-zinc-200">
+										<button onclick={`const input = document.getElementById('qty-${topperId}'); if(parseInt(input.value) > 1) { input.value = parseInt(input.value) - 1; } else { document.getElementById('counter-${topperId}').classList.add('hidden'); document.getElementById('counter-${topperId}').classList.remove('flex'); document.getElementById('init-btn-${topperId}').classList.remove('hidden'); }`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-zinc-200 transition-colors cursor-pointer" aria-label="Snížit množství">−</button>
 										<input type="number" id={`qty-${topperId}`} min="1" value="1" class="w-12 bg-transparent text-center font-bold outline-none border-none p-0" aria-label="Množství" />
-										<button onclick={`const input = document.getElementById('qty-${topperId}'); input.value = parseInt(input.value) + 1;`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer" aria-label="Zvýšit množství">+</button>
-										<button onclick={`const q = document.getElementById('qty-${topperId}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${topper.title}", price: "${topper.cena}", img: "${fotoUrl}", quantity: q, category: "zapichy" } })); document.getElementById('counter-${topperId}').classList.add('hidden'); document.getElementById('counter-${topperId}').classList.remove('flex'); document.getElementById('init-btn-${topperId}').classList.remove('hidden'); document.getElementById('qty-${topperId}').value = 1;`} class="bg-[#0a192f] text-white px-3 h-10 font-bold text-[10px] uppercase hover:bg-[#d4af37] cursor-pointer">OK</button>
+										<button onclick={`const input = document.getElementById('qty-${topperId}'); input.value = parseInt(input.value) + 1;`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-zinc-200 transition-colors cursor-pointer" aria-label="Zvýšit množství">+</button>
+										<button onclick={`const q = document.getElementById('qty-${topperId}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${topper.title}", price: "${topper.cena}", img: "${fotoUrl}", quantity: q, category: "zapichy" } })); document.getElementById('counter-${topperId}').classList.add('hidden'); document.getElementById('counter-${topperId}').classList.remove('flex'); document.getElementById('init-btn-${topperId}').classList.remove('hidden'); document.getElementById('qty-${topperId}').value = 1;`} class="bg-gold-500 text-zinc-900 px-3 h-10 font-bold text-[10px] uppercase hover:bg-zinc-900 hover:text-white cursor-pointer">OK</button>
 									</div>
 								</div>
 							</div>
@@ -95,10 +95,10 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 				)})}
 			</div>
 
-			<aside class="mt-16 max-w-3xl mx-auto border-t border-slate-200 pt-6 text-xs text-slate-600 font-bold leading-relaxed text-center">
+			<aside class="mt-16 max-w-3xl mx-auto border-t border-zinc-200 pt-6 text-xs text-zinc-600 font-bold leading-relaxed text-center">
 				Zápichy v této nabídce jsou standardní (nepersonalizované) zboží – od smlouvy lze odstoupit do 14 dnů od převzetí.
 				Zápichy zhotovené na míru podle vašeho přání jsou z odstoupení vyloučeny. Podrobnosti v
-				<a href="/obchodni-podminky/#odstoupeni" class="underline text-[#735c1e] hover:text-[#0a192f]">obchodních podmínkách</a>.
+				<a href="/obchodni-podminky/#odstoupeni" class="underline text-gold-700 hover:text-zinc-900">obchodních podmínkách</a>.
 			</aside>
 		</div>
 		<Lightbox />

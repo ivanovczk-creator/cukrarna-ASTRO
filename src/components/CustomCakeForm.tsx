@@ -66,7 +66,7 @@ const CustomCakeForm = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-8 bg-white rounded-[2.5rem] shadow-xl border border-[#d4af37]/10 font-bold text-[#0a192f]">
+    <div className="max-w-2xl mx-auto p-8 bg-white rounded-[2.5rem] shadow-xl border border-gold-500/10 font-bold text-zinc-900">
       <h2 className="text-3xl font-serif mb-4 text-center italic">Konfigurátor dortu</h2>
       
       <form 
@@ -83,8 +83,8 @@ const CustomCakeForm = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1">
-            <label htmlFor="cake-shop" className="text-xs uppercase tracking-widest text-[#735c1e]">Místo vyzvednutí</label>
-            <select id="cake-shop" name="Prodejna" value={selectedShop} onChange={(e) => setSelectedShop(e.target.value)} className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" required>
+            <label htmlFor="cake-shop" className="text-xs uppercase tracking-widest text-gold-700">Místo vyzvednutí</label>
+            <select id="cake-shop" name="Prodejna" value={selectedShop} onChange={(e) => setSelectedShop(e.target.value)} className="w-full p-3 bg-zinc-50 rounded-xl border border-zinc-200 outline-none" required>
               <option value="Ostrava (Zábřeh)">Ostrava - Zábřeh</option>
               <option value="Karviná">Karviná</option>
               <option value="Petřvald">Petřvald</option>
@@ -92,28 +92,28 @@ const CustomCakeForm = () => {
             </select>
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="cake-date" className="text-xs uppercase tracking-widest text-[#735c1e]">Datum vyzvednutí</label>
-            <PickupDateInput id="cake-date" name="Datum" min={earliest?.date} value={pickupDate} onChange={(e) => setPickupDate(e.target.value)} error={dateError} aria-describedby="cake-date-hint" className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" required />
+            <label htmlFor="cake-date" className="text-xs uppercase tracking-widest text-gold-700">Datum vyzvednutí</label>
+            <PickupDateInput id="cake-date" name="Datum" min={earliest?.date} value={pickupDate} onChange={(e) => setPickupDate(e.target.value)} error={dateError} aria-describedby="cake-date-hint" className="w-full p-3 bg-zinc-50 rounded-xl border border-zinc-200 outline-none" required />
           </div>
         </div>
-        {dateHint && <p id="cake-date-hint" className="-mt-3 text-xs text-slate-500 leading-snug">{dateHint}</p>}
+        {dateHint && <p id="cake-date-hint" className="-mt-3 text-xs text-zinc-500 leading-snug">{dateHint}</p>}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <label htmlFor="cake-name" className="sr-only">Vaše jméno</label>
-          <input id="cake-name" type="text" name="Jmeno" autoComplete="name" placeholder="Vaše jméno" required className="p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" />
+          <input id="cake-name" type="text" name="Jmeno" autoComplete="name" placeholder="Vaše jméno" required className="p-3 bg-zinc-50 rounded-xl border border-zinc-200 outline-none" />
           <label htmlFor="cake-email" className="sr-only">Váš e-mail</label>
-          <input id="cake-email" type="email" name="Email" autoComplete="email" placeholder="Váš e-mail" required className="p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" />
+          <input id="cake-email" type="email" name="Email" autoComplete="email" placeholder="Váš e-mail" required className="p-3 bg-zinc-50 rounded-xl border border-zinc-200 outline-none" />
         </div>
         
         <label htmlFor="cake-phone" className="sr-only">Telefon</label>
-        <input id="cake-phone" type="tel" name="Telefon" autoComplete="tel" placeholder="Telefon" required className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none" />
+        <input id="cake-phone" type="tel" name="Telefon" autoComplete="tel" placeholder="Telefon" required className="w-full p-3 bg-zinc-50 rounded-xl border border-zinc-200 outline-none" />
         <label htmlFor="cake-note" className="sr-only">Popis vašeho dortu</label>
-        <textarea id="cake-note" name="Poznamka" placeholder="Popište vaši představu..." required className="w-full p-3 h-32 bg-slate-50 rounded-xl border border-slate-200 outline-none resize-none"></textarea>
+        <textarea id="cake-note" name="Poznamka" placeholder="Popište vaši představu..." required className="w-full p-3 h-32 bg-zinc-50 rounded-xl border border-zinc-200 outline-none resize-none"></textarea>
         
-        <div className="p-6 bg-orange-50 border-2 border-dashed border-[#b38f2d]/30 rounded-2xl">
-          <label htmlFor="cake-photo" className="block text-xs font-bold text-[#735c1e] uppercase mb-3 text-center">Inspirační obrázek (nepovinné)</label>
+        <div className="p-6 bg-orange-50 border-2 border-dashed border-gold-500/30 rounded-2xl">
+          <label htmlFor="cake-photo" className="block text-xs font-bold text-gold-700 uppercase mb-3 text-center">Inspirační obrázek (nepovinné)</label>
           <input id="cake-photo" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.heic,.heif" onChange={handlePhotoChange} className="text-[10px] w-full" />
-          <p className="mt-2 text-[10px] text-slate-500 text-center">Jedna fotka (JPG, PNG, WEBP, HEIC), max. {MAX_FILE_BYTES / 1024 / 1024} MB</p>
+          <p className="mt-2 text-[10px] text-zinc-500 text-center">Jedna fotka (JPG, PNG, WEBP, HEIC), max. {MAX_FILE_BYTES / 1024 / 1024} MB</p>
           {photoError && <p role="alert" className="mt-2 text-xs font-bold text-red-600 text-center">{photoError}</p>}
         </div>
 
@@ -121,7 +121,7 @@ const CustomCakeForm = () => {
         <ConsentCheckbox id="cake-consent" />
 
         {submitError && <p role="alert" className="text-sm font-bold text-red-600 text-center">{submitError}</p>}
-        <button type="submit" disabled={isSubmitting || !!photoError || !!dateError} className="w-full disabled:opacity-60 disabled:cursor-not-allowed bg-[#0a192f] text-white py-4 rounded-2xl font-bold hover:bg-[#d4af37] transition-all uppercase tracking-widest active:scale-[0.98]">
+        <button type="submit" disabled={isSubmitting || !!photoError || !!dateError} className="w-full disabled:opacity-60 disabled:cursor-not-allowed bg-gold-500 text-zinc-900 py-4 rounded-2xl font-bold hover:bg-zinc-900 hover:text-white transition-all uppercase tracking-widest active:scale-[0.98]">
           {isSubmitting ? 'Odesílám…' : 'Odeslat poptávku'}
         </button>
       </form>

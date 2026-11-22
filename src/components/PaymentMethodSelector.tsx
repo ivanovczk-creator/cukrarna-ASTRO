@@ -17,7 +17,7 @@ interface Props {
 const PaymentMethodSelector = ({ value, onChange, onlineAvailable, total }: Props) => {
   return (
     <fieldset className="space-y-2">
-      <legend className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-2">
+      <legend className="text-[10px] uppercase tracking-widest font-bold text-zinc-500 mb-2">
         Způsob platby
       </legend>
 
@@ -30,10 +30,10 @@ const PaymentMethodSelector = ({ value, onChange, onlineAvailable, total }: Prop
               key={method.id}
               className={`p-3 rounded-xl border text-left transition-all ${
                 disabled
-                  ? 'opacity-50 cursor-not-allowed border-transparent bg-slate-50'
+                  ? 'opacity-50 cursor-not-allowed border-transparent bg-zinc-50'
                   : selected
-                    ? 'cursor-pointer border-[#d4af37] bg-[#d4af37]/10'
-                    : 'cursor-pointer border-transparent bg-slate-50 hover:border-[#d4af37]/50'
+                    ? 'cursor-pointer border-gold-500 bg-gold-500/10'
+                    : 'cursor-pointer border-transparent bg-zinc-50 hover:border-gold-500/50'
               }`}
             >
               <input
@@ -46,7 +46,7 @@ const PaymentMethodSelector = ({ value, onChange, onlineAvailable, total }: Prop
                 className="sr-only"
               />
               <span className="block text-xs font-bold leading-tight">{method.label}</span>
-              <span className="block text-[10px] text-slate-500 font-bold leading-tight mt-1">
+              <span className="block text-[10px] text-zinc-500 font-bold leading-tight mt-1">
                 {disabled ? 'Brzy dostupné' : method.hint}
               </span>
             </label>
@@ -55,7 +55,7 @@ const PaymentMethodSelector = ({ value, onChange, onlineAvailable, total }: Prop
       </div>
 
       {total !== null && (
-        <p className="text-right text-xs font-black text-[#735c1e]">Celkem: {formatCzk(total)}</p>
+        <p className="text-right text-xs font-black text-gold-700">Celkem: {formatCzk(total)}</p>
       )}
     </fieldset>
   );

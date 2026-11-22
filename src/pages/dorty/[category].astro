@@ -40,29 +40,29 @@ function getImage(path: string, images: Record<string, any>) {
 ---
 
 <Layout title={info.title} description={info.description} canonicalPath={`/dorty/${category}/`}>
-	<main class="py-16 px-4 bg-slate-50 min-h-screen">
-		<div class="max-w-7xl mx-auto font-bold text-navy-900">
-			<nav class="text-xs uppercase tracking-widest text-slate-600 mb-6 font-bold">
-				<a href="/" class="hover:text-[#d4af37]">Domů</a> / <a href="/dorty/" class="hover:text-[#d4af37]">Dorty</a> / <span class="text-slate-600 font-bold">{info.h1}</span>
+	<main class="py-16 px-4 bg-zinc-50 min-h-screen">
+		<div class="max-w-7xl mx-auto font-bold text-zinc-900">
+			<nav class="text-xs uppercase tracking-widest text-zinc-600 mb-6 font-bold">
+				<a href="/" class="hover:text-gold-700">Domů</a> / <a href="/dorty/" class="hover:text-gold-700">Dorty</a> / <span class="text-zinc-600 font-bold">{info.h1}</span>
 			</nav>
 
-			<div class="mb-12 border-l-4 border-[#d4af37] pl-6 py-2 max-w-4xl font-bold">
-				<h1 class="text-4xl md:text-5xl font-serif mb-4 text-[#0a192f] italic font-bold">{info.h1}</h1>
-				<p class="text-slate-700 text-lg leading-relaxed font-bold">{info.description}</p>
+			<div class="mb-12 border-l-4 border-gold-500 pl-6 py-2 max-w-4xl font-bold">
+				<h1 class="text-4xl md:text-5xl font-serif mb-4 text-zinc-900 italic font-bold">{info.h1}</h1>
+				<p class="text-zinc-700 text-lg leading-relaxed font-bold">{info.description}</p>
 			</div>
 
 			<FoodNotice class="mb-10" />
 
 			{filteredCakes.length > 0 ? (
-				<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 font-bold text-navy-900">
+				<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 font-bold text-zinc-900">
 					{filteredCakes.map((cake, index) => {
 						const imageSrc = getImage(cake.foto, cakeImages);
 						const shareUrl = `https://cukrarstviblahutovi.cz/dorty/${category}/`;
 						const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
 
 						return (
-							<div class="group bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden flex flex-col hover:shadow-2xl transition-all duration-500 font-bold">
-								<div class="h-72 overflow-hidden relative font-bold text-navy-900">
+							<div class="group bg-white rounded-[2.5rem] shadow-sm border border-zinc-100 overflow-hidden flex flex-col hover:shadow-2xl transition-all duration-500 font-bold">
+								<div class="h-72 overflow-hidden relative font-bold text-zinc-900">
 									{imageSrc ? (
 										<a href={cake.foto} class="glightbox block h-full font-bold" aria-label={`Detail ${cake.title}`}>
 											<Image 
@@ -79,14 +79,14 @@ function getImage(path: string, images: Record<string, any>) {
 											<div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500 font-bold"></div>
 										</a>
 									) : (
-										<div class="flex items-center justify-center h-full bg-slate-100 text-slate-600 italic uppercase text-[10px] tracking-widest font-bold">Foto připravujeme</div>
+										<div class="flex items-center justify-center h-full bg-zinc-100 text-zinc-600 italic uppercase text-[10px] tracking-widest font-bold">Foto připravujeme</div>
 									)}
 
 									<a 
 										href={fbShareLink} 
 										target="_blank" 
 										rel="noopener noreferrer"
-										class="absolute top-4 right-4 bg-white/90 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[#1877F2] hover:text-white text-[#1877F2]"
+										class="absolute top-4 right-4 bg-white/90 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-zinc-900 hover:text-white text-zinc-700"
 										title="Sdílet na Facebooku"
 									>
 										<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -94,17 +94,17 @@ function getImage(path: string, images: Record<string, any>) {
 										</svg>
 									</a>
 								</div>
-								<div class="p-8 flex-grow flex flex-col font-bold text-navy-900">
-									<h2 class="text-xl font-bold text-[#0a192f] mb-2 leading-tight font-serif italic">{cake.title}</h2>
-									<p class="text-slate-500 text-[10px] uppercase tracking-[0.2em] font-bold mb-6">{cake.porce}</p>
-									<div class="mt-auto flex justify-between items-center pt-6 border-t border-slate-50">
-										<span class="text-[#735c1e] font-black text-2xl">{cake.cena}</span>
+								<div class="p-8 flex-grow flex flex-col font-bold text-zinc-900">
+									<h2 class="text-xl font-bold text-zinc-900 mb-2 leading-tight font-serif italic">{cake.title}</h2>
+									<p class="text-zinc-500 text-[10px] uppercase tracking-[0.2em] font-bold mb-6">{cake.porce}</p>
+									<div class="mt-auto flex justify-between items-center pt-6 border-t border-zinc-50">
+										<span class="text-gold-700 font-black text-2xl">{cake.cena}</span>
 										<button 
 											data-cake-name={cake.title}
 											data-cake-price={cake.cena}
 											data-cake-img={cake.foto}
 											onclick="window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: this.getAttribute('data-cake-name'), price: this.getAttribute('data-cake-price'), img: this.getAttribute('data-cake-img'), quantity: 1, category: 'dorty' } }))"
-											class="bg-[#0a192f] text-white w-12 h-12 rounded-2xl hover:bg-[#d4af37] transition-all duration-300 flex items-center justify-center shadow-lg active:scale-90"
+											class="bg-gold-500 text-zinc-900 w-12 h-12 rounded-2xl hover:bg-zinc-900 hover:text-white transition-all duration-300 flex items-center justify-center shadow-lg active:scale-90"
 											title="Přidat do objednávky"
 										>
 											<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -118,37 +118,37 @@ function getImage(path: string, images: Record<string, any>) {
 					})}
 				</div>
 			) : (
-				<div class="bg-white rounded-[3rem] p-20 text-center border-2 border-dashed border-slate-200 shadow-sm">
+				<div class="bg-white rounded-[3rem] p-20 text-center border-2 border-dashed border-zinc-200 shadow-sm">
 					<div class="text-6xl mb-6 opacity-20">🎂</div>
-					<h2 class="text-2xl font-serif text-slate-500 italic font-bold">V této kategorii zatím nic není</h2>
-					<p class="text-slate-500 mt-2 font-bold">Pracujeme na tom, abyste si brzy mohli vybrat!</p>
-					<a href="/dorty/" class="inline-block mt-8 text-[#d4af37] font-bold uppercase text-xs tracking-widest border-b border-[#d4af37] pb-1">Zpět na všechny dorty</a>
+					<h2 class="text-2xl font-serif text-zinc-500 italic font-bold">V této kategorii zatím nic není</h2>
+					<p class="text-zinc-500 mt-2 font-bold">Pracujeme na tom, abyste si brzy mohli vybrat!</p>
+					<a href="/dorty/" class="inline-block mt-8 text-gold-700 font-bold uppercase text-xs tracking-widest border-b border-gold-500 pb-1">Zpět na všechny dorty</a>
 				</div>
 			)}
 
-			<section class="mt-20 bg-white rounded-[2.5rem] border border-slate-100 shadow-sm p-8 md:p-12 max-w-4xl" aria-labelledby="category-text-title">
-				<h2 id="category-text-title" class="text-2xl md:text-3xl font-serif italic text-[#0a192f] mb-6 font-bold">{info.sectionTitle}</h2>
-				<div class="space-y-4 text-slate-700 leading-relaxed font-normal text-base md:text-lg">
+			<section class="mt-20 bg-white rounded-[2.5rem] border border-zinc-100 shadow-sm p-8 md:p-12 max-w-4xl" aria-labelledby="category-text-title">
+				<h2 id="category-text-title" class="text-2xl md:text-3xl font-serif italic text-zinc-900 mb-6 font-bold">{info.sectionTitle}</h2>
+				<div class="space-y-4 text-zinc-700 leading-relaxed font-normal text-base md:text-lg">
 					{info.body.map((paragraph) => <p>{paragraph}</p>)}
 				</div>
-				<ul class="mt-6 space-y-2 text-slate-700 font-normal text-base list-disc pl-6 marker:text-[#d4af37]">
+				<ul class="mt-6 space-y-2 text-zinc-700 font-normal text-base list-disc pl-6 marker:text-gold-500">
 					{info.points.map((point) => <li>{point}</li>)}
 				</ul>
 			</section>
 
 			<nav class="mt-12 max-w-4xl" aria-label="Další kategorie dortů">
-				<h2 class="text-xl font-serif italic text-[#0a192f] mb-4 font-bold">Další kategorie dortů</h2>
+				<h2 class="text-xl font-serif italic text-zinc-900 mb-4 font-bold">Další kategorie dortů</h2>
 				<ul class="flex flex-wrap gap-3 list-none p-0 m-0">
 					{CAKE_CATEGORIES.filter((cat) => cat.id !== category).map((cat) => (
 						<li>
-							<a href={`/dorty/${cat.id}/`} class="inline-block bg-white border border-slate-200 rounded-full px-5 py-2 text-xs uppercase tracking-widest text-[#0a192f] hover:border-[#d4af37] hover:text-[#735c1e] transition-colors font-bold no-underline">{cat.h1}</a>
+							<a href={`/dorty/${cat.id}/`} class="inline-block bg-white border border-zinc-200 rounded-full px-5 py-2 text-xs uppercase tracking-widest text-zinc-900 hover:border-gold-500 hover:text-gold-700 transition-colors font-bold no-underline">{cat.h1}</a>
 						</li>
 					))}
 				</ul>
-				<p class="mt-6 text-sm text-slate-600 font-normal">
-					Hledáte i něco jiného? Prohlédněte si také <a href="/dort-na-prani/" class="underline text-[#735c1e] hover:text-[#0a192f]">dort na přání</a>,
-					<a href="/jedly-tisk/" class="underline text-[#735c1e] hover:text-[#0a192f]">jedlý tisk na fondánový list</a>
-					nebo <a href="/studena-kuchyne/" class="underline text-[#735c1e] hover:text-[#0a192f]">studenou kuchyni</a>.
+				<p class="mt-6 text-sm text-zinc-600 font-normal">
+					Hledáte i něco jiného? Prohlédněte si také <a href="/dort-na-prani/" class="underline text-gold-700 hover:text-zinc-900">dort na přání</a>,
+					<a href="/jedly-tisk/" class="underline text-gold-700 hover:text-zinc-900">jedlý tisk na fondánový list</a>
+					nebo <a href="/studena-kuchyne/" class="underline text-gold-700 hover:text-zinc-900">studenou kuchyni</a>.
 				</p>
 			</nav>
 

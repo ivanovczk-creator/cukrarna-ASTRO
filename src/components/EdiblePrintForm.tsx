@@ -12,8 +12,8 @@ import { formatCzk } from '../lib/payments/config';
 const PRINT_BASE = { value: 'Fondánový list A4', price: 160 } as const;
 const MAX_QTY = 50;
 
-const fieldClass = 'w-full p-4 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]';
-const labelClass = 'block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 ml-2';
+const fieldClass = 'w-full p-4 bg-white border border-zinc-200 rounded-2xl outline-none focus:ring-2 focus:ring-gold-500';
+const labelClass = 'block text-xs font-bold uppercase tracking-widest text-zinc-500 mb-2 ml-2';
 
 const EdiblePrintForm = () => {
   const [files, setFiles] = useState<File[]>([]);
@@ -89,13 +89,13 @@ const EdiblePrintForm = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-16 bg-[#f8fafc] rounded-[3rem] border border-slate-200 shadow-xl text-[#0a192f]">
+    <div className="max-w-4xl mx-auto px-4 py-16 bg-[#fafafa] rounded-[3rem] border border-zinc-200 shadow-xl text-zinc-900">
       <div className="text-center mb-10">
         <h2 className="text-4xl font-serif mb-4 italic">Tisk na fondánový list</h2>
-        <p className="text-slate-600 max-w-2xl mx-auto">
+        <p className="text-zinc-600 max-w-2xl mx-auto">
           Nahrajte své obrázky a my je vytiskneme na fondánový list A4.
         </p>
-        <div className="mt-4 inline-block bg-[#d4af37] text-[#0a192f] px-6 py-2 rounded-full font-bold shadow-sm">
+        <div className="mt-4 inline-block bg-gold-500 text-zinc-900 px-6 py-2 rounded-full font-bold shadow-sm">
           Cena: {formatCzk(PRINT_BASE.price)} / list A4
         </div>
       </div>
@@ -149,7 +149,7 @@ const EdiblePrintForm = () => {
         <div className="space-y-4">
           <div>
             <label htmlFor="edible-file" className={labelClass}>Obrázky (A4)</label>
-            <div className="relative w-full p-6 bg-white border-2 border-dashed border-slate-200 rounded-2xl text-center hover:border-[#d4af37] transition-all cursor-pointer">
+            <div className="relative w-full p-6 bg-white border-2 border-dashed border-zinc-200 rounded-2xl text-center hover:border-gold-500 transition-all cursor-pointer">
               <input 
                 id="edible-file"
                 type="file" 
@@ -159,16 +159,16 @@ const EdiblePrintForm = () => {
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
                 accept="image/*,.heic,.heif,.pdf,.png,.jpg,.jpeg,.webp" 
               />
-              <div className="text-sm text-slate-500">
+              <div className="text-sm text-zinc-500">
                 {files.length > 0 ? (
-                  <div className="text-[#0a192f] font-medium">
-                    <p className="text-xs text-slate-600 mb-1 font-bold">Vybrané soubory:</p>
+                  <div className="text-zinc-900 font-medium">
+                    <p className="text-xs text-zinc-600 mb-1 font-bold">Vybrané soubory:</p>
                     {files.map((file, i) => <div key={i}>{file.name}</div>)}
                   </div>
                 ) : (
                   <div>
-                    <p className="font-bold text-slate-700">Klikněte pro výběr obrázků nebo PDF</p>
-                    <p className="text-[10px] text-slate-600 mt-1">Podporuje JPG, PNG, HEIC (iPhone), WEBP i PDF · max. {MAX_FILES} souborů, každý do {MAX_FILE_BYTES / 1024 / 1024} MB</p>
+                    <p className="font-bold text-zinc-700">Klikněte pro výběr obrázků nebo PDF</p>
+                    <p className="text-[10px] text-zinc-600 mt-1">Podporuje JPG, PNG, HEIC (iPhone), WEBP i PDF · max. {MAX_FILES} souborů, každý do {MAX_FILE_BYTES / 1024 / 1024} MB</p>
                   </div>
                 )}
               </div>
@@ -177,11 +177,11 @@ const EdiblePrintForm = () => {
           </div>
           <div>
             <label htmlFor="edible-note" className={labelClass}>Poznámka</label>
-            <textarea id="edible-note" name="Poznamka" className="w-full p-4 h-24 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#d4af37]" placeholder="Např. ořez, nápis..."></textarea>
+            <textarea id="edible-note" name="Poznamka" className="w-full p-4 h-24 bg-white border border-zinc-200 rounded-2xl outline-none focus:ring-2 focus:ring-gold-500" placeholder="Např. ořez, nápis..."></textarea>
           </div>
         </div>
 
-        <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-4 items-end bg-white border border-slate-200 rounded-2xl p-5">
+        <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-4 items-end bg-white border border-zinc-200 rounded-2xl p-5">
           <div className="sm:col-span-1">
             <span id="edible-base-label" className={labelClass}>Typ podkladu</span>
             <input type="hidden" name="Typ-Podkladu" value={PRINT_BASE.value} readOnly />
@@ -206,10 +206,10 @@ const EdiblePrintForm = () => {
             />
           </div>
           <div className="text-center sm:text-right" aria-live="polite">
-            <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500">Celková cena</p>
-            <p className="text-2xl font-black text-[#735c1e]">{total !== null ? formatCzk(total) : '—'}</p>
+            <p className="text-[10px] uppercase tracking-widest font-bold text-zinc-500">Celková cena</p>
+            <p className="text-2xl font-black text-gold-700">{total !== null ? formatCzk(total) : '—'}</p>
             {total !== null && (
-              <p className="text-[11px] text-slate-500 font-bold">{qty} × {formatCzk(unitPrice)}</p>
+              <p className="text-[11px] text-zinc-500 font-bold">{qty} × {formatCzk(unitPrice)}</p>
             )}
           </div>
         </div>
@@ -218,7 +218,7 @@ const EdiblePrintForm = () => {
           <LegalNotices variant="print" />
           <ConsentCheckbox id="edible-consent" />
           {submitError && <p role="alert" className="text-sm font-bold text-red-600 text-center">{submitError}</p>}
-          <button type="submit" disabled={isSubmitting || !!fileError || !!dateError} className="w-full disabled:opacity-60 disabled:cursor-not-allowed bg-[#0a192f] text-white py-5 rounded-2xl font-bold hover:bg-[#d4af37] hover:text-[#0a192f] transition-all shadow-lg text-lg uppercase tracking-widest cursor-pointer">
+          <button type="submit" disabled={isSubmitting || !!fileError || !!dateError} className="w-full disabled:opacity-60 disabled:cursor-not-allowed bg-gold-500 text-zinc-900 py-5 rounded-2xl font-bold hover:bg-zinc-900 hover:text-gold-500 transition-all shadow-lg text-lg uppercase tracking-widest cursor-pointer">
             {isSubmitting ? 'Nahrávám soubory a odesílám…' : BINDING_ORDER_LABEL}
           </button>
         </div>

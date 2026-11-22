@@ -12,22 +12,22 @@ interface Props {
   variant: 'cart' | 'print' | 'custom';
 }
 
-const linkClass = 'underline text-[#735c1e] hover:text-[#0a192f]';
+const linkClass = 'underline text-gold-700 hover:text-zinc-900';
 
 const AllergenList = () => (
   <details className="mt-2">
-    <summary className="cursor-pointer font-bold underline text-[#735c1e] hover:text-[#0a192f]">
+    <summary className="cursor-pointer font-bold underline text-gold-700 hover:text-zinc-900">
       Alergeny (1–14)
     </summary>
     <ol className="mt-2 space-y-0.5 list-none p-0 m-0">
       {ALLERGENS.map((a) => (
         <li key={a.n}>
           <strong>{a.n}.</strong> {a.name}
-          {a.note ? <span className="text-slate-500"> ({a.note})</span> : null}
+          {a.note ? <span className="text-zinc-500"> ({a.note})</span> : null}
         </li>
       ))}
     </ol>
-    <p className="mt-2 text-slate-600">{ALLERGEN_CROSS_CONTAMINATION}</p>
+    <p className="mt-2 text-zinc-600">{ALLERGEN_CROSS_CONTAMINATION}</p>
   </details>
 );
 
@@ -35,7 +35,7 @@ const AllergenList = () => (
 const LegalNotices = ({ variant }: Props) => {
   if (variant === 'cart') {
     return (
-      <div className="space-y-2 text-[11px] leading-snug text-slate-700 font-bold">
+      <div className="space-y-2 text-[11px] leading-snug text-zinc-700 font-bold">
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
           <p>
             <span aria-hidden="true">❄️ </span>
@@ -43,7 +43,7 @@ const LegalNotices = ({ variant }: Props) => {
           </p>
           <AllergenList />
         </div>
-        <p className="bg-slate-50 rounded-xl p-3">
+        <p className="bg-zinc-50 rounded-xl p-3">
           <strong>Převzetí a platba:</strong> osobní odběr na zvolené prodejně (bez poplatku za dopravu), platba při
           převzetí nebo online přes Comgate. <strong>Odstoupení od smlouvy:</strong> {WITHDRAWAL_NOTICE}{' '}
           <a href={`${LEGAL_PAGES.terms}#odstoupeni`} target="_blank" rel="noopener noreferrer" className={linkClass}>
@@ -57,8 +57,8 @@ const LegalNotices = ({ variant }: Props) => {
 
   if (variant === 'print') {
     return (
-      <div className="space-y-2 text-xs leading-snug text-slate-700 font-bold">
-        <p className="bg-slate-50 rounded-xl p-3">
+      <div className="space-y-2 text-xs leading-snug text-zinc-700 font-bold">
+        <p className="bg-zinc-50 rounded-xl p-3">
           Jedlý tisk je zboží upravené podle přání spotřebitele (§ 1837 písm. d) občanského zákoníku) – od smlouvy proto
           nelze odstoupit ve lhůtě 14 dnů.{' '}
           <a href={`${LEGAL_PAGES.terms}#odstoupeni`} target="_blank" rel="noopener noreferrer" className={linkClass}>
@@ -75,8 +75,8 @@ const LegalNotices = ({ variant }: Props) => {
   }
 
   return (
-    <div className="space-y-2 text-xs leading-snug text-slate-700 font-bold">
-      <p className="bg-slate-50 rounded-xl p-3">
+    <div className="space-y-2 text-xs leading-snug text-zinc-700 font-bold">
+      <p className="bg-zinc-50 rounded-xl p-3">
         Odesláním poptávky se nezavazujete. Smlouva vzniká až naším potvrzením objednávky včetně ceny a termínu. Dort na
         přání je zboží upravené podle přání spotřebitele a podléhá rychlé zkáze – od smlouvy nelze odstoupit ve lhůtě 14
         dnů (§ 1837 písm. d) a e) občanského zákoníku).{' '}

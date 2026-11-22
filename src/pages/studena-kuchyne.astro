@@ -26,11 +26,11 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 	title="Studená kuchyně – chlebíčky a kanapky | Cukrářství Blahutovi" 
 	description="Studená kuchyně z rodinného cukrářství: čerstvé chlebíčky a kanapky na oslavy i firemní akce. Výdej v našich prodejnách Ostrava, Karviná a Petřvald."
 >
-	<main class="py-16 px-4 bg-slate-50 min-h-screen">
+	<main class="py-16 px-4 bg-zinc-50 min-h-screen">
 		<div class="max-w-7xl mx-auto">
 			<div class="text-center mb-16">
-				<h1 class="text-4xl md:text-5xl font-serif mb-6 italic text-navy-900 font-bold">Studená kuchyně</h1>
-				<p class="text-slate-600 max-w-2xl mx-auto text-lg font-bold">
+				<h1 class="text-4xl md:text-5xl font-serif mb-6 italic text-zinc-900 font-bold">Studená kuchyně</h1>
+				<p class="text-zinc-600 max-w-2xl mx-auto text-lg font-bold">
 					Čerstvé chlebíčky a kanapky z naší kuchyně. Vyberte si z nabídky a vyzvedněte si objednávku na vybrané prodejně.
 				</p>
 			</div>
@@ -43,8 +43,8 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 					const productId = String(product.id || product.title || 'produkt').replace(/\s+/g, '-').toLowerCase();
 
 					return (
-					<div class="group bg-white rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden flex flex-col hover:shadow-2xl transition-all duration-500 font-bold text-navy-900">
-						<div class="h-56 overflow-hidden relative bg-slate-50 font-bold">
+					<div class="group bg-white rounded-[2rem] shadow-lg border border-zinc-100 overflow-hidden flex flex-col hover:shadow-2xl transition-all duration-500 font-bold text-zinc-900">
+						<div class="h-56 overflow-hidden relative bg-zinc-50 font-bold">
 							{imageSrc ? (
 								<a href={fotoUrl} class="glightbox cursor-zoom-in block h-full" aria-label={`Zvětšit obrázek ${product.title}`}>
 									<Image 
@@ -74,14 +74,14 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 									<div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500"></div>
 								</a>
 							) : (
-								<div class="flex items-center justify-center h-full text-xs text-slate-600 italic font-bold">Foto připravujeme</div>
+								<div class="flex items-center justify-center h-full text-xs text-zinc-600 italic font-bold">Foto připravujeme</div>
 							)}
 
 							<a 
 								href={fbShareLink} 
 								target="_blank" 
 								rel="noopener noreferrer"
-								class="absolute top-4 right-4 bg-white/90 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[#1877F2] hover:text-white text-[#1877F2] z-10"
+								class="absolute top-4 right-4 bg-white/90 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-zinc-900 hover:text-white text-zinc-700 z-10"
 								title="Sdílet tento produkt na Facebooku"
 							>
 								<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -90,18 +90,18 @@ const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURICom
 							</a>
 						</div>
 						<div class="p-6 flex-grow flex flex-col justify-between">
-							<h2 class="text-lg font-bold mb-1 leading-tight text-navy-900 font-serif italic">{product.title}</h2>
+							<h2 class="text-lg font-bold mb-1 leading-tight text-zinc-900 font-serif italic">{product.title}</h2>
 							<div class="space-y-4">
-								<p class="text-[#735c1e] font-black text-xl">{product.cena}</p>
+								<p class="text-gold-700 font-black text-xl">{product.cena}</p>
 								
 								<div class="flex flex-col items-center gap-2">
-									<button id={`init-btn-${productId}`} onclick={`document.getElementById('init-btn-${productId}').classList.add('hidden'); document.getElementById('counter-${productId}').classList.remove('hidden'); document.getElementById('counter-${productId}').classList.add('flex');`} class="w-full bg-[#0a192f] text-white py-3 rounded-xl font-bold hover:bg-[#d4af37] transition-all cursor-pointer uppercase tracking-widest text-[10px]">Přidat</button>
+									<button id={`init-btn-${productId}`} onclick={`document.getElementById('init-btn-${productId}').classList.add('hidden'); document.getElementById('counter-${productId}').classList.remove('hidden'); document.getElementById('counter-${productId}').classList.add('flex');`} class="w-full bg-gold-500 text-zinc-900 py-3 rounded-xl font-bold hover:bg-zinc-900 hover:text-white transition-all cursor-pointer uppercase tracking-widest text-[10px]">Přidat</button>
 									
-									<div id={`counter-${productId}`} class="hidden w-full items-center justify-between bg-slate-100 rounded-xl overflow-hidden border border-slate-200">
-										<button onclick={`const input = document.getElementById('qty-${productId}'); if(parseInt(input.value) > 1) { input.value = parseInt(input.value) - 1; } else { document.getElementById('counter-${productId}').classList.add('hidden'); document.getElementById('counter-${productId}').classList.remove('flex'); document.getElementById('init-btn-${productId}').classList.remove('hidden'); }`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer" aria-label="Snížit množství">−</button>
+									<div id={`counter-${productId}`} class="hidden w-full items-center justify-between bg-zinc-100 rounded-xl overflow-hidden border border-zinc-200">
+										<button onclick={`const input = document.getElementById('qty-${productId}'); if(parseInt(input.value) > 1) { input.value = parseInt(input.value) - 1; } else { document.getElementById('counter-${productId}').classList.add('hidden'); document.getElementById('counter-${productId}').classList.remove('flex'); document.getElementById('init-btn-${productId}').classList.remove('hidden'); }`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-zinc-200 transition-colors cursor-pointer" aria-label="Snížit množství">−</button>
 										<input type="number" id={`qty-${productId}`} min="1" value="1" class="w-12 bg-transparent text-center font-bold outline-none border-none p-0" aria-label="Množství" />
-										<button onclick={`const input = document.getElementById('qty-${productId}'); input.value = parseInt(input.value) + 1;`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-slate-200 transition-colors cursor-pointer" aria-label="Zvýšit množství">+</button>
-										<button onclick={`const q = document.getElementById('qty-${productId}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${product.title}", price: "${product.cena}", img: "${fotoUrl}", quantity: q, category: "studena-kuchyne" } })); document.getElementById('counter-${productId}').classList.add('hidden'); document.getElementById('counter-${productId}').classList.remove('flex'); document.getElementById('init-btn-${productId}').classList.remove('hidden'); document.getElementById('qty-${productId}').value = 1;`} class="bg-[#0a192f] text-white px-3 h-10 font-bold text-[10px] uppercase hover:bg-[#d4af37] cursor-pointer">OK</button>
+										<button onclick={`const input = document.getElementById('qty-${productId}'); input.value = parseInt(input.value) + 1;`} class="w-10 h-10 flex items-center justify-center font-bold text-lg hover:bg-zinc-200 transition-colors cursor-pointer" aria-label="Zvýšit množství">+</button>
+										<button onclick={`const q = document.getElementById('qty-${productId}').value; window.dispatchEvent(new CustomEvent('add-to-cart', { detail: { name: "${product.title}", price: "${product.cena}", img: "${fotoUrl}", quantity: q, category: "studena-kuchyne" } })); document.getElementById('counter-${productId}').classList.add('hidden'); document.getElementById('counter-${productId}').classList.remove('flex'); document.getElementById('init-btn-${productId}').classList.remove('hidden'); document.getElementById('qty-${productId}').value = 1;`} class="bg-gold-500 text-zinc-900 px-3 h-10 font-bold text-[10px] uppercase hover:bg-zinc-900 hover:text-white cursor-pointer">OK</button>
 									</div>
 								</div>
 							</div>

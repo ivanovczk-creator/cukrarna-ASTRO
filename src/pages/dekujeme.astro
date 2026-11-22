@@ -3,19 +3,19 @@ import Layout from '../layouts/Layout.astro';
 import { COMPANY } from '../lib/legal';
 ---
 <Layout title="Děkujeme | Cukrářství Blahutovi" noindex={true}>
-	<main class="flex items-center justify-center min-h-[70vh] px-4 py-12 bg-slate-50">
-		<div class="text-center max-w-2xl bg-white p-12 md:p-20 rounded-[3rem] shadow-xl border border-slate-100">
-			<h1 id="thanks-title" class="text-4xl md:text-6xl font-serif text-[#0a192f] mb-6 italic font-bold">
+	<main class="flex items-center justify-center min-h-[70vh] px-4 py-12 bg-zinc-50">
+		<div class="text-center max-w-2xl bg-white p-12 md:p-20 rounded-[3rem] shadow-xl border border-zinc-100">
+			<h1 id="thanks-title" class="text-4xl md:text-6xl font-serif text-zinc-900 mb-6 italic font-bold">
 				Děkujeme za zprávu!
 			</h1>
-			<p id="thanks-text" role="status" aria-live="polite" class="text-lg md:text-xl text-slate-700 mb-6 leading-relaxed font-bold">
+			<p id="thanks-text" role="status" aria-live="polite" class="text-lg md:text-xl text-zinc-700 mb-6 leading-relaxed font-bold">
 				Vaši poptávku jsme v pořádku přijali. Co nejdříve se na ni podíváme a ozveme se vám zpět, abychom doladili detaily.
 			</p>
-			<p id="thanks-ref" class="hidden mb-6 text-sm font-bold text-slate-500"></p>
-			<p class="mb-10 text-sm text-slate-500 font-bold">
-				Dotazy k objednávce: <a href={`mailto:${COMPANY.email}`} class="underline text-[#735c1e]">{COMPANY.email}</a>, tel. {COMPANY.phone}
+			<p id="thanks-ref" class="hidden mb-6 text-sm font-bold text-zinc-500"></p>
+			<p class="mb-10 text-sm text-zinc-500 font-bold">
+				Dotazy k objednávce: <a href={`mailto:${COMPANY.email}`} class="underline text-gold-700">{COMPANY.email}</a>, tel. {COMPANY.phone}
 			</p>
-			<a href="/" class="inline-block bg-[#0a192f] text-[#d4af37] px-10 py-4 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#d4af37] hover:text-[#0a192f] transition-all shadow-lg font-serif italic">
+			<a href="/" class="inline-block bg-gold-500 text-zinc-900 px-10 py-4 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-zinc-900 hover:text-gold-500 transition-all shadow-lg font-serif italic">
 				Zpět na hlavní stránku
 			</a>
 		</div>
