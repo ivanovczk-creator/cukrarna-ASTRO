@@ -8,8 +8,8 @@ interface Props {
 }
 const { class: className = '', subtle = false } = Astro.props;
 const baseClass = subtle
-	? 'max-w-3xl mx-auto border-t border-zinc-200 pt-6 text-xs text-zinc-600 font-bold leading-relaxed text-center'
-	: 'max-w-3xl mx-auto bg-amber-50 border border-amber-200 rounded-2xl p-5 text-sm text-zinc-800 font-bold leading-relaxed';
+	? 'max-w-3xl mx-auto border-t border-cream-300 pt-6 text-xs text-zinc-600 font-bold leading-relaxed text-center'
+	: 'max-w-3xl mx-auto bg-blush-100 border border-blush-300 rounded-2xl p-5 text-sm text-zinc-800 font-bold leading-relaxed';
 ---
 
 <aside class={`${baseClass} ${className}`}>
@@ -18,6 +18,6 @@ const baseClass = subtle
 	</p>
 	<p class="mt-2">
 		Výrobky mohou obsahovat alergeny (č. 1–14). Přehled alergenů najdete v
-		<a href={`${LEGAL_PAGES.terms}#alergeny`} class="underline text-gold-700 hover:text-zinc-900">obchodních podmínkách</a>.
+		<a href={`${LEGAL_PAGES.terms}#alergeny`} class="underline text-berry-700 hover:text-zinc-900">obchodních podmínkách</a>.
 	</p>
 </aside>

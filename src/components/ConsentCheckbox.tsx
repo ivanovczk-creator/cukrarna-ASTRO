@@ -12,7 +12,7 @@ interface Props {
  * Hodnota odchází s formulářem pod názvem "Souhlas-VOP-GDPR" (= "ano"), takže je souhlas doložitelný v objednávce.
  */
 const ConsentCheckbox = ({ id, compact = false }: Props) => {
-  const linkClass = 'underline text-gold-700 hover:text-zinc-900 font-bold';
+  const linkClass = 'underline text-berry-700 hover:text-zinc-900 font-bold';
   return (
     <label
       htmlFor={id}
@@ -26,7 +26,7 @@ const ConsentCheckbox = ({ id, compact = false }: Props) => {
         required
         defaultChecked={false}
         autoComplete="off"
-        className="mt-0.5 h-4 w-4 shrink-0 accent-gold-500 cursor-pointer"
+        className="mt-0.5 h-4 w-4 shrink-0 accent-berry-600 cursor-pointer"
       />
       <span>
         {CONSENT_LABEL_PARTS.before}

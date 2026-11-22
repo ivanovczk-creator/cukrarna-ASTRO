@@ -15,8 +15,8 @@ const shops = SHOPS.map((shop) => ({
 	title="Naše prodejny a výroba | Cukrářství Blahutovi - Petřvald, Karviná, Ostrava, Píšť" 
 	description="Navštivte naše cukrárny v Petřvaldě, Karviné a Ostravě. Sídlo a výroba v Píšti. Nabízíme čerstvé zákusky, dorty na objednávku a výběrovou kávu."
 >
-	<main class="bg-zinc-50 min-h-screen">
-		<section class="py-20 px-4 bg-gold-50 text-zinc-900 text-center border-b border-gold-500/40">
+	<main class="bg-cream min-h-screen">
+		<section class="py-20 px-4 bg-blush-200 text-zinc-900 text-center border-b border-blush-300">
 			<div class="max-w-4xl mx-auto">
 				<h1 class="text-4xl md:text-6xl font-serif mb-6 italic text-zinc-900 font-bold">Kde nás najdete</h1>
 				<p class="text-xl opacity-90 leading-relaxed font-bold">
@@ -28,24 +28,24 @@ const shops = SHOPS.map((shop) => ({
 		<section class="py-16 px-4 max-w-7xl mx-auto">
 			<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
 				{shops.map(shop => (
-					<div class={`bg-white rounded-[2.5rem] shadow-xl overflow-hidden border flex flex-col ${shop.isHeadquarters ? 'border-gold-500 ring-1 ring-gold-500' : 'border-zinc-100'}`}>
+					<div class={`bg-white rounded-[2.5rem] shadow-xl overflow-hidden border flex flex-col ${shop.isHeadquarters ? 'border-berry-600 ring-1 ring-berry-600' : 'border-cream-200'}`}>
 						<div class="p-8 flex-grow">
-							<div class={`${shop.isHeadquarters ? 'bg-gold-500 text-zinc-900' : 'bg-gold-500/10 text-gold-700'} w-fit px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-4`}>
+							<div class={`${shop.isHeadquarters ? 'bg-berry-600 text-white' : 'bg-blush-300/20 text-berry-700'} w-fit px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-4`}>
 								{shop.isHeadquarters ? 'Sídlo & Výroba' : shop.city}
 							</div>
 							<h2 class="text-xl font-serif mb-6 text-zinc-900 italic font-bold leading-tight">{shop.name}</h2>
 							
 							<div class="space-y-6 text-zinc-700 font-bold"> 
 								<div class="flex items-start gap-4">
-									<span class="text-gold-500 mt-1 shrink-0">📍</span>
+									<span class="text-berry-600 mt-1 shrink-0">📍</span>
 									<p class="text-xs leading-relaxed font-bold">{shop.address}</p>
 								</div>
 								<div class="flex items-start gap-4">
-									<span class="text-gold-500 mt-1 shrink-0">📞</span>
-									<a href={`tel:${shop.phone.replace(/\s/g, '')}`} class="hover:text-gold-700 transition-colors font-bold text-xs">{shop.phone}</a>
+									<span class="text-berry-600 mt-1 shrink-0">📞</span>
+									<a href={`tel:${shop.phone.replace(/\s/g, '')}`} class="hover:text-berry-700 transition-colors font-bold text-xs">{shop.phone}</a>
 								</div>
 								<div class="flex items-start gap-4">
-									<span class="text-gold-500 mt-1 shrink-0">🕒</span>
+									<span class="text-berry-600 mt-1 shrink-0">🕒</span>
 									<div class="text-xs space-y-1 font-bold">
 										{shop.hours.map(line => <p>{line}</p>)}
 									</div>
@@ -54,14 +54,14 @@ const shops = SHOPS.map((shop) => ({
 						</div>
 						
 						<div class="p-8 pt-0 mt-auto space-y-3">
-							<a href={shop.detailPath} class="block w-full py-3 border-2 border-zinc-900 text-zinc-900 text-center rounded-2xl hover:bg-zinc-900 hover:text-gold-500 transition-all uppercase text-[9px] font-bold tracking-widest">
+							<a href={shop.detailPath} class="block w-full py-3 border-2 border-berry-600 text-berry-700 text-center rounded-2xl hover:bg-berry-700 hover:text-white transition-all uppercase text-[9px] font-bold tracking-widest">
 								Detail pobočky
 							</a>
 							<a 
 								href={shop.mapUrl} 
 								target="_blank" 
 								rel="noopener noreferrer"
-								class="block w-full py-3 bg-gold-500 text-zinc-900 text-center rounded-2xl hover:bg-zinc-900 hover:text-gold-500 transition-all uppercase text-[9px] font-bold tracking-widest shadow-md"
+								class="block w-full py-3 bg-berry-600 text-white text-center rounded-2xl hover:bg-berry-700 hover:text-white transition-all uppercase text-[9px] font-bold tracking-widest shadow-md"
 							>
 								Naplánovat trasu v mapách
 							</a>
@@ -71,27 +71,27 @@ const shops = SHOPS.map((shop) => ({
 			</div>
 		</section>
 
-		<section class="py-20 px-4 bg-white">
+		<section class="py-20 px-4 bg-cream-100">
 			<div class="max-w-7xl mx-auto text-center font-bold">
 				<h2 class="text-3xl md:text-5xl font-serif mb-16 italic text-zinc-900">Více než jen sladké...</h2>
 				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
 					<div class="flex flex-col items-center">
-						<div class="w-24 h-24 bg-[#f8f5f0] rounded-full flex items-center justify-center mb-6 text-4xl shadow-inner">☕</div>
+						<div class="w-24 h-24 bg-cream-100 rounded-full flex items-center justify-center mb-6 text-4xl shadow-inner">☕</div>
 						<h3 class="text-xl font-serif mb-3 italic text-zinc-900 font-bold">Výběrová káva</h3>
 						<p class="text-zinc-600 text-sm leading-relaxed">Vychutnejte si u nás čerstvě praženou kávu připravenou ke každému zákusku.</p>
 					</div>
 					<div class="flex flex-col items-center">
-						<div class="w-24 h-24 bg-[#f8f5f0] rounded-full flex items-center justify-center mb-6 text-4xl shadow-inner">🍋</div>
+						<div class="w-24 h-24 bg-cream-100 rounded-full flex items-center justify-center mb-6 text-4xl shadow-inner">🍋</div>
 						<h3 class="text-xl font-serif mb-3 italic text-zinc-900 font-bold">Domácí limonády</h3>
 						<p class="text-zinc-600 text-sm leading-relaxed">Osvěžující limonády z poctivých sirupů a čerstvého ovoce.</p>
 					</div>
 					<div class="flex flex-col items-center">
-						<div class="w-24 h-24 bg-[#f8f5f0] rounded-full flex items-center justify-center mb-6 text-4xl shadow-inner">🥪</div>
+						<div class="w-24 h-24 bg-cream-100 rounded-full flex items-center justify-center mb-6 text-4xl shadow-inner">🥪</div>
 						<h3 class="text-xl font-serif mb-3 italic text-zinc-900 font-bold">Slané občerstvení</h3>
 						<p class="text-zinc-600 text-sm leading-relaxed">Denně čerstvé obložené chlebíčky pro vaši rychlou svačinu.</p>
 					</div>
 					<div class="flex flex-col items-center">
-						<div class="w-24 h-24 bg-[#f8f5f0] rounded-full flex items-center justify-center mb-6 text-4xl shadow-inner">🍦</div>
+						<div class="w-24 h-24 bg-cream-100 rounded-full flex items-center justify-center mb-6 text-4xl shadow-inner">🍦</div>
 						<h3 class="text-xl font-serif mb-3 italic text-zinc-900 font-bold">Řemeslná zmrzlina</h3>
 						<p class="text-zinc-600 text-sm leading-relaxed">V letní sezóně vás osvěžíme naší poctivou kopečkovou zmrzlinou.</p>
 					</div>
@@ -100,7 +100,7 @@ const shops = SHOPS.map((shop) => ({
 		</section>
 
 		<section class="py-16 px-4 max-w-4xl mx-auto text-center font-bold">
-			<div class="bg-white p-12 rounded-[3rem] shadow-sm border border-zinc-200">
+			<div class="bg-white p-12 rounded-[3rem] shadow-sm border border-cream-300">
 				<h3 class="text-2xl font-serif mb-4 italic text-zinc-900 font-bold">Plánujete větší odběr?</h3>
 				<p class="text-zinc-700 mb-8 font-bold leading-relaxed">
 					Pokud si chcete rezervovat větší množství zákusků nebo se poradit o svatebním dortu, doporučujeme volat přímo na vybranou prodejnu.

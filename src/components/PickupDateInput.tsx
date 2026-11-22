@@ -33,7 +33,7 @@ const PickupDateInput = ({ error, hint, className = '', ...props }: PickupDateIn
       {error ? (
         <p id={messageId} role="alert" className="mt-2 text-xs font-bold text-red-600 leading-snug">{error}</p>
       ) : hint ? (
-        <p id={messageId} className="mt-1 text-[10px] font-bold text-zinc-500 leading-snug">{hint}</p>
+        <p id={messageId} className="mt-1 text-[10px] font-bold text-zinc-600 leading-snug">{hint}</p>
       ) : null}
     </div>
   );

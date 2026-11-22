@@ -17,7 +17,7 @@ interface Props {
 const PaymentMethodSelector = ({ value, onChange, onlineAvailable, total }: Props) => {
   return (
     <fieldset className="space-y-2">
-      <legend className="text-[10px] uppercase tracking-widest font-bold text-zinc-500 mb-2">
+      <legend className="text-[10px] uppercase tracking-widest font-bold text-zinc-600 mb-2">
         Způsob platby
       </legend>
 
@@ -30,10 +30,10 @@ const PaymentMethodSelector = ({ value, onChange, onlineAvailable, total }: Prop
               key={method.id}
               className={`p-3 rounded-xl border text-left transition-all ${
                 disabled
-                  ? 'opacity-50 cursor-not-allowed border-transparent bg-zinc-50'
+                  ? 'opacity-50 cursor-not-allowed border-transparent bg-cream'
                   : selected
-                    ? 'cursor-pointer border-gold-500 bg-gold-500/10'
-                    : 'cursor-pointer border-transparent bg-zinc-50 hover:border-gold-500/50'
+                    ? 'cursor-pointer border-berry-600 bg-blush-300/20'
+                    : 'cursor-pointer border-transparent bg-cream hover:border-blush-300'
               }`}
             >
               <input
@@ -46,7 +46,7 @@ const PaymentMethodSelector = ({ value, onChange, onlineAvailable, total }: Prop
                 className="sr-only"
               />
               <span className="block text-xs font-bold leading-tight">{method.label}</span>
-              <span className="block text-[10px] text-zinc-500 font-bold leading-tight mt-1">
+              <span className="block text-[10px] text-zinc-600 font-bold leading-tight mt-1">
                 {disabled ? 'Brzy dostupné' : method.hint}
               </span>
             </label>
@@ -55,7 +55,7 @@ const PaymentMethodSelector = ({ value, onChange, onlineAvailable, total }: Prop
       </div>
 
       {total !== null && (
-        <p className="text-right text-xs font-black text-gold-700">Celkem: {formatCzk(total)}</p>
+        <p className="text-right text-xs font-black text-berry-700">Celkem: {formatCzk(total)}</p>
       )}
     </fieldset>
   );

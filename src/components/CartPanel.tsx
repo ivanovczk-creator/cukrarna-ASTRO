@@ -139,7 +139,7 @@ const CartPanel = ({ cart, removeItem }: Props) => {
   };
 
   if (cart.length === 0) {
-    return <p className="text-center text-zinc-500 italic py-8 font-bold">Košík je prázdný</p>;
+    return <p className="text-center text-zinc-600 italic py-8 font-bold">Košík je prázdný</p>;
   }
 
   return (
@@ -147,11 +147,11 @@ const CartPanel = ({ cart, removeItem }: Props) => {
       <input type="hidden" name="form-name" value="objednavka" />
       <div className="max-h-48 overflow-y-auto mb-6 space-y-3 pr-2 scrollbar-thin">
         {cart.map((item, i) => (
-          <div key={i} className="flex gap-3 items-center bg-zinc-50 p-2 rounded-xl border border-zinc-100">
+          <div key={i} className="flex gap-3 items-center bg-cream p-2 rounded-xl border border-cream-200">
             <img src={item.img} alt="" className="w-10 h-10 object-cover rounded-lg" loading="lazy" />
             <div className="flex-grow">
               <p className="font-bold text-xs leading-tight">{item.name}</p>
-              <p className="text-[10px] text-gold-700 font-black">{item.quantity}x {item.price}</p>
+              <p className="text-[10px] text-berry-700 font-black">{item.quantity}x {item.price}</p>
             </div>
             <button
               type="button"
@@ -165,11 +165,11 @@ const CartPanel = ({ cart, removeItem }: Props) => {
         ))}
       </div>
 
-      <div className="space-y-3 pt-4 border-t border-zinc-100">
-        <input id="cart-name" type="text" name="Jmeno" autoComplete="name" aria-label="Jméno a příjmení" placeholder="Jméno a příjmení" required className="w-full p-3 bg-zinc-50 rounded-xl text-sm border border-transparent focus:border-gold-500 outline-none font-bold" />
+      <div className="space-y-3 pt-4 border-t border-cream-200">
+        <input id="cart-name" type="text" name="Jmeno" autoComplete="name" aria-label="Jméno a příjmení" placeholder="Jméno a příjmení" required className="w-full p-3 bg-cream rounded-xl text-sm border border-transparent focus:border-berry-600 outline-none font-bold" />
         <div className="grid grid-cols-2 gap-2">
-          <input id="cart-email" type="email" name="Email" autoComplete="email" aria-label="E-mail" placeholder="E-mail" required className="w-full p-3 bg-zinc-50 rounded-xl text-sm border border-transparent focus:border-gold-500 outline-none font-bold" />
-          <input id="cart-phone" type="tel" name="Telefon" autoComplete="tel" aria-label="Telefon" placeholder="Telefon" required className="w-full p-3 bg-zinc-50 rounded-xl text-sm border border-transparent focus:border-gold-500 outline-none font-bold" />
+          <input id="cart-email" type="email" name="Email" autoComplete="email" aria-label="E-mail" placeholder="E-mail" required className="w-full p-3 bg-cream rounded-xl text-sm border border-transparent focus:border-berry-600 outline-none font-bold" />
+          <input id="cart-phone" type="tel" name="Telefon" autoComplete="tel" aria-label="Telefon" placeholder="Telefon" required className="w-full p-3 bg-cream rounded-xl text-sm border border-transparent focus:border-berry-600 outline-none font-bold" />
         </div>
 
         <div className="grid grid-cols-2 gap-2">
@@ -179,7 +179,7 @@ const CartPanel = ({ cart, removeItem }: Props) => {
             aria-label="Místo vyzvednutí (prodejna)"
             value={selectedStore}
             onChange={(e) => setSelectedStore(e.target.value)}
-            className="w-full p-3 bg-zinc-50 rounded-xl text-sm border border-transparent focus:border-gold-500 outline-none font-bold"
+            className="w-full p-3 bg-cream rounded-xl text-sm border border-transparent focus:border-berry-600 outline-none font-bold"
           >
             <option>Petřvald</option>
             <option>Píšť</option>
@@ -196,15 +196,15 @@ const CartPanel = ({ cart, removeItem }: Props) => {
             error={dateError}
             aria-describedby="cart-date-hint"
             required
-            className="w-full p-3 bg-zinc-50 rounded-xl text-sm border border-transparent focus:border-gold-500 outline-none font-bold"
+            className="w-full p-3 bg-cream rounded-xl text-sm border border-transparent focus:border-berry-600 outline-none font-bold"
           />
         </div>
         {/* vysvětlení termínů přes celou šířku košíku (v úzkém sloupci u pole by se špatně četlo) */}
         {dateHint && (
-          <p id="cart-date-hint" className="text-[10px] font-bold text-zinc-500 leading-snug">{dateHint}</p>
+          <p id="cart-date-hint" className="text-[10px] font-bold text-zinc-600 leading-snug">{dateHint}</p>
         )}
 
-        <textarea id="cart-note" name="Poznamka" aria-label="Poznámka k objednávce (nepovinné)" placeholder="Poznámka k objednávce (nepovinné)" className="w-full p-3 bg-zinc-50 rounded-xl text-sm outline-none h-20 resize-none border border-transparent focus:border-gold-500 font-bold"></textarea>
+        <textarea id="cart-note" name="Poznamka" aria-label="Poznámka k objednávce (nepovinné)" placeholder="Poznámka k objednávce (nepovinné)" className="w-full p-3 bg-cream rounded-xl text-sm outline-none h-20 resize-none border border-transparent focus:border-berry-600 font-bold"></textarea>
 
         <PaymentMethodSelector
           value={onlineAvailable ? paymentMethod : 'cash'}
@@ -217,7 +217,7 @@ const CartPanel = ({ cart, removeItem }: Props) => {
 
         <ConsentCheckbox id="cart-consent" compact />
 
-        <button type="submit" disabled={isSubmitting || !!dateError} className="w-full disabled:opacity-60 disabled:cursor-not-allowed bg-gold-500 text-zinc-900 py-4 rounded-2xl font-bold hover:bg-zinc-900 hover:text-gold-500 transition-all shadow-lg active:scale-95 cursor-pointer uppercase tracking-widest text-[10px]">
+        <button type="submit" disabled={isSubmitting || !!dateError} className="w-full disabled:opacity-60 disabled:cursor-not-allowed bg-berry-600 text-white py-4 rounded-2xl font-bold hover:bg-berry-700 hover:text-white transition-all shadow-lg active:scale-95 cursor-pointer uppercase tracking-widest text-[10px]">
           {isSubmitting ? 'Odesílám…' : BINDING_ORDER_LABEL}
         </button>
       </div>

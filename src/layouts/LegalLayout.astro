@@ -14,8 +14,8 @@ const { title, heading, description, intro, updated = '19. 11. 2026' } = Astro.p
 ---
 
 <Layout title={`${title} | Cukrářství Blahutovi`} description={description}>
-	<main class="bg-zinc-50 min-h-screen">
-		<section class="py-16 md:py-20 px-4 bg-gold-50 text-zinc-900 text-center border-b border-gold-500/40">
+	<main class="bg-cream min-h-screen">
+		<section class="py-16 md:py-20 px-4 bg-blush-200 text-zinc-900 text-center border-b border-blush-300">
 			<div class="max-w-4xl mx-auto">
 				<h1 class="text-3xl md:text-5xl font-serif mb-4 italic text-zinc-900 font-bold">{heading}</h1>
 				{intro && <p class="text-lg opacity-90 leading-relaxed font-bold">{intro}</p>}
@@ -23,9 +23,9 @@ const { title, heading, description, intro, updated = '19. 11. 2026' } = Astro.p
 		</section>
 
 		<section class="py-12 px-4">
-			<article class="legal-content max-w-4xl mx-auto bg-white rounded-[2rem] shadow-xl border border-zinc-100 p-6 md:p-12 text-zinc-800 leading-relaxed">
+			<article class="legal-content max-w-4xl mx-auto bg-white rounded-[2rem] shadow-xl border border-cream-200 p-6 md:p-12 text-zinc-800 leading-relaxed">
 				<slot />
-				<p class="mt-12 pt-6 border-t border-zinc-100 text-xs text-zinc-500">Účinné od: {updated}</p>
+				<p class="mt-12 pt-6 border-t border-cream-200 text-xs text-zinc-600">Účinné od: {updated}</p>
 			</article>
 		</section>
 	</main>
@@ -56,20 +56,20 @@ const { title, heading, description, intro, updated = '19. 11. 2026' } = Astro.p
 	.legal-content ul { list-style: disc; }
 	.legal-content ol { list-style: decimal; }
 	.legal-content li { margin-bottom: 0.4rem; }
-	.legal-content a { color: #7a5a00; text-decoration: underline; font-weight: 600; }
+	.legal-content a { color: #992d37; text-decoration: underline; font-weight: 600; }
 	.legal-content a:hover { color: #18181b; }
 	.legal-content table { width: 100%; border-collapse: collapse; margin: 0 0 1.25rem; font-size: 0.9rem; }
 	.legal-content th, .legal-content td { border: 1px solid #e4e4e7; padding: 0.6rem 0.75rem; text-align: left; vertical-align: top; }
-	.legal-content th { background: #fafafa; color: #18181b; }
+	.legal-content th { background: #faf7f2; color: #18181b; }
 	.legal-content .legal-box {
-		background: #fffbeb;
-		border: 1px solid #fde68a;
+		background: #f6e3e0;
+		border: 1px solid #ecc6c2;
 		border-radius: 1rem;
 		padding: 1rem 1.25rem;
 		margin: 0 0 1.25rem;
 	}
 	.legal-content .legal-box p:last-child { margin-bottom: 0; }
-	.legal-content .legal-toc { background: #fafafa; border-radius: 1rem; padding: 1rem 1.25rem; margin: 0 0 2rem; }
+	.legal-content .legal-toc { background: #faf7f2; border-radius: 1rem; padding: 1rem 1.25rem; margin: 0 0 2rem; }
 	.legal-content .legal-toc ol { margin-bottom: 0; }
 	.legal-content address { font-style: normal; }
 </style>

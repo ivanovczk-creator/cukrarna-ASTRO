@@ -83,32 +83,32 @@ const ReservationForm = () => {
         onFocus={loadCartPanel}
         onTouchStart={loadCartPanel}
         aria-label={`Nákupní košík, počet položek: ${totalItems}`}
-        className={`p-2 text-zinc-900 transition-all cursor-pointer outline-none hover:text-zinc-700 ${justAdded ? 'scale-125' : 'scale-100'}`}
+        className={`p-2 text-zinc-900 transition-all cursor-pointer outline-none hover:text-berry-700 ${justAdded ? 'scale-125' : 'scale-100'}`}
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
         </svg>
         {totalItems > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold border-2 border-gold-500">
+          <span className="absolute -top-1 -right-1 bg-berry-700 text-white text-[10px] px-2 py-0.5 rounded-full font-bold border-2 border-blush-300">
             {totalItems}
           </span>
         )}
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-4 w-80 md:w-96 max-h-[80vh] overflow-y-auto bg-white rounded-[2rem] shadow-2xl p-6 md:p-8 border border-zinc-100 text-zinc-900 z-[100]">
+        <div className="absolute right-0 mt-4 w-80 md:w-96 max-h-[80vh] overflow-y-auto bg-white rounded-[2rem] shadow-2xl p-6 md:p-8 border border-cream-200 text-zinc-900 z-[100]">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-xl font-bold font-serif italic">Vaše objednávka</h3>
             <button
               onClick={() => setIsOpen(false)}
-              className="text-zinc-400 cursor-pointer p-2 hover:text-zinc-900 transition-colors"
+              className="text-zinc-500 cursor-pointer p-2 hover:text-zinc-900 transition-colors"
               aria-label="Zavřít košík"
             >
               ✕
             </button>
           </div>
 
-          <Suspense fallback={<p className="text-center text-zinc-500 italic py-8 font-bold" role="status">Načítám košík…</p>}>
+          <Suspense fallback={<p className="text-center text-zinc-600 italic py-8 font-bold" role="status">Načítám košík…</p>}>
             <CartPanel cart={cart} removeItem={removeItem} />
           </Suspense>
         </div>

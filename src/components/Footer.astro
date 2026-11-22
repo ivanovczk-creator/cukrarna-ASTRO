@@ -19,7 +19,7 @@ const legalLinks = [
 ];
 ---
 
-<footer class="bg-gold-500 py-14 text-zinc-900 border-t border-zinc-900/15">
+<footer class="bg-blush-300 py-14 text-zinc-900 border-t-4 border-berry-600">
 	<div class="max-w-7xl mx-auto px-4">
 		<div class="grid gap-10 md:grid-cols-3 text-left text-sm leading-relaxed">
 			<div>
@@ -29,10 +29,10 @@ const legalLinks = [
 				<p>{COMPANY.vatStatus}</p>
 				<p>Sídlo: {COMPANY.address}</p>
 				<p>
-					Tel.: <a href={`tel:${COMPANY.phone.replace(/\s/g, '')}`} class="hover:text-zinc-700 hover:underline underline-offset-2 transition-colors">{COMPANY.phone}</a>
+					Tel.: <a href={`tel:${COMPANY.phone.replace(/\s/g, '')}`} class="hover:text-zinc-900 hover:underline underline-offset-2 transition-colors">{COMPANY.phone}</a>
 				</p>
 				<p>
-					E-mail: <a href={`mailto:${COMPANY.email}`} class="hover:text-zinc-700 hover:underline underline-offset-2 transition-colors">{COMPANY.email}</a>
+					E-mail: <a href={`mailto:${COMPANY.email}`} class="hover:text-zinc-900 hover:underline underline-offset-2 transition-colors">{COMPANY.email}</a>
 				</p>
 				<p class="mt-3 text-xs opacity-80">Fyzická osoba zapsaná v živnostenském rejstříku. Tradiční rodinné cukrářství od roku 1991.</p>
 			</div>
@@ -42,9 +42,9 @@ const legalLinks = [
 				<ul class="space-y-2 list-none p-0 m-0">
 					{STORES.map((store) => (
 						<li>
-							<a href={`/dorty-${store.id}/`} class="font-bold hover:text-zinc-700 hover:underline underline-offset-2 transition-colors">{store.name}</a><br />
+							<a href={`/dorty-${store.id}/`} class="font-bold hover:text-zinc-900 hover:underline underline-offset-2 transition-colors">{store.name}</a><br />
 							{store.address}<br />
-							<a href={`tel:${store.phone.replace(/\s/g, '')}`} class="hover:text-zinc-700 hover:underline underline-offset-2 transition-colors">{store.phone}</a>
+							<a href={`tel:${store.phone.replace(/\s/g, '')}`} class="hover:text-zinc-900 hover:underline underline-offset-2 transition-colors">{store.phone}</a>
 						</li>
 					))}
 				</ul>
@@ -54,26 +54,26 @@ const legalLinks = [
 				<p class="uppercase tracking-widest text-[11px] text-zinc-900 font-bold mb-3">Informace</p>
 				<ul class="space-y-2 list-none p-0 m-0">
 					{legalLinks.map((link) => (
-						<li><a href={link.href} class="hover:text-zinc-700 hover:underline underline-offset-2 transition-colors">{link.label}</a></li>
+						<li><a href={link.href} class="hover:text-zinc-900 hover:underline underline-offset-2 transition-colors">{link.label}</a></li>
 					))}
 					{socialLinks.map((link) => (
-						<li><a href={link.href} target="_blank" rel="noopener noreferrer me" class="hover:text-zinc-700 hover:underline underline-offset-2 transition-colors">{link.label}</a></li>
+						<li><a href={link.href} target="_blank" rel="noopener noreferrer me" class="hover:text-zinc-900 hover:underline underline-offset-2 transition-colors">{link.label}</a></li>
 					))}
 					<li>
-						<button type="button" data-open-cookie-settings class="hover:text-zinc-700 hover:underline underline-offset-2 transition-colors underline-offset-2 hover:underline cursor-pointer bg-transparent border-0 p-0 text-inherit font-inherit text-left">Nastavení cookies</button>
+						<button type="button" data-open-cookie-settings class="hover:text-zinc-900 hover:underline underline-offset-2 transition-colors underline-offset-2 hover:underline cursor-pointer bg-transparent border-0 p-0 text-inherit font-inherit text-left">Nastavení cookies</button>
 					</li>
 				</ul>
 			</div>
 		</div>
 
 		<div class="mt-10 pt-8 border-t border-zinc-900/15 flex flex-col items-center gap-4">
-			<p class="uppercase tracking-widest text-[10px] text-zinc-900/80 font-bold">Platba kartou a online – bezpečně přes Comgate</p>
+			<p class="uppercase tracking-widest text-[10px] text-zinc-900 font-bold">Platba kartou a online – bezpečně přes Comgate</p>
 			<PaymentIcons />
 		</div>
 
-		<div class="mt-8 text-center text-[11px] text-zinc-900/80 tracking-wide">
+		<div class="mt-8 text-center text-[11px] text-zinc-900 tracking-wide">
 			<p>© {year} {COMPANY.tradeName} — Všechna práva vyhrazena</p>
-			<a href="https://objednavky.cukrarstviblahutovi.cz/login" target="_blank" rel="noopener noreferrer" class="hover:text-zinc-700 hover:underline underline-offset-2 transition-colors mt-2 inline-block opacity-80">Přihlášení pro partnery</a>
+			<a href="https://objednavky.cukrarstviblahutovi.cz/login" target="_blank" rel="noopener noreferrer" class="hover:text-zinc-900 hover:underline underline-offset-2 transition-colors mt-2 inline-block opacity-80">Přihlášení pro partnery</a>
 		</div>
 	</div>
 </footer>

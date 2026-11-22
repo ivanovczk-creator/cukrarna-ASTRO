@@ -29,7 +29,7 @@ const cakeCategories = [
 	title="Nabídka dortů na zakázku | Cukrářství Blahutovi" 
 	description="Prohlédněte si naše kategorie dortů. Pečeme dětské, svatební i atypické 3D dorty z poctivých surovin v Ostravě, Karviné a Petřvaldě."
 >
-	<main class="py-16 bg-zinc-50 min-h-screen">
+	<main class="py-16 bg-cream min-h-screen">
 		<section class="max-w-7xl mx-auto px-4">
 			<div class="text-center mb-16">
 				<h1 class="text-4xl md:text-5xl font-serif mb-6 italic text-zinc-900 font-bold">Naše Dorty</h1>
@@ -44,7 +44,7 @@ const cakeCategories = [
 					const imageSrc = getImage(cat.img, cakeImages);
 					return (
 						<a href={`/dorty/${cat.id}/`} class="group flex flex-col items-center gap-4 no-underline text-zinc-900">
-							<div class="w-full aspect-square rounded-full overflow-hidden border-2 border-zinc-100 group-hover:border-gold-500 transition-all duration-500 shadow-md relative">
+							<div class="w-full aspect-square rounded-full overflow-hidden border-2 border-cream-200 group-hover:border-berry-600 transition-all duration-500 shadow-md relative">
 								{imageSrc ? (
 									<Image 
 										src={imageSrc} 
@@ -62,7 +62,7 @@ const cakeCategories = [
 								)}
 								<div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
 							</div>
-							<span class="text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-600 group-hover:text-gold-700 text-center transition-colors leading-tight font-serif italic">{cat.name}</span>
+							<span class="text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-600 group-hover:text-berry-700 text-center transition-colors leading-tight font-serif italic">{cat.name}</span>
 						</a>
 					)
 				})}

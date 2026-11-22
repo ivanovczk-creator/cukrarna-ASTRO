@@ -10,10 +10,10 @@ const isActive = (href: string) => {
 };
 ---
 
-<header class="bg-gold-500 text-zinc-900 sticky top-0 z-50 border-b border-zinc-900/15 shadow-sm">
+<header class="bg-blush-300 text-zinc-900 sticky top-0 z-50 border-b border-zinc-900/15 shadow-sm">
 	<div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative font-bold">
 		<a href="/" class="group no-underline">
-			<strong class="text-xl md:text-2xl font-serif text-zinc-900 group-hover:text-zinc-700 transition-colors">Cukrářství Blahutovi</strong>
+			<strong class="text-xl md:text-2xl font-serif text-zinc-900 group-hover:text-berry-700 transition-colors">Cukrářství Blahutovi</strong>
 		</a>
 
 		<nav id="nav-menu" aria-label="Hlavní menu" class="hidden lg:flex gap-6 uppercase text-[10px] font-bold tracking-widest text-zinc-900">
@@ -48,7 +48,7 @@ const isActive = (href: string) => {
 			e.preventDefault();
 			[
 				'hidden', 'flex', 'flex-col', 'absolute', 'top-20', 'left-0', 'w-full',
-				'bg-gold-500', 'p-6', 'z-50', 'border-b', 'border-zinc-900/15', 'shadow-lg',
+				'bg-blush-300', 'p-6', 'z-50', 'border-b', 'border-zinc-900/15', 'shadow-lg',
 			].forEach((cls) => nav.classList.toggle(cls));
 		};
 	}

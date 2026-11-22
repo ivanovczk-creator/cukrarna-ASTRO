@@ -48,31 +48,31 @@ const breadcrumbs = [
 ---
 
 <Layout title={page.title} description={page.description}>
-	<main class="py-16 px-4 bg-zinc-50 min-h-screen">
+	<main class="py-16 px-4 bg-cream min-h-screen">
 		<div class="max-w-7xl mx-auto font-bold text-zinc-900">
 			<nav class="text-xs uppercase tracking-widest text-zinc-600 mb-6 font-bold" aria-label="Drobečková navigace">
-				<a href="/" class="hover:text-gold-700">Domů</a> / <a href="/prodejny/" class="hover:text-gold-700">Prodejny</a> / <span class="text-zinc-600 font-bold">{shop.city}</span>
+				<a href="/" class="hover:text-berry-700">Domů</a> / <a href="/prodejny/" class="hover:text-berry-700">Prodejny</a> / <span class="text-zinc-600 font-bold">{shop.city}</span>
 			</nav>
 
-			<div class="mb-12 border-l-4 border-gold-500 pl-6 py-2 max-w-4xl">
+			<div class="mb-12 border-l-4 border-berry-600 pl-6 py-2 max-w-4xl">
 				<h1 class="text-4xl md:text-5xl font-serif mb-4 text-zinc-900 italic font-bold">{page.h1}</h1>
 				<p class="text-zinc-700 text-lg leading-relaxed font-bold">{page.intro}</p>
 			</div>
 
-			<section class="bg-white rounded-[2.5rem] border border-zinc-100 shadow-sm p-8 md:p-12 max-w-4xl mb-12" aria-labelledby="shop-info-title">
+			<section class="bg-white rounded-[2.5rem] border border-cream-200 shadow-sm p-8 md:p-12 max-w-4xl mb-12" aria-labelledby="shop-info-title">
 				<h2 id="shop-info-title" class="text-2xl md:text-3xl font-serif italic text-zinc-900 mb-6 font-bold">{shop.isHeadquarters ? 'Sídlo a výrobna' : 'Prodejna'} – adresa a otevírací doba</h2>
 				<address class="not-italic space-y-4 text-zinc-700 text-base">
-					<p><span class="text-gold-500" aria-hidden="true">📍</span> {address}</p>
-					<p><span class="text-gold-500" aria-hidden="true">📞</span> <a href={telHref(shop.phone)} class="underline text-gold-700 hover:text-zinc-900">{shop.phone}</a></p>
+					<p><span class="text-berry-600" aria-hidden="true">📍</span> {address}</p>
+					<p><span class="text-berry-600" aria-hidden="true">📞</span> <a href={telHref(shop.phone)} class="underline text-berry-700 hover:text-zinc-900">{shop.phone}</a></p>
 					<div>
-						<p class="font-bold mb-1"><span class="text-gold-500" aria-hidden="true">🕒</span> Otevírací doba</p>
+						<p class="font-bold mb-1"><span class="text-berry-600" aria-hidden="true">🕒</span> Otevírací doba</p>
 						<ul class="list-none p-0 m-0 space-y-1 font-normal">
 							{shop.hours.map((line) => <li>{line}</li>)}
 						</ul>
 					</div>
 					<p class="font-normal">Výdej online objednávek: {shop.pickupLabel}.</p>
 				</address>
-				<a href={shop.mapUrl} target="_blank" rel="noopener noreferrer" class="inline-block mt-6 bg-gold-500 text-zinc-900 px-8 py-3 rounded-2xl hover:bg-zinc-900 hover:text-gold-500 transition-all uppercase text-[10px] font-bold tracking-widest shadow-md">
+				<a href={shop.mapUrl} target="_blank" rel="noopener noreferrer" class="inline-block mt-6 bg-berry-600 text-white px-8 py-3 rounded-2xl hover:bg-berry-700 hover:text-white transition-all uppercase text-[10px] font-bold tracking-widest shadow-md">
 					Naplánovat trasu v mapách
 				</a>
 			</section>
@@ -84,16 +84,16 @@ const breadcrumbs = [
 				<ul class="flex flex-wrap gap-3 list-none p-0 m-0">
 					{CAKE_CATEGORIES.map((cat) => (
 						<li>
-							<a href={`/dorty/${cat.id}/`} class="inline-block bg-white border border-zinc-200 rounded-full px-5 py-2 text-xs uppercase tracking-widest text-zinc-900 hover:border-gold-500 hover:text-gold-700 transition-colors font-bold no-underline">{cat.h1}</a>
+							<a href={`/dorty/${cat.id}/`} class="inline-block bg-white border border-cream-300 rounded-full px-5 py-2 text-xs uppercase tracking-widest text-zinc-900 hover:border-berry-600 hover:text-berry-700 transition-colors font-bold no-underline">{cat.h1}</a>
 						</li>
 					))}
 				</ul>
 				<p class="mt-6 text-sm text-zinc-600 font-normal">
-					Prohlédněte si také <a href="/zakusky/" class="underline text-gold-700 hover:text-zinc-900">denní nabídku zákusků</a>,
-					<a href="/studena-kuchyne/" class="underline text-gold-700 hover:text-zinc-900">studenou kuchyni</a>,
-					<a href="/jedly-tisk/" class="underline text-gold-700 hover:text-zinc-900">jedlý tisk</a>
-					nebo <a href="/dort-na-prani/" class="underline text-gold-700 hover:text-zinc-900">dort na přání</a>.
-					Ostatní pobočky najdete na stránce <a href="/prodejny/" class="underline text-gold-700 hover:text-zinc-900">Prodejny</a>.
+					Prohlédněte si také <a href="/zakusky/" class="underline text-berry-700 hover:text-zinc-900">denní nabídku zákusků</a>,
+					<a href="/studena-kuchyne/" class="underline text-berry-700 hover:text-zinc-900">studenou kuchyni</a>,
+					<a href="/jedly-tisk/" class="underline text-berry-700 hover:text-zinc-900">jedlý tisk</a>
+					nebo <a href="/dort-na-prani/" class="underline text-berry-700 hover:text-zinc-900">dort na přání</a>.
+					Ostatní pobočky najdete na stránce <a href="/prodejny/" class="underline text-berry-700 hover:text-zinc-900">Prodejny</a>.
 				</p>
 			</section>
 

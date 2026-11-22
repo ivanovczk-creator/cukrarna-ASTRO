@@ -4,19 +4,27 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Neutrální tmavá paleta: používáme výchozí Tailwind `zinc`
-        //   zinc-900 = #18181b (hlavní tmavá: texty, hlavička, patička)
-        //   zinc-800 = #27272a (jemnější tmavý tón)
-        // Hlavní akcentní barva webu – žlutá z loga/Instagramu.
-        // 500 = výplně a zvýraznění (na ní vždy tmavý text zinc-900),
-        // 700 = žlutý text/odkazy na světlém pozadí (kontrast ≥ 6:1 na bílé).
-        gold: {
-          50: '#fff9e0',
-          400: '#f6d155',
-          500: '#f0c030',
-          600: '#c99a12',
-          700: '#7a5a00',
-        }
+        // Neutrální tmavá: výchozí Tailwind `zinc` (zinc-900 = #18181b), texty obsahu #1f1f1f.
+        // Teplé krémové pozadí stránek (karty zůstávají bílé).
+        cream: {
+          DEFAULT: '#faf7f2',
+          100: '#f4efe6',
+          200: '#ebe4d6',
+          300: '#ddd4c0',
+        },
+        // Tlumená starorůžová pro panely (hlavička, patička, nadpisové bloky).
+        // Na 300/400 vždy tmavý text #1f1f1f; na 100 tmavý text nebo berry-700.
+        blush: {
+          100: '#f6e3e0',
+          200: '#ecc6c2',
+          300: '#d49a96',
+          400: '#c9827e',
+        },
+        // Sytá malinově červená pro CTA a aktivní prvky (600 = bílý text, 700 = hover/text na světlém).
+        berry: {
+          600: '#b83b46',
+          700: '#992d37',
+        },
       },
     },
   },

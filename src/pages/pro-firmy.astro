@@ -10,8 +10,8 @@ const districts = [
 	title="Velkoobchod zákusků a catering | Ostrava, Karviná, Opava" 
 	description="Pravidelné závozy čerstvých zákusků a dortů pro kavárny, restaurace a firemní akce. Poctivá řemeslná výroba."
 >
-	<main class="bg-zinc-50 min-h-screen">
-		<section class="py-24 px-4 bg-gold-50 text-zinc-900 text-center relative overflow-hidden font-bold border-b border-gold-500/40">
+	<main class="bg-cream min-h-screen">
+		<section class="py-24 px-4 bg-blush-200 text-zinc-900 text-center relative overflow-hidden font-bold border-b border-blush-300">
 			<div class="max-w-4xl mx-auto relative z-10">
 				<h1 class="text-4xl md:text-6xl font-serif mb-6 italic text-zinc-900 font-bold leading-tight">B2B Spolupráce a Velkoobchod</h1>
 				<p class="text-xl opacity-90 leading-relaxed font-serif italic">
@@ -22,7 +22,7 @@ const districts = [
 		</section>
 
 		<section class="py-12 px-4 max-w-7xl mx-auto">
-			<div class="bg-white rounded-[2.5rem] p-8 shadow-sm border-2 border-gold-500/20 flex flex-col md:flex-row items-center justify-between gap-8 transition-all hover:shadow-md">
+			<div class="bg-white rounded-[2.5rem] p-8 shadow-sm border-2 border-blush-300 flex flex-col md:flex-row items-center justify-between gap-8 transition-all hover:shadow-md">
 				<div class="text-center md:text-left">
 					<p class="text-2xl font-serif text-zinc-900 italic font-bold mb-2">Zákaznický portál pro partnery</p>
 					<p class="text-zinc-600 font-bold max-w-md">Jste již naším odběratelem? Zadejte svou objednávku přímo do výroby v našem systému.</p>
@@ -31,7 +31,7 @@ const districts = [
 					href="https://objednavky.cukrarstviblahutovi.cz/login" 
 					target="_blank" 
 					rel="noopener noreferrer"
-					class="whitespace-nowrap bg-gold-500 text-zinc-900 px-10 py-5 rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-zinc-900 hover:text-gold-500 transition-all shadow-lg hover:scale-105 active:scale-95"
+					class="whitespace-nowrap bg-berry-600 text-white px-10 py-5 rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-berry-700 hover:text-white transition-all shadow-lg hover:scale-105 active:scale-95"
 				>
 					Vstoupit do objednávek
 				</a>
@@ -49,7 +49,7 @@ const districts = [
 					
 					<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
 						{districts.map(city => (
-							<div class="bg-white border-2 border-zinc-200 p-3 rounded-2xl text-center shadow-sm">
+							<div class="bg-white border-2 border-cream-300 p-3 rounded-2xl text-center shadow-sm">
 								<span class="text-zinc-900 font-bold text-sm tracking-wide">{city}</span>
 							</div>
 						))}
@@ -57,14 +57,14 @@ const districts = [
 
 					<div class="space-y-6">
 						<div class="flex items-start gap-4">
-							<div class="bg-gold-500/20 p-3 rounded-full text-gold-700 font-bold">✔</div>
+							<div class="bg-blush-300/30 p-3 rounded-full text-berry-700 font-bold">✔</div>
 							<div>
 								<p class="font-bold text-zinc-900 uppercase text-xs tracking-widest mb-1">Individuální velkoobchodní ceník</p>
 								<p class="text-zinc-600 text-sm">Nastavíme podmínky na míru vašemu odběru.</p>
 							</div>
 						</div>
 						<div class="flex items-start gap-4">
-							<div class="bg-gold-500/20 p-3 rounded-full text-gold-700 font-bold">✔</div>
+							<div class="bg-blush-300/30 p-3 rounded-full text-berry-700 font-bold">✔</div>
 							<div>
 								<p class="font-bold text-zinc-900 uppercase text-xs tracking-widest mb-1">Flexibilní závozy</p>
 								<p class="text-zinc-600 text-sm">Závozy plánujeme tak, aby vaše vitrína byla vždy plná.</p>
@@ -73,7 +73,7 @@ const districts = [
 					</div>
 				</div>
 
-				<div class="bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl border border-zinc-100">
+				<div class="bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl border border-cream-200">
 					<h3 class="text-3xl font-serif mb-8 text-center text-zinc-900 italic font-bold">Nezávazná poptávka</h3>
 					
 					<form 
@@ -88,46 +88,46 @@ const districts = [
 
 						<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 							<div>
-								<label id="label-firma" class="block text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-2 ml-2">Název firmy</label>
-								<input type="text" name="Firma" aria-labelledby="label-firma" placeholder="Moje firma s.r.o." required class="w-full p-4 rounded-2xl bg-zinc-50 border-none focus:ring-2 focus:ring-gold-500 outline-none font-bold" />
+								<label id="label-firma" class="block text-[10px] uppercase tracking-widest text-zinc-600 font-bold mb-2 ml-2">Název firmy</label>
+								<input type="text" name="Firma" aria-labelledby="label-firma" placeholder="Moje firma s.r.o." required class="w-full p-4 rounded-2xl bg-cream border-none focus:ring-2 focus:ring-berry-600 outline-none font-bold" />
 							</div>
 							<div>
-								<label id="label-ico" class="block text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-2 ml-2">IČO</label>
-								<input type="text" name="ICO" aria-labelledby="label-ico" placeholder="12345678" class="w-full p-4 rounded-2xl bg-zinc-50 border-none focus:ring-2 focus:ring-gold-500 outline-none font-bold" />
+								<label id="label-ico" class="block text-[10px] uppercase tracking-widest text-zinc-600 font-bold mb-2 ml-2">IČO</label>
+								<input type="text" name="ICO" aria-labelledby="label-ico" placeholder="12345678" class="w-full p-4 rounded-2xl bg-cream border-none focus:ring-2 focus:ring-berry-600 outline-none font-bold" />
 							</div>
 						</div>
 						<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 							<div>
-								<label id="label-email" class="block text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-2 ml-2">E-mail</label>
-								<input type="email" name="Email" aria-labelledby="label-email" placeholder="vas@email.cz" required class="w-full p-4 rounded-2xl bg-zinc-50 border-none focus:ring-2 focus:ring-gold-500 outline-none font-bold" />
+								<label id="label-email" class="block text-[10px] uppercase tracking-widest text-zinc-600 font-bold mb-2 ml-2">E-mail</label>
+								<input type="email" name="Email" aria-labelledby="label-email" placeholder="vas@email.cz" required class="w-full p-4 rounded-2xl bg-cream border-none focus:ring-2 focus:ring-berry-600 outline-none font-bold" />
 							</div>
 							<div>
-								<label id="label-tel" class="block text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-2 ml-2">Telefon</label>
-								<input type="tel" name="Telefon" aria-labelledby="label-tel" placeholder="+420 123 456 789" required class="w-full p-4 rounded-2xl bg-zinc-50 border-none focus:ring-2 focus:ring-gold-500 outline-none font-bold" />
+								<label id="label-tel" class="block text-[10px] uppercase tracking-widest text-zinc-600 font-bold mb-2 ml-2">Telefon</label>
+								<input type="tel" name="Telefon" aria-labelledby="label-tel" placeholder="+420 123 456 789" required class="w-full p-4 rounded-2xl bg-cream border-none focus:ring-2 focus:ring-berry-600 outline-none font-bold" />
 							</div>
 						</div>
 						<div>
-							<label id="label-lokalita" class="block text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-2 ml-2">Lokalita závozu</label>
-							<select name="Lokalita" aria-labelledby="label-lokalita" required class="w-full p-4 rounded-2xl bg-zinc-50 border-none focus:ring-2 focus:ring-gold-500 outline-none font-bold text-zinc-700">
+							<label id="label-lokalita" class="block text-[10px] uppercase tracking-widest text-zinc-600 font-bold mb-2 ml-2">Lokalita závozu</label>
+							<select name="Lokalita" aria-labelledby="label-lokalita" required class="w-full p-4 rounded-2xl bg-cream border-none focus:ring-2 focus:ring-berry-600 outline-none font-bold text-zinc-700">
 								<option value="">Vyberte město</option>
 								{districts.map(city => <option value={city}>{city}</option>)}
 								<option value="jine">Jiná lokalita</option>
 							</select>
 						</div>
 						<div>
-							<label id="label-msg" class="block text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-2 ml-2">Zpráva / Poptávané množství</label>
-							<textarea name="Poznamka" aria-labelledby="label-msg" placeholder="Mám zájem o pravidelný odběr..." rows="4" class="w-full p-4 rounded-2xl bg-zinc-50 border-none focus:ring-2 focus:ring-gold-500 outline-none font-bold"></textarea>
+							<label id="label-msg" class="block text-[10px] uppercase tracking-widest text-zinc-600 font-bold mb-2 ml-2">Zpráva / Poptávané množství</label>
+							<textarea name="Poznamka" aria-labelledby="label-msg" placeholder="Mám zájem o pravidelný odběr..." rows="4" class="w-full p-4 rounded-2xl bg-cream border-none focus:ring-2 focus:ring-berry-600 outline-none font-bold"></textarea>
 						</div>
 						
 						<label for="b2b-consent" class="flex items-start gap-3 cursor-pointer text-sm text-zinc-700 font-bold leading-snug">
-							<input id="b2b-consent" type="checkbox" name="Souhlas-VOP-GDPR" value="ano" required autocomplete="off" class="mt-0.5 h-4 w-4 shrink-0 accent-gold-500 cursor-pointer" />
+							<input id="b2b-consent" type="checkbox" name="Souhlas-VOP-GDPR" value="ano" required autocomplete="off" class="mt-0.5 h-4 w-4 shrink-0 accent-berry-600 cursor-pointer" />
 							<span>
-								Souhlasím se <a href="/obchodni-podminky/" target="_blank" rel="noopener noreferrer" class="underline text-gold-700 hover:text-zinc-900">Všeobecnými obchodními podmínkami</a>
-								a beru na vědomí <a href="/ochrana-osobnich-udaju/" target="_blank" rel="noopener noreferrer" class="underline text-gold-700 hover:text-zinc-900">Zásady ochrany osobních údajů</a>.
+								Souhlasím se <a href="/obchodni-podminky/" target="_blank" rel="noopener noreferrer" class="underline text-berry-700 hover:text-zinc-900">Všeobecnými obchodními podmínkami</a>
+								a beru na vědomí <a href="/ochrana-osobnich-udaju/" target="_blank" rel="noopener noreferrer" class="underline text-berry-700 hover:text-zinc-900">Zásady ochrany osobních údajů</a>.
 							</span>
 						</label>
 
-						<button type="submit" class="w-full bg-gold-500 text-zinc-900 py-5 rounded-2xl font-bold uppercase tracking-[0.2em] text-xs hover:bg-zinc-900 hover:text-gold-500 transition-all shadow-xl active:scale-95">
+						<button type="submit" class="w-full bg-berry-600 text-white py-5 rounded-2xl font-bold uppercase tracking-[0.2em] text-xs hover:bg-berry-700 hover:text-white transition-all shadow-xl active:scale-95">
 							Odeslat poptávku
 						</button>
 					</form>
