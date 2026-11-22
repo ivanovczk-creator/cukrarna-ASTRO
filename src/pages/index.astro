@@ -30,48 +30,15 @@ const cakeCategories = [
 
 <Layout title="Cukrářství Blahutovi | Dorty a zákusky Ostrava a okolí">
 	<main>
-		<section class="py-20 px-4 max-w-7xl mx-auto text-zinc-900">
-			<h1 class="text-4xl md:text-5xl font-serif text-center mb-4 italic text-zinc-900 font-bold" style="content-visibility: visible;">Poctivé domácí dorty a zákusky</h1>
-			<p class="text-center text-zinc-700 mb-16 max-w-xl mx-auto text-lg leading-relaxed font-bold font-serif">Vyberte si kategorii dortu pro vaši příležitost:</p>
-
-			<div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-8 px-4 font-bold">
-				{cakeCategories.map((cat) => {
-					const imageSrc = getImage(cat.img, cakeImages);
-					return (
-						<a href={`/dorty/${cat.id}/`} class="group flex flex-col items-center gap-4 no-underline text-zinc-900 font-bold">
-							<div class="w-full aspect-square rounded-full overflow-hidden border-2 border-cream-200 group-hover:border-berry-600 transition-all duration-500 shadow-md relative">
-								{imageSrc ? (
-									<Image 
-										src={imageSrc} 
-										alt={`${cat.name} - ${cat.seo}`} 
-										class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
-										width={180} 
-										height={180} 
-										format="webp"
-										loading="eager"
-										fetchpriority="high"
-										decoding="sync" 
-									/>
-								) : (
-									<div class="w-full h-full bg-zinc-100 flex items-center justify-center text-[10px] text-zinc-600 italic font-bold">Foto</div>
-								)}
-								<div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
-							</div>
-							<span class="text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-600 group-hover:text-berry-700 text-center transition-colors leading-tight font-serif italic">{cat.name}</span>
-						</a>
-					)
-				})}
-			</div>
-		</section>
-
-		<section class="py-20 px-4 bg-cream text-zinc-900">
+		<section class="py-12 md:py-16 px-4 bg-cream text-zinc-900">
 			<div class="max-w-7xl mx-auto font-bold">
-				<h2 class="text-4xl md:text-5xl font-serif text-center mb-6 italic font-bold">Denní nabídka čerstvých zákusků</h2>
-				<p class="text-center text-zinc-700 mb-12 max-w-3xl mx-auto text-lg leading-relaxed font-bold">
+				<h1 class="text-4xl md:text-5xl font-serif text-center mb-4 italic font-bold" style="content-visibility: visible;">Poctivé domácí zákusky a dorty</h1>
+				<p class="text-center text-zinc-700 mb-10 max-w-3xl mx-auto text-lg leading-relaxed font-bold">
 					Zákusky pro vás připravujeme každý den čerstvé. Vyberte si z naší poctivé nabídky a objednejte si je přímo k vyzvednutí.
 				</p>
+				<h2 class="sr-only">Denní nabídka čerstvých zákusků</h2>
 				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-					{desserts.slice(0, 8).map((dessert) => {
+					{desserts.slice(0, 8).map((dessert, i) => {
 						const fotoUrl = dessert.foto || "";
 						const imageSrc = getImage(fotoUrl, dessertImages);
 						const dessertId = dessert.title.replace(/\s+/g, '-').toLowerCase();
@@ -88,7 +55,8 @@ const cakeCategories = [
 											width={300} 
 											height={300} 
 											format="webp"
-											loading="lazy"
+											loading={i < 4 ? 'eager' : 'lazy'}
+											fetchpriority={i < 4 ? 'high' : 'auto'}
 											decoding="async"
 										/>
 									</a>
@@ -122,7 +90,48 @@ const cakeCategories = [
 			</div>
 		</section>
 
-		<section class="py-20 px-4 bg-cream-100 font-bold">
+		<section class="py-20 px-4 bg-cream-100 text-zinc-900">
+			<div class="max-w-7xl mx-auto">
+				<h2 class="text-4xl md:text-5xl font-serif text-center mb-4 italic text-zinc-900 font-bold">Dorty pro každou příležitost</h2>
+				<p class="text-center text-zinc-700 mb-12 max-w-xl mx-auto text-lg leading-relaxed font-bold font-serif">Vyberte si kategorii dortu pro vaši příležitost:</p>
+
+				<div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-8 px-4 font-bold">
+					{cakeCategories.map((cat) => {
+						const imageSrc = getImage(cat.img, cakeImages);
+						return (
+							<a href={`/dorty/${cat.id}/`} class="group flex flex-col items-center gap-4 no-underline text-zinc-900 font-bold">
+								<div class="w-full aspect-square rounded-full overflow-hidden border-2 border-cream-200 group-hover:border-berry-600 transition-all duration-500 shadow-md relative">
+									{imageSrc ? (
+										<Image 
+											src={imageSrc} 
+											alt={`${cat.name} - ${cat.seo}`} 
+											class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+											width={180} 
+											height={180} 
+											format="webp"
+											loading="lazy"
+											decoding="async" 
+										/>
+									) : (
+										<div class="w-full h-full bg-zinc-100 flex items-center justify-center text-[10px] text-zinc-600 italic font-bold">Foto</div>
+									)}
+									<div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
+								</div>
+								<span class="text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-600 group-hover:text-berry-700 text-center transition-colors leading-tight font-serif italic">{cat.name}</span>
+							</a>
+						)
+					})}
+				</div>
+
+				<div class="mt-14 text-center">
+					<a href="/dorty/" class="inline-block border-2 border-berry-600 text-berry-700 px-12 py-5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-berry-700 hover:text-white transition-all font-serif italic">
+						Zobrazit všechny dorty
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<section class="py-20 px-4 bg-cream font-bold">
 			<div class="max-w-5xl mx-auto text-center">
 				<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-zinc-900 font-bold">Studená kuchyně</h2>
 				<p class="text-lg text-zinc-700 mb-10 leading-relaxed font-bold font-serif">
@@ -134,7 +143,7 @@ const cakeCategories = [
 			</div>
 		</section>
 
-        <section class="py-24 px-4 bg-cream font-bold">
+        <section class="py-24 px-4 bg-cream-100 font-bold">
 			<div class="max-w-5xl mx-auto text-center">
 				<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-zinc-900 font-bold">Jedlý tisk na dort</h2>
 				<p class="text-lg text-zinc-700 mb-10 leading-relaxed font-bold font-serif">
@@ -146,7 +155,7 @@ const cakeCategories = [
 			</div>
 		</section>
 
-		<section class="py-24 px-4 bg-cream-100 overflow-hidden font-bold">
+		<section class="py-24 px-4 bg-cream overflow-hidden font-bold">
 			<div class="max-w-5xl mx-auto text-center">
 				<h2 class="text-4xl md:text-5xl font-serif mb-8 italic text-zinc-900 font-bold">Dort přesně podle vašich představ</h2>
 				<p class="text-lg text-zinc-700 mb-10 leading-relaxed font-bold font-serif">
