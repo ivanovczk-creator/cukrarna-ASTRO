@@ -18,7 +18,7 @@ export interface CityPage {
 
 export const CITY_PAGES: Record<ShopId, CityPage> = {
   ostrava: {
-    title: 'Dorty a zákusky Ostrava-Zábřeh | Cukrárna Blahutovi, Výškovická',
+    title: 'Dorty a zákusky Ostrava-Zábřeh | Cukrárna Blahutovi',
     h1: 'Cukrárna Blahutovi Ostrava-Zábřeh – dorty a zákusky',
     description:
       'Cukrárna Blahutovi na Výškovické v Ostravě-Zábřehu: čerstvé zákusky, chlebíčky, dorty na zakázku a jedlý tisk. Otevírací doba, telefon a online objednání.',
@@ -38,10 +38,10 @@ export const CITY_PAGES: Record<ShopId, CityPage> = {
     ],
   },
   karvina: {
-    title: 'Dorty Karviná – dorty a zákusky na zakázku | Cukrárna Blahutovi',
+    title: 'Dorty a zákusky na zakázku Karviná | Cukrárna Blahutovi',
     h1: 'Dorty a zákusky Karviná – Cukrárna Blahutovi',
     description:
-      'Dorty na zakázku v Karviné: svatební, narozeninové a dětské dorty, čerstvé zákusky a jedlý tisk. Cukrárna Blahutovi na tř. Těreškovové, otevírací doba a online objednání.',
+      'Dorty na zakázku v Karviné: svatební, narozeninové i dětské, k tomu čerstvé zákusky a jedlý tisk. Online objednání a vyzvednutí na tř. Těreškovové.',
     inCity: 'v Karviné',
     intro:
       'Naši prodejnu v Karviné najdete na třídě Těreškovové. Zákusky a objednané dorty si tu vyzvednete v den, který vyberete při objednávce.',

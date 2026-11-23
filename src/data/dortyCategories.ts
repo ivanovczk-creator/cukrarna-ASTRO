@@ -23,10 +23,10 @@ export interface CakeCategory {
 export const CAKE_CATEGORIES: CakeCategory[] = [
   {
     id: 'svatebni',
-    title: 'Svatební dorty na míru | Ostrava, Karviná, Opavsko | Cukrářství Blahutovi',
+    title: 'Svatební dorty na míru Ostrava | Cukrářství Blahutovi',
     h1: 'Svatební dorty na míru',
     description:
-      'Vícepatrové i jednopatrové svatební dorty na zakázku z pravého másla, smetany a čerstvého ovoce. Cukrářství Blahutovi – Píšť, Ostrava-Zábřeh, Karviná, Petřvald.',
+      'Vícepatrové i jednopatrové svatební dorty na zakázku z másla, smetany a čerstvého ovoce. Vyzvednutí v Píšti, Ostravě, Karviné a Petřvaldě.',
     sectionTitle: 'Svatební dorty z poctivých surovin',
     body: [
       'Vyrábíme vícepatrové i jednopatrové svatební dorty na zakázku z poctivých surovin – pravého másla, smetany, čerstvého ovoce, tvarohu i kvalitní čokolády. Rádi sladíme vzhled dortu se stylem vaší svatby, od moderních polonahých dortů s živými květy až po klasické potahované či hladké krémové varianty.',
@@ -41,10 +41,10 @@ export const CAKE_CATEGORIES: CakeCategory[] = [
   },
   {
     id: 'krtiny',
-    title: 'Dorty ke křtinám a narození miminka | Ostrava, Karviná, Píšť | Cukrářství Blahutovi',
+    title: 'Dorty ke křtinám a narození miminka | Cukrářství Blahutovi',
     h1: 'Dorty ke křtinám a narození miminka',
     description:
-      'Jemné slavnostní dorty ke křtinám, vítání občánků a prvním narozeninám v pastelových odstínech, se jménem a datem. Vyzvednutí v Ostravě, Karviné, Petřvaldě a Píšti.',
+      'Jemné slavnostní dorty ke křtinám, vítání občánků a prvním narozeninám se jménem a datem. Vyzvednutí v Ostravě, Karviné, Petřvaldě i Píšti.',
     sectionTitle: 'Dort pro oslavu narození a křtin',
     body: [
       'Jemné slavnostní dorty ke křtinám, vítání občánků nebo prvním narozeninám vyrábíme v pastelových i přírodních odstínech. Zdobíme je jedlým tiskem, čerstvým ovocem, čokoládovými prvky nebo vlastními akrylovými či dřevěnými zápichy se jménem a datem.',
@@ -59,10 +59,10 @@ export const CAKE_CATEGORIES: CakeCategory[] = [
   },
   {
     id: '3d-netradicni',
-    title: '3D a netradiční dorty na přání | Ostrava, Karviná, Opavsko | Cukrářství Blahutovi',
+    title: '3D a netradiční dorty na přání | Cukrářství Blahutovi',
     h1: '3D a netradiční tvarované dorty na přání',
     description:
-      'Dorty ve tvaru auta, fotbalového míče, postavičky nebo kabelky. Ručně modelované 3D dorty na zakázku podle vaší předlohy – Píšť, Ostrava-Zábřeh, Karviná, Petřvald.',
+      'Ručně modelované 3D dorty na zakázku podle vaší předlohy – auta, postavičky, kabelky i míče. Vyzvednutí v Píšti, Ostravě, Karviné a Petřvaldě.',
     sectionTitle: 'Dort ve tvaru, jaký si přejete',
     body: [
       'Hledáte dort ve tvaru auta, fotbalového míče, oblíbené postavičky, kabelky nebo netradičního tematického motivu pro oslavence? Ručně modelované a 3D tvarované dorty připravujeme na zakázku podle vaší předlohy nebo fotografie, včetně vlastních ozdob a zápichů na míru.',
@@ -77,7 +77,7 @@ export const CAKE_CATEGORIES: CakeCategory[] = [
   },
   {
     id: 'nahe',
-    title: 'Nahé a polonahé dorty s ovocem a květy | Ostrava, Karviná | Cukrářství Blahutovi',
+    title: 'Nahé dorty s ovocem a květy, Ostrava | Cukrářství Blahutovi',
     h1: 'Nahé a polonahé dorty s ovocem a květy',
     description:
       'Nahé (naked) a polonahé dorty s čerstvým sezónním ovocem, jedlými květy a dripem. Lehký krém bez těžké hmoty – Ostrava-Zábřeh, Karviná, Petřvald, Píšť.',
@@ -95,7 +95,7 @@ export const CAKE_CATEGORIES: CakeCategory[] = [
   },
   {
     id: 'detske',
-    title: 'Dětské narozeninové dorty Ostrava a Karviná | Cukrářství Blahutovi',
+    title: 'Dětské narozeninové dorty Ostrava | Cukrářství Blahutovi',
     h1: 'Dětské narozeninové dorty',
     description:
       'Ručně modelované dětské dorty pro oslavy v Ostravě a Karviné. Postavičky z pohádek i zvířátka z poctivých surovin od Cukrářství Blahutovi.',
@@ -112,7 +112,7 @@ export const CAKE_CATEGORIES: CakeCategory[] = [
   },
   {
     id: 'narozeninove',
-    title: 'Narozeninové dorty na zakázku Karviná a Ostrava | Cukrářství Blahutovi',
+    title: 'Narozeninové dorty Karviná a Ostrava | Cukrářství Blahutovi',
     h1: 'Narozeninové dorty na zakázku',
     description:
       'Hledáte poctivý narozeninový dort v Karviné nebo Ostravě? Pečeme moderní i klasické dorty na přání. Vyzvednutí na prodejnách Karviná a Ostrava-Zábřeh.',
@@ -129,7 +129,7 @@ export const CAKE_CATEGORIES: CakeCategory[] = [
   },
   {
     id: 'elegantni',
-    title: 'Elegantní dorty pro jubilea a firemní akce Ostrava | Cukrářství Blahutovi',
+    title: 'Elegantní dorty na jubilea Ostrava | Cukrářství Blahutovi',
     h1: 'Elegantní dorty pro jubilea a slavnostní příležitosti',
     description:
       'Reprezentativní dorty pro významná životní jubilea a firemní akce v Ostravě a Karviné. Precizní design a prvotřídní chuť od Cukrářství Blahutovi.',
