@@ -252,10 +252,10 @@ function paymentSubjectTag_(r) {
 /** Barevný informační pruh nad / pod e-mailem (kind: paid | wait | cash | info). */
 function noticeBox_(text, kind) {
   const colors = {
-    paid: ['#dcfce7', '#16a34a', '#14532d'],
-    wait: ['#fee2e2', '#dc2626', '#991b1b'],
-    cash: ['#fff1c2', '#f0a500', '#7a4a00'],
-    info: ['#faf7f2', '#ddd4c0', '#52525b'],
+    paid: ['#dcfce7', '#16a34a', '#1f1f1f'],
+    wait: ['#f6e3e0', '#b83b46', '#1f1f1f'],
+    cash: ['#faf7f2', '#ddd4c0', '#1f1f1f'],
+    info: ['#faf7f2', '#ddd4c0', '#1f1f1f'],
   };
   const c = colors[kind] || colors.info;
   return '<div style="max-width:680px;margin:0 auto 10px auto;padding:12px 16px;background:' + c[0] + ';border:1px solid ' + c[1] + ';' +
@@ -795,14 +795,14 @@ function factCell_(fact) {
   let bg = '#faf7f2';
   let border = '#ebe4d6';
   let color = '#1f1f1f';
-  let labelColor = '#71717a';
+  let labelColor = '#1f1f1f';
   let size = '15px';
-  if (fact.hi === 'price') { bg = '#fff4cc'; border = '#f0c030'; size = '20px'; }
-  if (fact.hi === 'date') { bg = '#f6e3e0'; border = '#d49a96'; color = '#7f2a33'; size = '17px'; }
+  if (fact.hi === 'price') { color = '#1f1f1f'; size = '20px'; }
+  if (fact.hi === 'date') { color = '#1f1f1f'; size = '17px'; }
   // způsob a stav platby: zelená = zaplaceno, žlutá = při vyzvednutí, červená = čeká na online platbu
-  if (fact.hi === 'pay-paid') { bg = '#dcfce7'; border = '#16a34a'; color = '#14532d'; labelColor = '#166534'; }
-  if (fact.hi === 'pay-cash') { bg = '#fff1c2'; border = '#f0a500'; color = '#7a4a00'; labelColor = '#7a4a00'; }
-  if (fact.hi === 'pay-wait') { bg = '#fee2e2'; border = '#dc2626'; color = '#991b1b'; labelColor = '#991b1b'; }
+  if (fact.hi === 'pay-paid') { bg = '#dcfce7'; border = '#16a34a'; color = '#1f1f1f'; labelColor = '#1f1f1f'; }
+  if (fact.hi === 'pay-cash') { bg = '#ffffff'; border = '#d49a96'; }
+  if (fact.hi === 'pay-wait') { bg = '#f6e3e0'; border = '#b83b46'; color = '#1f1f1f'; labelColor = '#1f1f1f'; }
   const sub = fact.sub
     ? '<div style="font-size:12px;font-weight:400;line-height:1.45;margin-top:6px;color:' + color + ';">' + esc_(fact.sub) + '</div>'
     : '';
@@ -818,7 +818,7 @@ function factCell_(fact) {
 function buildFacts_(r) {
   const facts = [];
   const link = function (href, text) {
-    return '<a href="' + esc_(href) + '" style="color:inherit;text-decoration:none;border-bottom:1px dotted #71717a;">' + esc_(text) + '</a>';
+    return '<a href="' + esc_(href) + '" style="color:inherit;text-decoration:none;border-bottom:1px dotted #1f1f1f;">' + esc_(text) + '</a>';
   };
 
   // cena a způsob/stav platby vždy vedle sebe (první řádek)
@@ -829,7 +829,7 @@ function buildFacts_(r) {
   if (r.store) facts.push({ label: 'Prodejna', html: esc_(r.store) });
   if (r.location) facts.push({ label: 'Lokalita závozu', html: esc_(r.location) });
   if (r.quantity) facts.push({ label: 'Počet kusů', html: esc_(r.quantity) + '\u00a0ks' });
-  if (r.company) facts.push({ label: 'Firma', html: esc_(r.company) + (r.ico ? ' <span style="font-weight:400;color:#71717a;">(IČO ' + esc_(r.ico) + ')</span>' : '') });
+  if (r.company) facts.push({ label: 'Firma', html: esc_(r.company) + (r.ico ? ' <span style="font-weight:400;color:#1f1f1f;">(IČO ' + esc_(r.ico) + ')</span>' : '') });
   else if (r.ico) facts.push({ label: 'IČO', html: esc_(r.ico) });
   if (r.email) facts.push({ label: 'E-mail', html: link('mailto:' + r.email, r.email) });
   if (r.phone) facts.push({ label: 'Telefon', html: link('tel:' + r.phone.replace(/\s+/g, ''), r.phone) });
@@ -847,11 +847,11 @@ function factsTable_(facts) {
 }
 
 function sectionTitle_(text) {
-  return '<div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;color:#52525b;margin:0 0 10px 0;">' + esc_(text) + '</div>';
+  return '<div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;color:#1f1f1f;margin:0 0 10px 0;">' + esc_(text) + '</div>';
 }
 
 function linesTable_(r) {
-  const th = 'padding:10px 12px;border-bottom:2px solid #ddd4c0;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#71717a;';
+  const th = 'padding:10px 12px;border-bottom:2px solid #ddd4c0;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#1f1f1f;';
   const td = 'padding:10px 12px;border-bottom:1px solid #ebe4d6;font-size:14px;';
   const showCat = r.categories.length > 1;
 
@@ -859,7 +859,7 @@ function linesTable_(r) {
     return (
       '<tr>' +
       '<td style="' + td + '"><strong>' + esc_(l.name) + '</strong>' +
-      (showCat ? '<div style="font-size:11px;color:#71717a;margin-top:2px;">' + esc_(categoryLabel_(l.category)) + '</div>' : '') +
+      (showCat ? '<div style="font-size:11px;color:#1f1f1f;margin-top:2px;">' + esc_(categoryLabel_(l.category)) + '</div>' : '') +
       '</td>' +
       '<td style="' + td + 'text-align:center;white-space:nowrap;">' + l.quantity + '\u00a0ks</td>' +
       '<td style="' + td + 'text-align:right;white-space:nowrap;">' + (l.unitPrice ? esc_(money_(l.unitPrice)) : '–') + '</td>' +
@@ -869,8 +869,8 @@ function linesTable_(r) {
   }).join('');
 
   const totalRow = r.total
-    ? '<tr><td colspan="3" style="padding:12px;text-align:right;font-size:13px;color:#52525b;">Celkem s DPH</td>' +
-      '<td style="padding:12px;text-align:right;font-size:16px;font-weight:700;white-space:nowrap;color:#992d37;">' + esc_(money_(r.total)) + '</td></tr>'
+    ? '<tr><td colspan="3" style="padding:12px;text-align:right;font-size:13px;color:#1f1f1f;">Celkem s DPH</td>' +
+      '<td style="padding:12px;text-align:right;font-size:16px;font-weight:700;white-space:nowrap;color:#1f1f1f;">' + esc_(money_(r.total)) + '</td></tr>'
     : '';
 
   return (
@@ -886,13 +886,13 @@ function linesTable_(r) {
 
 function kvTable_(rows, small) {
   const fs = small ? '12px' : '14px';
-  const color = small ? '#71717a' : '#1f1f1f';
+  const color = small ? '#1f1f1f' : '#1f1f1f';
   return (
     '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">' +
     rows.map(function (row) {
       return (
         '<tr>' +
-        '<td valign="top" style="padding:5px 12px 5px 0;font-size:' + fs + ';color:#71717a;white-space:nowrap;width:1%;">' + esc_(row[0]) + '</td>' +
+        '<td valign="top" style="padding:5px 12px 5px 0;font-size:' + fs + ';color:#1f1f1f;white-space:nowrap;width:1%;">' + esc_(row[0]) + '</td>' +
         '<td valign="top" style="padding:5px 0;font-size:' + fs + ';color:' + color + ';word-break:break-word;white-space:pre-wrap;">' + esc_(row[1]) + '</td>' +
         '</tr>'
       );
@@ -915,7 +915,7 @@ function buildEmailHtml_(r, xmlInfo) {
     : '';
 
   const header =
-    '<tr><td style="background:#f0c030;padding:22px 28px 20px 28px;">' +
+    '<tr><td style="background:#d49a96;padding:22px 28px 20px 28px;">' +
     '<div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#1f1f1f;margin-bottom:12px;">Cukrářství Blahutovi · web</div>' +
     '<span style="display:inline-block;background:' + accent + ';color:#ffffff;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:5px 12px;border-radius:6px;">' + esc_(r.type.label) + '</span>' +
     '<div style="font-size:26px;line-height:1.25;font-weight:700;color:#1f1f1f;margin-top:14px;">' + esc_(r.name) + '</div>' +
@@ -948,7 +948,7 @@ function buildEmailHtml_(r, xmlInfo) {
       return (
         '<div style="margin:0 0 12px 0;">' +
         '<a href="' + esc_(l.url) + '" target="_blank" style="display:inline-block;background:' + accent + ';color:#ffffff;font-size:15px;font-weight:700;text-decoration:none;padding:13px 22px;border-radius:8px;">' + esc_(l.label) + ' &rarr;</a>' +
-        '<div style="font-size:11px;color:#71717a;margin-top:5px;word-break:break-all;">' + esc_(l.url) + '</div>' +
+        '<div style="font-size:11px;color:#1f1f1f;margin-top:5px;word-break:break-all;">' + esc_(l.url) + '</div>' +
         '</div>'
       );
     }).join('');
@@ -961,14 +961,14 @@ function buildEmailHtml_(r, xmlInfo) {
 
   if (xmlInfo) {
     sections.push(block(
-      '<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 14px;font-size:13px;color:#166534;">' +
+      '<div style="background:#faf7f2;border:1px solid #ddd4c0;border-radius:8px;padding:10px 14px;font-size:13px;color:#1f1f1f;">' +
       'XML pro Pohodu <code>' + esc_(xmlInfo.fileName) + '</code> je uložené na Google Disku a přiložené k tomuto e-mailu.</div>'
     ));
   }
 
   const tech = r.tech.length
     ? '<tr><td style="padding:16px 28px 22px 28px;background:#faf7f2;border-top:1px solid #ebe4d6;">' +
-      '<div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#71717a;margin-bottom:6px;">Technické údaje</div>' +
+      '<div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#1f1f1f;margin-bottom:6px;">Technické údaje</div>' +
       kvTable_(r.tech, true) +
       '</td></tr>'
     : '';
@@ -1354,18 +1354,18 @@ function b2bRows_(r) {
 function confirmationShell_(title, bodyRows) {
   const font = "font-family:'Segoe UI',Roboto,Arial,Helvetica,sans-serif;";
   const header =
-    '<tr><td style="background:#f0c030;padding:26px 28px 22px 28px;">' +
+    '<tr><td style="background:#d49a96;padding:26px 28px 22px 28px;">' +
     '<div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#1f1f1f;margin-bottom:12px;">Cukrářství Blahutovi</div>' +
     '<div style="font-size:26px;line-height:1.25;font-weight:700;color:#1f1f1f;">' + esc_(title) + '</div>' +
     '</td></tr>' +
     '<tr><td style="height:4px;line-height:4px;font-size:0;background:#b83b46;">&nbsp;</td></tr>';
 
   const footer =
-    '<tr><td style="padding:16px 28px 22px 28px;background:#faf7f2;border-top:1px solid #ebe4d6;font-size:12px;line-height:1.6;color:#71717a;">' +
-    '<strong style="color:#52525b;">Cukrářství Blahutovi</strong> · Ivo Blahut · ' + esc_(CONFIG.ADDRESS) + ' · IČO ' + esc_(CONFIG.ICO) + '<br>' +
-    'Tel. <a href="tel:' + esc_(CONFIG.PHONE.replace(/\s+/g, '')) + '" style="color:#52525b;">' + esc_(CONFIG.PHONE) + '</a> · ' +
-    '<a href="mailto:' + esc_(CONFIG.NOTIFY_EMAIL) + '" style="color:#52525b;">' + esc_(CONFIG.NOTIFY_EMAIL) + '</a><br>' +
-    '<span style="color:#71717a;">Tento e-mail vznikl automaticky po odeslání formuláře na webu cukrarstviblahutovi.cz.</span>' +
+    '<tr><td style="padding:16px 28px 22px 28px;background:#faf7f2;border-top:1px solid #ebe4d6;font-size:12px;line-height:1.6;color:#1f1f1f;">' +
+    '<strong style="color:#1f1f1f;">Cukrářství Blahutovi</strong> · Ivo Blahut · ' + esc_(CONFIG.ADDRESS) + ' · IČO ' + esc_(CONFIG.ICO) + '<br>' +
+    'Tel. <a href="tel:' + esc_(CONFIG.PHONE.replace(/\s+/g, '')) + '" style="color:#1f1f1f;">' + esc_(CONFIG.PHONE) + '</a> · ' +
+    '<a href="mailto:' + esc_(CONFIG.NOTIFY_EMAIL) + '" style="color:#1f1f1f;">' + esc_(CONFIG.NOTIFY_EMAIL) + '</a><br>' +
+    '<span style="color:#1f1f1f;">Tento e-mail vznikl automaticky po odeslání formuláře na webu cukrarstviblahutovi.cz.</span>' +
     '</td></tr>';
 
   return (
@@ -1419,7 +1419,7 @@ function buildStandardConfirmation_(req) {
     ));
   }
   rows.push(confirmBlock_(
-    '<div style="background:#fff7d6;border:1px solid #f0c030;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.55;color:#1f1f1f;">' +
+    '<div style="background:#faf7f2;border:1px solid #ddd4c0;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.55;color:#1f1f1f;">' +
     contactHtml + '</div>'
   ));
   rows.push(confirmParagraph_('Děkujeme a těšíme se na vás.<br><strong>Cukrářství Blahutovi</strong>'));
@@ -1462,7 +1462,7 @@ function buildB2bConfirmation_(req) {
     rows.push(confirmBlock_(sectionTitle_('Údaje z vaší poptávky') + kvTable_(dataRows, false)));
   }
   rows.push(confirmBlock_(
-    '<div style="background:#fff7d6;border:1px solid #f0c030;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.55;color:#1f1f1f;">' +
+    '<div style="background:#faf7f2;border:1px solid #ddd4c0;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.55;color:#1f1f1f;">' +
     esc_(contactText) + '</div>'
   ));
   rows.push(confirmParagraph_('S pozdravem<br><strong>Cukrářství Blahutovi</strong>'));
