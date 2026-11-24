@@ -7,6 +7,7 @@
  * proto je stránka /dekujeme nikdy nepovažuje za důkaz zaplacení. Odpověď neobsahuje žádné osobní údaje.
  */
 import {
+  FINAL_STATUSES,
   ORDER_ID_RE,
   checkCanonical,
   fetchPaymentStatus,
@@ -53,6 +54,16 @@ export default async (req) => {
       }
     } catch (err) {
       console.warn('[payment-status] Comgate status nedostupný', refId, err.message);
+    }
+  }
+
+  // konečný stav, který se zatím nepodařilo propsat do objednávky (např. platba dorazila dřív než XML objednávky,
+  // nebo se platbu nepodařilo založit): zkusíme ho propsat znovu, ať objednávka nezůstane „čeká na úhradu“
+  if (FINAL_STATUSES.includes(record.status) && record.syncedStatus !== record.status && isConfigured(cfg)) {
+    try {
+      record = (await settlePayment(cfg, record, record.status, record.paidTransId ?? transId)).record;
+    } catch (err) {
+      console.warn('[payment-status] dopropsání stavu selhalo', refId, err.message);
     }
   }
 

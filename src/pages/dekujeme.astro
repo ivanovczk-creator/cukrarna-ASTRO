@@ -33,11 +33,11 @@ import { COMPANY } from '../lib/legal';
 	const MESSAGES: Record<'PAID' | 'PENDING' | 'CANCELLED' | 'CHECKING' | 'UNVERIFIED', { title: string; text: string }> = {
 		PAID: {
 			title: 'Platba proběhla úspěšně',
-			text: 'Děkujeme, vaši platbu kartou jsme přijali a objednávku zpracováváme. Potvrzení objednávky vám pošleme e-mailem. Zboží si vyzvednete v objednaném termínu na vybrané prodejně.',
+			text: 'Děkujeme, vaši platbu kartou jsme přijali a objednávku zpracováváme. Potvrzení platby vám pošleme e-mailem. Zboží si vyzvednete v objednaném termínu na vybrané prodejně, při převzetí už nic neplatíte.',
 		},
 		PENDING: {
 			title: 'Platba čeká na potvrzení',
-			text: 'Platbu zatím banka nepotvrdila. Objednávku jsme přijali – jakmile platbu obdržíme, dáme vám vědět e-mailem.',
+			text: 'Platbu zatím banka nepotvrdila. Objednávku jsme přijali – jakmile platbu obdržíme, pošleme vám e-mail s potvrzením platby.',
 		},
 		CANCELLED: {
 			title: 'Platba nebyla dokončena',
@@ -88,6 +88,16 @@ import { COMPANY } from '../lib/legal';
 		if (!hint) {
 			// bez parametrů platby = objednávka s platbou při převzetí (i online platba, kterou se nepodařilo zahájit)
 			trackOrderPurchase(order && { ...order, payment: 'cash' });
+			// online platbu se nepodařilo zahájit: objednávka se doznačí jako „platba při vyzvednutí“ (best-effort, serverová
+			// funkce zkusí stav propsat do objednávky; XML objednávky může vzniknout o pár vteřin později)
+			if (order?.payment === 'online') {
+				void (async () => {
+					for (const delay of [4000, 8000, 15000]) {
+						await sleep(delay);
+						if ((await fetchStatus(order.orderId)) !== 'PENDING') break;
+					}
+				})();
+			}
 			return;
 		}
 

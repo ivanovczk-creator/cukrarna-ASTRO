@@ -24,7 +24,9 @@ POST /api/comgate-notify                                    /dekujeme?platba=…
   ▼
 pohoda-webhook ──▶ Apps Script { action: "payment-update" }
                    → XML objednávky: poznámka „Platba: ZAPLACENO online…“ + značka [ZAPLACENO ONLINE] v textu
-                   → interní e-mail na NOTIFY_EMAIL
+                   → interní e-mail na NOTIFY_EMAIL, aktualizace pro prodejnu a „Platba přijata“ zákazníkovi
+                     (stav platby je ve všech e-mailech v bloku „Způsob a stav platby“: ZAPLACENO ONLINE /
+                      PLATBA PŘI VYZVEDNUTÍ / ČEKÁ NA ONLINE PLATBU – NEZAPLACENO)
 ```
 
 Platba při převzetí tuto větev nepoužívá (žádné volání Comgate, žádné přesměrování).

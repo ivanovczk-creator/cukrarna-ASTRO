@@ -112,7 +112,8 @@ async function deliverConfirmation(parsed, requestUrl) {
   }
 
   const sent = await sendCustomerMail(mail, {
-    idempotencyKey: mail.orderId ? `confirm-${mail.orderId}` : undefined,
+    // potvrzení objednávky a „platba přijata“ jdou ke stejné objednávce → každé má vlastní klíč
+    idempotencyKey: mail.orderId ? `${mail.kind === 'paid' ? 'paid' : 'confirm'}-${mail.orderId}` : undefined,
   });
   if (sent.ok) return { confirmation: 'sent' };
 

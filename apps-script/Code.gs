@@ -19,13 +19,16 @@
  * Kopie objednávky z košíku pro prodejnu: podle pole Prodejna (místo vyzvednutí) se na adresu prodejny z CONFIG.STORE_EMAILS
  * pošle samostatný e-mail s údaji objednávky (bez XML přílohy a bez technických údajů). Ostatní prodejny ji nedostanou.
  * Totéž platí pro jedlý tisk (tisk) a dort na přání (dort-na-prani) – viz CONFIG.STORE_COPY_TYPES.
- * Po zaplacení online (Comgate) dostane stejná prodejna krátkou aktualizaci „ZAPLACENO ONLINE“ (jednou na objednávku).
+ * Stav platby je ve všech objednávkových e-mailech jednotně v bloku „Způsob a stav platby“ (paymentState_):
+ * ZAPLACENO ONLINE (Comgate) / PLATBA PŘI VYZVEDNUTÍ (na prodejně) / ČEKÁ NA ONLINE PLATBU – NEZAPLACENO.
+ * Po výsledku online platby (Comgate) dostane prodejna aktualizaci ve stejné šabloně (ZAPLACENO ONLINE, resp. platba při
+ * vyzvednutí, když online platba nebyla dokončena) a po zaplacení i zákazník krátké „Platba přijata“ (každé jen jednou).
  * Test z editoru: funkce testStoreCopy a testStorePaymentNotice.
  * Test z editoru: funkce testConfirmation (bez podtržítka, jinak by nešla spustit).
  */
 
 /** Verze kódu – po nasazení ji uvidíte v odpovědi na GET adresy /exec (kontrola, že běží správná verze). */
-const VERSION = '2026-11-21-store-copy-v2';
+const VERSION = '2026-11-22-payment-status-v2';
 
 const CONFIG = {
   NOTIFY_EMAIL: 'objednavky@cukrarstviblahutovi.cz',
@@ -54,12 +57,12 @@ const CONFIG = {
 
 /** Typy formulářů (klíč = form_name z Netlify). */
 const FORM_TYPES = {
-  'objednavka': { key: 'objednavka', label: 'Objednávka', accent: '#b45309', xml: true },
-  'tisk-na-papir': { key: 'tisk', label: 'Jedlý tisk – fondánový list', accent: '#2563eb', xml: false },
-  'dort-na-prani-v2': { key: 'dort-na-prani', label: 'Dort na přání – poptávka', accent: '#db2777', xml: false },
-  'b2b-poptavka': { key: 'b2b', label: 'Poptávka pro firmy', accent: '#059669', xml: false },
+  'objednavka': { key: 'objednavka', label: 'Objednávka', accent: '#b83b46', xml: true },
+  'tisk-na-papir': { key: 'tisk', label: 'Jedlý tisk – fondánový list', accent: '#b83b46', xml: false },
+  'dort-na-prani-v2': { key: 'dort-na-prani', label: 'Dort na přání – poptávka', accent: '#b83b46', xml: false },
+  'b2b-poptavka': { key: 'b2b', label: 'Poptávka pro firmy', accent: '#b83b46', xml: false },
 };
-const GENERIC_TYPE = { key: 'jine', label: 'Formulář z webu', accent: '#475569', xml: false };
+const GENERIC_TYPE = { key: 'jine', label: 'Formulář z webu', accent: '#b83b46', xml: false };
 
 const CATEGORY_LABELS = {
   'dorty': 'Dorty',
@@ -198,6 +201,68 @@ function paymentNote_(status, p) {
   return 'Online kartou (Comgate) – ČEKÁ NA ÚHRADU';
 }
 
+/**
+ * Jednotný popis způsobu a stavu platby pro VŠECHNY objednávkové e-maily (interní, kopie pro prodejnu, aktualizace
+ * po platbě i potvrzení zákazníkovi). Stav drží r.paymentStatus:
+ *   'PENDING'   online (Comgate) vybráno, platba zatím není potvrzena (stav v okamžiku odeslání objednávky)
+ *   'PAID'      online platba potvrzená (push notifikace z Comgate)
+ *   'CANCELLED' online platba nedokončena → platí se při převzetí
+ *   'CASH'      platba při vyzvednutí na prodejně
+ * Vrací null u požadavků bez platby (poptávky: dort na přání, firmy).
+ * hi = styl buňky (zelená / žlutá / červená), tag = štítek v předmětu e-mailu.
+ */
+function paymentState_(r) {
+  if (!r || !r.paymentMethod) return null;
+  const st = r.paymentStatus || (r.paymentMethod === 'online' ? 'PENDING' : 'CASH');
+  if (st === 'PAID') {
+    return {
+      code: 'paid', hi: 'pay-paid', tag: 'ZAPLACENO ONLINE',
+      headline: 'ZAPLACENO ONLINE (Comgate)',
+      sub: 'Při převzetí se nic neinkasuje.' + (r.paymentDetail ? ' ' + r.paymentDetail + '.' : ''),
+      subCustomer: 'Děkujeme, objednávka je uhrazena – při vyzvednutí už nic neplatíte.',
+    };
+  }
+  if (st === 'PENDING') {
+    return {
+      code: 'pending', hi: 'pay-wait', tag: 'ČEKÁ NA ONLINE PLATBU',
+      headline: 'ČEKÁ NA ONLINE PLATBU – NEZAPLACENO',
+      sub: 'Platba kartou zatím není potvrzena – nevydávejte jako zaplaceno. Po úhradě přijde další e-mail „ZAPLACENO ONLINE“.',
+      subCustomer: 'Dokončete platbu kartou na stránce platební brány. Nedokončíte-li ji, zaplatíte při vyzvednutí na prodejně.',
+    };
+  }
+  const cancelled = st === 'CANCELLED';
+  return {
+    code: cancelled ? 'cancelled' : 'cash', hi: 'pay-cash', tag: 'PLATBA PŘI VYZVEDNUTÍ',
+    headline: 'PLATBA PŘI VYZVEDNUTÍ (na prodejně)',
+    sub: cancelled
+      ? 'Online platba nebyla dokončena – vybrat při převzetí na prodejně.'
+      : 'Zákazník zaplatí při převzetí na prodejně.',
+    subCustomer: cancelled
+      ? 'Online platba nebyla dokončena – zaplatíte při převzetí na prodejně.'
+      : 'Zaplatíte při převzetí objednávky na prodejně.',
+  };
+}
+
+/** Štítek stavu platby na začátku předmětu e-mailu, např. „[ZAPLACENO ONLINE] “ (prázdný u poptávek). */
+function paymentSubjectTag_(r) {
+  const ps = paymentState_(r);
+  return ps ? '[' + ps.tag + '] ' : '';
+}
+
+/** Barevný informační pruh nad / pod e-mailem (kind: paid | wait | cash | info). */
+function noticeBox_(text, kind) {
+  const colors = {
+    paid: ['#dcfce7', '#16a34a', '#14532d'],
+    wait: ['#fee2e2', '#dc2626', '#991b1b'],
+    cash: ['#fff1c2', '#f0a500', '#7a4a00'],
+    info: ['#faf7f2', '#ddd4c0', '#52525b'],
+  };
+  const c = colors[kind] || colors.info;
+  return '<div style="max-width:680px;margin:0 auto 10px auto;padding:12px 16px;background:' + c[0] + ';border:1px solid ' + c[1] + ';' +
+    "border-radius:8px;font-family:'Segoe UI',Roboto,Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:" + c[2] + ';">' +
+    esc_(text) + '</div>';
+}
+
 /** Krátká značka v textu objednávky (v Pohodě je vidět ve výpisu objednávek). */
 function paymentMarker_(status) {
   if (status === 'PAID') return '[ZAPLACENO ONLINE]';
@@ -236,35 +301,66 @@ function handlePaymentUpdate_(p) {
   });
   file.setContent(xml);
 
+  const order = orderFromXml_(xml, status, p);
+  const paid = status === 'PAID';
   const cache = CacheService.getScriptCache();
   const key = 'pay:' + orderId + ':' + status;
   let emailed = false;
   if (!cache.get(key)) {
-    const paid = status === 'PAID';
+    const intro = paid
+      ? 'Zákazník zaplatil objednávku online kartou přes Comgate – při převzetí se nic neinkasuje.'
+      : 'Online platba nebyla dokončena (zrušena / nezdařila se). Objednávka zůstává v systému – platba proběhne při vyzvednutí na prodejně, případně se domluvte se zákazníkem.';
+    const hint = 'XML objednávky na Disku (' + orderId + '.xml) bylo aktualizováno: poznámka „Platba: …“ a značka v textu objednávky. ' +
+      'Pokud už byla objednávka naimportována do Pohody před úhradou, upravte poznámku ručně.';
     MailApp.sendEmail({
       to: CONFIG.NOTIFY_EMAIL,
-      subject: (paid ? 'Online platba ZAPLACENA – ' : 'Online platba NEDOKONČENA – ') + orderId,
-      body: [
-        paid ? 'Zákazník zaplatil objednávku online kartou přes Comgate.' : 'Online platba objednávky nebyla dokončena (zrušena / nezdařila se).',
-        '',
-        'Objednávka: ' + orderId,
-        'Stav: ' + note,
-        paid ? '' : 'Objednávka zůstává v systému – domluvte se se zákazníkem na úhradě (např. při převzetí).',
-        'XML objednávky na Disku (' + orderId + '.xml) bylo aktualizováno: poznámka „Platba: …“ a značka v textu objednávky.',
-        'Pokud už byla objednávka naimportována do Pohody před úhradou, upravte poznámku ručně.',
-      ].join('\n'),
+      subject: buildPaymentUpdateSubject_(order),
+      body: intro + '\n\n' + buildEmailText_(order, null) + '\n\n' + hint,
+      htmlBody: noticeBox_(intro, paid ? 'paid' : 'cash') + buildEmailHtml_(order, null) + noticeBox_(hint, 'info'),
       name: CONFIG.SENDER_NAME,
     });
     cache.put(key, '1', 21600);
     emailed = true;
   }
 
-  // prodejna, u které si zákazník objednávku vyzvedne, se dozví, že je zaplaceno kartou (jen PAID, jen jednou)
-  const storeNotice = status === 'PAID'
-    ? sendStorePaymentNotice_(file, xml, p)
-    : { status: 'skipped', reason: 'stav ' + status };
+  // prodejna, u které si zákazník objednávku vyzvedne, se dozví výsledek platby (ZAPLACENO / platba při vyzvednutí), vždy jednou
+  const storeNotice = sendStorePaymentNotice_(file, xml, p, undefined, status);
 
-  return { orderId: orderId, payment: status, xmlUpdated: true, emailed: emailed, storeNotice: storeNotice.status };
+  const result = { orderId: orderId, payment: status, xmlUpdated: true, emailed: emailed, storeNotice: storeNotice.status };
+  // zákazník dostal při odeslání objednávky e-mail „ČEKÁ NA ONLINE PLATBU“ → po zaplacení mu pošleme „Platba přijata“
+  // (při Resendu ho odešle pohoda-webhook podle polí confirmation/confirmationMail v této odpovědi)
+  if (paid) Object.assign(result, confirmationResult_(sendCustomerPaymentConfirmation_(file, order)));
+  return result;
+}
+
+/** Značka v popisu XML souboru: zákazník už dostal e-mail „Platba přijata“. */
+const CUSTOMER_PAID_MARK = 'CUSTOMER_PAID_NOTIFIED';
+
+/** Pošle zákazníkovi „Platba přijata“ (jednou na objednávku). Nikdy nevyhazuje výjimku. */
+function sendCustomerPaymentConfirmation_(file, order) {
+  const cache = CacheService.getScriptCache();
+  const key = 'paycust:' + order.orderId;
+  try {
+    const marked = file && String(file.getDescription() || '').indexOf(CUSTOMER_PAID_MARK) !== -1;
+    if (marked || cache.get(key)) return { status: 'skipped', reason: 'duplicate' };
+  } catch (err) { /* hlídání duplicit je jen pojistka */ }
+
+  const res = sendCustomerConfirmation_(Object.assign({}, order, { mailKind: 'paid' }));
+  if (res.status === 'sent' || res.status === 'delegated') {
+    cache.put(key, '1', 21600);
+    try {
+      if (file) file.setDescription((String(file.getDescription() || '') + ' ' + CUSTOMER_PAID_MARK).trim());
+    } catch (err) { /* cache už duplicitu hlídá */ }
+  }
+  return res;
+}
+
+/** Předmět interního e-mailu po výsledku online platby. */
+function buildPaymentUpdateSubject_(o) {
+  return (o.paymentStatus === 'PAID' ? 'ZAPLACENO ONLINE – ' : 'ONLINE PLATBA NEDOKONČENA – ') +
+    o.name + ' – ' + o.type.label + ' ' + o.orderId +
+    (o.store ? ' – ' + o.store : '') +
+    (o.date ? ' (' + o.date + ')' : '');
 }
 
 /** Ostatní formuláře: přehledný e-mail. Idempotence přes ID odeslání (nebo otisk těla). */
@@ -425,6 +521,8 @@ function normalizeRequest_(parsed) {
     orderId: pick_(d, ['Cislo-Objednavky'], used),
     paymentMethod: '',
     paymentLabel: '',
+    paymentStatus: '',
+    paymentDetail: '',
     total: parseMoney_(pick_(d, ['Celkem-Kc'], used)),
     quantity: 0,
     lines: [],
@@ -438,11 +536,14 @@ function normalizeRequest_(parsed) {
   pick_(d, ['Typ-Pozadavku'], used);
   const categoriesField = pick_(d, ['Kategorie-Objednavky'], used);
 
-  // platba
+  // platba: jen objednávky s cenou (košík, jedlý tisk). Online (Comgate) startuje jako PENDING – v okamžiku
+  // odeslání formuláře ještě není zaplaceno, výsledek přijde později (handlePaymentUpdate_). Poptávky (dort na přání,
+  // firmy) platbu nemají.
   const paymentRaw = pick_(d, ['Zpusob-Platby'], used).toLowerCase();
-  if (paymentRaw) {
+  if (type.key === 'objednavka' || type.key === 'tisk') {
     req.paymentMethod = paymentRaw.indexOf('online') !== -1 ? 'online' : 'cash';
     req.paymentLabel = req.paymentMethod === 'online' ? 'Online kartou (Comgate)' : 'Při převzetí';
+    req.paymentStatus = req.paymentMethod === 'online' ? 'PENDING' : 'CASH';
   }
 
   // položky košíku
@@ -673,6 +774,7 @@ function buildPohodaXml_(o) {
 function buildSubject_(r) {
   const where = r.store || r.location;
   return (
+    paymentSubjectTag_(r) +
     r.name + ' – ' + r.type.label +
     (r.orderId ? ' ' + r.orderId : '') +
     (where ? ' – ' + where : '') +
@@ -690,16 +792,25 @@ function factCell_(fact) {
   if (!fact) {
     return '<td width="50%" style="padding:0;"></td>';
   }
-  let bg = '#f8fafc';
-  let border = '#e2e8f0';
-  let color = '#0f172a';
+  let bg = '#faf7f2';
+  let border = '#ebe4d6';
+  let color = '#1f1f1f';
+  let labelColor = '#71717a';
   let size = '15px';
-  if (fact.hi === 'price') { bg = '#fffbeb'; border = '#fcd34d'; color = '#92400e'; size = '20px'; }
-  if (fact.hi === 'date') { bg = '#eff6ff'; border = '#93c5fd'; color = '#1e3a8a'; size = '17px'; }
+  if (fact.hi === 'price') { bg = '#fff4cc'; border = '#f0c030'; size = '20px'; }
+  if (fact.hi === 'date') { bg = '#f6e3e0'; border = '#d49a96'; color = '#7f2a33'; size = '17px'; }
+  // způsob a stav platby: zelená = zaplaceno, žlutá = při vyzvednutí, červená = čeká na online platbu
+  if (fact.hi === 'pay-paid') { bg = '#dcfce7'; border = '#16a34a'; color = '#14532d'; labelColor = '#166534'; }
+  if (fact.hi === 'pay-cash') { bg = '#fff1c2'; border = '#f0a500'; color = '#7a4a00'; labelColor = '#7a4a00'; }
+  if (fact.hi === 'pay-wait') { bg = '#fee2e2'; border = '#dc2626'; color = '#991b1b'; labelColor = '#991b1b'; }
+  const sub = fact.sub
+    ? '<div style="font-size:12px;font-weight:400;line-height:1.45;margin-top:6px;color:' + color + ';">' + esc_(fact.sub) + '</div>'
+    : '';
   return (
     '<td width="50%" valign="top" style="padding:12px 14px;background:' + bg + ';border:1px solid ' + border + ';border-radius:10px;">' +
-    '<div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#64748b;margin-bottom:4px;">' + esc_(fact.label) + '</div>' +
+    '<div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:' + labelColor + ';margin-bottom:4px;">' + esc_(fact.label) + '</div>' +
     '<div style="font-size:' + size + ';font-weight:700;color:' + color + ';word-break:break-word;">' + fact.html + '</div>' +
+    sub +
     '</td>'
   );
 }
@@ -707,19 +818,21 @@ function factCell_(fact) {
 function buildFacts_(r) {
   const facts = [];
   const link = function (href, text) {
-    return '<a href="' + esc_(href) + '" style="color:inherit;text-decoration:none;border-bottom:1px dotted #94a3b8;">' + esc_(text) + '</a>';
+    return '<a href="' + esc_(href) + '" style="color:inherit;text-decoration:none;border-bottom:1px dotted #71717a;">' + esc_(text) + '</a>';
   };
 
-  if (r.date) facts.push({ label: 'Termín vyzvednutí', html: esc_(formatDate_(r.date)), hi: 'date' });
+  // cena a způsob/stav platby vždy vedle sebe (první řádek)
   if (r.total) facts.push({ label: 'Cena celkem', html: esc_(money_(r.total)), hi: 'price' });
+  const ps = paymentState_(r);
+  if (ps) facts.push({ label: 'Způsob a stav platby', html: esc_(ps.headline), sub: ps.sub, hi: ps.hi });
+  if (r.date) facts.push({ label: 'Termín vyzvednutí', html: esc_(formatDate_(r.date)), hi: 'date' });
   if (r.store) facts.push({ label: 'Prodejna', html: esc_(r.store) });
   if (r.location) facts.push({ label: 'Lokalita závozu', html: esc_(r.location) });
   if (r.quantity) facts.push({ label: 'Počet kusů', html: esc_(r.quantity) + '\u00a0ks' });
-  if (r.company) facts.push({ label: 'Firma', html: esc_(r.company) + (r.ico ? ' <span style="font-weight:400;color:#64748b;">(IČO ' + esc_(r.ico) + ')</span>' : '') });
+  if (r.company) facts.push({ label: 'Firma', html: esc_(r.company) + (r.ico ? ' <span style="font-weight:400;color:#71717a;">(IČO ' + esc_(r.ico) + ')</span>' : '') });
   else if (r.ico) facts.push({ label: 'IČO', html: esc_(r.ico) });
   if (r.email) facts.push({ label: 'E-mail', html: link('mailto:' + r.email, r.email) });
   if (r.phone) facts.push({ label: 'Telefon', html: link('tel:' + r.phone.replace(/\s+/g, ''), r.phone) });
-  if (r.paymentLabel) facts.push({ label: 'Způsob platby', html: esc_(r.paymentLabel) });
   if (r.baseType) facts.push({ label: 'Podklad', html: esc_(r.baseType) });
 
   return facts;
@@ -734,19 +847,19 @@ function factsTable_(facts) {
 }
 
 function sectionTitle_(text) {
-  return '<div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;color:#475569;margin:0 0 10px 0;">' + esc_(text) + '</div>';
+  return '<div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;color:#52525b;margin:0 0 10px 0;">' + esc_(text) + '</div>';
 }
 
 function linesTable_(r) {
-  const th = 'padding:10px 12px;border-bottom:2px solid #cbd5e1;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#64748b;';
-  const td = 'padding:10px 12px;border-bottom:1px solid #e2e8f0;font-size:14px;';
+  const th = 'padding:10px 12px;border-bottom:2px solid #ddd4c0;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#71717a;';
+  const td = 'padding:10px 12px;border-bottom:1px solid #ebe4d6;font-size:14px;';
   const showCat = r.categories.length > 1;
 
   const rows = r.lines.map(function (l) {
     return (
       '<tr>' +
       '<td style="' + td + '"><strong>' + esc_(l.name) + '</strong>' +
-      (showCat ? '<div style="font-size:11px;color:#64748b;margin-top:2px;">' + esc_(categoryLabel_(l.category)) + '</div>' : '') +
+      (showCat ? '<div style="font-size:11px;color:#71717a;margin-top:2px;">' + esc_(categoryLabel_(l.category)) + '</div>' : '') +
       '</td>' +
       '<td style="' + td + 'text-align:center;white-space:nowrap;">' + l.quantity + '\u00a0ks</td>' +
       '<td style="' + td + 'text-align:right;white-space:nowrap;">' + (l.unitPrice ? esc_(money_(l.unitPrice)) : '–') + '</td>' +
@@ -756,8 +869,8 @@ function linesTable_(r) {
   }).join('');
 
   const totalRow = r.total
-    ? '<tr><td colspan="3" style="padding:12px;text-align:right;font-size:13px;color:#475569;">Celkem s DPH</td>' +
-      '<td style="padding:12px;text-align:right;font-size:16px;font-weight:700;white-space:nowrap;color:#92400e;">' + esc_(money_(r.total)) + '</td></tr>'
+    ? '<tr><td colspan="3" style="padding:12px;text-align:right;font-size:13px;color:#52525b;">Celkem s DPH</td>' +
+      '<td style="padding:12px;text-align:right;font-size:16px;font-weight:700;white-space:nowrap;color:#992d37;">' + esc_(money_(r.total)) + '</td></tr>'
     : '';
 
   return (
@@ -773,13 +886,13 @@ function linesTable_(r) {
 
 function kvTable_(rows, small) {
   const fs = small ? '12px' : '14px';
-  const color = small ? '#64748b' : '#0f172a';
+  const color = small ? '#71717a' : '#1f1f1f';
   return (
     '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">' +
     rows.map(function (row) {
       return (
         '<tr>' +
-        '<td valign="top" style="padding:5px 12px 5px 0;font-size:' + fs + ';color:#94a3b8;white-space:nowrap;width:1%;">' + esc_(row[0]) + '</td>' +
+        '<td valign="top" style="padding:5px 12px 5px 0;font-size:' + fs + ';color:#71717a;white-space:nowrap;width:1%;">' + esc_(row[0]) + '</td>' +
         '<td valign="top" style="padding:5px 0;font-size:' + fs + ';color:' + color + ';word-break:break-word;white-space:pre-wrap;">' + esc_(row[1]) + '</td>' +
         '</tr>'
       );
@@ -797,16 +910,16 @@ function buildEmailHtml_(r, xmlInfo) {
 
   const chips = r.categories.length > 1
     ? '<div style="margin-top:10px;">' + r.categories.map(function (c) {
-        return '<span style="display:inline-block;margin:0 6px 4px 0;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,0.14);color:#fde68a;font-size:12px;font-weight:600;">' + esc_(categoryLabel_(c)) + '</span>';
+        return '<span style="display:inline-block;margin:0 6px 4px 0;padding:3px 10px;border-radius:999px;background:rgba(31,31,31,0.10);color:#1f1f1f;font-size:12px;font-weight:600;">' + esc_(categoryLabel_(c)) + '</span>';
       }).join('') + '</div>'
     : '';
 
   const header =
-    '<tr><td style="background:#0a192f;padding:22px 28px 20px 28px;">' +
-    '<div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#d4af37;margin-bottom:12px;">Cukrářství Blahutovi · web</div>' +
+    '<tr><td style="background:#f0c030;padding:22px 28px 20px 28px;">' +
+    '<div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#1f1f1f;margin-bottom:12px;">Cukrářství Blahutovi · web</div>' +
     '<span style="display:inline-block;background:' + accent + ';color:#ffffff;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:5px 12px;border-radius:6px;">' + esc_(r.type.label) + '</span>' +
-    '<div style="font-size:26px;line-height:1.25;font-weight:700;color:#ffffff;margin-top:14px;">' + esc_(r.name) + '</div>' +
-    (r.orderId ? '<div style="font-size:14px;color:#d4af37;margin-top:4px;">Objednávka č. ' + esc_(r.orderId) + '</div>' : '') +
+    '<div style="font-size:26px;line-height:1.25;font-weight:700;color:#1f1f1f;margin-top:14px;">' + esc_(r.name) + '</div>' +
+    (r.orderId ? '<div style="font-size:14px;font-weight:600;color:#1f1f1f;margin-top:4px;">Objednávka č. ' + esc_(r.orderId) + '</div>' : '') +
     chips +
     '</td></tr>' +
     '<tr><td style="height:4px;line-height:4px;font-size:0;background:' + accent + ';">&nbsp;</td></tr>';
@@ -826,7 +939,7 @@ function buildEmailHtml_(r, xmlInfo) {
   if (r.note) {
     sections.push(block(
       sectionTitle_(noteLabel_(r)) +
-      '<div style="background:#f8fafc;border-left:4px solid ' + accent + ';border-radius:4px;padding:14px 16px;font-size:15px;line-height:1.55;white-space:pre-wrap;">' + esc_(r.note) + '</div>'
+      '<div style="background:#faf7f2;border-left:4px solid ' + accent + ';border-radius:4px;padding:14px 16px;font-size:15px;line-height:1.55;white-space:pre-wrap;">' + esc_(r.note) + '</div>'
     ));
   }
 
@@ -835,7 +948,7 @@ function buildEmailHtml_(r, xmlInfo) {
       return (
         '<div style="margin:0 0 12px 0;">' +
         '<a href="' + esc_(l.url) + '" target="_blank" style="display:inline-block;background:' + accent + ';color:#ffffff;font-size:15px;font-weight:700;text-decoration:none;padding:13px 22px;border-radius:8px;">' + esc_(l.label) + ' &rarr;</a>' +
-        '<div style="font-size:11px;color:#94a3b8;margin-top:5px;word-break:break-all;">' + esc_(l.url) + '</div>' +
+        '<div style="font-size:11px;color:#71717a;margin-top:5px;word-break:break-all;">' + esc_(l.url) + '</div>' +
         '</div>'
       );
     }).join('');
@@ -854,15 +967,15 @@ function buildEmailHtml_(r, xmlInfo) {
   }
 
   const tech = r.tech.length
-    ? '<tr><td style="padding:16px 28px 22px 28px;background:#f8fafc;border-top:1px solid #e2e8f0;">' +
-      '<div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#94a3b8;margin-bottom:6px;">Technické údaje</div>' +
+    ? '<tr><td style="padding:16px 28px 22px 28px;background:#faf7f2;border-top:1px solid #ebe4d6;">' +
+      '<div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#71717a;margin-bottom:6px;">Technické údaje</div>' +
       kvTable_(r.tech, true) +
       '</td></tr>'
     : '';
 
   return (
-    '<div style="margin:0;padding:24px 12px;background:#e2e8f0;' + font + 'color:#0f172a;">' +
-    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:680px;margin:0 auto;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #cbd5e1;">' +
+    '<div style="margin:0;padding:24px 12px;background:#f4efe6;' + font + 'color:#1f1f1f;">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:680px;margin:0 auto;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #ddd4c0;">' +
     header + sections.join('') + tech +
     '</table></div>'
   );
@@ -881,7 +994,11 @@ function buildEmailText_(r, xmlInfo) {
   if (r.date) lines.push('Termín: ' + formatDate_(r.date));
   if (r.quantity) lines.push('Počet kusů: ' + r.quantity);
   if (r.total) lines.push('Cena celkem: ' + money_(r.total));
-  if (r.paymentLabel) lines.push('Platba: ' + r.paymentLabel);
+  const ps = paymentState_(r);
+  if (ps) {
+    lines.push('ZPŮSOB A STAV PLATBY: ' + ps.headline);
+    lines.push('  (' + ps.sub + ')');
+  }
 
   if (r.lines.length) {
     lines.push('', 'Položky:');
@@ -946,8 +1063,9 @@ function sendCustomerConfirmation_(r) {
           replyTo: CONFIG.NOTIFY_EMAIL,
           // jen pro upozornění obchodu, kdyby odeslání selhalo
           customerName: r.name,
-          typeLabel: r.type.label,
+          typeLabel: r.mailKind === 'paid' ? 'Potvrzení platby' : r.type.label,
           orderId: r.orderId || '',
+          kind: r.mailKind || 'confirmation',
         };
       } else {
         const options = {
@@ -1161,6 +1279,14 @@ function testDeliverability() {
 /** Texty podle typu požadavku (předmět, nadpis, úvod). */
 function confirmationTexts_(r) {
   const brand = 'Cukrářství Blahutovi';
+  if (r.mailKind === 'paid') {
+    return {
+      subject: 'Platba přijata – objednávka' + (r.orderId ? ' č. ' + r.orderId : '') + ' – ' + brand,
+      title: 'Děkujeme, platbu jsme přijali',
+      intro: 'Vaši online platbu kartou jsme v pořádku přijali. Objednávka je uhrazena – při vyzvednutí už nic neplatíte.',
+      noteLabel: 'Vaše poznámka',
+    };
+  }
   switch (r.type.key) {
     case 'objednavka':
       return {
@@ -1200,8 +1326,9 @@ function confirmFacts_(r) {
   if (r.store) facts.push({ label: 'Prodejna', text: r.store });
   if (r.location) facts.push({ label: 'Lokalita', text: r.location });
   if (r.date) facts.push({ label: 'Termín vyzvednutí', text: formatDate_(r.date), hi: 'date' });
-  if (r.paymentLabel) facts.push({ label: 'Způsob platby', text: r.paymentLabel });
   if (r.total) facts.push({ label: 'Cena celkem', text: money_(r.total), hi: 'price' });
+  const ps = paymentState_(r);
+  if (ps) facts.push({ label: 'Způsob a stav platby', text: ps.headline, sub: ps.subCustomer, hi: ps.hi });
   if (r.quantity) facts.push({ label: 'Počet kusů', text: r.quantity + '\u00a0ks' });
   if (r.baseType) facts.push({ label: 'Podklad', text: r.baseType });
   return facts;
@@ -1227,30 +1354,30 @@ function b2bRows_(r) {
 function confirmationShell_(title, bodyRows) {
   const font = "font-family:'Segoe UI',Roboto,Arial,Helvetica,sans-serif;";
   const header =
-    '<tr><td style="background:#0a192f;padding:26px 28px 22px 28px;">' +
-    '<div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#d4af37;margin-bottom:12px;">Cukrářství Blahutovi</div>' +
-    '<div style="font-size:26px;line-height:1.25;font-weight:700;color:#ffffff;">' + esc_(title) + '</div>' +
+    '<tr><td style="background:#f0c030;padding:26px 28px 22px 28px;">' +
+    '<div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#1f1f1f;margin-bottom:12px;">Cukrářství Blahutovi</div>' +
+    '<div style="font-size:26px;line-height:1.25;font-weight:700;color:#1f1f1f;">' + esc_(title) + '</div>' +
     '</td></tr>' +
-    '<tr><td style="height:4px;line-height:4px;font-size:0;background:#d4af37;">&nbsp;</td></tr>';
+    '<tr><td style="height:4px;line-height:4px;font-size:0;background:#b83b46;">&nbsp;</td></tr>';
 
   const footer =
-    '<tr><td style="padding:16px 28px 22px 28px;background:#f8fafc;border-top:1px solid #e2e8f0;font-size:12px;line-height:1.6;color:#64748b;">' +
-    '<strong style="color:#475569;">Cukrářství Blahutovi</strong> · Ivo Blahut · ' + esc_(CONFIG.ADDRESS) + ' · IČO ' + esc_(CONFIG.ICO) + '<br>' +
-    'Tel. <a href="tel:' + esc_(CONFIG.PHONE.replace(/\s+/g, '')) + '" style="color:#475569;">' + esc_(CONFIG.PHONE) + '</a> · ' +
-    '<a href="mailto:' + esc_(CONFIG.NOTIFY_EMAIL) + '" style="color:#475569;">' + esc_(CONFIG.NOTIFY_EMAIL) + '</a><br>' +
-    '<span style="color:#94a3b8;">Tento e-mail vznikl automaticky po odeslání formuláře na webu cukrarstviblahutovi.cz.</span>' +
+    '<tr><td style="padding:16px 28px 22px 28px;background:#faf7f2;border-top:1px solid #ebe4d6;font-size:12px;line-height:1.6;color:#71717a;">' +
+    '<strong style="color:#52525b;">Cukrářství Blahutovi</strong> · Ivo Blahut · ' + esc_(CONFIG.ADDRESS) + ' · IČO ' + esc_(CONFIG.ICO) + '<br>' +
+    'Tel. <a href="tel:' + esc_(CONFIG.PHONE.replace(/\s+/g, '')) + '" style="color:#52525b;">' + esc_(CONFIG.PHONE) + '</a> · ' +
+    '<a href="mailto:' + esc_(CONFIG.NOTIFY_EMAIL) + '" style="color:#52525b;">' + esc_(CONFIG.NOTIFY_EMAIL) + '</a><br>' +
+    '<span style="color:#71717a;">Tento e-mail vznikl automaticky po odeslání formuláře na webu cukrarstviblahutovi.cz.</span>' +
     '</td></tr>';
 
   return (
-    '<div style="margin:0;padding:24px 12px;background:#e2e8f0;' + font + 'color:#0f172a;">' +
-    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;margin:0 auto;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #cbd5e1;">' +
+    '<div style="margin:0;padding:24px 12px;background:#f4efe6;' + font + 'color:#1f1f1f;">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;margin:0 auto;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #ddd4c0;">' +
     header + bodyRows.join('') + footer +
     '</table></div>'
   );
 }
 
 function confirmParagraph_(text) {
-  return '<tr><td style="padding:18px 28px 6px 28px;font-size:15px;line-height:1.6;color:#0f172a;">' + text + '</td></tr>';
+  return '<tr><td style="padding:18px 28px 6px 28px;font-size:15px;line-height:1.6;color:#1f1f1f;">' + text + '</td></tr>';
 }
 
 function confirmBlock_(inner) {
@@ -1276,7 +1403,7 @@ function buildStandardConfirmation_(req) {
   rows.push(confirmParagraph_(esc_(hello) + '<br>' + esc_(t.intro)));
   if (facts.length) {
     rows.push('<tr><td style="padding:10px 20px 4px 20px;">' + factsTable_(facts.map(function (f) {
-      return { label: f.label, html: esc_(f.text), hi: f.hi };
+      return { label: f.label, html: esc_(f.text), sub: f.sub, hi: f.hi };
     })) + '</td></tr>');
   }
   if (hasItemsTable) {
@@ -1288,11 +1415,11 @@ function buildStandardConfirmation_(req) {
   if (r.note) {
     rows.push(confirmBlock_(
       sectionTitle_(t.noteLabel) +
-      '<div style="background:#f8fafc;border-left:4px solid #d4af37;border-radius:4px;padding:14px 16px;font-size:15px;line-height:1.55;white-space:pre-wrap;">' + esc_(r.note) + '</div>'
+      '<div style="background:#faf7f2;border-left:4px solid #b83b46;border-radius:4px;padding:14px 16px;font-size:15px;line-height:1.55;white-space:pre-wrap;">' + esc_(r.note) + '</div>'
     ));
   }
   rows.push(confirmBlock_(
-    '<div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.55;color:#78350f;">' +
+    '<div style="background:#fff7d6;border:1px solid #f0c030;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.55;color:#1f1f1f;">' +
     contactHtml + '</div>'
   ));
   rows.push(confirmParagraph_('Děkujeme a těšíme se na vás.<br><strong>Cukrářství Blahutovi</strong>'));
@@ -1300,7 +1427,7 @@ function buildStandardConfirmation_(req) {
 
   // prostý text
   const text = [hello, t.intro, ''];
-  facts.forEach(function (f) { text.push(f.label + ': ' + f.text); });
+  facts.forEach(function (f) { text.push(f.label + ': ' + f.text + (f.sub ? ' (' + f.sub + ')' : '')); });
   if (r.lines.length && r.type.key !== 'tisk') {
     text.push('', 'Přehled položek:');
     r.lines.forEach(function (l) {
@@ -1335,7 +1462,7 @@ function buildB2bConfirmation_(req) {
     rows.push(confirmBlock_(sectionTitle_('Údaje z vaší poptávky') + kvTable_(dataRows, false)));
   }
   rows.push(confirmBlock_(
-    '<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.55;color:#166534;">' +
+    '<div style="background:#fff7d6;border:1px solid #f0c030;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.55;color:#1f1f1f;">' +
     esc_(contactText) + '</div>'
   ));
   rows.push(confirmParagraph_('S pozdravem<br><strong>Cukrářství Blahutovi</strong>'));
@@ -1408,17 +1535,17 @@ function sendStoreCopy_(r, overrideTo) {
 
     // bez technických údajů (IP, user agent, …) a bez XML přílohy – prodejna dostane jen údaje objednávky
     const copy = Object.assign({}, r, { tech: [] });
+    const ps = paymentState_(r);
+    const waiting = !!ps && ps.code === 'pending';
     const intro = 'Kopie: ' + r.type.label + ' – prodejna ' + (r.store || '') + '. Zákazník si ji vyzvedne u vás. ' +
-      'Požadavek zpracovává centrála, tento e-mail je pro informaci a přípravu.';
+      'Požadavek zpracovává centrála, tento e-mail je pro informaci a přípravu.' +
+      (waiting ? ' Online platba zatím NENÍ potvrzena – o výsledku vás budeme informovat dalším e-mailem.' : '');
 
     const options = {
       to: to,
       subject: 'Kopie pro prodejnu ' + (r.store || '') + ': ' + buildSubject_(r),
       body: intro + '\n\n' + buildEmailText_(copy, null),
-      htmlBody:
-        '<div style="max-width:680px;margin:0 auto 10px auto;padding:12px 16px;background:#fffbeb;border:1px solid #fde68a;' +
-        "border-radius:8px;font-family:'Segoe UI',Roboto,Arial,Helvetica,sans-serif;font-size:14px;color:#92400e;\">" +
-        esc_(intro) + '</div>' + buildEmailHtml_(copy, null),
+      htmlBody: noticeBox_(intro, waiting ? 'wait' : 'info') + buildEmailHtml_(copy, null),
       name: CONFIG.SENDER_NAME,
     };
     if (isEmail_(r.email)) options.replyTo = r.email;
@@ -1431,15 +1558,16 @@ function sendStoreCopy_(r, overrideTo) {
   }
 }
 
-/** Značka v popisu XML souboru na Disku: upozornění o zaplacení už prodejna dostala (ochrana proti duplicitě i po 6 h). */
+/** Značky v popisu XML souboru na Disku: upozornění prodejně už bylo odesláno (ochrana proti duplicitě i po 6 h cache). */
 const STORE_PAID_MARK = 'STORE_PAID_NOTIFIED';
+const STORE_CANCEL_MARK = 'STORE_CANCEL_NOTIFIED';
 
 function unx_(v) {
   return String(v == null ? '' : v)
     .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, '&');
 }
 
-/** Z XML objednávky (buildPohodaXml_) vyčte prodejnu, zákazníka, termín a položky. */
+/** Z XML objednávky (buildPohodaXml_) vyčte prodejnu, zákazníka, termín, poznámku a položky. */
 function parseOrderFromXml_(xml) {
   const tag = function (name, scope) {
     const m = new RegExp('<' + name + '>([^<]*)</' + name + '>').exec(scope);
@@ -1453,13 +1581,16 @@ function parseOrderFromXml_(xml) {
   const headText = tag('ord:text', header);
   const sm = /^Web objednávka \S+ – (.*?)(?: \[[^\]]*\])?$/.exec(headText);
 
+  // poznámka: „Platba: … | poznámka zákazníka“
+  const nm = /^Platba: (.*?)(?: \| ([\s\S]*))?$/.exec(tag('ord:note', header));
+
   const lines = [];
   const itemRe = /<ord:orderItem>([\s\S]*?)<\/ord:orderItem>/g;
   let m;
   while ((m = itemRe.exec(detail)) !== null) {
     const quantity = Number(tag('ord:quantity', m[1])) || 0;
     const unitPrice = Number(tag('typ:unitPrice', m[1])) || 0;
-    lines.push({ name: tag('ord:text', m[1]), quantity: quantity, lineTotal: quantity * unitPrice });
+    lines.push({ name: tag('ord:text', m[1]), quantity: quantity, unitPrice: unitPrice, lineTotal: quantity * unitPrice });
   }
 
   return {
@@ -1469,75 +1600,109 @@ function parseOrderFromXml_(xml) {
     phone: tag('typ:mobilPhone', header),
     email: tag('typ:email', header),
     date: tag('ord:dateDelivery', header),
+    note: nm && nm[2] ? nm[2] : '',
     lines: lines,
     total: lines.reduce(function (sum, l) { return sum + l.lineTotal; }, 0),
   };
 }
 
 /**
- * Po zaplacení online pošle prodejně z objednávky krátkou aktualizaci „ZAPLACENO ONLINE“ (při výdeji se neinkasuje).
- * Nikdy nevyhazuje výjimku. Duplicitu hlídá cache (6 h) i značka v popisu XML souboru (trvale).
+ * Z XML objednávky složí požadavek ve stejném tvaru jako normalizeRequest_, takže e-maily po platbě
+ * (interní i pro prodejnu) používají stejnou šablonu a stejné názvy polí jako e-maily při vzniku objednávky.
+ * @param {string} xml obsah XML objednávky
+ * @param {string} status 'PAID' | 'CANCELLED'
+ * @param {Object} p údaje o platbě { transId, test }
+ */
+function orderFromXml_(xml, status, p) {
+  p = p || {};
+  const o = parseOrderFromXml_(xml);
+  const detail = status === 'PAID'
+    ? [p.transId ? 'Transakce ' + p.transId : '', p.test ? 'TESTOVACÍ PLATBA' : ''].filter(function (s) { return s; }).join(', ')
+    : '';
+  const lines = o.lines.map(function (l) { return Object.assign({ category: 'objednavka' }, l); });
+  return {
+    formName: 'objednavka',
+    type: FORM_TYPES['objednavka'],
+    submissionId: '',
+    name: o.name || 'Zákazník',
+    company: '',
+    ico: '',
+    email: o.email,
+    phone: o.phone,
+    store: o.store,
+    location: '',
+    date: o.date,
+    note: o.note,
+    orderId: o.orderId,
+    paymentMethod: 'online',
+    paymentLabel: 'Online kartou (Comgate)',
+    paymentStatus: status,
+    paymentDetail: detail,
+    total: o.total,
+    quantity: lines.reduce(function (s, l) { return s + l.quantity; }, 0),
+    lines: lines,
+    categories: [],
+    itemsText: '',
+    baseType: '',
+    links: [],
+    extras: [],
+    tech: [],
+  };
+}
+
+/**
+ * Po výsledku online platby pošle prodejně aktualizaci ve stejné šabloně jako kopii objednávky:
+ *   PAID      → „ZAPLACENO ONLINE (Comgate)“ – při výdeji se neinkasuje
+ *   CANCELLED → „PLATBA PŘI VYZVEDNUTÍ (na prodejně)“ – online platba nedokončena, vybrat na místě
+ * Nikdy nevyhazuje výjimku. Duplicitu hlídá cache (6 h) i značka v popisu XML souboru (trvale), zvlášť pro každý stav.
  * @param {GoogleAppsScript.Drive.File|null} file XML objednávky (null jen v testu)
  * @param {string} xml aktuální obsah XML
  * @param {Object} p údaje o platbě { orderId, amount (v haléřích), transId, test }
  * @param {string=} overrideTo jen pro test: pošle se sem a duplicita se nehlídá
+ * @param {string=} status 'PAID' (výchozí) | 'CANCELLED'
  */
-function sendStorePaymentNotice_(file, xml, p, overrideTo) {
+function sendStorePaymentNotice_(file, xml, p, overrideTo, status) {
+  status = status || 'PAID';
+  const paid = status === 'PAID';
+  const mark = paid ? STORE_PAID_MARK : STORE_CANCEL_MARK;
   const orderId = String(p.orderId || '');
-  const result = function (status, reason, to) {
-    console.log('Upozornění prodejně o platbě: ' + status + (reason ? ' (' + reason + ')' : '') +
+  const result = function (st, reason, to) {
+    console.log('Upozornění prodejně o platbě (' + status + '): ' + st + (reason ? ' (' + reason + ')' : '') +
       ' | objednávka: ' + orderId + (to ? ' | ' + maskEmail_(to) : ''));
-    return { status: status, reason: reason || '', to: to || '' };
+    return { status: st, reason: reason || '', to: to || '' };
   };
 
   try {
     if (!overrideTo && p.test) return result('skipped', 'testovací platba');
 
-    const order = parseOrderFromXml_(xml);
+    const order = orderFromXml_(xml, status, p);
     const to = overrideTo || CONFIG.STORE_EMAILS[storeKey_(order.store)];
     if (!to) return result('skipped', 'prodejna "' + order.store + '" nemá e-mail pro kopii');
 
     const cache = CacheService.getScriptCache();
-    const key = 'paystore:' + orderId;
+    const key = 'paystore:' + orderId + ':' + status;
     if (!overrideTo) {
-      const marked = file && String(file.getDescription() || '').indexOf(STORE_PAID_MARK) !== -1;
+      const marked = file && String(file.getDescription() || '').indexOf(mark) !== -1;
       if (marked || cache.get(key)) return result('skipped', 'duplicate', to);
     }
 
-    const total = p.amount ? Number(p.amount) / 100 : order.total;
-    const headline = 'ZAPLACENO ONLINE kartou – při převzetí se nic neinkasuje.';
-    const facts = [['Objednávka', orderId], ['Zákazník', order.name], ['Telefon', order.phone],
-      ['Vyzvednutí', order.date ? formatDate_(order.date) + ' · ' + order.store : order.store],
-      ['Cena celkem', total ? money_(total) : '']].filter(function (row) { return row[1]; });
-
-    const text = [headline, ''];
-    facts.forEach(function (row) { text.push(row[0] + ': ' + row[1]); });
-    if (order.lines.length) {
-      text.push('', 'Položky:');
-      order.lines.forEach(function (l) { text.push('- ' + l.quantity + 'x ' + l.name); });
-    }
-
-    const html =
-      "<div style=\"max-width:680px;margin:0 auto;font-family:'Segoe UI',Roboto,Arial,Helvetica,sans-serif;font-size:15px;color:#0f172a;\">" +
-      '<div style="padding:14px 18px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;color:#166534;font-weight:700;">' + esc_(headline) + '</div>' +
-      '<div style="margin-top:12px;">' + kvTable_(facts, false) + '</div>' +
-      (order.lines.length
-        ? '<div style="margin-top:12px;"><strong>Položky</strong><ul style="margin:6px 0 0 18px;padding:0;">' +
-          order.lines.map(function (l) { return '<li>' + esc_(l.quantity + 'x ' + l.name) + '</li>'; }).join('') + '</ul></div>'
-        : '') +
-      '</div>';
+    const headline = paid
+      ? 'ZAPLACENO ONLINE kartou – při převzetí se nic neinkasuje.'
+      : 'Online platba nebyla dokončena – zákazník zaplatí při vyzvednutí na prodejně.';
+    const intro = 'Aktualizace platby: ' + headline;
 
     MailApp.sendEmail({
       to: to,
-      subject: 'ZAPLACENO ONLINE – Objednávka ' + orderId + (order.store ? ' – ' + order.store : ''),
-      body: text.join('\n'),
-      htmlBody: html,
+      subject: (paid ? 'ZAPLACENO ONLINE – ' : 'PLATBA PŘI VYZVEDNUTÍ (online nedokončena) – ') +
+        'Objednávka ' + orderId + (order.store ? ' – ' + order.store : ''),
+      body: intro + '\n\n' + buildEmailText_(order, null),
+      htmlBody: noticeBox_(intro, paid ? 'paid' : 'cash') + buildEmailHtml_(order, null),
       name: CONFIG.SENDER_NAME,
     });
 
     if (!overrideTo) {
       cache.put(key, '1', 21600);
-      if (file) file.setDescription((String(file.getDescription() || '') + ' ' + STORE_PAID_MARK).trim());
+      if (file) file.setDescription((String(file.getDescription() || '') + ' ' + mark).trim());
     }
     return result('sent', '', to);
   } catch (err) {
@@ -1545,9 +1710,9 @@ function sendStorePaymentNotice_(file, xml, p, overrideTo) {
     try {
       MailApp.sendEmail({
         to: CONFIG.NOTIFY_EMAIL,
-        subject: 'Upozornění prodejně o zaplacení se nepodařilo odeslat – ' + orderId,
-        body: 'Objednávka ' + orderId + ' je zaplacená online, ale upozornění prodejně se nepodařilo odeslat (' +
-          String(err && err.message ? err.message : err) + '). Dejte prodejně vědět ručně.',
+        subject: 'Upozornění prodejně o výsledku platby se nepodařilo odeslat – ' + orderId,
+        body: 'U objednávky ' + orderId + ' (' + (paid ? 'zaplaceno online' : 'online platba nedokončena') +
+          ') se nepodařilo odeslat upozornění prodejně (' + String(err && err.message ? err.message : err) + '). Dejte prodejně vědět ručně.',
         name: CONFIG.SENDER_NAME,
       });
     } catch (e2) { /* už nic neděláme */ }
@@ -1611,4 +1776,56 @@ function testStoreCopy() {
   const res = sendStoreCopy_(req, to);
   console.log('Výsledek testu: ' + res.status + (res.reason ? ' (' + res.reason + ')' : ''));
   return res;
+}
+
+/**
+ * Test z editoru Apps Script (vyberte funkci „testPaymentStatusEmails“ a dejte Spustit).
+ * Pošle na CONFIG.TEST_EMAIL ukázky interního e-mailu ve všech stavech platby (čeká na online platbu,
+ * zaplaceno online, online nedokončena → při vyzvednutí, platba při vyzvednutí, jedlý tisk) a zákaznické potvrzení
+ * s čekající online platbou a po zaplacení. Nic se neposílá prodejnám ani do Pohody.
+ */
+function testPaymentStatusEmails() {
+  const to = CONFIG.TEST_EMAIL || CONFIG.NOTIFY_EMAIL;
+  const date = Utilities.formatDate(new Date(Date.now() + 7 * 86400000), 'Europe/Prague', 'yyyy-MM-dd');
+  const make = function (formName, extra) {
+    const data = Object.assign({
+      Jmeno: 'Test Zákazník', Email: to, Telefon: '602 000 000', Prodejna: 'Karviná', Datum: date,
+    }, extra);
+    return normalizeRequest_({ raw: '', src: { form_name: formName, id: 'test-pay', data: data }, data: data, formName: formName, submissionId: 'test-pay' });
+  };
+  const cart = {
+    'Cislo-Objednavky': 'TEST-0010', 'Celkem-Kc': '410',
+    'Produkty-JSON': JSON.stringify([
+      { name: 'Větrník', price: 70, quantity: 3, category: 'zakusky' },
+      { name: 'Punčový řez', price: 100, quantity: 2, category: 'zakusky' },
+    ]),
+  };
+  const send = function (label, r) {
+    MailApp.sendEmail({
+      to: to,
+      subject: 'TEST platby – ' + label + ' | ' + buildSubject_(r),
+      body: buildEmailText_(r, null),
+      htmlBody: buildEmailHtml_(r, null),
+      name: CONFIG.SENDER_NAME,
+    });
+  };
+
+  const pending = make('objednavka', Object.assign({ 'Zpusob-Platby': 'online' }, cart));
+  send('čeká na online platbu', pending);
+
+  const paid = Object.assign({}, pending, { paymentStatus: 'PAID', paymentDetail: 'transakce TEST' });
+  send('zaplaceno online', paid);
+
+  send('online nedokončena', Object.assign({}, pending, { paymentStatus: 'CANCELLED' }));
+  send('platba při vyzvednutí', make('objednavka', Object.assign({ 'Zpusob-Platby': 'cash' }, cart)));
+  send('jedlý tisk', make('tisk-na-papir', {
+    'Typ-Podkladu': 'Fondánový list A4', 'Pocet-Kusu': '2', 'Celkem-Kc': '180',
+  }));
+
+  const paidConf = buildStandardConfirmation_(Object.assign({}, paid, { mailKind: 'paid' }));
+  MailApp.sendEmail({ to: to, subject: 'TEST platby – potvrzení zákazníkovi po zaplacení | ' + paidConf.subject, body: paidConf.text, htmlBody: paidConf.html, name: CONFIG.CUSTOMER_SENDER_NAME });
+
+  const conf = buildStandardConfirmation_(pending);
+  MailApp.sendEmail({ to: to, subject: 'TEST platby – potvrzení zákazníkovi (online čeká) | ' + conf.subject, body: conf.text, htmlBody: conf.html, name: CONFIG.CUSTOMER_SENDER_NAME });
+  console.log('Odesláno 7 ukázkových e-mailů na ' + maskEmail_(to));
 }
