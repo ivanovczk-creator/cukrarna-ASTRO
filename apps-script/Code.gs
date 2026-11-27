@@ -1283,7 +1283,7 @@ function confirmationTexts_(r) {
     return {
       subject: 'Platba přijata – objednávka' + (r.orderId ? ' č. ' + r.orderId : '') + ' – ' + brand,
       title: 'Děkujeme, platbu jsme přijali',
-      intro: 'Vaši online platbu kartou jsme v pořádku přijali. Objednávka je uhrazena – při vyzvednutí už nic neplatíte.',
+      intro: 'Vaši online platbu kartou jsme v pořádku přijali. Shrnutí objednávky najdete níže.',
       noteLabel: 'Vaše poznámka',
     };
   }

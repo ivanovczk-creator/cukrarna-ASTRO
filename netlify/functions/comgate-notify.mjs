@@ -78,6 +78,15 @@ export default async (req) => {
   console.log('[comgate-notify]', JSON.stringify({ refId, transId, status, stored: result.record.status, synced: result.synced }));
 
   if (!result.synced) {
+    // Zrušená platba (např. vypršela po 7 dnech: paymentErrorReason=CUSTOMER_TIMEOUT) k objednávce, kterou už nemáme
+    // v systému (XML na Disku smazané, např. testovací objednávka): není co aktualizovat a opakování by jen donekonečna
+    // generovalo chybové e-maily z Comgate. Starší než hodina = už nejde o souběh s vytvářením objednávky.
+    const orderMissing = /order-not-found/.test(result.syncError ?? '');
+    const ageMs = Date.now() - Date.parse(result.record.createdAt ?? '');
+    if (status === 'CANCELLED' && orderMissing && Number.isFinite(ageMs) && ageMs > 3600_000) {
+      console.warn('[comgate-notify] zrušená platba k neexistující objednávce – potvrzeno bez propsání:', refId);
+      return ok();
+    }
     console.error('[comgate-notify] stav uložen, ale nepropsán do objednávky:', result.syncError);
     return fail('order update failed', 500); // Comgate zopakuje
   }
